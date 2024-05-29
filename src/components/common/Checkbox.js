@@ -1,3 +1,4 @@
+// 김소현
 import React from "react";
 
 // 필요한경우 disabled, checked={true}로 props 보내서 사용

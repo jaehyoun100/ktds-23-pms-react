@@ -1,3 +1,4 @@
+// 김소현
 import React from "react";
 
 // min, max 값 필요할경우 props로 넘기기
