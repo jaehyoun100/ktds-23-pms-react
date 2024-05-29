@@ -1,7 +1,12 @@
+import { useState } from "react";
+import LoginPage from "./components/login/Login";
+
 function App() {
+  const [token, setToken] = useState();
   return (
     <>
-      <div>ktds-23-pms-react</div>
+      {!token && <LoginPage />}
+      {!token && <div>ktds-23-pms-react</div>}
     </>
   );
 }
