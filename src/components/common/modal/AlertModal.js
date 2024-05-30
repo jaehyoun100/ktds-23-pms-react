@@ -1,4 +1,5 @@
-// 박상걸
+//박상걸
+
 /** 사용할 장소에 다음과 같이 state를 만드시고 진행하시면 됩니다!! 문의는 박상걸을 찾아주세요
  * 
  * function App() {
@@ -53,52 +54,38 @@ export default App;
 
  * 
  */
+
 import React from "react";
+import "./modal.css";
 
-const ConfirmModal = React.memo(
-  ({
-    content,
-    onClose,
-    show,
-    cancelContent,
-    confirmContent,
-    confirmOnClick,
-  }) => {
-    if (!show) {
-      return null;
-    }
-
-    return (
-      <dialog
-        open
-        className="modal-window"
-        role="alertdialog"
-        aria-modal="true"
-      >
-        <div className="grid-modal">
-          <div
-            className="modal-close"
-            onClick={onClose}
-            role="button"
-            aria-label="Close modal"
-            style={{ cursor: "pointer" }}
-          >
-            X
-          </div>
-          <div className="modal-content">
-            <div className="modal-text">{content}</div>
-          </div>
-          <div className="input-space">
-            <button className="confirm-button button" onClick={confirmOnClick}>
-              {confirmContent}
-            </button>
-            <button className="confirm-button button" onClick={onClose}>
-              {cancelContent}
-            </button>
-          </div>
-        </div>
-      </dialog>
-    );
+const AlertModal = React.memo(({ content, onClose, show, closeContent }) => {
+  if (!show) {
+    return null;
   }
-);
-export default ConfirmModal;
+
+  return (
+    <dialog open className="modal-window" role="alertdialog" aria-modal="true">
+      <div className="grid-modal">
+        <div
+          className="modal-close"
+          onClick={onClose}
+          role="button"
+          aria-label="Close modal"
+          style={{ cursor: "pointer" }}
+        >
+          X
+        </div>
+        <div className="modal-content">
+          <div className="modal-text">{content}</div>
+        </div>
+        <div className="input-space">
+          <button className="confirm-button button" onClick={onClose}>
+            {closeContent}
+          </button>
+        </div>
+      </div>
+    </dialog>
+  );
+});
+
+export default AlertModal;
