@@ -8,8 +8,9 @@
   /* 박스 서브 색은 기본 바디부분 색과 같이 함 */
   --box-sub-bg: #fafafb;
   /* 메인 컬러 */
-  --main-color: #fd3636;
-  --btn-color: #ee6953;
+  --main-color: #2c3e50;
+  --second-color:#7c9ec0;
+  --light-color: #ecf0f1;
 
   /* 두번째 메인 컬러 정해보자... */
   --sub-color: #ff989870;
@@ -77,54 +78,7 @@ body {
   position: relative;
 }
 
-/* 체크 박스 사용법
- <input type="checkbox" id="checkbox1" />
-        <label for="checkbox1"></label>
-        <label for="checkbox1"></label>
 
-  <input type="checkbox" id="checkbox2" />
-        <label for="checkbox2"></label>
-        <label for="checkbox2"></label>
-  
-  위와 같은 형식으로 사용하되 각 객체에 대한 id와 label for를 고유한 번호로 주어
-  혼선이 없도록 한다. 만약 여러개를 사용할 시 위의 형식과 같이 사용한다.
-*/
-input[type="checkbox"] {
-  /* 원래 기존 스타일 삭제 */
-  display: none;
-}
-
-input[type="checkbox"] + label {
-  /* 체크박스 만들기 */
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 1px solid #000;
-  background-color: var(--border-color);
-  display: inline-block;
-  cursor: pointer;
-  vertical-align: middle;
-  border-radius: 0.3rem;
-  user-select: none; /* 드래그 금지 */
-  margin: 0.3rem;
-}
-
-input[type="checkbox"]:checked + label {
-  /* 체크되었을 때 */
-  background: var(--btn-color);
-}
-
-input[type="checkbox"]:disabled + label {
-  /* 체크되었을 때 */
-  background: var(--secondary);
-}
-
-input[type="checkbox"] + label + label {
-  font-size: 1rem;
-  position: relative;
-  top: 3px;
-  cursor: pointer;
-  user-select: none;
-}
 
 /* 라디오 사용법
  <input type="radio" id="radio1" name="radio-group" />
@@ -309,7 +263,7 @@ th {
 }
 
 input,
-button,
+
 select,
 textarea {
   margin: 0;
@@ -318,25 +272,7 @@ textarea {
   line-height: inherit;
 }
 
-button {
-  width: 5rem;
-  height: 2rem;
-  color: #fff;
-  border: 0px;
-  font-weight: bold;
-  border-radius: 0.25rem;
-  background-color: var(--btn-color);
-  cursor: pointer;
-}
 
-button:hover {
-  color: #fff;
-  background-color: var(--main-color);
-}
-
-button:disabled {
-  background-color: var(--border-color);
-}
 
 input[type="text"] {
   width: 16rem;
