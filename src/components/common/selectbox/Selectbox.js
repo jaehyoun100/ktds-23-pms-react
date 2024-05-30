@@ -1,5 +1,5 @@
 // 김소현
-import React from "react";
+import React, { useState } from "react";
 import "./selectbox.css";
 
 /**
@@ -11,13 +11,37 @@ import "./selectbox.css";
  * ]
  */
 export default function Selectbox({ optionList }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(optionList[0].name);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleOptionClick = (name) => {
+    setSelected(name);
+    setIsOpen(false);
+  };
+
   return (
-    <select>
-      {optionList.map((item, idx) => (
-        <option key={idx} value={item.value}>
-          {item.name}
-        </option>
-      ))}
-    </select>
+    <div className="custom-select-container">
+      <div className="custom-select-header" onClick={toggleDropdown}>
+        {selected}
+        <span className="arrow">{isOpen ? "▲" : "▼"}</span>
+      </div>
+      {isOpen && (
+        <ul className="custom-select-list">
+          {optionList.map((item, idx) => (
+            <li
+              key={idx}
+              className="custom-select-option"
+              onClick={() => handleOptionClick(item.name)}
+            >
+              {item.name}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
