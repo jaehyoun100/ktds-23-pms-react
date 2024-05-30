@@ -2,7 +2,7 @@
 import "./input.css";
 export default function Textarea({
   inputId,
-  ref,
+  textRef,
   value,
   readOnly,
   onChange,
@@ -14,7 +14,7 @@ export default function Textarea({
       <textarea
         type="text"
         id={inputId}
-        ref={ref}
+        ref={textRef}
         value={value}
         readOnly={readOnly}
         onChange={onChange}
