@@ -1,5 +1,6 @@
 // 김소현
 import React from "react";
+import "./selectbox.css";
 
 /**
  * optionList = [
