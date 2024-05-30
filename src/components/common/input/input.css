@@ -7,12 +7,17 @@ label {
   align-items: center; /* 요소들을 수직 가운데 정렬 */
 }
 
-input[type="text"] {
+input[type="text"], textarea {
+    width: 16rem;
+    border: 0;
+    border-radius: var(--box-border-radius);
+    padding-left: 10px;
+    outline: none;
   height: 30px;
   background-color: var(--light-color);
   color: var(--main-color);
 }
-input[type="text"]:focus {
+input[type="text"]:focus, textarea:focus {
   outline: none; /* 포커스 효과 제거 */
   border: 1px solid var(--second-color); /* 클릭 시 테두리 추가 및 색상 지정 */
 }
@@ -54,4 +59,7 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"]:focus {
   outline: none;
   border: none; /* 클릭 시 테두리 없앰 */
+}
+textarea{
+    padding: 0.3rem 10px;
 }
