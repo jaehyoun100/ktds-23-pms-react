@@ -1,0 +1,27 @@
+select {
+  background-color: var(--light-color); /* 배경색 설정 */
+  border: 1px solid var(--second-color); /* 테두리 색상 설정 */
+  border-radius: 5px; /* 테두리 모서리를 둥글게 설정 */
+  padding: 7px; /* 안쪽 여백 추가 */
+  color: var(--main-color); /* 글자 색상 설정 */
+  font-size: 14px; /* 글자 크기 설정 */
+  outline: none; /* 포커스 시 발생하는 기본 아웃라인 제거 */
+
+  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+  width: 100px; /* 너비를 명시적으로 설정 */
+  height: 30px; /* 높이를 명시적으로 설정 */
+
+  text-align: center;
+}
+
+/* 포커스 시 스타일 */
+select:focus {
+  border-color: var(--second-color); /* 포커스 시 테두리 색상 */
+}
+
+/* Option 스타일 */
+option {
+  background-color: var(--light-color); /* 옵션 배경색 설정 */
+  color: var(--second-color); /* 옵션 글자 색상 설정 */
+  padding: 10px; /* 옵션 패딩 추가 */
+}
