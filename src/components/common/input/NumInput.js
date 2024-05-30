@@ -1,8 +1,6 @@
-// 김소현
 import React, { useState } from "react";
 import "./input.css";
 
-// min, max 값 필요할경우 props로 넘기기
 export default function NumInput({
   inputId,
   numRef,
@@ -14,12 +12,26 @@ export default function NumInput({
   const [number, setNumber] = useState(numRef ? numRef.current : 0);
 
   const handleMinus = () => {
-    setNumber((number) => --number);
-    numRef && (numRef.current = numRef.current - 1);
+    setNumber((number) => {
+      const newNumber = number - 1;
+      if (numRef) numRef.current = newNumber;
+      return newNumber;
+    });
   };
+
   const handlePlus = () => {
-    setNumber((number) => ++number);
-    numRef && (numRef.current = numRef.current + 1);
+    setNumber((number) => {
+      const newNumber = number + 1;
+      if (numRef) numRef.current = newNumber;
+      return newNumber;
+    });
+  };
+
+  const handleChange = (e) => {
+    const newValue = Number(e.target.value);
+    setNumber(newValue);
+    if (numRef) numRef.current = newValue;
+    if (onChange) onChange(e);
   };
 
   return (
@@ -35,7 +47,7 @@ export default function NumInput({
         min={min}
         max={max}
         readOnly={readOnly}
-        onChange={onChange}
+        onChange={handleChange}
         value={number}
       />
       <button className="plusminus" onClick={handlePlus}>
