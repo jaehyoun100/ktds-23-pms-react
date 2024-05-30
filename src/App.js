@@ -3,10 +3,11 @@ import LoginPage from "./components/login/Login";
 
 function App() {
   const [token, setToken] = useState();
+
   return (
     <>
-      {!token && <LoginPage />}
-      {!token && <div>ktds-23-pms-react</div>}
+      {!token && <LoginPage setToken={setToken} />}
+      {token && <div>ktds-23-pms-react</div>}
     </>
   );
 }
