@@ -12,3 +12,14 @@ export const loadSupplyList = async ({ token, pageNo = 0 }) => {
 
   return json;
 };
+
+export const loadSupply = async ({ selectedSplId, token }) => {
+  const response = await fetch(
+    `http://localhost:8080/api/v1/supply/${selectedSplId}`,
+    { method: "GET", headers: { Authorization: token } }
+  );
+
+  const json = await response.json();
+
+  return json;
+};
