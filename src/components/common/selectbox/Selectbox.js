@@ -3,6 +3,12 @@ import React, { useState } from "react";
 import "./selectbox.css";
 
 /**
+ *  const [selectedData, setSelectedData] = useState("값을 입력해주세요");
+  const list = [
+    { name: "옵션아이템명", value: "옵션value값" },
+    { name: "옵션아이템명2", value: "옵션value값2" },
+  ];
+ * 
  * optionList = [
  *      {
  *          name:"옵션아이템명",
@@ -10,17 +16,24 @@ import "./selectbox.css";
  *      }
  * ]
  */
-export default function Selectbox({ optionList }) {
+export default function Selectbox({
+  optionList,
+  selectedData,
+  setSelectedData,
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(optionList[0].name);
+  const [selected, setSelected] = useState(
+    selectedData ? selectedData : optionList[0].name
+  );
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (name) => {
-    setSelected(name);
+  const handleOptionClick = (item) => {
+    setSelected(item.name);
     setIsOpen(false);
+    setSelectedData(item.value);
   };
 
   return (
@@ -35,7 +48,7 @@ export default function Selectbox({ optionList }) {
             <li
               key={idx}
               className="custom-select-option"
-              onClick={() => handleOptionClick(item.name)}
+              onClick={() => handleOptionClick(item)}
             >
               {item.name}
             </li>
