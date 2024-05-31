@@ -1,7 +1,7 @@
 import "../project.css";
 import ChartContainer from "./ChartContainer";
 import MainInfo from "./MainInfo";
-export default function Main() {
+export default function ProjectMain() {
   return (
     <>
       <div>
