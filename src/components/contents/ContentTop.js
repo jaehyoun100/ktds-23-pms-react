@@ -5,9 +5,14 @@ export default function ContentTop() {
   return (
     <div className="main-content-top">
       <div className="content-top-left">
-        <SessionTimer />
+        <img
+          className="logo-img"
+          src="https://item.kakaocdn.net/do/42827d1e8227c8b4251acffb9e899e4ea88f7b2cbb72be0bdfff91ad65b168ab"
+          alt="logo"
+        />
       </div>
-      <div className="content-top-btns">
+      <div className="content-top-right">
+        <SessionTimer />
         <button type="button" className="admin-btn content-top-btn button-icon">
           <BsPersonLock className="top-icon" />
         </button>
