@@ -1,3 +1,4 @@
+// 김소현
 import React, { useState } from "react";
 import "./input.css";
 
@@ -7,7 +8,7 @@ export default function NumInput({
   min,
   max,
   readOnly,
-  onChange,
+  onChangeHandler,
 }) {
   const [number, setNumber] = useState(numRef ? numRef.current : 0);
 
@@ -31,7 +32,7 @@ export default function NumInput({
     const newValue = Number(e.target.value);
     setNumber(newValue);
     if (numRef) numRef.current = newValue;
-    if (onChange) onChange(e);
+    if (onChangeHandler) onChangeHandler(e);
   };
 
   return (

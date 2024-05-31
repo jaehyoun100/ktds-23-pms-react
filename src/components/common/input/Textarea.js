@@ -5,7 +5,7 @@ export default function Textarea({
   textRef,
   value,
   readOnly,
-  onChange,
+  onChangeHandler,
   children,
 }) {
   return (
@@ -17,7 +17,7 @@ export default function Textarea({
         ref={textRef}
         value={value}
         readOnly={readOnly}
-        onChange={onChange}
+        onChange={onChangeHandler}
       >
         {children}
       </textarea>
