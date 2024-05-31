@@ -19,7 +19,7 @@ import "./selectbox.css";
  * ]
  */
 export default function Selectbox({
-  optionList,
+  optionList = [{ name: undefined, value: undefined }],
   selectedData,
   setSelectedData,
   styleClassName,

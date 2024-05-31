@@ -3,6 +3,7 @@ import Main from "../layout/content/Main";
 import NotFoundError from "../components/errors/NotFoundError";
 import SurveyApp from "../components/survey/SurveyApp";
 import ProjectMain from "../components/project/main/ProjectMain";
+import ProjectListApp from "../components/project/projectlist/ProjectListApp";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -17,8 +18,11 @@ export default function RouterAppProvider() {
           element: <SurveyApp />,
         },
         {
-          path: "project",
-          element: <ProjectMain />,
+          path: "project/",
+          children: [
+            { index: true, element: <ProjectListApp /> },
+            { path: "view", element: <ProjectMain /> },
+          ],
         },
       ],
     },
