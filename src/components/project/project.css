@@ -1,3 +1,59 @@
 div {
   margin: 0;
 }
+.readme-container {
+  width: 400px;
+  height: 300px;
+  max-width: 100% -20px;
+  max-height: 100% -20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-wrap: break-word; /* 긴 단어가 부모 요소 너비를 넘지 않도록 줄바꿈 */
+  word-break: break-word; /* 긴 단어가 부모 요소 너비를 넘지 않도록 줄바꿈 */
+  padding: 10px;
+  font-size: 14px;
+  color: gray;
+  background-color: #f5f5f5;
+  border: 2px solid #f5a49d; /* 녹색 단색 보더 */
+  border-radius: 5px; /* 둥근 모서리 */
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 */
+}
+
+/* 전체 스크롤바 */
+.readme-container::-webkit-scrollbar {
+  width: 10px; /* 스크롤바 너비 */
+  margin-right: 10px;
+}
+
+/* 스크롤바 트랙 */
+.readme-container::-webkit-scrollbar-track {
+  border-radius: 10px; /* 둥근 모서리 */
+}
+
+/* 스크롤바 핸들 */
+.readme-container::-webkit-scrollbar-thumb {
+  background: #ff6a53; /* 스크롤바 핸들 색상 */
+  border-radius: 10px; /* 둥근 모서리 */
+  border: 2px solid #f1f1f1; /* 핸들 테두리 */
+}
+
+/* 스크롤바 핸들 호버 시 */
+.readme-container::-webkit-scrollbar-thumb:hover {
+  background: #ff6a53; /* 스크롤바 핸들 호버 색상 */
+}
+.display-flex {
+  align-items: center;
+  display: flex;
+  margin-bottom: 10px;
+}
+.display-flex > svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  color: #ff6a53;
+}
+.readme {
+  font-size: 17px;
+  color: var(--second-color);
+}
