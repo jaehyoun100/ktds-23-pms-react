@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupplyList } from "../../http/supplyHttp";
 import SupplyView from "./SupplyView";
+import SupplyRegistration from "./SupplyRegistration";
 
 let pageNo = 0;
 
 export default function SupplyApp({ token }) {
   const [selectedSplId, setSelectedSplId] = useState();
+  const [isRegistrationMode, setIsRegistrationMode] = useState(false);
   const [needReload, setNeedReload] = useState();
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -34,9 +36,13 @@ export default function SupplyApp({ token }) {
     setSelectedSplId(rowId);
   };
 
+  const onRegistrationModeClickHandler = () => {
+    setIsRegistrationMode(true);
+  };
+
   return (
     <>
-      {token && !isSelect && (
+      {token && !isSelect && !isRegistrationMode && (
         <>
           <div>총 {count} 개의 소모품이 검색되었습니다.</div>
           <table>
@@ -63,7 +69,7 @@ export default function SupplyApp({ token }) {
           </table>
         </>
       )}
-      {token && isSelect && (
+      {token && isSelect && !isRegistrationMode && (
         <SupplyView
           selectedSplId={selectedSplId}
           setSelectedSplId={setSelectedSplId}
@@ -72,8 +78,15 @@ export default function SupplyApp({ token }) {
           token={token}
         />
       )}
+      {isRegistrationMode && (
+        <SupplyRegistration
+          setIsRegistrationMode={setIsRegistrationMode}
+          setNeedReload={setNeedReload}
+          token={token}
+        />
+      )}
+      <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
     </>
   );
-  // <button>버튼 1</button>
   // <button>버튼 2</button>
 }
