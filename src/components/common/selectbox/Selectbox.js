@@ -20,6 +20,7 @@ export default function Selectbox({
   optionList,
   selectedData,
   setSelectedData,
+  styleClassName,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(
@@ -37,7 +38,7 @@ export default function Selectbox({
   };
 
   return (
-    <div className="custom-select-container">
+    <div className={`custom-select-container ${styleClassName}`}>
       <div className="custom-select-header" onClick={toggleDropdown}>
         {selected}
         <span className="arrow">{isOpen ? "▲" : "▼"}</span>
