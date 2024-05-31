@@ -1,4 +1,3 @@
-import axios from "axios";
 import "../project.css";
 import MainChart from "./MainChart";
 import { useEffect, useState } from "react";
