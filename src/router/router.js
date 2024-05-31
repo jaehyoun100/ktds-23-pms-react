@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ContentMain from "../layout/content/ContentMain";
+import Main from "../layout/content/Main";
 import NotFoundError from "../components/errors/NotFoundError";
 import SurveyApp from "../components/survey/SurveyApp";
 
@@ -8,7 +8,7 @@ export default function RouterAppProvider() {
     /* 라우트 영역 */
     {
       path: "/",
-      element: <ContentMain />,
+      element: <Main />,
       errorElement: <NotFoundError />,
     },
     {

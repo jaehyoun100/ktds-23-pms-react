@@ -1,0 +1,26 @@
+/* main content top */
+.main-content-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.sidebar-toggler {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.content-top-left {
+  display: flex;
+  align-items: center;
+}
+
+.top-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.content-top-btn {
+  margin-left: 24px;
+}
