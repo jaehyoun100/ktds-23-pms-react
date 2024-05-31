@@ -2,6 +2,7 @@ import "./Main.css";
 import Sidebar from "../sidebar/Sidebar";
 import Content from "./Content";
 import menus from "../sidebar/Menu";
+import { Outlet } from "react-router-dom";
 
 export default function Main() {
   return (
