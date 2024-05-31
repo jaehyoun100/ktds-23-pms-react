@@ -6,7 +6,7 @@
 
 .custom-select-header {
   background-color: var(--light-color);
-  border: 2px solid var(--second-color);
+  /* border: 2px solid var(--thrid-color); */
   border-radius: 5px;
   padding: 10px;
   color: var(--second-color);
@@ -30,7 +30,7 @@
   width: 100%;
   color: var(--main-color);
   background-color: var(--light-color);
-  border: 2px solid var(--second-color);
+  /* border: 2px solid var(--thrid-color); */
   border-radius: 5px;
   margin-top: 5px;
   list-style: none;
