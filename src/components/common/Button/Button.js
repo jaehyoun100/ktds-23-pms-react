@@ -2,9 +2,9 @@
 import React from "react";
 import "./button.css";
 
-export default function Button({ onClick, children, disabled }) {
+export default function Button({ onClickHandler, children, disabled }) {
   return (
-    <button onClick={onClick} disabled={disabled}>
+    <button onClick={onClickHandler} disabled={disabled}>
       {children}
     </button>
   );

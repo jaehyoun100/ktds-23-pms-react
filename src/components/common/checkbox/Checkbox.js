@@ -7,9 +7,9 @@ export default function Checkbox({
   disabled,
   checked,
   CheckboxId,
-  onChange,
+  onChangeHandler,
   ref,
-  onclick,
+  onClickHandler,
 }) {
   return (
     <label htmlFor={CheckboxId} className="checkboxlabel">
@@ -18,10 +18,10 @@ export default function Checkbox({
         id={CheckboxId}
         disabled={disabled}
         checked={checked}
-        onChange={onChange}
+        onChange={onChangeHandler}
         ref={ref}
         className="checkbox"
-        onClick={onclick}
+        onClick={onClickHandler}
         value={ref.current.value}
       />
       <p className="checkboxP"></p>

@@ -2,12 +2,20 @@
 import React from "react";
 import "./input.css";
 
+/**
+ * 
+  inputId : 
+  textRef,
+  value,
+  readOnly,
+  onChange,
+ */
 export default function TextInput({
   inputId,
   textRef,
   value,
   readOnly,
-  onChange,
+  onChangeHandler,
 }) {
   return (
     <>
@@ -18,7 +26,7 @@ export default function TextInput({
         ref={textRef}
         value={value}
         readOnly={readOnly}
-        onChange={onChange}
+        onChange={onChangeHandler}
       />
     </>
   );
