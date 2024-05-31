@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "../layout/content/Main";
 import NotFoundError from "../components/errors/NotFoundError";
 import SurveyApp from "../components/survey/SurveyApp";
-import Main from "../components/project/main/Main";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
