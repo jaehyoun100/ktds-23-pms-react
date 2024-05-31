@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ContentMain from "../layout/content/ContentMain";
 import NotFoundError from "../components/errors/NotFoundError";
 import SurveyApp from "../components/survey/SurveyApp";
+import Main from "../components/project/main/Main";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -14,6 +15,10 @@ export default function RouterAppProvider() {
     {
       path: "survey",
       element: <SurveyApp />,
+    },
+    {
+      path: "project",
+      element: <Main />,
     },
   ]);
 
