@@ -2,13 +2,13 @@
 import React from "react";
 import "./checkbox.css";
 
-// 필요한경우 disabled={true}, checked={true}로 props 보내서 사용
+// 필요한경우 isDisabled={true}, isChecked={true}로 props 보내서 사용
 export default function Checkbox({
-  disabled,
-  checked,
+  isDisabled,
+  isChecked,
   CheckboxId,
   onChangeHandler,
-  ref,
+  checkboxRef,
   onClickHandler,
 }) {
   return (
@@ -16,13 +16,13 @@ export default function Checkbox({
       <input
         type="checkbox"
         id={CheckboxId}
-        disabled={disabled}
-        checked={checked}
+        disabled={isDisabled}
+        checked={isChecked}
         onChange={onChangeHandler}
-        ref={ref}
+        ref={checkboxRef}
         className="checkbox"
         onClick={onClickHandler}
-        value={ref.current.value}
+        value={checkboxRef.current.value}
       />
       <p className="checkboxP"></p>
     </label>

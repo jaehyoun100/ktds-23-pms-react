@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import "./input.css";
 
+// 수정 못하게 하려면 isReadOnly={true} 전달하기
+// 최소값이나 최대값 설정하고 싶으면 minNum, maxNum 전달하기
 export default function NumInput({
   inputId,
   numRef,
-  min,
-  max,
-  readOnly,
+  minNum,
+  maxNum,
+  isReadOnly,
   onChangeHandler,
 }) {
   const [number, setNumber] = useState(numRef ? numRef.current : 0);
@@ -45,9 +47,9 @@ export default function NumInput({
         type="number"
         id={inputId}
         numref={numRef}
-        min={min}
-        max={max}
-        readOnly={readOnly}
+        min={minNum}
+        max={maxNum}
+        readOnly={isReadOnly}
         onChange={handleChange}
         value={number}
       />
