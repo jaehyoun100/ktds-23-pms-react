@@ -4,6 +4,7 @@ import NotFoundError from "../components/errors/NotFoundError";
 import SurveyApp from "../components/survey/SurveyApp";
 import ProjectMain from "../components/project/main/ProjectMain";
 import ProjectListApp from "../components/project/projectlist/ProjectListApp";
+import EmployeeApp from "../components/employee/EmployeeApp";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -23,6 +24,10 @@ export default function RouterAppProvider() {
             { index: true, element: <ProjectListApp /> },
             { path: "view", element: <ProjectMain /> },
           ],
+        },
+        {
+          path: "employee",
+          element: <EmployeeApp />,
         },
       ],
     },
