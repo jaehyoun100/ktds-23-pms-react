@@ -1,10 +1,12 @@
 // 김소현
 import "./input.css";
+
+// 수정 못하게 하려면 isReadOnly={true} 전달하기
 export default function Textarea({
   inputId,
   textRef,
   value,
-  readOnly,
+  isReadOnly,
   onChangeHandler,
   children,
 }) {
@@ -16,7 +18,7 @@ export default function Textarea({
         id={inputId}
         ref={textRef}
         value={value}
-        readOnly={readOnly}
+        readOnly={isReadOnly}
         onChange={onChangeHandler}
       >
         {children}
