@@ -1,33 +1,27 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { loadRequirement } from "../../http/requirementHttp";
+import { useEffect, useState } from "react";
 
-export default function Requirement({ token }) {
-  let array = [" A", " B", " C", " D", " E"];
-
-  console.log("token: " + token);
+export default function Requirement() {
+  //   let array = [" A", " B", " C", " D", " E"];
 
   const [requirement, setRequirement] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [needLoad, setNeedLoad] = useState();
-
-  // Component를 실행시키자마자 API 요청으로 데이터를 받아오는 부분
-  const fetchGetBoard = useCallback(loadRequirement, [token]);
-
-  // 토큰이 바뀌면 객체 리터럴이 다시 생성되어서 실행해라
-  const fetchToken = useMemo(() => {
-    return { token, needLoad };
-  }, [token, needLoad]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     // 게시글 불러오기
     const loadBoards = async () => {
-      const json = await fetchGetBoard({ ...fetchToken });
+      const response = await fetch(
+        `http://localhost:8080/api/v1/requirement/search`,
+        {
+          method: "GET",
+          headers: { Authorization: token },
+        }
+      );
+      const json = await response.json();
       setRequirement(json);
-      setIsLoading(false);
     };
 
     loadBoards();
-  }, [fetchGetBoard, fetchToken]);
+  }, [token]);
 
   const { count } = requirement || {};
 
@@ -61,16 +55,6 @@ export default function Requirement({ token }) {
                   <td>작성일{item.crtDt}</td>
                 </tr>
               ))}
-            {/* {array.map((item, index) => (
-              <tr key={index}>
-                <td>프로젝트{item}</td>
-                <td>제목{item}</td>
-                <td>일정상태{item}</td>
-                <td>진행상태{item}</td>
-                <td>작성자{item}</td>
-                <td>작성일{item}</td>
-              </tr>
-            ))} */}
           </tbody>
         </table>
       </>
