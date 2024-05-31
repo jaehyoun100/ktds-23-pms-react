@@ -4,7 +4,7 @@ export const loadSupplyList = async ({ token, pageNo = 0 }) => {
   }
 
   const response = await fetch(
-    `http://localhost:8080/api/v1/supply/list?pageNo=${pageNo}`,
+    `http://localhost:8080/api/v1/supply?pageNo=${pageNo}`,
     { method: "GET", headers: { Authorization: token } }
   );
 
@@ -21,5 +21,31 @@ export const loadSupply = async ({ selectedSplId, token }) => {
 
   const json = await response.json();
 
+  return json;
+};
+
+export const registerSupply = async (
+  token,
+  name,
+  category,
+  price,
+  image,
+  detail
+) => {
+  const data = new FormData();
+  data.append("splName", name);
+  data.append("splCtgr", category);
+  data.append("splPrice", price);
+  data.append("splImg", image);
+  data.append("splDtl", detail);
+
+  const response = await fetch("http://localhost:8080/api/v1/supply", {
+    method: "POST",
+    headers: { Authorization: token },
+    body: data,
+  });
+
+  const json = await response.json();
+  console.log(json);
   return json;
 };
