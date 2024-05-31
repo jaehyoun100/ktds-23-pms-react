@@ -34,11 +34,11 @@
   --box-border-radius: 0.5rem;
 
   /* 사이드 바 크기 300px */
-  --sidebar-size: 18.75rem;
+  /* --sidebar-size: 18.75rem; */
 
   /* 로고 사이즈 - 헤더 */
-  --sidebar-logo-img-size: 3rem;
-  --sidebar-logo-size: 5rem;
+  /* --sidebar-logo-img-size: 3rem; */
+  /* --sidebar-logo-size: 5rem; */
 
   /* 프로필 사진 크기 더 크게 할건지 생각하기*/
   --profile-image-size: 5rem;
@@ -129,6 +129,7 @@ input[type="radio"] + label + label {
 }
 
 div {
+  
   margin: 0;
   padding: 0;
 }
@@ -331,7 +332,7 @@ select {
   background-size: 16px 16px;
 }
 
-/* Header */
+/* Header
 .header {
   background-color: var(--box-bg);
   padding-left: var(--sidebar-size);
@@ -372,11 +373,11 @@ select {
   width: 40px;
   height: 40px;
   margin-left: 40px;
-}
+} */
 
 /* Sidebar */
 
-.sidebar {
+/* .sidebar {
   background-color: var(--box-bg);
   position: fixed;
   top: 0;
@@ -385,12 +386,12 @@ select {
   height: 100vh;
   box-shadow: var(--shadow);
   overflow-y: auto;
-}
+} */
 
 /* .sidebar-close {
   display: none;
 } */
-
+/* 
 .sidebar-user {
   display: flex;
   height: 10rem;
@@ -398,8 +399,8 @@ select {
   padding: 15px;
   justify-content: space-evenly;
   text-align: center;
-}
-
+} */
+/* 
 .user-name {
   font-size: 1.7rem;
   font-weight: 550;
@@ -420,9 +421,9 @@ select {
   margin-left: 6.875rem;
   margin-right: 20px;
   margin-top: 3rem;
-}
+} */
 
-.sidebar-menu {
+/* .sidebar-menu {
   padding: 10px 0;
   list-style-type: none;
 }
@@ -452,8 +453,8 @@ select {
 
 .sidebar-submenu-content:hover {
   color: var(--main-color);
-}
-
+} */
+/* 
 .location-tree {
   margin: 0;
   height: 2rem;
@@ -485,7 +486,7 @@ select {
 .location-tree li:nth-child(1) {
   color: #000;
   cursor: default !important;
-}
+} */
 /**  메뉴 탭  **/
 .menu-tab-wrapper {
   display: flex;
@@ -581,19 +582,19 @@ iframe {
   display: none;
 }
 
-.dropdown-icon {
+.dropdown-icon {  
   font-size: 1.5rem;
   margin-right: 10px;
 }
 
-.sidebar-submenu-content {
+/* .sidebar-submenu-content {
   position: relative;
 }
 
 .sidebar-submenu-content .dropdown-icon {
   position: absolute;
   right: 15px;
-}
+} */
 
 .dropdown-icon {
   --size: 15px;
@@ -637,9 +638,9 @@ iframe {
   transform: rotate(-45deg);
 }
 
-.sidebar-submenu-content:hover > .dropdown-icon {
+/* .sidebar-submenu-content:hover > .dropdown-icon {
   --color: var(--main-color);
-}
+} */
 
 .dropdown-menu {
   padding: 0;
@@ -760,106 +761,6 @@ input[type="text"].input-text-title {
   display: none;
 }
 
-@media only screen and (max-width: 1280px) {
-  .sidebar {
-    transition: transform 0.3s ease-in-out;
-    max-width: 100%;
-    z-index: 99;
-    transform: translateX(-80%);
-  }
-
-  .dropdown-menu {
-    display: none;
-  }
-
-  .dropdown-icon {
-    display: none;
-  }
-
-  .sidebar.active {
-    transform: translateX(0);
-  }
-
-  .sidebar-common-icon {
-    position: absolute;
-    right: 0;
-    margin: 0 19px;
-  }
-
-  .sidebar-wrapper:hover {
-    .backboard {
-      display: block;
-      position: fixed;
-      z-index: 90;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #0005;
-    }
-
-    .backboard:hover {
-      display: none;
-    }
-
-    .sidebar {
-      transition: transform 0.3s ease-in-out;
-      max-width: 100%;
-      z-index: 99;
-      transform: translateX(0);
-    }
-
-    .sidebar-common-icon {
-      position: static;
-    }
-
-    .dropdown-icon {
-      display: block;
-    }
-
-    .dropdown-menu {
-      display: block;
-    }
-  }
-
-  .header,
-  .content {
-    padding: 0;
-    padding-left: 60px;
-  }
-
-  /* 화면이 줄었을때 grid 에서 block으로 바뀜 */
-  .main {
-    padding-left: 0;
-    display: block;
-  }
-
-  .content {
-    padding-left: 60px;
-    display: block;
-    /* 블럭 크기 고정할 필요 있음 */
-  }
-
-  /* 화면을 줄였을 때 컨텐트별 크기 지정하는 법 */
-  /* .main-common {
-    width: 30rem;
-    height: 30rem;
-  } */
-
-  .mobile-toggle,
-  .sidebar-close {
-    display: grid;
-    place-items: center;
-    font-size: 2rem;
-    margin-right: 30px;
-    cursor: pointer;
-  }
-
-  .sidebar-close {
-    position: absolute;
-    right: -15px;
-  }
-}
 
 /* pagination */
 nav {
