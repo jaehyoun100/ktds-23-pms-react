@@ -23,5 +23,31 @@ export default function SupplyApp({ token }) {
     fetchingData();
   }, [memoizedLoadSupplyList, memoizedToken]);
 
-  return <div>소모품 App</div>;
+  const { count, pages, next } = data || {};
+  const { body: supplies } = data || {};
+
+  return (
+    <>
+      <div>총 {count} 개의 소모품이 검색되었습니다.</div>
+      <table>
+        <thead>
+          <tr>
+            <th>카테고리</th>
+            <th>이름</th>
+            <th>재고</th>
+          </tr>
+        </thead>
+        <tbody>
+          {supplies &&
+            supplies.map((supplyItem) => (
+              <tr key={supplyItem.splId}>
+                <td>{supplyItem.splCtgr}</td>
+                <td>{supplyItem.splName}</td>
+                <td>{supplyItem.invQty}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </>
+  );
 }
