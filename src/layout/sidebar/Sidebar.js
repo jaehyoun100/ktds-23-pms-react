@@ -1,6 +1,6 @@
 import "./Sidebar.css";
 import MenuList from "./MenuList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuMenu } from "react-icons/lu";
 
 export default function Sidebar({ menus = [] }) {
@@ -10,6 +10,26 @@ export default function Sidebar({ menus = [] }) {
   const onSidebarToggleHandler = () => {
     setCloseSideBar(!closeSideBar);
   };
+
+  // 미디어 쿼리 감지: 브라우저의 너비가 변경될 때 이를 감지하고 상태를 변경하는 함수
+  const handleResize = () => {
+    if (window.innerWidth <= 1280) {
+      setCloseSideBar(true);
+    } else {
+      setCloseSideBar(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    // 초기 렌더링 시 미디어 쿼리 상태를 확인
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className={`sidebar ${closeSideBar === false ? null : "active"}`}>
