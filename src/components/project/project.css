@@ -57,3 +57,42 @@ div {
   font-size: 17px;
   color: var(--second-color);
 }
+.header-container{
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0 4px 4px -4px var(--main-color);
+  /* border-bottom: 1px solid var(--second-color); */
+  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: baseline;
+  .flex{
+    gap: 50px;
+    align-items: baseline;
+    display: flex;
+    margin-left: 20px;
+  }
+}
+.header-container h4, .header-container h6{
+  color: var(--dark-color);
+}
+
+.header-menu{
+  font-size: 13px;
+  display: flex;
+  flex-direction: row;
+  gap: 54px;
+  margin-right: 100px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.header-menu span{
+  display: inline-block;
+  padding: 3px ;
+  border:none;
+  transition: all 10s ease-in;
+}
+.header-menu span:hover{
+  color: var(--main-color);
+  padding-bottom: 3px;
+  border-bottom: 1.2px solid var(--main-color);
+}
