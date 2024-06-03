@@ -1,10 +1,13 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import LoginFooter from "./LoginFooter";
+import { useDispatch } from "react-redux";
+import { getToken } from "../../http/userDetailHttp";
 
-export default function LoginPage({ setToken }) {
+export default function LoginPage() {
   const empIdRef = useRef();
   const passwordRef = useRef();
-  const [credentialsExpired, setCredentialsExpired] = useState(false);
+
+  const tokenDispatch = useDispatch();
 
   const onLoginBtnClickHandler = async () => {
     const empId = empIdRef.current.value;
@@ -26,35 +29,23 @@ export default function LoginPage({ setToken }) {
     /**
      * token 의 값을 브라우져의 로컬 스토리지에 저장한다
      */
-    const json = await login(empId, password);
-
-    if (json.message) {
-      alert(json.message);
-      return;
-    } else {
-      if (json.credentialsExpired) {
-        setCredentialsExpired(json.credentialsExpired);
-        alert("비밀번호 만료됨");
-      }
-      setToken(json.token);
-      localStorage.setItem("token", json.token);
-    }
+    tokenDispatch(getToken(empId, password));
   };
 
-  const login = async (empId, pwd) => {
-    const response = await fetch("http://localhost:8080/auth/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        empId,
-        pwd,
-      }),
-    });
-    const json = await response.json();
-    console.log(json);
+  // const login = async (empId, pwd) => {
+  //   const response = await fetch("http://localhost:8080/auth/token", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       empId,
+  //       pwd,
+  //     }),
+  //   });
+  //   const json = await response.json();
+  //   console.log(json);
 
-    return json;
-  };
+  //   return json;
+  // };
 
   return (
     <>
@@ -75,7 +66,7 @@ export default function LoginPage({ setToken }) {
                   required
                   ref={empIdRef}
                 />
-                <label for="empId">ID</label>
+                <label htmlFor="empId">ID</label>
                 <span></span>
               </div>
               <div className="pwd">
@@ -90,7 +81,7 @@ export default function LoginPage({ setToken }) {
                   required
                   ref={passwordRef}
                 />
-                <label for="pwd">PASSWORD</label>
+                <label htmlFor="pwd">PASSWORD</label>
                 <span></span>
               </div>
               <div className="login-btn">
