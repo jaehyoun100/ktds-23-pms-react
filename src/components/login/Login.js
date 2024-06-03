@@ -12,7 +12,6 @@ export default function LoginPage() {
   const onLoginBtnClickHandler = async () => {
     const empId = empIdRef.current.value;
     const password = passwordRef.current.value;
-
     /**
      * 들어온 email과 password의 값이 올바른지 확인한다
      */
@@ -26,26 +25,12 @@ export default function LoginPage() {
       passwordRef.current.focus();
       return;
     }
+
     /**
-     * token 의 값을 브라우져의 로컬 스토리지에 저장한다
+     * token 의 값을 가져와서 브라우져의 로컬 스토리지에 저장한다
      */
     tokenDispatch(getToken(empId, password));
   };
-
-  // const login = async (empId, pwd) => {
-  //   const response = await fetch("http://localhost:8080/auth/token", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       empId,
-  //       pwd,
-  //     }),
-  //   });
-  //   const json = await response.json();
-  //   console.log(json);
-
-  //   return json;
-  // };
 
   return (
     <>
