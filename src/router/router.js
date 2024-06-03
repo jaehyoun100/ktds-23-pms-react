@@ -8,8 +8,6 @@ import outputRouter from "./routercomponent/outputRouter";
 import requirementRouter from "./routercomponent/requirementRouter";
 import supplyRouter from "./routercomponent/supplyRouter";
 import deptteamRouter from "./routercomponent/deptteamRouter";
-import Requirement from "../components/requirement/Requirement";
-import Output from "../components/output/Output";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([

@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Requirement() {
   const [requirement, setRequirement] = useState();
   const token = localStorage.getItem("token");
+
+  // React Router의 Path를 이동시키는 Hook
+  // Spring의 redirect와 유사.
+  const navigate = useNavigate();
+
+  const onRqmCreateHandler = () => {
+    navigate("/requirement/write");
+  };
 
   useEffect(() => {
     // 요구사항 리스트 불러오기
@@ -63,7 +71,7 @@ export default function Requirement() {
       </>
       <div className="button-area right-align">
         <button>삭제</button>
-        <button>요구사항 생성</button>
+        <button onClick={onRqmCreateHandler}>요구사항 생성</button>
       </div>
     </>
   );
