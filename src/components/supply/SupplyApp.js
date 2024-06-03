@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupplyList } from "../../http/supplyHttp";
 import SupplyView from "./SupplyView";
-import SupplyRegistration from "./SupplyRegistration";
+import SupplyRegist from "./SupplyRegist";
 
 let pageNo = 0;
 
@@ -79,7 +79,7 @@ export default function SupplyApp({ token }) {
         />
       )}
       {isRegistrationMode && (
-        <SupplyRegistration
+        <SupplyRegist
           setIsRegistrationMode={setIsRegistrationMode}
           setNeedReload={setNeedReload}
           token={token}
