@@ -1,5 +1,5 @@
-import "../project.css";
 import { FaBookBookmark } from "react-icons/fa6";
+import styles from "../project.module.css";
 
 export default function MainReadMe({ memo }) {
   return (

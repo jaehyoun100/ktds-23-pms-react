@@ -1,4 +1,4 @@
-import "../project.css";
+import "../project.module.css";
 import { useState } from "react";
 import ChartContainer from "./ChartContainer";
 import MainInfo from "./MainInfo";

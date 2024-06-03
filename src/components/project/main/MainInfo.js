@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "../project.css";
+import "../project.module.css";
 export default function MainInfo() {
   const prjId = "PRJ_240502_000243";
   useEffect(() => {
