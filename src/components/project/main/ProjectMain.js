@@ -20,9 +20,7 @@ export default function ProjectMain() {
   useMemo(() => {
     const { item } = location.state.key;
     console.log(item, "item");
-    // setProject(item);
     setProjectId(item.prjId);
-    setMemo(item.prjMemo);
   }, [location.state.key]);
   useEffect(() => {
     const test = async () => {
@@ -44,7 +42,7 @@ export default function ProjectMain() {
       const getProject = async () => {
         const run = await test();
         setProject(run.body);
-        console.log(run.body, "!!!!!!!!!!!!!!!");
+        setMemo(run.body.prjMemo);
       };
       getProject();
     }
