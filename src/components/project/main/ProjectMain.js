@@ -11,9 +11,12 @@ export default function ProjectMain() {
     <>
       <MainHeader />
       <div style={{ backgroundColor: "#fff" }}>
-        <MainInfo />
-        <ChartContainer />
-        <MainReadMe memo={memo} />
+        <div className={styles.gridComponent}>
+          <MainInfo />
+          <ChartContainer />
+          <MainReadMe memo={memo} />
+          <div>오</div>
+        </div>
       </div>
     </>
   );

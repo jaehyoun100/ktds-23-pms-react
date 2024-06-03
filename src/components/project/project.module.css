@@ -1,9 +1,18 @@
 div {
   margin: 0;
 }
+.MainInfo {
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
 .readmeContainer {
-  width: 400px;
-  height: 300px;
+  width: 80%;
+  height: 80%;
+  margin-left: 40px;
   max-width: 100% -20px;
   max-height: 100% -20px;
   overflow-y: auto;
@@ -51,13 +60,24 @@ div {
   width: 20px;
   height: 20px;
   margin-right: 10px;
+  margin-left: 40px;
+
   color: #ff6a53;
 }
+.gridComponent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
 .readme {
   font-size: 17px;
   color: var(--second-color);
 }
-.headerContainer{
+.readmeMargin {
+  margin-top: 80px;
+}
+.headerContainer {
   display: flex;
   flex-direction: row;
   box-shadow: 0 4px 4px -4px var(--main-color);
@@ -65,18 +85,19 @@ div {
   margin-bottom: 10px;
   justify-content: space-between;
   align-items: baseline;
-  .flex{
+  .flex {
     gap: 50px;
     align-items: baseline;
     display: flex;
     margin-left: 20px;
   }
 }
-.headerContainer h4, .headerContainer h6{
+.headerContainer h4,
+.headerContainer h6 {
   color: var(--dark-color);
 }
 
-.headerMenu{
+.headerMenu {
   font-size: 13px;
   display: flex;
   flex-direction: row;
@@ -85,14 +106,50 @@ div {
   cursor: pointer;
   font-weight: bold;
 }
-.headerMenu span{
+.headerMenu span {
   display: inline-block;
-  padding: 3px ;
-  border:none;
+  padding: 3px;
+  border: none;
   transition: all 10s ease-in;
 }
-.headerMenu span:hover{
+.headerMenu span:hover {
   color: var(--main-color);
   padding-bottom: 3px;
   border-bottom: 1.2px solid var(--main-color);
+}
+
+.barContainer {
+  width: 400px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+
+  position: relative;
+  height: 40px;
+}
+
+.bar {
+  height: 100%;
+  background-color: #f5a49d;
+  text-align: center;
+  line-height: 40px; /* 바의 높이와 동일하게 설정하여 텍스트를 가운데 정렬 */
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: 8px 0 0 8px;
+}
+.infoFirst {
+  padding-top: 40px;
+}
+.infoDisplay {
+  margin-left: 40px;
+  margin-top: 30px;
+}
+.infoDisplay :first-child {
+  width: 93px;
+  font-weight: 700;
+}
+.infoDisplay > div {
+  margin-right: 20px;
+  font-size: 17px;
 }

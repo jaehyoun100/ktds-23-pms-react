@@ -4,13 +4,13 @@ import s from "../project.module.css";
 
 export default function MainReadMe({ memo }) {
   return (
-    <>
-      <div className={s.displayFlex}>
+    <div>
+      <div className={`${s.displayFlex} ${s.readmeMargin}`}>
         <FaBookBookmark />
         <div className={s.readme}>Read Me</div>
       </div>
 
       <div className={s.readmeContainer}>{memo}</div>
-    </>
+    </div>
   );
 }
