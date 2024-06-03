@@ -1,5 +1,5 @@
 import { tokenActions } from "../store/toolkit/slice/tokenSlice";
-import { stateActions } from "../store/toolkit/store";
+import { stateActions } from "../store/toolkit/slice/userDetailSlice";
 
 /**
  * Token 값을 받아서 서버에서 empVO 를 가져온 다음
