@@ -1,24 +1,14 @@
 import { useEffect, useState } from "react";
 import styles from "../project.module.css";
 import ProjectSubChart from "./ProjectSubChart";
+import { IoInformationCircleSharp } from "react-icons/io5";
 
 export default function MainInfo({ project }) {
   // const prjId = "PRJ_240502_000243";
 
-  const [totalTasks, setTotalTasks] = useState(0);
-  const [completedTasks, setCompletedTasks] = useState(0);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const total = 3;
-      const completed = 2;
-
-      setTotalTasks(total);
-      setCompletedTasks(completed);
-    };
-
-    fetchData();
-  }, []);
+  const onInfoClickHandler = () => {
+    return;
+  };
 
   return (
     <div>
@@ -32,7 +22,14 @@ export default function MainInfo({ project }) {
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
         <div>고객사</div>
-        <div>{project.clntInfo}</div>
+        <div className={styles.displayInfoFlex}>
+          {" "}
+          {project.clntInfo}{" "}
+          <IoInformationCircleSharp
+            className={styles.info}
+            onClick={onInfoClickHandler}
+          />
+        </div>
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
         <div>참여원</div>

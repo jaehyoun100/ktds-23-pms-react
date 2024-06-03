@@ -13,7 +13,7 @@ const ProjectSubChart = ({ totalTasks, completedTasks }) => {
         className={styles.bar}
         style={{
           width: `${completionRatio ? completionRatio : 100}%`,
-          backgroundColor: `${completionRatio === 0 ? "#333" : ""}`,
+          backgroundColor: `${completionRatio === 0 ? "#e0e0e0" : ""}`,
         }}
       >
         {completedTasks} / {totalTasks} ({Math.round(completionRatio)}%)
