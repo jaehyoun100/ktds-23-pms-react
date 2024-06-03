@@ -42,6 +42,9 @@ export default function SupplyView({
           <div>{supplyBody.splCtgr}</div>
           <div>{supplyBody.splPrice}</div>
           <div>{supplyBody.invQty}</div>
+          <div>
+            <img src={supplyBody.splImg} alt={supplyBody.splName} />
+          </div>
           <div>{supplyBody.splDtl}</div>
         </div>
       )}
