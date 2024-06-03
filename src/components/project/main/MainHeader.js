@@ -1,14 +1,14 @@
-import "../project.css";
+import styles from "../project.module.css";
 export default function MainHeader() {
   return (
-    <div className="header-container">
-      <div className="flex">
+    <div className={styles.headerContainer}>
+      <div className={styles.flex}>
         <h4>
           <span>담당부서</span> / <span>프로젝트명</span>
         </h4>
         <h6>PM : 아무개</h6>
       </div>
-      <div className="header-menu">
+      <div className={styles.headerMenu}>
         <span>참여원관리</span>
         <span>요구사항</span>
         <span>이슈관리</span>

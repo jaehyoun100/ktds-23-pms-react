@@ -1,7 +1,7 @@
 div {
   margin: 0;
 }
-.readme-container {
+.readmeContainer {
   width: 400px;
   height: 300px;
   max-width: 100% -20px;
@@ -21,33 +21,33 @@ div {
 }
 
 /* 전체 스크롤바 */
-.readme-container::-webkit-scrollbar {
+.readmeContainer::-webkit-scrollbar {
   width: 10px; /* 스크롤바 너비 */
   margin-right: 10px;
 }
 
 /* 스크롤바 트랙 */
-.readme-container::-webkit-scrollbar-track {
+.readmeContainer::-webkit-scrollbar-track {
   border-radius: 10px; /* 둥근 모서리 */
 }
 
 /* 스크롤바 핸들 */
-.readme-container::-webkit-scrollbar-thumb {
+.readmeContainer::-webkit-scrollbar-thumb {
   background: #ff6a53; /* 스크롤바 핸들 색상 */
   border-radius: 10px; /* 둥근 모서리 */
   border: 2px solid #f1f1f1; /* 핸들 테두리 */
 }
 
 /* 스크롤바 핸들 호버 시 */
-.readme-container::-webkit-scrollbar-thumb:hover {
+.readmeContainer::-webkit-scrollbar-thumb:hover {
   background: #ff6a53; /* 스크롤바 핸들 호버 색상 */
 }
-.display-flex {
+.displayFlex {
   align-items: center;
   display: flex;
   margin-bottom: 10px;
 }
-.display-flex > svg {
+.displayFlex > svg {
   width: 20px;
   height: 20px;
   margin-right: 10px;
@@ -57,7 +57,7 @@ div {
   font-size: 17px;
   color: var(--second-color);
 }
-.header-container{
+.headerContainer{
   display: flex;
   flex-direction: row;
   box-shadow: 0 4px 4px -4px var(--main-color);
@@ -72,11 +72,11 @@ div {
     margin-left: 20px;
   }
 }
-.header-container h4, .header-container h6{
+.headerContainer h4, .headerContainer h6{
   color: var(--dark-color);
 }
 
-.header-menu{
+.headerMenu{
   font-size: 13px;
   display: flex;
   flex-direction: row;
@@ -85,13 +85,13 @@ div {
   cursor: pointer;
   font-weight: bold;
 }
-.header-menu span{
+.headerMenu span{
   display: inline-block;
   padding: 3px ;
   border:none;
   transition: all 10s ease-in;
 }
-.header-menu span:hover{
+.headerMenu span:hover{
   color: var(--main-color);
   padding-bottom: 3px;
   border-bottom: 1.2px solid var(--main-color);

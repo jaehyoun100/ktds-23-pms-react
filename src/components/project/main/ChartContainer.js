@@ -1,4 +1,5 @@
 import MainChart from "./MainChart";
+import styles from "../project.module.css";
 
 export default function ChartContainer() {
   // const [chartData1, setChartData1] = useState({ completed: 30, inProgress: 20 });
