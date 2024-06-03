@@ -2,12 +2,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "../layout/content/Main";
 import NotFoundError from "../components/errors/NotFoundError";
 import SurveyApp from "../components/survey/SurveyApp";
-import ProjectMain from "../components/project/main/ProjectMain";
-import ProjectListApp from "../components/project/projectlist/ProjectListApp";
 import EmployeeApp from "../components/employee/EmployeeApp";
-import Requirement from "../components/requirement/Requirement";
-import Output from "../components/output/Output";
 import projectRouter from "./routercomponent/projectRouter";
+import outputRouter from "./routercomponent/outputRouter";
+import requirementRouter from "./routercomponent/requirementRouter";
+import supplyRouter from "./routercomponent/supplyRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -26,11 +25,9 @@ export default function RouterAppProvider() {
           path: "employee",
           element: <EmployeeApp />,
         },
-        {
-          path: "requirement",
-          element: <Requirement />,
-        },
-        { path: "output", element: <Output /> },
+        requirementRouter,
+        outputRouter,
+        supplyRouter,
       ],
     },
   ]);
