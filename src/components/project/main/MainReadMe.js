@@ -1,15 +1,16 @@
+import React from "react";
 import { FaBookBookmark } from "react-icons/fa6";
-import styles from "../project.module.css";
+import s from "../project.module.css";
 
 export default function MainReadMe({ memo }) {
   return (
     <>
-      <div className="display-flex">
+      <div className={s.displayFlex}>
         <FaBookBookmark />
-        <div className="readme">Read Me</div>
+        <div className={s.readme}>Read Me</div>
       </div>
 
-      <div className="readme-container">{memo}</div>
+      <div className={s.readmeContainer}>{memo}</div>
     </>
   );
 }
