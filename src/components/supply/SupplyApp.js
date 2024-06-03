@@ -5,13 +5,14 @@ import SupplyRegist from "./SupplyRegist";
 
 let pageNo = 0;
 
-export default function SupplyApp({ token }) {
+export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();
   const [isRegistrationMode, setIsRegistrationMode] = useState(false);
   const [needReload, setNeedReload] = useState();
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
+  const token = localStorage.getItem("token");
   const isSelect = selectedSplId !== undefined;
 
   const memoizedLoadSupplyList = useCallback(loadSupplyList, []);
@@ -85,7 +86,9 @@ export default function SupplyApp({ token }) {
           token={token}
         />
       )}
-      <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
+      {!isSelect && !isRegistrationMode && (
+        <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
+      )}
     </>
   );
   // <button>버튼 2</button>
