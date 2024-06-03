@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Requirement() {
-  //   let array = [" A", " B", " C", " D", " E"];
-
   const [requirement, setRequirement] = useState();
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // 게시글 불러오기
-    const loadBoards = async () => {
+    // 요구사항 리스트 불러오기
+    const loadRequirements = async () => {
       const response = await fetch(
         `http://localhost:8080/api/v1/requirement/search`,
         {
@@ -20,7 +19,7 @@ export default function Requirement() {
       setRequirement(json);
     };
 
-    loadBoards();
+    loadRequirements();
   }, [token]);
 
   const { count, body: data } = requirement || {};
@@ -46,7 +45,13 @@ export default function Requirement() {
               data.map((item) => (
                 <tr key={item.rqmId}>
                   <td>{item.projectVO.prjName}</td>
-                  <td>{item.rqmTtl}</td>
+                  <td>
+                    <Link
+                      to={`/requirement/view?prjId=${item.projectVO.prjId}&rqmId=${item.rqmId}`}
+                    >
+                      {item.rqmTtl}
+                    </Link>
+                  </td>
                   <td>{item.scdStsVO.cmcdName}</td>
                   <td>{item.rqmStsVO.cmcdName}</td>
                   <td>{item.crtrIdVO.empName}</td>
