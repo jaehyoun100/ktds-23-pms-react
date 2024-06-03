@@ -7,6 +7,7 @@ import projectRouter from "./routercomponent/projectRouter";
 import outputRouter from "./routercomponent/outputRouter";
 import requirementRouter from "./routercomponent/requirementRouter";
 import supplyRouter from "./routercomponent/supplyRouter";
+import deptteamRouter from "./routercomponent/deptteamRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -28,6 +29,7 @@ export default function RouterAppProvider() {
         requirementRouter,
         outputRouter,
         supplyRouter,
+        deptteamRouter,
       ],
     },
   ]);
