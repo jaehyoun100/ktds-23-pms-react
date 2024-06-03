@@ -3,29 +3,32 @@
  */
 
 export const viewWriteReviewPage = async (token) => {
-  await fetch("http://localhost:8080/api/review/writes", {
-    method: "GET",
+  const selectedProjectId = "PRJ_240501_000224";
+
+  const response = await fetch(
+    `http://localhost:8080/api/review/writes/${selectedProjectId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  const json = await response.json();
+  return json;
+};
+
+export const writeReview = async (token, reviewContent) => {
+  const formData = new FormData();
+  formData.append("content", reviewContent);
+
+  const response = await fetch("http://localhost:8080/api/review/writes", {
+    method: "POST",
     headers: {
       Authorization: token,
     },
+    body: formData,
   });
-};
-
-export const writeReview = async (token, empId, reviewContent) => {
-  // 임시 프로젝트 번호
-  const selectedProjectId = 3;
-
-  const response = await fetch(
-    `http://localhost:8080/api/review/writes${selectedProjectId}`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ empId, reviewContent }),
-    }
-  );
 
   const json = await response.json();
   console.log(json);

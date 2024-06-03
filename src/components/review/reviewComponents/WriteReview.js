@@ -2,28 +2,35 @@
  * 프로젝트에 참여한 인원이 후기를 작성하는 Component
  *
  */
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import "../reviewCss/WriteReview.css";
-import { writeReview } from "../../../http/reviewHttp";
+import {
+  loadOneProject,
+  viewWriteReviewPage,
+  writeReview,
+} from "../../../http/reviewHttp";
 
 export default function WriteReview() {
-  const empIdRef = useRef();
-  const reviewContentRef = useRef();
   const token = localStorage.getItem("token");
 
-  const onSaveClickHandler = async () => {
-    // token 에서 가져올 empId
-    const empId = empIdRef.current.value;
-    const reviewContent = reviewContentRef.current.value;
+  useEffect(() => {
+    viewWriteReviewPage(token);
+  }, [token]);
 
-    if (!reviewContent) {
-      // modal 등 으로 대체
-      alert("후기 내용을 입력하세요.");
-      reviewContent.current.focus();
-      return;
+  const reviewContentRef = useRef();
+
+  const onSaveClickHandler = async () => {
+    const reviewContent = reviewContentRef.current.value;
+    const json = await writeReview(token, reviewContent);
+
+    if (json.errors) {
+      json.errors.forEach((error) => {
+        alert(error);
+      });
+    } else if (json.body) {
     }
 
-    const json = await writeReview(token, empId, reviewContent);
+    console.log(token);
   };
 
   return (
@@ -31,7 +38,7 @@ export default function WriteReview() {
       <div className="grid-container">
         <div className="prj-sub-container">
           {/* 프로젝트 제목 삽입 */}
-          <div className="prj-sub">Test Project</div>
+          <div className="prj-sub">project</div>
         </div>
         <br></br>
         <br></br>
@@ -39,7 +46,10 @@ export default function WriteReview() {
           <div></div>
           <span className="write-review-span">후기를 작성해주세요.</span>
           <div></div>
-          <textarea className="write-review-text"></textarea>
+          <textarea
+            className="write-review-text"
+            ref={reviewContentRef}
+          ></textarea>
           <div></div>
         </div>
         <div className="submit-btn-container">
