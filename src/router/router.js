@@ -7,6 +7,8 @@ import ProjectListApp from "../components/project/projectlist/ProjectListApp";
 import EmployeeApp from "../components/employee/EmployeeApp";
 import Requirement from "../components/requirement/Requirement";
 import Output from "../components/output/Output";
+import requirementRouter from "./routercomponent/requirementRouter";
+import outputRouter from "./routercomponent/outputRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -31,11 +33,8 @@ export default function RouterAppProvider() {
           path: "employee",
           element: <EmployeeApp />,
         },
-        {
-          path: "requirement",
-          element: <Requirement />,
-        },
-        { path: "output", element: <Output /> },
+        requirementRouter,
+        outputRouter,
       ],
     },
   ]);
