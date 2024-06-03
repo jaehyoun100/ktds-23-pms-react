@@ -1,19 +1,11 @@
-import { useState } from "react";
-import LoginPage from "./components/login/Login";
-import RouterAppProvider from "./router/router";
+import ComponentSetting from "./layout/content/ComponentSetting";
+import ToolkitProvider from "./store/toolkit/store";
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
-
   return (
-    <>
-      {!token && <LoginPage setToken={setToken} />}
-      {token && (
-        <div>
-          <RouterAppProvider />
-        </div>
-      )}
-    </>
+    <ToolkitProvider>
+      <ComponentSetting />;
+    </ToolkitProvider>
   );
 }
 
