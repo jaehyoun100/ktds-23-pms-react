@@ -3,17 +3,12 @@ import LoginPage from "../../components/login/Login";
 import RouterAppProvider from "../../router/router";
 
 export default function ComponentSetting() {
-  const loginState = useSelector((state) => {
-    return {
-      token: state.tokenInfo.token,
-      credentialsExpired: state.tokenInfo.credentialsExpired,
-    };
-  });
+  const { token, credentialsExpired } = useSelector((state) => state.tokenInfo);
 
   return (
     <>
-      {!loginState.token && <LoginPage />}
-      {loginState.token && (
+      {!token && <LoginPage />}
+      {token && (
         <div>
           <RouterAppProvider />
         </div>
