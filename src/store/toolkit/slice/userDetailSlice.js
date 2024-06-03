@@ -13,4 +13,4 @@ export const userDetailSliceStore = createSlice({
 });
 
 // store action 공유
-export const stateActions = userDetailSliceStore.actions;
+export const employeeActions = userDetailSliceStore.actions;

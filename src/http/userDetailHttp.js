@@ -1,5 +1,5 @@
 import { tokenActions } from "../store/toolkit/slice/tokenSlice";
-import { stateActions } from "../store/toolkit/slice/userDetailSlice";
+import { employeeActions } from "../store/toolkit/slice/userDetailSlice";
 
 /**
  * Token 값을 받아서 서버에서 empVO 를 가져온 다음
@@ -16,7 +16,7 @@ export const getEmployee = (token) => {
     });
     const json = await response.json();
 
-    dispatch(stateActions.get(json));
+    dispatch(employeeActions.get(json));
   };
 };
 /**
@@ -36,7 +36,6 @@ export const getToken = (empId, pwd) => {
       }),
     });
     const json = await response.json();
-    console.log(json);
 
     if (json.message) {
       alert(json.message);
@@ -46,7 +45,13 @@ export const getToken = (empId, pwd) => {
         // setCredentialsExpired(json.credentialsExpired);
         alert("비밀번호 만료됨");
       }
-      dispatch(tokenActions.get(json));
+      dispatch(tokenActions.login(json));
     }
+  };
+};
+export const logout = () => {
+  // TODO 확인 모달창을 통해 퇴근인지 로그아웃인지 체크 필요함
+  return async (dispatch) => {
+    dispatch(tokenActions.logout({ token: "" }));
   };
 };

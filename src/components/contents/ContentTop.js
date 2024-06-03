@@ -1,7 +1,13 @@
+import { useDispatch } from "react-redux";
 import SessionTimer from "./ContentTimer";
 import "./ContentTop.css";
 import { BsPersonLock, BsBell, BsBoxArrowRight } from "react-icons/bs";
+import { logout } from "../../http/userDetailHttp";
 export default function ContentTop() {
+  const tokenDispatch = useDispatch();
+  const onLogoutBtnClickHandler = () => {
+    tokenDispatch(logout());
+  };
   return (
     <div className="main-content-top">
       <div className="content-top-left">
@@ -19,7 +25,10 @@ export default function ContentTop() {
         <button className="notification-btn content-top-btn button-icon">
           <BsBell className="top-icon" />
         </button>
-        <button className="logout-btn content-top-btn button-icon">
+        <button
+          className="logout-btn content-top-btn button-icon"
+          onClick={onLogoutBtnClickHandler}
+        >
           <BsBoxArrowRight className="top-icon" />
         </button>
       </div>
