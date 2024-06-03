@@ -57,7 +57,7 @@ export default function ProjectMain() {
             <div className={styles.gridComponent}>
               <MainInfo project={project} />
               <ChartContainer />
-              <MainReadMe memo={memo} />
+              {memo && <MainReadMe memo={memo} />}
             </div>
           </div>
         </>
