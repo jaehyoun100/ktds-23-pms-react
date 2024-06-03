@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { registerSupply } from "../../http/supplyHttp";
 
-export default function SupplyRegistration({
+export default function SupplyRegist({
   setIsRegistrationMode,
   setNeedReload,
   token,
@@ -63,6 +63,10 @@ export default function SupplyRegistration({
       <div>
         <label htmlFor="detail">제품 설명</label>
         <textarea id="detail" ref={detailRef}></textarea>
+      </div>
+      <div>
+        <button>+</button>
+        <button>-</button>
       </div>
       <div>
         <button onClick={onRegisterClickHandler}>등록</button>
