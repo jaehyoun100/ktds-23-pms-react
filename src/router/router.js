@@ -7,6 +7,7 @@ import ProjectListApp from "../components/project/projectlist/ProjectListApp";
 import EmployeeApp from "../components/employee/EmployeeApp";
 import Requirement from "../components/requirement/Requirement";
 import Output from "../components/output/Output";
+import projectRouter from "./routercomponent/projectRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -20,13 +21,7 @@ export default function RouterAppProvider() {
           path: "survey",
           element: <SurveyApp />,
         },
-        {
-          path: "project/",
-          children: [
-            { index: true, element: <ProjectListApp /> },
-            { path: "view", element: <ProjectMain /> },
-          ],
-        },
+        projectRouter,
         {
           path: "employee",
           element: <EmployeeApp />,
