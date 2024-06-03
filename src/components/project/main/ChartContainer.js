@@ -54,7 +54,13 @@ export default function ChartContainer() {
   //   fetchData2();
   // }, []);
   return (
-    <div style={{ display: "flex", justifyContent: "space-around" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        marginTop: "80px",
+      }}
+    >
       <MainChart completed={completed1} inProgress={inProgress1} />
       <MainChart completed={completed2} inProgress={inProgress2} />
       <MainChart completed={completed3} inProgress={inProgress3} />
