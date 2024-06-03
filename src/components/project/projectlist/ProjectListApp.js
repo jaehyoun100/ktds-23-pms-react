@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Button from "../../common/Button/Button";
 import Search from "../../common/search/Search";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const ProjectListApp = () => {
   const [data, setData] = useState([]);
@@ -37,6 +38,7 @@ const ProjectListApp = () => {
     // 프로젝트 검색 api 호출
     // searchDataCommonCode : 선택된 프로젝트 상태 코드
   };
+  const navigate = useNavigate();
   return (
     <div>
       <div>{data.projectCount}개의 프로젝트</div>
@@ -47,7 +49,14 @@ const ProjectListApp = () => {
         onClickHandler={searchOnClickHandler}
       />
       {data.projectList?.map((item, idx) => (
-        <div key={idx}>{item.prjName}</div>
+        <div
+          key={idx}
+          onClick={() => {
+            navigate("/project/view", { state: { key: { item } } });
+          }}
+        >
+          {item.prjName}
+        </div>
       ))}
     </div>
   );
