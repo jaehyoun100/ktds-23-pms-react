@@ -23,9 +23,7 @@ export default function Requirement() {
     loadBoards();
   }, [token]);
 
-  const { count } = requirement || {};
-
-  const { body: data } = requirement || {};
+  const { count, body: data } = requirement || {};
 
   return (
     <>
@@ -47,12 +45,12 @@ export default function Requirement() {
             {data &&
               data.map((item) => (
                 <tr key={item.rqmId}>
-                  <td>프로젝트{item.rqmId}</td>
-                  <td>제목{item.rqmTtl}</td>
-                  <td>일정상태{item.scdSts}</td>
-                  <td>진행상태{item.rqmSts}</td>
-                  <td>작성자{item.crtrId}</td>
-                  <td>작성일{item.crtDt}</td>
+                  <td>{item.projectVO.prjName}</td>
+                  <td>{item.rqmTtl}</td>
+                  <td>{item.scdStsVO.cmcdName}</td>
+                  <td>{item.rqmStsVO.cmcdName}</td>
+                  <td>{item.crtrIdVO.empName}</td>
+                  <td>{item.crtDt}</td>
                 </tr>
               ))}
           </tbody>
