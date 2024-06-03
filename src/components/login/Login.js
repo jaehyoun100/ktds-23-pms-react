@@ -1,12 +1,11 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import LoginFooter from "./LoginFooter";
 import { useDispatch } from "react-redux";
 import { getToken } from "../../http/userDetailHttp";
 
-export default function LoginPage({ setToken }) {
+export default function LoginPage() {
   const empIdRef = useRef();
   const passwordRef = useRef();
-  const [credentialsExpired, setCredentialsExpired] = useState(false);
 
   const tokenDispatch = useDispatch();
 
