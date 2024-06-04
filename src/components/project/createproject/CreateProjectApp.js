@@ -3,6 +3,8 @@ import styles from "../project.module.css";
 import TextInput from "../../common/input/TextInput";
 import Selectbox from "../../common/selectbox/Selectbox";
 import SelectDate from "../../common/selectbox/SelectDate";
+import Textarea from "../../common/input/Textarea";
+import { Button } from "antd";
 
 const CreateProjectApp = () => {
   const prjNameRef = useRef();
@@ -37,6 +39,7 @@ const CreateProjectApp = () => {
   const handleEndDateSelect = (date) => {
     setEndSelectedDate(date);
   };
+  const onClickCreateButtonHandler = () => {};
 
   return (
     <div className={styles.createContainer}>
@@ -78,9 +81,16 @@ const CreateProjectApp = () => {
           />
         </div>
         <div>Project Readme</div>
-        <div>
-          <TextInput id="prjMemo" textref={prjMemoRef} />
+        <div className={styles.contentBoxContainer}>
+          <textarea
+            className={styles.contentBox}
+            inputId="prjMemo"
+            textref={prjMemoRef}
+          ></textarea>
         </div>
+      </div>
+      <div className={styles.buttonArea}>
+        <Button children="생성" onClick={onClickCreateButtonHandler} />
       </div>
     </div>
   );

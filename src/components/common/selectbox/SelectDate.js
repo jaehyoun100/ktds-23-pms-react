@@ -34,7 +34,7 @@ const SelectDate = ({ onStartDateSelect, onEndDateSelect }) => {
       />
       ~
       <DatePicker
-        className={styles.datePicker}
+        className={styles.datePicker2}
         onChange={handleEndDateChange}
       />
       <Button type="primary" onClick={handleButtonClick}>
