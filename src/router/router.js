@@ -9,6 +9,7 @@ import requirementRouter from "./routercomponent/requirementRouter";
 import supplyRouter from "./routercomponent/supplyRouter";
 import deptteamRouter from "./routercomponent/deptteamRouter";
 import ReviewApp from "../components/review/ReviewApp";
+import reviewRouter from "./routercomponent/reviewRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -31,6 +32,7 @@ export default function RouterAppProvider() {
         outputRouter,
         supplyRouter,
         deptteamRouter,
+        reviewRouter,
       ],
     },
   ]);
