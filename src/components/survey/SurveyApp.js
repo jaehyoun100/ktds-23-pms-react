@@ -3,23 +3,30 @@
 import React, { useEffect, useState } from "react";
 import SurveyAnswer from "./SurveyAnswer";
 import SurveyWrite from "./SurveyWiteApp";
+import { useSelector } from "react-redux";
 
-export default function SurveyApp({ token }) {
+export default function SurveyApp() {
   // Receive token as prop
   const [surveys, setSurveys] = useState([]);
   const [answerMode, setAnswerMode] = useState(false);
   const [writeMode, setWriteMode] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
+  const tokenInfo = useSelector((state) => {
+    return {
+      token: state.tokenInfo.token,
+      credentialsExpired: state.tokenInfo.credentialsExpired,
+    };
+  });
   useEffect(() => {
-    if (!token) {
+    if (!tokenInfo.token) {
       return;
     }
     const loadboard = async () => {
       const response = await fetch("http://localhost:8080/api/survey/list", {
         method: "GET",
         headers: {
-          Authorization: token,
+          Authorization: tokenInfo.token,
         },
       });
 
@@ -39,7 +46,7 @@ export default function SurveyApp({ token }) {
       //PM여부 확인
     };
     loadboard();
-  }, [token]);
+  }, [tokenInfo.token]);
 
   //답변하기 버튼을 클릭했을 때
   const surveyWriteAnswerClickHandler = (projectId) => {
@@ -113,9 +120,15 @@ export default function SurveyApp({ token }) {
         </>
       )}
       {answerMode && (
-        <SurveyAnswer token={token} selectedProjectId={selectedProjectId} setAnswerMode={setAnswerMode}/>
+        <SurveyAnswer
+          token={tokenInfo.token}
+          selectedProjectId={selectedProjectId}
+          setAnswerMode={setAnswerMode}
+        />
       )}
-      {writeMode && <SurveyWrite token={token} setWriteMode={setWriteMode}/>}
+      {writeMode && (
+        <SurveyWrite token={tokenInfo.token} setWriteMode={setWriteMode} />
+      )}
     </>
   );
 }
