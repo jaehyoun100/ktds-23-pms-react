@@ -2,12 +2,24 @@ import { useEffect, useState } from "react";
 import styles from "../project.module.css";
 import ProjectSubChart from "./ProjectSubChart";
 import { IoInformationCircleSharp } from "react-icons/io5";
+import InfoModal from "./InfoModal";
 
 export default function MainInfo({ project }) {
   // const prjId = "PRJ_240502_000243";
 
-  const onInfoClickHandler = () => {
-    return;
+  const content =
+    "KT DS는 1989년 창립하여 어쩌구 저쩌구 만나서 반갑습니다!! 행복한 하루 되세요 ^^ KT DS는 1989년 창립하여 어쩌구 저쩌구 만나서 반갑습니다!! 행복한 하루 되세요 ^^";
+  const title = "KT DS";
+  const contact = "02-332-1129";
+
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setShowInfoModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowInfoModal(false);
   };
 
   return (
@@ -27,7 +39,7 @@ export default function MainInfo({ project }) {
           {project.clntInfo}{" "}
           <IoInformationCircleSharp
             className={styles.info}
-            onClick={onInfoClickHandler}
+            onClick={handleOpenModal}
           />
         </div>
       </div>
@@ -47,6 +59,14 @@ export default function MainInfo({ project }) {
           completedTasks={project.requireCnt}
         />
       </div>
+      <InfoModal
+        show={showInfoModal}
+        onClose={handleCloseModal}
+        content={content}
+        title={title}
+        cancelContent="확인"
+        contact={contact}
+      />
     </div>
   );
 }
