@@ -1,6 +1,6 @@
 // 김소현
 import React, { useState } from "react";
-import "./input.css";
+import s from "./input.module.css";
 
 // 수정 못하게 하려면 isReadOnly={true} 전달하기
 // 최소값이나 최대값 설정하고 싶으면 minNum, maxNum 전달하기
@@ -40,7 +40,7 @@ export default function NumInput({
   return (
     <>
       <label htmlFor={inputId} />
-      <button className="plusminus" onClick={handleMinus}>
+      <button className={s.plusminus} onClick={handleMinus}>
         -
       </button>
       <input
@@ -53,7 +53,7 @@ export default function NumInput({
         onChange={handleChange}
         value={number}
       />
-      <button className="plusminus" onClick={handlePlus}>
+      <button className={s.plusminus} onClick={handlePlus}>
         +
       </button>
     </>

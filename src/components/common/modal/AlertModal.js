@@ -56,7 +56,7 @@ export default App;
  */
 
 import React from "react";
-import "./modal.css";
+import s from "./modal.module.css";
 
 const AlertModal = React.memo(({ content, onClose, show, closeContent }) => {
   if (!show) {
@@ -64,10 +64,10 @@ const AlertModal = React.memo(({ content, onClose, show, closeContent }) => {
   }
 
   return (
-    <dialog open className="modal-window" role="alertdialog" aria-modal="true">
-      <div className="grid-modal">
+    <dialog open className={s.modalWindow} role="alertdialog" aria-modal="true">
+      <div className={s.gridModal}>
         <div
-          className="modal-close"
+          className={s.modalClose}
           onClick={onClose}
           role="button"
           aria-label="Close modal"
@@ -75,11 +75,14 @@ const AlertModal = React.memo(({ content, onClose, show, closeContent }) => {
         >
           X
         </div>
-        <div className="modal-content">
-          <div className="modal-text">{content}</div>
+        <div className={s.modalContent}>
+          <div className={s.modalText}>{content}</div>
         </div>
-        <div className="input-space">
-          <button className="confirm-button button" onClick={onClose}>
+        <div className={s.inputSpace}>
+          <button
+            className={`${s.confirmButton} ${s.button}`}
+            onClick={onClose}
+          >
             {closeContent}
           </button>
         </div>

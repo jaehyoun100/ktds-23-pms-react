@@ -1,7 +1,7 @@
 import { CgSearch } from "react-icons/cg";
 import TextInput from "../input/TextInput";
 import Selectbox from "../selectbox/Selectbox";
-import "./search.css";
+import s from "./search.module.css";
 export default function Search({
   onClickHandler,
   textRef,
@@ -10,13 +10,12 @@ export default function Search({
   setSelectedData,
 }) {
   return (
-    <div className="flex-array">
+    <div className={s.flexArray}>
       <Selectbox
-        className="select-box"
+        className={s.selectBox}
         optionList={optionList}
         selectedData={selectedData}
         setSelectedData={setSelectedData}
-        styleClassName="select-box"
       />
       <TextInput textRef={textRef} />
       <CgSearch onClick={onClickHandler} />

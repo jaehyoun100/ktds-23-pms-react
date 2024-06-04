@@ -1,6 +1,10 @@
 div {
   margin: 0;
 }
+.createAndModify {
+  color: var(--second-color);
+  font-weight: 600;
+}
 .MainInfo {
   text-align: center;
   padding: 20px;
@@ -21,6 +25,18 @@ h1 {
 .info :hover {
   color: var(--main-color);
 }
+.createContainer {
+  position: relative;
+  top: 5%;
+  left: 20%;
+}
+.createGrid {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: repeat(3, 120px 1fr);
+}
+
 .readmeContainer {
   width: 80%;
   height: 80%;

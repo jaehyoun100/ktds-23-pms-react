@@ -54,7 +54,7 @@ export default App;
  * 
  */
 import React from "react";
-import "./modal.css";
+import s from "./modal.module.css";
 
 const ConfirmModal = React.memo(
   ({
@@ -72,13 +72,13 @@ const ConfirmModal = React.memo(
     return (
       <dialog
         open
-        className="modal-window"
+        className={s.modalWindow}
         role="alertdialog"
         aria-modal="true"
       >
-        <div className="grid-modal">
+        <div className={s.gridModal}>
           <div
-            className="modal-close"
+            className={s.modalClose}
             onClick={onClose}
             role="button"
             aria-label="Close modal"
@@ -86,14 +86,20 @@ const ConfirmModal = React.memo(
           >
             X
           </div>
-          <div className="modal-content">
-            <div className="modal-text">{content}</div>
+          <div className={s.modalContent}>
+            <div className={s.modalText}>{content}</div>
           </div>
-          <div className="input-space">
-            <button className="confirm-button button" onClick={confirmOnClick}>
+          <div className={s.inputSpace}>
+            <button
+              className={`${s.confirmButton} ${s.button}`}
+              onClick={confirmOnClick}
+            >
               {confirmContent}
             </button>
-            <button className="confirm-button button" onClick={onClose}>
+            <button
+              className={`${s.confirmButton} ${s.button}`}
+              onClick={onClose}
+            >
               {cancelContent}
             </button>
           </div>

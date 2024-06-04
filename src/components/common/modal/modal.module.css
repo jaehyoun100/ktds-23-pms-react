@@ -1,7 +1,7 @@
 /* Modal Window */
 
-.modal-window,
-.modal-confirm-window {
+.modalWindow,
+.modalConfirmWindow {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -19,8 +19,8 @@
 }
 
 /* Close Button */
-.modal-close,
-.modal-confirm-close {
+.modalClose,
+.modalConfirmClose {
   text-align: right;
   color: gray;
   cursor: pointer;
@@ -28,14 +28,14 @@
   margin-bottom: 10px;
 }
 
-.modal-close:hover,
-.modal-confirm-close:hover {
+.modalClose:hover,
+.modalConfirm-close:hover {
   color: black;
 }
 
 /* Grid Modal Container */
-.grid-modal,
-.grid-confirm-modal {
+.gridModal,
+.gridConfirmModal {
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 1rem;
@@ -43,8 +43,8 @@
 }
 
 /* Modal Content */
-.modal-content,
-.modal-confirm-content {
+.modalContent,
+.modalConfirmContent {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -53,16 +53,16 @@
 }
 
 /* Modal Text */
-.modal-text,
-.modal-confirm-text {
+.modalText,
+.modalConfirmText {
   text-align: center;
   color: #333;
   font-size: 1.2rem;
 }
 
 /* Input Space for Buttons */
-.input-space,
-.input-confirm-space {
+.inputSpace,
+.inputConfirmSpace {
   display: flex;
   justify-content: flex-end;
   align-items: center;

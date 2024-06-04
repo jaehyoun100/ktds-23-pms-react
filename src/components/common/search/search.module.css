@@ -1,19 +1,8 @@
-.flex-array {
+.flexArray {
   display: flex;
   align-items: center;
 }
-.select-box > div {
-  height: 30px;
-  padding: 5px;
-}
-.select-box {
-  width: 160px;
-  margin-right: 5px;
-}
-.select-box > ul > li {
-  height: 30px;
-  padding: 5px;
-}
+
 input {
   margin-right: 5px;
 }
