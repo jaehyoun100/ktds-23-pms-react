@@ -11,6 +11,7 @@ import deptteamRouter from "./routercomponent/deptteamRouter";
 import Requirement from "../components/requirement/Requirement";
 import Output from "../components/output/Output";
 import ReviewApp from "../components/review/ReviewApp";
+import reviewRouter from "./routercomponent/reviewRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -33,6 +34,7 @@ export default function RouterAppProvider() {
         outputRouter,
         supplyRouter,
         deptteamRouter,
+        reviewRouter,
       ],
     },
   ]);
