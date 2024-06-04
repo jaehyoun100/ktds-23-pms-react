@@ -18,33 +18,30 @@ export default function ProjectMain() {
   });
   const location = useLocation();
   useMemo(() => {
-    const { item } = location.state.key;
-    console.log(item, "item");
+    const item = location.state.key;
     setProjectId(item.prjId);
   }, [location.state.key]);
   useEffect(() => {
-    const test = async () => {
-      console.log("!!!!!!!!!", projectId, "prjID!!");
-      const response = await fetch(
-        `http://localhost:8080/api/project/view/${projectId}`,
-        { headers: { Authorization: tokenInfo.token }, method: "GET" }
-      );
-
-      console.log(response);
-      const json = await response.json();
-      console.log(json);
-      const project = json.body.projectVO;
-      const projectTeammateCnt = json.body.projectTeammateCount;
-      console.log(project, projectTeammateCnt);
-      return json;
-    };
     if (projectId) {
-      const getProject = async () => {
-        const run = await test();
-        setProject(run.body);
-        setMemo(run.body.prjMemo);
+      const test = async () => {
+        const response = await fetch(
+          `http://localhost:8080/api/project/view/${projectId}`,
+          { headers: { Authorization: tokenInfo.token }, method: "GET" }
+        );
+
+        const json = await response.json();
+        console.log(json);
+
+        return json.body;
       };
-      getProject();
+      if (projectId) {
+        const getProject = async () => {
+          const run = await test();
+          setProject(run);
+          setMemo(run.prjMemo);
+        };
+        getProject();
+      }
     }
   }, [projectId, tokenInfo.token]);
 
@@ -57,7 +54,7 @@ export default function ProjectMain() {
             <div className={styles.gridComponent}>
               <MainInfo project={project} />
               <ChartContainer />
-              {memo && <MainReadMe memo={memo} />}
+              <MainReadMe memo={memo} />
             </div>
           </div>
         </>
