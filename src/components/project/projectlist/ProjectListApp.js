@@ -93,9 +93,6 @@ const ProjectListApp = () => {
     },
     { title: "후기작성", dataIndex: "", key: "", width: "10%" },
   ];
-  const onClickHandler = () => {
-    // 프로젝트 생성 api 호출
-  };
 
   const navigate = useNavigate();
   return (
@@ -108,7 +105,7 @@ const ProjectListApp = () => {
           selectedData={selectCommonCode}
         />
       )} */}
-      <Button onClickHandler={onClickHandler}>생성</Button>
+      <Button onClickHandler={() => navigate("/project/create")}>생성</Button>
       {data && (
         <>
           <div>{data.projectCount}개의 프로젝트</div>
