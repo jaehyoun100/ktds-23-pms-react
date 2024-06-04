@@ -20,9 +20,20 @@ export const loadSupply = async ({ selectedSplId, token }) => {
   );
 
   const json = await response.json();
-  console.log(json);
+
   return json;
 };
+
+// export const loadSupplyImage = async ({ splImg, token }) => {
+//   const response = await fetch(
+//     `http://localhost:8080/api/v1/supply/image/${splImg}`,
+//     { method: "GET", headers: { Authorization: token } }
+//   );
+
+//   const json = await response.json();
+
+//   return json;
+// };
 
 export const registerSupply = async (
   token,
@@ -36,7 +47,7 @@ export const registerSupply = async (
   data.append("splName", name);
   data.append("splCtgr", category);
   data.append("splPrice", price);
-  data.append("splImg", image);
+  data.append("file", image);
   data.append("splDtl", detail);
 
   const response = await fetch("http://localhost:8080/api/v1/supply", {
@@ -70,6 +81,17 @@ export const modifySupply = async (
     method: "PUT",
     headers: { Authorization: token },
     body: data,
+  });
+
+  const json = await response.json();
+
+  return json;
+};
+
+export const deleteSupply = async (splId, token) => {
+  const response = await fetch(`http://localhost:8080/api/v1/supply/${splId}`, {
+    method: "DELETE",
+    headers: { Authorization: token },
   });
 
   const json = await response.json();

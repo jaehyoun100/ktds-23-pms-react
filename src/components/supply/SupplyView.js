@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { loadSupply } from "../../http/supplyHttp";
+import { deleteSupply, loadSupply } from "../../http/supplyHttp";
 
 export default function SupplyView({
   selectedSplId,
@@ -34,6 +34,18 @@ export default function SupplyView({
 
   const { body: supplyBody } = data || {};
 
+  const onDeleteClickHandler = async () => {
+    const json = await deleteSupply(supplyBody.splId, token);
+
+    if (json.body) {
+      setSelectedSplId(undefined);
+      setNeedReload(Math.random());
+    } else {
+      console.log(json);
+      alert(json.errors);
+    }
+  };
+
   return (
     <div>
       {supplyBody && (
@@ -42,12 +54,11 @@ export default function SupplyView({
           <div>{supplyBody.splCtgr}</div>
           <div>{supplyBody.splPrice}</div>
           <div>{supplyBody.invQty}</div>
-          <div>
-            <img src={supplyBody.splImg} alt={supplyBody.splName} />
-          </div>
+          <div>이미지 보여줄 div</div>
           <div>{supplyBody.splDtl}</div>
         </div>
       )}
+      <button onClick={onDeleteClickHandler}>삭제</button>
       <button onClick={backToListHandler}>목록보기</button>
     </div>
   );
