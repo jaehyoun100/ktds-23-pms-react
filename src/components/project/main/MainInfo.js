@@ -3,10 +3,31 @@ import styles from "../project.module.css";
 import ProjectSubChart from "./ProjectSubChart";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import InfoModal from "./InfoModal";
+import { useSelector } from "react-redux";
 
 export default function MainInfo({ project }) {
   // const prjId = "PRJ_240502_000243";
+  // const [clientData, setClientData] = useState();
+  // const tokenInfo = useSelector((state) => {
+  //   return {
+  //     token: state.tokenInfo.token,
+  //     credentialsExpired: state.tokenInfo.credentialsExpired,
+  //   };
+  // });
 
+  // useEffect(() => {
+  //   const getClient = async () => {
+  //     const response = await fetch("http://localhost:8080/api/project/client", {
+  //       headers: { Authorization: tokenInfo.token },
+  //       method: "GET",
+  //     });
+  //     const json = await response.json();
+  //     console.log(json.body, "!!!!!!!!!!!");
+  //     return json;
+  //   };
+  //   setClientData(getClient());
+  // }, [tokenInfo.token]);
+  console.log(project, "!!!");
   const content =
     "KT DS는 1989년 창립하여 어쩌구 저쩌구 만나서 반갑습니다!! 행복한 하루 되세요 ^^ KT DS는 1989년 창립하여 어쩌구 저쩌구 만나서 반갑습니다!! 행복한 하루 되세요 ^^";
   const title = "KT DS";
@@ -62,10 +83,10 @@ export default function MainInfo({ project }) {
       <InfoModal
         show={showInfoModal}
         onClose={handleCloseModal}
-        content={content}
-        title={title}
+        content={project.clientVO.info}
+        title={project.clientVO.clntName}
         cancelContent="확인"
-        contact={contact}
+        contact={project.clientVO.cntct}
       />
     </div>
   );
