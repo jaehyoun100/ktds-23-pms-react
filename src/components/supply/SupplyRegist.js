@@ -12,6 +12,7 @@ export default function SupplyRegist({
       category: "",
       price: "",
       image: null,
+      imagePreview: null,
       detail: "",
     },
   ]);
@@ -19,7 +20,9 @@ export default function SupplyRegist({
   const handleInputChange = (index, event) => {
     const values = [...inputFields];
     if (event.target.name === "image") {
-      values[index][event.target.name] = event.target.files[0]; // 파일 정보를 저장
+      const file = event.target.files[0];
+      values[index][event.target.name] = file;
+      values[index].imagePreview = URL.createObjectURL(file);
     } else {
       values[index][event.target.name] = event.target.value;
     }
@@ -29,7 +32,14 @@ export default function SupplyRegist({
   const handleAddFields = () => {
     setInputFields([
       ...inputFields,
-      { name: "", category: "", price: "", image: null, detail: "" },
+      {
+        name: "",
+        category: "",
+        price: "",
+        image: null,
+        imagePreview: null,
+        detail: "",
+      },
     ]);
   };
 
@@ -106,8 +116,18 @@ export default function SupplyRegist({
               type="file"
               id={`image-${index}`}
               name="image"
+              accept="image/*"
               onChange={(event) => handleInputChange(index, event)}
             />
+            {inputField.imagePreview && (
+              <div>
+                <img
+                  src={inputField.imagePreview}
+                  alt={`미리보기-${index}`}
+                  style={{ width: "100px", height: "100px", marginTop: "10px" }}
+                />
+              </div>
+            )}
           </div>
           <div>
             <label htmlFor={`detail-${index}`}>제품 설명</label>
