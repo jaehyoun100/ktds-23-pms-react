@@ -9,10 +9,10 @@
   --box-sub-bg: #fafafb;
   /* 메인 컬러 */
   --main-color: #2c3e50;
-  --second-color:#7c9ec0;
-  --third-color:#dfe4ea;
+  --second-color: #7c9ec0;
+  --third-color: #dfe4ea;
   --light-color: #f0f4f7;
-  --dark-color:#421919;
+  --dark-color: #421919;
 
   /* 두번째 메인 컬러 정해보자... */
   /* 기본 글자 색 */
@@ -79,8 +79,6 @@ body {
   position: relative;
 }
 
-
-
 /* 라디오 사용법
  <input type="radio" id="radio1" name="radio-group" />
         <label for="radio1"></label>
@@ -130,7 +128,6 @@ input[type="radio"] + label + label {
 }
 
 div {
-  
   margin: 0;
   padding: 0;
 }
@@ -272,8 +269,6 @@ textarea {
   font-size: inherit;
   line-height: inherit;
 }
-
-
 
 input[type="text"] {
   width: 16rem;
@@ -583,7 +578,7 @@ iframe {
   display: none;
 }
 
-.dropdown-icon {  
+.dropdown-icon {
   font-size: 1.5rem;
   margin-right: 10px;
 }
@@ -761,7 +756,6 @@ input[type="text"].input-text-title {
 .backboard {
   display: none;
 }
-
 
 /* pagination */
 nav {
