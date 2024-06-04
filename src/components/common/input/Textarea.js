@@ -1,5 +1,5 @@
 // 김소현
-import "./input.css";
+import s from "./input.module.css";
 
 // 수정 못하게 하려면 isReadOnly={true} 전달하기
 export default function Textarea({

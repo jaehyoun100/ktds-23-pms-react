@@ -49,6 +49,14 @@
   background-color: var(--second-color);
   color: var(--light-color);
 }
+.datePicker {
+  margin-left: 0px;
+  margin-right: 10px;
+}
+.datePicker2 {
+  margin-left: 10px;
+  margin-right: 10px;
+}
 .datePicker > svg {
   width: 20px;
   height: 20px;

@@ -1,6 +1,6 @@
 // 김소현
 import React from "react";
-import "./button.css";
+import s from "./button.module.css";
 
 /**
  * ## props 설명
