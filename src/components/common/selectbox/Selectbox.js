@@ -18,6 +18,7 @@ export default function Selectbox({
   selectedData,
   setSelectedData,
   style,
+  onChangeFn,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(
@@ -32,6 +33,7 @@ export default function Selectbox({
     setSelected(item.label);
     setIsOpen(false);
     setSelectedData(item.value);
+    onChangeFn && onChangeFn();
   };
 
   return (
@@ -47,6 +49,7 @@ export default function Selectbox({
               key={idx}
               className={styles.customSelectOption}
               onClick={() => handleOptionClick(item)}
+              value={item.value}
             >
               {item.label}
             </li>

@@ -8,26 +8,6 @@ import Profile from "./Profile";
 
 export default function MainInfo({ project }) {
   // const prjId = "PRJ_240502_000243";
-  // const [clientData, setClientData] = useState();
-  // const tokenInfo = useSelector((state) => {
-  //   return {
-  //     token: state.tokenInfo.token,
-  //     credentialsExpired: state.tokenInfo.credentialsExpired,
-  //   };
-  // });
-
-  // useEffect(() => {
-  //   const getClient = async () => {
-  //     const response = await fetch("http://localhost:8080/api/project/client", {
-  //       headers: { Authorization: tokenInfo.token },
-  //       method: "GET",
-  //     });
-  //     const json = await response.json();
-  //     console.log(json.body, "!!!!!!!!!!!");
-  //     return json;
-  //   };
-  //   setClientData(getClient());
-  // }, [tokenInfo.token]);
 
   const [showInfoModal, setShowInfoModal] = useState(false);
 
