@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./requirement.module.css";
+import { loadOneRequirement } from "../../http/requirementHttp";
 
 export default function RequirementView() {
   const [content, setContent] = useState();
@@ -29,20 +30,13 @@ export default function RequirementView() {
   };
 
   useEffect(() => {
-    // 요구사항 정보 불러오기
-    const loadOneRequirement = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/requirement/view?prjId=${prjId}&rqmId=${rqmId}`,
-        {
-          method: "GET",
-          headers: { Authorization: token },
-        }
-      );
-      const json = await response.json();
+    // 선택한 요구사항 정보 불러오기
+    const getOneRequirement = async () => {
+      const json = await loadOneRequirement(token, prjId, rqmId);
       setContent(json);
     };
 
-    loadOneRequirement();
+    getOneRequirement();
   }, [token, prjId, rqmId]);
 
   const { body: data } = content || {};

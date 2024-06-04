@@ -1,33 +1,79 @@
 import { useNavigate } from "react-router";
-import styles from "./requirement.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  loadForWriteData,
+  loadNameByPrjName,
+} from "../../http/requirementHttp";
 
 export default function RequirementWrite() {
-  // React Router의 Path를 이동시키는 Hook
-  // Spring의 redirect와 유사.
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
   const [writeData, setWriteData] = useState({
     projectList: [],
     scdSts: [],
     rqmSts: [],
   });
+  const [empData, setEmpData] = useState();
+
+  const token = localStorage.getItem("token");
+
+  const prjRef = useRef();
+  const startDayRef = useRef();
+  const endDayRef = useRef();
+  // 오늘 날짜로 기본설정
+  const today = new Date().toISOString().substring(0, 10);
+
+  // React Router의 Path를 이동시키는 Hook
+  // Spring의 redirect와 유사.
+  const navigate = useNavigate();
 
   const onClickHandler = () => {
     navigate("/requirement");
   };
 
+  const prjSelectHandler = () => {
+    const selectedPrjId = prjRef.current.value;
+    console.log("selectedPrjName: " + selectedPrjId);
+
+    const getProjectTeammate = async () => {
+      // 프로젝트 이름을 통해서 담당개발자, 확인자, 테스터 값 받아오기
+      const json = await loadNameByPrjName({ token, selectedPrjId });
+      // 받아온 값 처리
+
+      const { body: data } = json;
+
+      // for (let i = 0; i < data.length; i++) {
+      //   arr.push(data[i].employeeVO.empName);
+      // }
+      const arr = data.map((item) => item.employeeVO);
+      // console.log(arr);
+      setEmpData(arr);
+    };
+    getProjectTeammate();
+  };
+
+  const startDayHandler = (event) => {
+    const dayValue = event.target.value;
+
+    if (dayValue < today) {
+      alert("오늘 이전의 날짜는 선택할 수 없습니다.");
+      event.target.value = today;
+    }
+  };
+  const endDayHandler = (event) => {
+    const dayValue = event.target.value;
+
+    if (dayValue < today) {
+      alert("오늘 이전의 날짜는 선택할 수 없습니다.");
+      event.target.value = today;
+    }
+  };
+
+  // useEffect(() => {
+  // }, [empData]);
+
   useEffect(() => {
     // 프로젝트, 일정상태, 진행상태 데이터 불러오기
-    const loadForWriteData = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/requirement/write`,
-        {
-          method: "GET",
-          headers: { Authorization: token },
-        }
-      );
-      const json = await response.json();
+    const getRequirementWritePage = async () => {
+      const json = await loadForWriteData(token);
       const { projectList, scdSts, rqmSts } = json.body;
       setWriteData({
         projectList,
@@ -36,20 +82,14 @@ export default function RequirementWrite() {
       });
     };
 
-    loadForWriteData();
+    getRequirementWritePage();
   }, [token]);
 
   // 객체 분해를 사용해서 값 추출
   const { projectList, scdSts, rqmSts } = writeData || {};
 
-  console.log("projectList: ", projectList);
-  console.log("scdSts: ", scdSts);
-  console.log("rqmSts: ", rqmSts);
-
   return (
     <>
-      <div>요구사항 작성 페이지입니다.</div>
-
       <div className="writeGrid">
         <label htmlFor="rqm-ttl">요구사항 제목</label>
         <div>
@@ -64,11 +104,18 @@ export default function RequirementWrite() {
         {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
         <label htmlFor="prj-id">프로젝트</label>
         <div>
-          <select name="prjId" id="prj-id">
+          <select
+            name="prjId"
+            id="prj-id"
+            onChange={prjSelectHandler}
+            ref={prjRef}
+          >
             <option value="">프로젝트를 선택해주세요</option>
             {projectList &&
               projectList.map((item) => (
-                <option value="{item.prjId}">{item.prjName}</option>
+                <option value={item.prjId} key={item.prjId}>
+                  {item.prjName}
+                </option>
               ))}
           </select>
         </div>
@@ -77,6 +124,12 @@ export default function RequirementWrite() {
         <div>
           <select id="dvlrp-check" name="dvlrp">
             <option value="">프로젝트를 선택해주세요</option>
+            {empData &&
+              empData.map((item) => (
+                <option value={item.empId} key={item.empId}>
+                  {item.empName}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -84,6 +137,12 @@ export default function RequirementWrite() {
         <div>
           <select id="cfrmr-check" name="cfrmr">
             <option value="">프로젝트를 선택해주세요</option>
+            {empData &&
+              empData.map((item) => (
+                <option value={item.empId} key={item.empId}>
+                  {item.empName}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -91,6 +150,12 @@ export default function RequirementWrite() {
         <div>
           <select id="tstr-check" name="tstr">
             <option value="">프로젝트를 선택해주세요</option>
+            {empData &&
+              empData.map((item) => (
+                <option value={item.empId} key={item.empId}>
+                  {item.empName}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -101,7 +166,9 @@ export default function RequirementWrite() {
             type="date"
             id="start-date"
             name="strtDt"
-            // value="${requirement.strtDt}"
+            ref={startDayRef}
+            defaultValue={today}
+            onChange={startDayHandler}
           />
         </div>
         {/** 날짜선택창 */}
@@ -111,7 +178,9 @@ export default function RequirementWrite() {
             type="date"
             id="end-date"
             name="endDt"
-            // value="${requirement.endDt}"
+            ref={endDayRef}
+            defaultValue={today}
+            onChange={endDayHandler}
           />
         </div>
         <label htmlFor="file">첨부파일</label>
@@ -122,9 +191,10 @@ export default function RequirementWrite() {
         <div className="hereCkEditor5">
           {/* * 여기가 editor 생성부 */}
           <div className="editor" data-name="rqmCntnt" data-init-content="">
-            <textarea style={{ width: "600px", height: "300px" }}>
-              CKEditor를 이용해서 내용 넣기
-            </textarea>
+            <textarea
+              style={{ width: "600px", height: "300px" }}
+              defaultValue="CKEditor를 이용해서 내용 넣기"
+            ></textarea>
           </div>
         </div>
 
@@ -138,7 +208,9 @@ export default function RequirementWrite() {
           >
             {scdSts &&
               scdSts.map((item) => (
-                <option value="{item.cmcdId}">{item.cmcdName}</option>
+                <option value="{item.cmcdId}" key={item.cmcdId}>
+                  {item.cmcdName}
+                </option>
               ))}
           </select>
         </div>
@@ -153,7 +225,9 @@ export default function RequirementWrite() {
           >
             {rqmSts &&
               rqmSts.map((item) => (
-                <option value="{item.cmcdId}">{item.cmcdName}</option>
+                <option value="{item.cmcdId}" key={item.cmcdId}>
+                  {item.cmcdName}
+                </option>
               ))}
           </select>
         </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { loadRequirements } from "../../http/requirementHttp";
 
 export default function Requirement() {
   const [requirement, setRequirement] = useState();
@@ -15,19 +16,12 @@ export default function Requirement() {
 
   useEffect(() => {
     // 요구사항 리스트 불러오기
-    const loadRequirements = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/requirement/search`,
-        {
-          method: "GET",
-          headers: { Authorization: token },
-        }
-      );
-      const json = await response.json();
+    const getRequirementList = async () => {
+      const json = await loadRequirements(token);
       setRequirement(json);
     };
 
-    loadRequirements();
+    getRequirementList();
   }, [token]);
 
   const { count, body: data } = requirement || {};
