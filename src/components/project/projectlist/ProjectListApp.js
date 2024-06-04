@@ -54,6 +54,7 @@ const ProjectListApp = () => {
       width: "25%",
       render: (data, row) => (
         <span
+          style={{ cursor: "pointer" }}
           onClick={() => {
             navigate("/project/view", { state: { key: row } });
           }}
@@ -75,7 +76,15 @@ const ProjectListApp = () => {
       key: "clntName",
       width: "15%",
     },
-    { title: "프로젝트 기한", dataIndex: "endDt", key: "endDt", width: "10%" },
+    {
+      title: "프로젝트 기한",
+      dataIndex: "endDt",
+      key: "endDt",
+      width: "10%",
+      // render: (data) => (
+      //   <span>{data}</span>
+      // ),
+    },
     {
       title: "진행상황",
       dataIndex: ["prjStsCode", "cmcdName"],

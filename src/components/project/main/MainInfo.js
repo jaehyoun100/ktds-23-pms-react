@@ -4,6 +4,7 @@ import ProjectSubChart from "./ProjectSubChart";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import InfoModal from "./InfoModal";
 import { useSelector } from "react-redux";
+import Profile from "./Profile";
 
 export default function MainInfo({ project }) {
   // const prjId = "PRJ_240502_000243";
@@ -27,11 +28,6 @@ export default function MainInfo({ project }) {
   //   };
   //   setClientData(getClient());
   // }, [tokenInfo.token]);
-  console.log(project, "!!!");
-  const content =
-    "KT DS는 1989년 창립하여 어쩌구 저쩌구 만나서 반갑습니다!! 행복한 하루 되세요 ^^ KT DS는 1989년 창립하여 어쩌구 저쩌구 만나서 반갑습니다!! 행복한 하루 되세요 ^^";
-  const title = "KT DS";
-  const contact = "02-332-1129";
 
   const [showInfoModal, setShowInfoModal] = useState(false);
 
@@ -57,7 +53,7 @@ export default function MainInfo({ project }) {
         <div>고객사</div>
         <div className={styles.displayInfoFlex}>
           {" "}
-          {project.clntInfo}{" "}
+          {project.clientVO.clntName}{" "}
           <IoInformationCircleSharp
             className={styles.info}
             onClick={handleOpenModal}
@@ -68,8 +64,16 @@ export default function MainInfo({ project }) {
         <div>참여원</div>
         {project.projectTeammateList.map((item) => (
           <div key={item.tmId}>
-            <div>{item.employeeVO.originPrflFileName}</div>
-            <div>{item.employeeVO.empName}</div>
+            <Profile profileFile={item.employeeVO.originPrflFileName}></Profile>
+            <div
+              style={{
+                fontSize: "12px",
+                textAlign: "center",
+                marginTop: "3px",
+              }}
+            >
+              {item.employeeVO.empName}
+            </div>
           </div>
         ))}
       </div>
