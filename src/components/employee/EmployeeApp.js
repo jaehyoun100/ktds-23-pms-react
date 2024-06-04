@@ -1,35 +1,36 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Input, Select } from "antd";
 import Table from "../../utils/Table";
 import { useNavigate } from "react-router-dom";
 import { CustomButton } from "./components/EmployeeView";
+import { useSelector } from "react-redux";
 
 export default function EmployeeApp() {
   const [data, setData] = useState([]);
-  const [selectedList, setSelectedList] = useState();
   const navigate = useNavigate();
+  // const [selectedList, setSelectedList] = useState();
   // const [loading, setLoading] = useState();
   // const [error, setError] = useState();
-  const token = true;
-
-  const loadData = useCallback(async () => {
-    await fetch("http://localhost:8080/api/v1/employee", {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => setData(data.body));
-  }, []);
+  const { token } = useSelector((state) => state.tokenInfo);
 
   // const loadData = useCallback(async () => {
-  //   const response = await fetch("http://localhost:8080/api/v1/employee", {
+  //   await fetch("http://localhost:8080/api/v1/employee", {
   //     method: "GET",
-  //     headers: {
-  //       Authorization: token,
-  //     }
   //   })
-  //   const json = await response.json();
-  //   setData(json.body);
-  // }, [token]);
+  //     .then((response) => response.json())
+  //     .then((data) => setData(data.body));
+  // }, []);
+
+  const loadData = useCallback(async () => {
+    const response = await fetch(`http://localhost:8080/api/v1/employee`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+    const json = await response.json();
+    setData(json.body);
+  }, [token]);
 
   useEffect(() => {
     if (token) loadData();
@@ -126,7 +127,6 @@ export default function EmployeeApp() {
         filter
         filterOptions={filterOptions}
       />
-      <CustomButton>ddd</CustomButton>
     </>
   );
 }
