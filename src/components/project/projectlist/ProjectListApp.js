@@ -3,13 +3,15 @@ import Button from "../../common/Button/Button";
 import Search from "../../common/search/Search";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Table from "../../../utils/Table";
 
 const ProjectListApp = () => {
   const [data, setData] = useState([]);
   const [searchDataCommonCode, setSearchDataCommonCode] = useState();
+  const [filterOptions, setFilterOptions] = useState([]);
   const [selectCommonCode, setSelectCommonCode] =
     useState("옵션 선택해주세요.");
-
+  const [currencyList, setCurrencyList] = useState([]);
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -28,38 +30,87 @@ const ProjectListApp = () => {
     const getProject = async () => {
       const run = await getList();
       setData(run[1]);
-      console.log(run[0]);
+      // setCurrencyList({data})
+      console.log(run[1]);
       let optionList = [];
+      let filterOptionArray = [];
       for (let i = 0; i < run[0].length; i++) {
         optionList[i] = { value: run[0][i].cmcdId, name: run[0][i].cmcdName };
+        filterOptionArray[i] = {
+          value: run[0][i].cmcdId,
+          label: run[0][i].cmcdName,
+        };
       }
       setSearchDataCommonCode(optionList);
+      setFilterOptions(filterOptionArray);
     };
     getProject();
   }, [tokenInfo.token]);
+  const columns = [
+    {
+      title: "프로젝트명",
+      dataIndex: "prjName",
+      key: "prjName",
+      width: "25%",
+      render: (data, row) => (
+        <span
+          onClick={() => {
+            navigate("/project/view", { state: { key: row } });
+          }}
+        >
+          {data}
+        </span>
+      ),
+    },
+    {
+      title: "담당부서",
+      dataIndex: ["deptVO", "deptName"],
+      key: "deptName",
+      width: "20%",
+    },
+    { title: "PM", dataIndex: "pm", key: "pm", width: "10%" },
+    {
+      title: "고객사",
+      dataIndex: ["clientVO", "clntName"],
+      key: "clntName",
+      width: "15%",
+    },
+    { title: "프로젝트 기한", dataIndex: "endDt", key: "endDt", width: "10%" },
+    {
+      title: "진행상황",
+      dataIndex: ["prjStsCode", "cmcdName"],
+      key: "cmcdName",
+      width: "10%",
+    },
+    { title: "후기작성", dataIndex: "", key: "", width: "10%" },
+  ];
   const onClickHandler = () => {
     // 프로젝트 생성 api 호출
   };
-  const searchOnClickHandler = () => {
-    // 프로젝트 검색 api 호출
-    // selectCommonCode : 선택된 프로젝트 상태 코드
-  };
+
   const navigate = useNavigate();
   return (
     <div>
-      {searchDataCommonCode && (
+      {/* {searchDataCommonCode && (
         <Search
           optionList={searchDataCommonCode}
           setSelectedData={setSelectCommonCode}
           onClickHandler={searchOnClickHandler}
           selectedData={selectCommonCode}
         />
-      )}
+      )} */}
       <Button onClickHandler={onClickHandler}>생성</Button>
       {data && (
         <>
           <div>{data.projectCount}개의 프로젝트</div>
-          {data.projectList?.map((item, idx) => (
+          <Table
+            columns={columns}
+            dataSource={data.projectList}
+            rowKey={(dt) => dt.id}
+            filter
+            filterOptions={filterOptions}
+          />
+          {/* {data.projectList?.map((item, idx) => (
             <div
               key={idx}
               onClick={() => {
@@ -68,7 +119,7 @@ const ProjectListApp = () => {
             >
               {item.prjName}
             </div>
-          ))}
+          ))} */}
         </>
       )}
     </div>
