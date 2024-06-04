@@ -78,6 +78,7 @@ h1 {
 }
 .gridComponent {
   display: grid;
+  height: 750px;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
 }
@@ -87,7 +88,7 @@ h1 {
   color: var(--second-color);
 }
 .readmeMargin {
-  margin-top: 80px;
+  margin-top: 40px;
 }
 .headerContainer {
   display: flex;
