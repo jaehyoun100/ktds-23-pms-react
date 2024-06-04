@@ -293,3 +293,39 @@ h1 {
   background-color: #2c3e50;
   border-color: #2c3e50;
 }
+.calendarContainer {
+  top: 0;
+  left: 0;
+  display: flex;
+}
+.calendarMemoContainer {
+  margin-left: 20px;
+}
+.calendarMemoDate {
+  margin-bottom: 10px;
+}
+.calendarMemoContainer > textarea {
+  width: 220px;
+  height: 150px;
+}
+.calendarTodo {
+  width: 280px;
+  height: 320px;
+  box-sizing: border-box;
+  border: 1px solid #333;
+}
+.calendarTodo > ul > div {
+  color: var(--second-color);
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border-bottom: 1px solid #333;
+}
+.calendarTodo > ul > li {
+  list-style: none;
+}
+.calendarTodo > ul > li :first-child {
+  margin-bottom: 4px;
+  margin-top: 4px;
+  color: var(--dark-color);
+}

@@ -1,0 +1,63 @@
+.reactCalendar {
+  width: 280px;
+  height: 320px;
+}
+
+.reactCalendar__navigation {
+  background: var(--second-color);
+  border-bottom: var(--main-color);
+  height: 90px;
+  border-radius: 20px 20px 0 0;
+
+  span {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--main-color);
+  }
+}
+abbr {
+  color: #000;
+}
+.reactCalendar__navigation button:disabled {
+  background-color: var(--second-color);
+  border-radius: 20px 20px 0 0;
+}
+
+.reactCalendar__navigation button:enabled:hover,
+.reactCalendar__navigation button:enabled:focus {
+  background-color: var(--second-color);
+  border-radius: 20px 20px 0 0;
+}
+.reactCalendar__monthView {
+  padding: 12px 32px;
+  abbr {
+    color: var(--light-color);
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+.reactCalendar button {
+  background: rgb(224, 224, 224);
+  margin-bottom: 10px;
+}
+.reactCalendar__month-view__weekdays {
+  font-size: 12px;
+  font-weight: 700;
+}
+.reactCalendar__tile {
+  text-align: center;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: var(--second-color);
+}
+
+/*hover, focus, 선택됐을 시 */
+.reactCalendar__tile:enabled:hover,
+.reactCalendar__tile:enabled:focus,
+.reactCalendar__tile--active {
+  background: var(--second-color);
+  border-radius: 14px;
+}
