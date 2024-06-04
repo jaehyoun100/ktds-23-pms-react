@@ -2,6 +2,7 @@ import { useRef } from "react";
 import LoginFooter from "./LoginFooter";
 import { useDispatch } from "react-redux";
 import { getToken } from "../../http/userDetailHttp";
+import ConfirmModal from "../common/modal/ConfirmModal";
 
 export default function LoginPage() {
   const empIdRef = useRef();
@@ -16,7 +17,7 @@ export default function LoginPage() {
      * 들어온 email과 password의 값이 올바른지 확인한다
      */
     if (!empId) {
-      alert("이메일을 입력하세요");
+      alert("사원번호를 입력하세요");
       empIdRef.current.focus();
       return;
     }
@@ -34,6 +35,7 @@ export default function LoginPage() {
 
   return (
     <>
+      <ConfirmModal />
       <div className="container">
         <div className="item header"></div>
         <div className="item"></div>
