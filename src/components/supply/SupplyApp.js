@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupplyList } from "../../http/supplyHttp";
-import SupplyView from "./SupplyView";
-import SupplyRegist from "./SupplyRegist";
+import SupplyView from "./components/SupplyView";
+import SupplyRegist from "./components/SupplyRegist";
 import Table from "../../utils/Table";
-
-let pageNo = 0;
+import style from "./supply.module.css";
 
 export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();
@@ -81,8 +80,8 @@ export default function SupplyApp() {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
-      <div style={{ flex: 1 }}>
+    <div className={style.supplyAppContainer}>
+      <div className={style.tableComponent}>
         {token && !isRegistrationMode && (
           <>
             <Table
@@ -102,12 +101,17 @@ export default function SupplyApp() {
             />
           </>
         )}
-        {!isSelect && !isRegistrationMode && (
-          <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
+        {!isRegistrationMode && (
+          <>
+            <button onClick={onRegistrationModeClickHandler}>
+              소모품 등록
+            </button>
+            <button>신청 기록</button>
+          </>
         )}
       </div>
       {isSelect && !isRegistrationMode && (
-        <div style={{ flex: 1, marginLeft: "20px" }}>
+        <div className={style.supplyViewComponent}>
           <SupplyView
             selectedSplId={selectedSplId}
             setSelectedSplId={setSelectedSplId}
@@ -126,5 +130,4 @@ export default function SupplyApp() {
       )}
     </div>
   );
-  // <button>버튼 2</button>
 }

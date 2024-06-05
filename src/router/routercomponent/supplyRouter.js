@@ -1,6 +1,6 @@
 import SupplyApp from "../../components/supply/SupplyApp";
-import SupplyRegist from "../../components/supply/SupplyRegist";
-import SupplyView from "../../components/supply/SupplyView";
+import SupplyRegist from "../../components/supply/components/SupplyRegist";
+import SupplyView from "../../components/supply/components/SupplyView";
 
 const supplyRouter = {
   path: "supply/",

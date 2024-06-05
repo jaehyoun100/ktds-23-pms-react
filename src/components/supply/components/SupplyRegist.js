@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { registerSupply } from "../../http/supplyHttp";
+import { registerSupply } from "../../../http/supplyHttp";
 
 export default function SupplyRegist({
   setIsRegistrationMode,
