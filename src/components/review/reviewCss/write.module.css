@@ -67,7 +67,7 @@
   margin-top: 150px;
 }
 
-svg {
+.svgContainer > svg {
   width: 30px;
   height: 30px;
 }

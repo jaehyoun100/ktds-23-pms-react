@@ -6,12 +6,12 @@
 input {
   margin-right: 5px;
 }
-svg {
+.flexArray > svg {
   width: 20px;
   height: 20px;
   cursor: pointer;
   color: var(--main-color);
 }
-svg:hover {
+.flexArray > svg:hover {
   color: var(--second-color);
 }

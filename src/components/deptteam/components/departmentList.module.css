@@ -1,0 +1,7 @@
+.contentLayout {
+  display: flex;
+  justify-content: space-between;
+}
+.layout {
+  width: 49%;
+}

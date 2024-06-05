@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Table as AntTable, Card, Input, Select } from "antd";
 import { produce } from "immer";
 import Selectbox from "../components/common/selectbox/Selectbox";
+import s from "./table.module.css";
 
 export default function Table({
   dataSource,
