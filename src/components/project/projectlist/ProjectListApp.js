@@ -4,6 +4,7 @@ import Search from "../../common/search/Search";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Table from "../../../utils/Table";
+import { getReviewYN } from "../../../http/reviewHttp";
 
 const ProjectListApp = () => {
   const [data, setData] = useState([]);
@@ -12,6 +13,9 @@ const ProjectListApp = () => {
   const [selectCommonCode, setSelectCommonCode] =
     useState("옵션 선택해주세요.");
   const [currencyList, setCurrencyList] = useState([]);
+  // 후기
+  const [prjIdList, setPrjId] = useState([]);
+  const [reviewResult, setReviewResult] = useState([]);
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -43,9 +47,28 @@ const ProjectListApp = () => {
       }
       setSearchDataCommonCode(optionList);
       setFilterOptions(filterOptionArray);
+
+      let projectIdArr = [];
+
+      for (let i = 0; i < run[1].projectList.length; i++) {
+        projectIdArr[i] = run[1].projectList[i].prjId;
+      }
+      setPrjId(projectIdArr);
     };
     getProject();
   }, [tokenInfo.token]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const result = async () => {
+      const body = await getReviewYN(token, prjIdList);
+
+      setReviewResult(body.body);
+    };
+
+    result();
+  }, [prjIdList]);
+
   const columns = [
     {
       title: "프로젝트명",
