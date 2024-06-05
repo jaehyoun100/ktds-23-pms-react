@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./requirement.module.css";
 import { loadOneRequirement } from "../../http/requirementHttp";
@@ -30,22 +30,32 @@ export default function RequirementView() {
     navigate("/requirement");
   };
 
+  const fetchParams = useMemo(() => {
+    return {token, needReloadDetail};
+  }, [token, needReloadDetail]);
+
+  // Component를 실행시키자마자 API 요청으로 데이터를 받아오는 부분
+  const fetchLoadOneRequirement = useCallback(async (params) => {
+    const {token, prjId, rqmId} = params;
+    return await loadOneRequirement(token, prjId, rqmId);
+  }, []);
+
   useEffect(() => {
     // 선택한 요구사항 정보 불러오기
     const getOneRequirement = async () => {
-      const json = await loadOneRequirement(token, prjId, rqmId);
+      const json = await fetchLoadOneRequirement({...fetchParams, prjId, rqmId});
       setContent(json);
     };
 
     getOneRequirement();
-  }, [token, prjId, rqmId]);
+  }, [fetchLoadOneRequirement, fetchParams, prjId, rqmId]);
 
   const { body: data } = content || {};
 
   return (
     <>
       {/** 데이터가 불러와졌고, 수정모드가 아니면 */}
-      {content && !isModifyMode && (
+      {data && !isModifyMode && (
         <>
           <div className={styles.mainInfo}>
             <div className={`${styles.grid} ${styles.infoBorder}`}>

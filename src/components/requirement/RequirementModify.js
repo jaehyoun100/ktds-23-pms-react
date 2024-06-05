@@ -21,7 +21,7 @@ export default function RequirementModify({
     teammateList: [],
   });
   const [editorData, setEditorData] = useState();
-  const [errors, setErrors] = useState({
+  const [modifyErrors, setModifyErrors] = useState({
     rqmTtl: [],
     prjId: [],
     dvlrp: [],
@@ -68,6 +68,8 @@ export default function RequirementModify({
     const scdSts = scdStsRef.current.value; // 일정상태
     const rqmSts = rqmStsRef.current.value; // 진행상태
 
+    console.log("rqmCntnt: ", rqmCntnt);
+
     const formData = new FormData();
     formData.append("rqmTtl", rqmTtl);
     formData.append("prjId", prjId);
@@ -87,7 +89,7 @@ export default function RequirementModify({
       setNeedReloadDetail(Math.random());
     }
     if (json.body !== (true || false)) {
-      setErrors(json.body);
+      setModifyErrors(json.body);
     }
   };
 
@@ -114,11 +116,6 @@ export default function RequirementModify({
       const json = await loadForModifyData(token, projectId, requirementId);
       const { requirement, projectList, scdSts, rqmSts, prjTeammateList } =
         json.body;
-      console.log("requirement: ", requirement);
-      console.log("projectList: ", projectList);
-      console.log("scdSts: ", scdSts);
-      console.log("rqmSts: ", rqmSts);
-      console.log("prjTeammateList: ", prjTeammateList);
 
       const teammateList = prjTeammateList.map((item) => item.employeeVO);
       console.log("teammateList: ", teammateList);
@@ -309,8 +306,8 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
-          {errors.scdSts.length > 0 && (
-            <div className={styles.errorMessage}>{errors.scdSts}</div>
+          {modifyErrors.scdSts.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.scdSts}</div>
           )}
         </div>
 
@@ -331,8 +328,8 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
-          {errors.rqmSts.length > 0 && (
-            <div className={styles.errorMessage}>{errors.rqmSts}</div>
+          {modifyErrors.rqmSts.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.rqmSts}</div>
           )}
         </div>
 

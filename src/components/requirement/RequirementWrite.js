@@ -17,7 +17,7 @@ export default function RequirementWrite() {
   });
   const [empData, setEmpData] = useState();
   const [editorData, setEditorData] = useState();
-  const [errors, setErrors] = useState({
+  const [writeErrors, setWriteErrors] = useState({
     rqmTtl: [],
     prjId: [],
     dvlrp: [],
@@ -124,7 +124,7 @@ export default function RequirementWrite() {
       navigate("/requirement");
     }
     if (json.body !== (true || false)) {
-      setErrors(json.body);
+      setWriteErrors(json.body);
     }
   };
 
@@ -277,8 +277,8 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
-          {errors.scdSts.length > 0 && (
-            <div className={styles.errorMessage}>{errors.scdSts}</div>
+          {writeErrors.scdSts.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.scdSts}</div>
           )}
         </div>
 
@@ -294,8 +294,8 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
-          {errors.rqmSts.length > 0 && (
-            <div className={styles.errorMessage}>{errors.rqmSts}</div>
+          {writeErrors.rqmSts.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.rqmSts}</div>
           )}
         </div>
 
