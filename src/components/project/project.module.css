@@ -119,9 +119,7 @@ h1 {
   font-size: 17px;
   color: var(--second-color);
 }
-.readmeMargin {
-  margin-top: 40px;
-}
+
 .headerContainer {
   display: flex;
   flex-direction: row;
@@ -294,38 +292,68 @@ h1 {
   border-color: #2c3e50;
 }
 .calendarContainer {
-  top: 0;
-  left: 0;
+  margin-left: 70px;
   display: flex;
 }
 .calendarMemoContainer {
+  border: 1px solid #333;
+  width: 280px;
+  height: 340px;
+  padding: 10px;
+  border-radius: 5px;
   margin-left: 20px;
 }
 .calendarMemoDate {
-  margin-bottom: 10px;
+  margin-top: 10px;
+  color: var(--second-color);
+  margin-bottom: 20px;
 }
 .calendarMemoContainer > textarea {
-  width: 220px;
-  height: 150px;
+  width: 256px;
+  height: 214px;
+  margin-bottom: 10px;
 }
 .calendarTodo {
+  margin-left: 10px;
   width: 280px;
-  height: 320px;
+  height: 340px;
   box-sizing: border-box;
+  border-radius: 4px;
   border: 1px solid #333;
 }
-.calendarTodo > ul > div {
+.calendarTodo > ul {
+  margin-left: 0;
+  padding-left: 0;
+}
+.todo {
+  padding-left: 20px;
+  padding-bottom: 10px;
   color: var(--second-color);
   margin-top: 10px;
   margin-bottom: 20px;
   font-size: 16px;
+  font-weight: 600;
   border-bottom: 1px solid #333;
 }
-.calendarTodo > ul > li {
+.ulContainer > li {
   list-style: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--light-color);
+  padding-left: 10px;
+  margin-bottom: 20px;
 }
-.calendarTodo > ul > li :first-child {
-  margin-bottom: 4px;
+.eventDate {
   margin-top: 4px;
+  margin-right: 20px;
   color: var(--dark-color);
+}
+.ulContainer {
+  width: 270px;
+  height: 240px;
+  margin-left: 4px;
+  margin-right: 4px;
+  border-radius: 5px;
+  border: 1px solid var(--light-color);
+  padding: 20px;
+  overflow-y: auto;
 }

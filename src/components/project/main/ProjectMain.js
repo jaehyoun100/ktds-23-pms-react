@@ -9,9 +9,13 @@ import { useSelector } from "react-redux";
 import CalendarComponent from "./CalendarComponent";
 export default function ProjectMain() {
   const [events, setEvents] = useState([
-    { id: 1, date: "2024-06-10", memo: "First event" },
-    { id: 2, date: "2024-06-15", memo: "Second event" },
-    { id: 3, date: "2024-06-20", memo: "Third event" },
+    { id: 1, date: "2024-06-10", memo: "프로젝트 회의 1차" },
+    { id: 2, date: "2024-06-15", memo: "프로젝트 회의 2차" },
+    { id: 3, date: "2024-06-22", memo: "프로젝트 회의 3차" },
+    { id: 4, date: "2024-06-27", memo: "고객사 방문후 검토" },
+    { id: 5, date: "2024-07-04", memo: "프로젝트 중간 점검" },
+    { id: 6, date: "2024-07-11", memo: "프로젝트 회의 4차" },
+    { id: 7, date: "2024-07-20", memo: "프로젝트 최종 점검" },
   ]);
 
   const saveMemo = (date, memo) => {
