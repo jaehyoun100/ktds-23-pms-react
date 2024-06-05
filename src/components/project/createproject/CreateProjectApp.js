@@ -9,10 +9,10 @@ import { useSelector } from "react-redux";
 const CreateProjectApp = () => {
   const prjNameRef = useRef();
   const prjMemoRef = useRef();
-  // const startDateRef = useRef();
-  // const endDateRef = useRef();
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const startDateRef = useRef();
+  const endDateRef = useRef();
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(new Date());
 
   const [clientData, setClientData] = useState([]);
   const [clientSelectedData, setClientSelectedData] =
@@ -83,8 +83,8 @@ const CreateProjectApp = () => {
   };
 
   const onChangeSelect = () => {
-    console.log(startDate);
-    console.log(endDate);
+    console.log(startDateRef.current);
+    console.log(endDateRef.current);
     // if (
     //   startDateRef.current &&
     //   endDateRef.current &&
@@ -92,9 +92,9 @@ const CreateProjectApp = () => {
     // ) {
     //   alert("시작일이 끝 날짜보다 클 수 없습니다.");
     // }
-    if (startDate && endDate && startDate > endDate) {
-      alert("시작일이 끝 날짜보다 클 수 없습니다.");
-    }
+    // if (startDate && endDate && startDate > endDate) {
+    //   alert("시작일이 끝 날짜보다 클 수 없습니다.");
+    // }
   };
 
   const onClickCreateButtonHandler = () => {};
@@ -136,8 +136,8 @@ const CreateProjectApp = () => {
         <div>
           <SelectDate
             onChangeSelect={onChangeSelect}
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
+            startDateRef={startDateRef}
+            endDateRef={endDateRef}
           />
         </div>
         <div>Project Readme</div>
