@@ -34,7 +34,7 @@ export default function SurveyApp() {
       setSurveys(json.body);
       //console.log("teammate : ", json.body[0]);
       //손봐야함
-      console.log("json.body : ", json.body);
+      console.log("SurveyApp json.body : ", json.body);
       //본인이 속한 프로젝트를 가져옴 관리자면 다가져옴
       //console.log("projectCommonCodeList : ", json.body[2]);
       //공통코드를 가져옴(써놨길래 일단 가져옴)
@@ -65,11 +65,11 @@ export default function SurveyApp() {
         <>
           <table style={{ width: "100%" }}>
             <thead>
-              <tr>
+              <tr style={{ textAlign: "center" }}>
                 <td>프로젝트 명</td>
                 <td>고객사</td>
                 <td>담당 부서</td>
-                {!surveys[5] && <td>설문 생성 여부</td>}
+                {!surveys[5] && <td>설문</td>}
                 {surveys[5] && <td>설문 작성</td>}
               </tr>
             </thead>
@@ -81,26 +81,70 @@ export default function SurveyApp() {
                       <td>{survey.prjName}</td>
                       <td>{survey.clntInfo}</td>
                       <td>{survey.deptVO.deptName}</td>
-                      {!surveys[5] && (
-                        //프로젝트의 설문 sts의 여부에 따라 조건부 랜더링을 하자
-                        <td>
-                          <button
-                            onClick={() =>
-                              surveyWriteAnswerClickHandler(survey.prjId)
-                            }
-                          >
-                            설문 답변
-                          </button>
-                        </td>
-                      )}
-                      {surveys[5] && (
-                        <td>
-                          <button onClick={surveyWriteQuestionClickHandler}>
-                            설문 작성
-                          </button>
-                          {/* 미작성 || 작성중이라면 버튼이 보이고 
-                      작성이 완료되었다면 버튼을 사라지게 만들자 */}
-                        </td>
+                      {/* 
+                      PRJ_STS != 409 라면 프로젝트 미종료
+                      PRJ_STS = 409 & SRV_STS = N 이라면 설문 미생성
+                      PRJ_STS = 409 & SRV_STS = W 이라면 설문 작성중
+                      PRJ_STS = 409 & SRV_STS = Y 이라면 설문 답변
+
+                      SRV_CR_DATE 설문 등록일 
+                      SRV_END_DATE 설문 답변 마감일 
+
+                      
+                      */}
+
+                      {survey.prjSts !== "409" ? (
+                        <td>프젝 미종료</td>
+                      ) : (
+                        <>
+                          {!surveys[5] ? (
+                            //프로젝트의 설문 sts의 여부에 따라 조건부 랜더링을 하자
+                            <>
+                              {survey.srvSts === "N" ? (
+                                <td
+                                  style={{ fontWeight: "bold", color: "#f44" }}
+                                >
+                                  미작성
+                                </td>
+                              ) : (
+                                <>
+                                  {survey.srvSts === "W" ? (
+                                    <td style={{ fontWeight: "bold" }}>
+                                      작성중 ...
+                                    </td>
+                                  ) : (
+                                    <td>
+                                      <button
+                                        onClick={() => surveyWriteAnswerClickHandler(survey.prjId)}
+                                      >
+                                        설문 답변
+                                      </button>
+                                    </td>
+                                  )}
+                                </>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {survey.srvSts === "N" &&
+                              survey.srvSts === "W" ? (
+                                <></>
+                              ) : (
+                                <>
+                                  <td>
+                                    <button
+                                      onClick={surveyWriteQuestionClickHandler}
+                                    >
+                                      설문 작성
+                                    </button>
+                                    {/* 미작성 || 작성중이라면 버튼이 보이고 
+                                        작성이 완료되었다면 버튼을 사라지게 만들자 */}
+                                  </td>
+                                </>
+                              )}
+                            </>
+                          )}
+                        </>
                       )}
                     </tr>
                   ))}

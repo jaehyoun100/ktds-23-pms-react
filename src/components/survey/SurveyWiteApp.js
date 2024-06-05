@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import WriteSelectType from "./WriteSelectType";
 
 export default function SurveyWrite({ token, setWriteMode }) {
   const [chooseType, SetChooseType] = useState(undefined);
@@ -54,7 +55,7 @@ export default function SurveyWrite({ token, setWriteMode }) {
 
   return (
     <>
-      <table style={{ width: "100%" , minWidth: "510px"}}>
+      <table style={{ width: "100%", minWidth: "510px" }}>
         <thead>
           <tr>
             <th>설문 문항</th>
@@ -75,6 +76,22 @@ export default function SurveyWrite({ token, setWriteMode }) {
                         선택형
                       </button>
                       <button onClick={writeTypeClickHandler}>서술형</button>
+                      <button
+                        style={{ marginLeft: "10px" }}
+                        onClick={surveyQuestionAddClickHandler}
+                      >
+                        추가
+                      </button>
+                      {surveyQuestionCount !== 1 && (
+                        <>
+                          <button
+                            style={{ marginLeft: "10px" }}
+                            onClick={surveyQuestionSubClickHandler}
+                          >
+                            삭제
+                          </button>
+                        </>
+                      )}
                       <div>
                         {/* {!chooseType && <td>선택형</td>}
                 {chooseType && <td>서술형</td>} */}
@@ -82,86 +99,22 @@ export default function SurveyWrite({ token, setWriteMode }) {
                           {chooseType !== undefined && (
                             <>
                               {!chooseType ? (
-                                <>
-                                  <div>
-                                    질문
-                                    <input
-                                      type="text"
-                                      style={{ margin: "0 0 10px 50px" }}
-                                    />
-                                    <button
-                                      style={{ marginLeft: "10px" }}
-                                      onClick={surveyQuestionAddClickHandler}
-                                    >
-                                      추가
-                                    </button>
-                                    {surveyQuestionCount !== 1 && (
-                                      <>
-                                        <button
-                                          style={{ marginLeft: "10px" }}
-                                          onClick={
-                                            surveyQuestionSubClickHandler
-                                          }
-                                        >
-                                          삭제
-                                        </button>
-                                      </>
-                                    )}
-                                  </div>
-                                  <div>
-                                    선택지
-                                    <input
-                                      type="text"
-                                      style={{ margin: "0 0 10px 35px" }}
-                                    />
-                                    <button
-                                      onClick={selectOptionAddClickHandler}
-                                      style={{
-                                        marginLeft: "10px",
-                                        width: "28px",
-                                        height: "28px",
-                                      }}
-                                    >
-                                      +
-                                    </button>
-                                    <button
-                                      onClick={selectOptionSubClickHandler}
-                                      style={{
-                                        marginLeft: "10px",
-                                        width: "28px",
-                                        height: "28px",
-                                      }}
-                                    >
-                                      -
-                                    </button>
-                                  </div>
-                                  <div>
-                                    선택지
-                                    <input
-                                      type="text"
-                                      style={{ margin: "0 0 10px 35px" }}
-                                    />
-                                  </div>
-                                  {selectOptionCount !== 0 && (
-                                    <>
-                                      {[...Array(selectOptionCount)].map(
-                                        (index) => (
-                                          <>
-                                            <div key={index}>
-                                              선택지
-                                              <input
-                                                type="text"
-                                                style={{
-                                                  margin: "0 0 10px 35px",
-                                                }}
-                                              />{" "}
-                                            </div>
-                                          </>
-                                        )
-                                      )}
-                                    </>
-                                  )}
-                                </>
+                                <WriteSelectType
+                                  selectOptionAddClickHandler={
+                                    selectOptionAddClickHandler
+                                  }
+                                  surveyQuestionAddClickHandler={
+                                    surveyQuestionAddClickHandler
+                                  }
+                                  selectOptionSubClickHandler={
+                                    selectOptionSubClickHandler
+                                  }
+                                  surveyQuestionSubClickHandler={
+                                    surveyQuestionSubClickHandler
+                                  }
+                                  selectOptionCount={selectOptionCount}
+                                  surveyQuestionCount={surveyQuestionCount}
+                                />
                               ) : (
                                 <div>
                                   질문
