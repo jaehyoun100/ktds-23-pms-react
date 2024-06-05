@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { deleteSupply, loadSupply } from "../../http/supplyHttp";
+import { deleteSupply, loadSupply } from "../../../http/supplyHttp";
 
 export default function SupplyView({
   selectedSplId,

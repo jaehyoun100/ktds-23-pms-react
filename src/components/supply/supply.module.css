@@ -1,0 +1,13 @@
+.supplyAppContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tableComponent {
+  flex: 1;
+}
+
+.supplyViewComponent {
+  flex: 1;
+  margin-left: 20px;
+}
