@@ -1,18 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../project.module.css";
 import TextInput from "../../common/input/TextInput";
 import Selectbox from "../../common/selectbox/Selectbox";
 import SelectDate from "../../common/selectbox/SelectDate";
-import { Button } from "antd";
+import Button from "../../common/Button/Button";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const CreateProjectApp = () => {
   const prjNameRef = useRef();
+  // const [prjName, setPrjName] = useState("");
   const prjMemoRef = useRef();
+
   const startDateRef = useRef();
   const endDateRef = useRef();
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [endDate, setEndDate] = useState(new Date());
 
   const [clientData, setClientData] = useState([]);
   const [clientSelectedData, setClientSelectedData] =
@@ -83,29 +84,47 @@ const CreateProjectApp = () => {
   };
 
   const onChangeSelect = () => {
-    console.log(startDateRef.current);
-    console.log(endDateRef.current);
-    // if (
-    //   startDateRef.current &&
-    //   endDateRef.current &&
-    //   startDateRef.current > endDateRef.current
-    // ) {
-    //   alert("시작일이 끝 날짜보다 클 수 없습니다.");
-    // }
-    // if (startDate && endDate && startDate > endDate) {
-    //   alert("시작일이 끝 날짜보다 클 수 없습니다.");
-    // }
+    if (
+      startDateRef.current &&
+      endDateRef.current &&
+      startDateRef.current > endDateRef.current
+    ) {
+      alert("시작일이 끝 날짜보다 클 수 없습니다.");
+    }
   };
-
-  const onClickCreateButtonHandler = () => {};
+  const navigate = useNavigate();
+  const onClickCreateButtonHandler = async () => {
+    const response = await fetch("http://localhost:8080/api/project/write", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: tokenInfo.token,
+      },
+      body: JSON.stringify({
+        prjName: prjNameRef.current.value,
+        clntInfo: clientSelectedData,
+        deptId: deptSelectedData,
+        pmId: pmSelectedData,
+        strtDt: startDateRef.current,
+        endDt: endDateRef.current,
+        prjMemo: prjMemoRef.current.value,
+      }),
+    });
+    const json = await response.json();
+    console.log(json);
+    if (json.status === 200) {
+      alert("프로젝트 생성에 성공했습니다.");
+      navigate("/project");
+    }
+  };
 
   return (
     <div className={styles.createContainer}>
-      <h3 className={styles.createAndModify}>프로젝트 생성 / 수정</h3>
+      <h3 className={styles.createAndModify}>프로젝트 생성</h3>
       <div className={styles.createGrid}>
         <div>프로젝트명</div>
         <div>
-          <TextInput id="prjName" textref={prjNameRef} />
+          <TextInput id="prjName" ref={prjNameRef} />
         </div>
         <div>고객사</div>
         <div>
@@ -145,12 +164,12 @@ const CreateProjectApp = () => {
           <textarea
             className={styles.contentBox}
             inputId="prjMemo"
-            textref={prjMemoRef}
+            ref={prjMemoRef}
           ></textarea>
         </div>
       </div>
       <div className={styles.buttonArea}>
-        <Button children="생성" onClick={onClickCreateButtonHandler} />
+        <Button onClickHandler={onClickCreateButtonHandler}>생성</Button>
       </div>
     </div>
   );
