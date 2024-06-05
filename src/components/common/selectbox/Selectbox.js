@@ -29,11 +29,11 @@ export default function Selectbox({
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (item) => {
+  const handleOptionClick = async (item) => {
     setSelected(item.label);
     setIsOpen(false);
-    setSelectedData(item.value);
-    onChangeFn && onChangeFn();
+    await setSelectedData(item.value);
+    onChangeFn && (await onChangeFn());
   };
 
   return (

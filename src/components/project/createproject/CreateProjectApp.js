@@ -68,19 +68,21 @@ const CreateProjectApp = () => {
   }, [tokenInfo.token]);
 
   const onChangeFn = async () => {
-    console.log(deptSelectedData);
-    const response = await fetch(
-      `http://localhost:8080/api/project/employee/findbydeptid/${deptSelectedData}`,
-      { headers: { Authorization: tokenInfo.token }, method: "GET" }
-    );
-    const json = await response.json();
-    console.log(json);
-    let list = [];
-    for (let i = 0; i < json.body.length; i++) {
-      list.push({ label: json.body[i].empName, value: json.body[i].empId });
+    console.log(deptSelectedData, "~~~");
+    if (deptSelectedData !== null) {
+      const response = await fetch(
+        `http://localhost:8080/api/project/employee/findbydeptid/${deptSelectedData}`,
+        { headers: { Authorization: tokenInfo.token }, method: "GET" }
+      );
+      const json = await response.json();
+      console.log(json);
+      let list = [];
+      for (let i = 0; i < json.body.length; i++) {
+        list.push({ label: json.body[i].empName, value: json.body[i].empId });
+      }
+      setPmCandidate(list);
+      return json;
     }
-    setPmCandidate(list);
-    return json;
   };
 
   const onChangeSelect = () => {
