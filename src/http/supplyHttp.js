@@ -40,6 +40,7 @@ export const registerSupply = async (
   name,
   category,
   price,
+  stock,
   image,
   detail
 ) => {
@@ -47,6 +48,7 @@ export const registerSupply = async (
   data.append("splName", name);
   data.append("splCtgr", category);
   data.append("splPrice", price);
+  data.append("invQty", stock);
   data.append("file", image);
   data.append("splDtl", detail);
 
@@ -67,6 +69,7 @@ export const modifySupply = async (
   name,
   category,
   price,
+  stock,
   image,
   detail
 ) => {
@@ -74,6 +77,7 @@ export const modifySupply = async (
   data.append("splName", name);
   data.append("splCtgr", category);
   data.append("splPrice", price);
+  data.append("invQty", stock);
   data.append("splImg", image);
   data.append("splDtl", detail);
 

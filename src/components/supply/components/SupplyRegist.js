@@ -11,6 +11,7 @@ export default function SupplyRegist({
       name: "",
       category: "",
       price: "",
+      stock: "",
       image: null,
       imagePreview: null,
       detail: "",
@@ -36,6 +37,7 @@ export default function SupplyRegist({
         name: "",
         category: "",
         price: "",
+        stock: "",
         image: null,
         imagePreview: null,
         detail: "",
@@ -55,12 +57,13 @@ export default function SupplyRegist({
 
   const onRegisterClickHandler = async () => {
     for (const field of inputFields) {
-      const { name, category, price, image, detail } = field;
+      const { name, category, price, stock, image, detail } = field;
       const json = await registerSupply(
         token,
         name,
         category,
         price,
+        stock,
         image,
         detail
       );
@@ -107,6 +110,16 @@ export default function SupplyRegist({
               id={`price-${index}`}
               name="price"
               value={inputField.price}
+              onChange={(event) => handleInputChange(index, event)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`stock-${index}`}>재고</label>
+            <input
+              type="number"
+              id={`stock-${index}`}
+              name="stock"
+              value={inputField.stock}
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
