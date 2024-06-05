@@ -17,7 +17,7 @@ export default function Search({
         selectedData={selectedData}
         setSelectedData={setSelectedData}
       />
-      <TextInput textRef={textRef} />
+      <TextInput ref={textRef} />
       <CgSearch onClick={onClickHandler} />
     </div>
   );
