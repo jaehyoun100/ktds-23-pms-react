@@ -2,23 +2,24 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./requirement.module.css";
 import { loadOneRequirement } from "../../http/requirementHttp";
+import RequirementModify from "./RequirementModify";
 
 export default function RequirementView() {
   const [content, setContent] = useState();
+  const [isModifyMode, setIsModifyMode] = useState(false);
+  const [needReloadDetail, setNeedReloadDetail] = useState();
   const token = localStorage.getItem("token");
 
   const query = new URLSearchParams(useLocation().search);
   const prjId = query.get("prjId");
   const rqmId = query.get("rqmId");
 
-  console.log("@@@@@@@@@@@@" + rqmId);
-
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
 
   const onRqmModifyHandler = () => {
-    alert("수정");
+    setIsModifyMode(true);
   };
 
   const onRqmDeleteHandler = () => {
@@ -43,8 +44,8 @@ export default function RequirementView() {
 
   return (
     <>
-      <div>요구사항 view 페이지</div>
-      {content && (
+      {/** 데이터가 불러와졌고, 수정모드가 아니면 */}
+      {content && !isModifyMode && (
         <>
           <div className={styles.mainInfo}>
             <div className={`${styles.grid} ${styles.infoBorder}`}>
@@ -99,10 +100,24 @@ export default function RequirementView() {
         </>
       )}
 
+      {isModifyMode && (
+        <RequirementModify
+          projectId={prjId}
+          requirementId={rqmId}
+          setIsModifyMode={setIsModifyMode}
+          setNeedReloadDetail={setNeedReloadDetail}
+        />
+      )}
+
       <div className="button-area right-align">
-        <button onClick={onRqmModifyHandler}>수정</button>
-        <button onClick={onRqmDeleteHandler}>삭제</button>
-        <button onClick={onClickHandler}>상위 목록으로 가기</button>
+        {!isModifyMode && content && (
+          <>
+            <button onClick={onRqmModifyHandler}>수정</button>
+            <button onClick={onRqmDeleteHandler}>삭제</button>
+          </>
+        )}
+
+        <button onClick={onClickHandler}>요구사항 목록으로 이동</button>
       </div>
     </>
   );
