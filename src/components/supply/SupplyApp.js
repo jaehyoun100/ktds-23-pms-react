@@ -4,10 +4,14 @@ import SupplyView from "./components/SupplyView";
 import SupplyRegist from "./components/SupplyRegist";
 import Table from "../../utils/Table";
 import style from "./supply.module.css";
+import SupplyLogView from "./components/SupplyLogView";
 
 export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();
   const [isRegistrationMode, setIsRegistrationMode] = useState(false);
+  const [isSupplyModificationMode, setIsSupplyModificationMode] =
+    useState(false);
+  const [isSupplyLogViewMode, setIsSupplyLogViewMode] = useState(false);
   const [needReload, setNeedReload] = useState();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,9 +72,6 @@ export default function SupplyApp() {
     },
   ];
 
-  // const { count, pages, next } = data || {};
-  // const { body: supplies } = data || {};
-
   const onRowClickHandler = (rowId) => {
     setSelectedSplId((prevId) => (prevId === rowId ? undefined : rowId));
   };
@@ -79,11 +80,15 @@ export default function SupplyApp() {
     setIsRegistrationMode(true);
   };
 
+  const onSupplyLogViewModeClickHandler = () => {
+    setIsSupplyLogViewMode(true);
+  };
+
   return (
-    <div className={style.supplyAppContainer}>
-      <div className={style.tableComponent}>
-        {token && !isRegistrationMode && (
-          <>
+    <>
+      <div className={style.supplyAppContainer}>
+        <div className={style.tableComponent}>
+          {token && !isRegistrationMode && !isSupplyLogViewMode && (
             <Table
               columns={isSelect ? simplifiedColumns : columns}
               dataSource={data}
@@ -99,35 +104,46 @@ export default function SupplyApp() {
                 };
               }}
             />
-          </>
-        )}
-        {!isRegistrationMode && (
-          <>
-            <button onClick={onRegistrationModeClickHandler}>
-              소모품 등록
-            </button>
-            <button>신청 기록</button>
-          </>
+          )}
+          {!isRegistrationMode && !isSupplyLogViewMode && (
+            <>
+              <button onClick={onRegistrationModeClickHandler}>
+                소모품 등록
+              </button>
+              <button onClick={onSupplyLogViewModeClickHandler}>
+                신청 기록
+              </button>
+            </>
+          )}
+        </div>
+        {isSelect && !isRegistrationMode && !isSupplyLogViewMode && (
+          <div className={style.supplyViewComponent}>
+            <SupplyView
+              selectedSplId={selectedSplId}
+              setSelectedSplId={setSelectedSplId}
+              isSupplyModificationMode={isSupplyModificationMode}
+              setIsSupplyModificationMode={setIsSupplyModificationMode}
+              needReload={needReload}
+              setNeedReload={setNeedReload}
+              token={token}
+            />
+          </div>
         )}
       </div>
-      {isSelect && !isRegistrationMode && (
-        <div className={style.supplyViewComponent}>
-          <SupplyView
-            selectedSplId={selectedSplId}
-            setSelectedSplId={setSelectedSplId}
-            needReload={needReload}
-            setNeedReload={setNeedReload}
-            token={token}
-          />
-        </div>
-      )}
-      {isRegistrationMode && (
+      {isRegistrationMode && !isSupplyLogViewMode && (
         <SupplyRegist
           setIsRegistrationMode={setIsRegistrationMode}
           setNeedReload={setNeedReload}
           token={token}
         />
       )}
-    </div>
+      {!isRegistrationMode && isSupplyLogViewMode && (
+        <SupplyLogView
+          setIsSupplyLogViewMode={setIsSupplyLogViewMode}
+          needReload={needReload}
+          token={token}
+        />
+      )}
+    </>
   );
 }
