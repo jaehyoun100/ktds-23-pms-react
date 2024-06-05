@@ -7,19 +7,33 @@ const SelectDate = ({ startDateRef, endDateRef, onChangeSelect }) => {
   // const endDateRef = useRef(null);
 
   const handleStartDateChange = async (date) => {
-    // console.log(date !== null ? date.$d : null, "????????????");
-    let origin = date.$d ? new Date(date.$d).toISOString() : null;
-    let dateVal = origin.replace(/-/g, "").slice(0, 8);
-    console.log(dateVal, "!!!!!!!!?");
-    startDateRef.current = dateVal;
-    // await setStartDate(dateVal);
+    if (date && date.$d) {
+      let origin = new Date(date.$d);
+      const year = origin.getFullYear(); // 연도 가져오기
+      const month = (origin.getMonth() + 1).toString().padStart(2, "0"); // 월 가져오기 (0부터 시작하므로 +1 해준 후 2자리로 만들기)
+      const day = origin.getDate().toString().padStart(2, "0"); // 일 가져오기 (2자리로 만들기)
+
+      const dateVal = `${year}${month}${day}`; // YYYYmmdd 형식으로 조합
+
+      startDateRef.current = dateVal;
+    } else {
+      startDateRef.current = undefined;
+    }
     onChangeSelect();
   };
+
   const handleEndDateChange = (date) => {
-    let origin = new Date(date?.$d).toISOString();
-    let dateVal = origin.replace(/-/g, "").slice(0, 8);
-    endDateRef.current = dateVal;
-    // setEndDate(dateVal);
+    if (date && date.$d) {
+      let origin = new Date(date.$d);
+      const year = origin.getFullYear(); // 연도 가져오기
+      const month = (origin.getMonth() + 1).toString().padStart(2, "0"); // 월 가져오기 (0부터 시작하므로 +1 해준 후 2자리로 만들기)
+      const day = origin.getDate().toString().padStart(2, "0"); // 일 가져오기 (2자리로 만들기)
+
+      const dateVal = `${year}${month}${day}`; // YYYYmmdd 형식으로 조합
+      endDateRef.current = dateVal;
+    } else {
+      endDateRef.current = undefined;
+    }
     onChangeSelect();
   };
 
