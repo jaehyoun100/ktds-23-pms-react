@@ -57,7 +57,7 @@ export const deleteReview = async (token) => {
 
   const json = await response.json();
   console.log(json);
-  return json();
+  return json;
 };
 
 // 후기 수정 메서드
@@ -65,7 +65,7 @@ export const modifyReview = async (token) => {
   const selectedProjectId = 3;
 
   const response = await fetch(
-    `http://localhost8080/api/review/writes${selectedProjectId}`,
+    `http://localhost:8080/api/review/writes${selectedProjectId}`,
     {
       method: "PUT",
       headers: {
@@ -75,5 +75,22 @@ export const modifyReview = async (token) => {
   );
   const json = await response.json();
   console.log(json);
-  return json();
+  return json;
+};
+
+// 후기 작성 가능 여부 메서드
+export const getReviewYN = async (token, prjIdList) => {
+  const response = await fetch(
+    "http://localhost:8080/api/review/writes/reviewyn",
+    {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(prjIdList),
+    }
+  );
+  const json = await response.json();
+  return json;
 };
