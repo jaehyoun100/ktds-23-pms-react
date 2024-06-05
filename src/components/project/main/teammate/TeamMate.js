@@ -6,10 +6,17 @@ import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 
 export default function TeamMate() {
+  // 기존 팀원 리스트
   const [teammateList, setTeammateList] = useState([]);
+  // 기존 pm
   const [pm, setPm] = useState();
   const [deptId, setDeptId] = useState();
+  // 해당 부서의 구성원 리스트
   const [memberList, setMemberList] = useState([]);
+  const [selectedData, setSelectedData] =
+    useState("추가할 직원을 선택해주세요.");
+  const nameRef = useRef();
+
   const location = useLocation();
   const tokenInfo = useSelector((state) => {
     return {
@@ -24,6 +31,7 @@ export default function TeamMate() {
     setPm(item.project.pm);
     setDeptId(item.project.deptId);
   }, [location.state.key]);
+
   useEffect(() => {
     const getEmp = async () => {
       const response = await fetch(
@@ -31,7 +39,14 @@ export default function TeamMate() {
         { headers: { Authorization: tokenInfo.token }, method: "GET" }
       );
       const json = await response.json();
-      console.log(json);
+      console.log(json, ")!@!@!@!@!@");
+      setMemberList([]);
+      for (let i of json.body) {
+        setMemberList((prev) => [
+          ...prev,
+          { label: i.empName, value: i.empId },
+        ]);
+      }
     };
     getEmp();
   }, [deptId, tokenInfo.token]);
@@ -60,6 +75,22 @@ export default function TeamMate() {
     buttonHiddenRef.current.style.display = "none";
   };
 
+  const onChangeSelectHandler = async () => {
+    console.log(nameRef.current);
+    const response = await fetch(
+      `http://localhost:8080/api/v1/employee/${nameRef.current}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: tokenInfo.token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const json = await response.json();
+    console.log(json);
+  };
+
   return (
     <div>
       <table>
@@ -72,14 +103,25 @@ export default function TeamMate() {
         <tbody>
           {pm && (
             <tr>
-              <td>{pm.employeeVO.empName}</td>
-              <td>PM</td>
+              <td style={{ width: "300px" }}>{pm.employeeVO.empName}</td>
+              <td style={{ width: "300px" }}>PM</td>
             </tr>
           )}
-          {memberList?.map((item, idx) => (
-            <td key={idx}>
-              <Selectbox />
-            </td>
+          {teammateList?.map((item, idx) => (
+            <tr key={idx}>
+              <td>
+                {memberList && (
+                  <Selectbox
+                    optionList={memberList}
+                    setSelectedData={setSelectedData}
+                    selectedData={selectedData}
+                    style={{ width: "100%" }}
+                    onChangeFn={onChangeSelectHandler}
+                    selectRef={nameRef}
+                  />
+                )}
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
