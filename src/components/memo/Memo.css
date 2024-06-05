@@ -1,0 +1,36 @@
+.memo-container {
+  background-color: #ffffff;
+  padding: 15px;
+  
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  grid-template-rows: auto repeat(3, 28px) auto;
+  row-gap: 10px;
+}
+
+#grid-label-send, 
+#grid-label-receive {
+  font-weight: 700;
+}
+
+#grid-send-date {
+  grid-area: 4 / 1 / 5 / 3;
+  color: #898989;
+}
+
+#grid-save > svg {
+  width: 20px;
+  height: 20px;
+  
+}
+
+#grid-content {
+  grid-area: 5 / 1 / 6 / 3;
+}
+
+.button-area {
+  margin-bottom: 35px;
+}
