@@ -104,8 +104,8 @@ const CreateProjectApp = () => {
         clntInfo: clientSelectedData,
         deptId: deptSelectedData,
         pmId: pmSelectedData,
-        strtDt: startDateRef.current.value,
-        endDt: endDateRef.current.value,
+        strtDt: startDateRef.current,
+        endDt: endDateRef.current,
         prjMemo: prjMemoRef.current.value,
       }),
     });
@@ -163,7 +163,7 @@ const CreateProjectApp = () => {
         <div className={styles.contentBoxContainer}>
           <textarea
             className={styles.contentBox}
-            inputId="prjMemo"
+            id="prjMemo"
             ref={prjMemoRef}
           ></textarea>
         </div>
