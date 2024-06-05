@@ -1,23 +1,30 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Selectbox from "../../../common/selectbox/Selectbox";
 import s from "./TeamMate.module.css";
 import Button from "../../../common/Button/Button";
+
 export default function TeamMate() {
   const buttonGroupHiddenRef = useRef(null);
   const buttonHiddenRef = useRef(null);
 
-  buttonGroupHiddenRef.current.style.display = "none";
+  useEffect(() => {
+    if (buttonGroupHiddenRef.current) {
+      buttonGroupHiddenRef.current.style.display = "none";
+    }
+  }, []); // 마운트될 때 한 번 실행
 
-  const [memberList, setMemberList] = useState();
+  const [memberList, setMemberList] = useState([]);
 
   const onPlusClickHandler = () => {
     const item = { name: {}, role: {} };
-    setMemberList((prev) => [...prev, { item }]);
+    setMemberList((prev) => [...prev, item]);
   };
+
   const onSaveClickHandler = () => {
     buttonGroupHiddenRef.current.style.display = "none";
     buttonHiddenRef.current.style.display = "block";
   };
+
   const onModifyClickHandler = () => {
     buttonGroupHiddenRef.current.style.display = "block";
     buttonHiddenRef.current.style.display = "none";
