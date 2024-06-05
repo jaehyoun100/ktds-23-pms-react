@@ -28,8 +28,6 @@ export default function SurveyAnswer({
         }
       );
       const json = await response.json();
-      console.log(json.body[1].questionList.map((srv) => srv.srvId));
-      console.log(json.body[2].map((question) => question.srvId));
       console.log(json.body);
       setSurveyLists(json.body);
     };
