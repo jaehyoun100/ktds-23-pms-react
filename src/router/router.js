@@ -1,15 +1,15 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "../layout/content/Main";
 import NotFoundError from "../components/errors/NotFoundError";
-import SurveyApp from "../components/survey/SurveyApp";
 import projectRouter from "./routercomponent/projectRouter";
 import outputRouter from "./routercomponent/outputRouter";
 import requirementRouter from "./routercomponent/requirementRouter";
 import supplyRouter from "./routercomponent/supplyRouter";
 import deptteamRouter from "./routercomponent/deptteamRouter";
 import reviewRouter from "./routercomponent/reviewRouter";
-import employeeRouter from "./routercomponent/employeeRouter";
+import surveyRouter from "./routercomponent/surveyRouter";
 import memoRouter from "./routercomponent/memoRouter";
+import employeeRouter from "./routercomponent/employeeRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -19,10 +19,6 @@ export default function RouterAppProvider() {
       element: <Main />,
       errorElement: <NotFoundError />,
       children: [
-        {
-          path: "survey",
-          element: <SurveyApp />,
-        },
         projectRouter,
         employeeRouter,
         requirementRouter,
@@ -31,6 +27,7 @@ export default function RouterAppProvider() {
         deptteamRouter,
         reviewRouter,
         memoRouter,
+        surveyRouter,
       ],
     },
   ]);
