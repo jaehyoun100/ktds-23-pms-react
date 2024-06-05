@@ -70,7 +70,7 @@ export const modifySupply = async (
   category,
   price,
   stock,
-  image,
+  // image,
   detail
 ) => {
   const data = new FormData();
@@ -78,7 +78,7 @@ export const modifySupply = async (
   data.append("splCtgr", category);
   data.append("splPrice", price);
   data.append("invQty", stock);
-  data.append("splImg", image);
+  // data.append("splImg", image);
   data.append("splDtl", detail);
 
   const response = await fetch(`http://localhost:8080/api/v1/supply/${splId}`, {
