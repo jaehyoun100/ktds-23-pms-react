@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import styles from "../project.module.css";
 export default function MainHeader({ project }) {
+  const navigate = useNavigate();
   return (
     <div className={styles.headerContainer}>
       <div className={styles.flex}>
@@ -10,7 +12,15 @@ export default function MainHeader({ project }) {
         <h6>PM : {project.pm.employeeVO.empName}</h6>
       </div>
       <div className={styles.headerMenu}>
-        <span>참여원관리</span>
+        <span
+          onClick={() =>
+            navigate("/project/manage-teammate", {
+              state: { key: { project } },
+            })
+          }
+        >
+          참여원관리
+        </span>
         <span>요구사항</span>
         <span>이슈관리</span>
         <span>문답</span>

@@ -1,9 +1,41 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import Selectbox from "../../../common/selectbox/Selectbox";
 import s from "./TeamMate.module.css";
 import Button from "../../../common/Button/Button";
+import { useLocation } from "react-router";
+import { useSelector } from "react-redux";
 
 export default function TeamMate() {
+  const [teammateList, setTeammateList] = useState([]);
+  const [pm, setPm] = useState();
+  const [deptId, setDeptId] = useState();
+  const [memberList, setMemberList] = useState([]);
+  const location = useLocation();
+  const tokenInfo = useSelector((state) => {
+    return {
+      token: state.tokenInfo.token,
+      credentialsExpired: state.tokenInfo.credentialsExpired,
+    };
+  });
+  useMemo(() => {
+    const item = location.state.key;
+    console.log(item.project.projectTeammateList, "!@@@@");
+    setTeammateList(item.project.projectTeammateList);
+    setPm(item.project.pm);
+    setDeptId(item.project.deptId);
+  }, [location.state.key]);
+  useEffect(() => {
+    const getEmp = async () => {
+      const response = await fetch(
+        `http://localhost:8080/api/project/employee/findbydeptid/${deptId}`,
+        { headers: { Authorization: tokenInfo.token }, method: "GET" }
+      );
+      const json = await response.json();
+      console.log(json);
+    };
+    getEmp();
+  }, [deptId, tokenInfo.token]);
+
   const buttonGroupHiddenRef = useRef(null);
   const buttonHiddenRef = useRef(null);
 
@@ -12,8 +44,6 @@ export default function TeamMate() {
       buttonGroupHiddenRef.current.style.display = "none";
     }
   }, []); // 마운트될 때 한 번 실행
-
-  const [memberList, setMemberList] = useState([]);
 
   const onPlusClickHandler = () => {
     const item = { name: {}, role: {} };
@@ -40,10 +70,12 @@ export default function TeamMate() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>아무개</td>
-            <td>PM</td>
-          </tr>
+          {pm && (
+            <tr>
+              <td>{pm.employeeVO.empName}</td>
+              <td>PM</td>
+            </tr>
+          )}
           {memberList?.map((item, idx) => (
             <td key={idx}>
               <Selectbox />
