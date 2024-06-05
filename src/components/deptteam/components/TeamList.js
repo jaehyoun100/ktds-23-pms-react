@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadTeamList } from "../../../http/deptteamHttp";
 import Table from "../../../utils/Table";
+import TeamMemberList from "./TeamMemberList.js";
 
-export default function DepartmentList({
+export default function TeamList({
   selectedDeptId,
-  setSelectedDeptId,
   token,
+  setSelectTmId,
+  selectTmId,
 }) {
   const [data, setData] = useState();
 
@@ -23,47 +25,53 @@ export default function DepartmentList({
     fetchData();
   }, [memoizedloadTeamList, memoizedParam, setData]);
 
-  const { body: teamList } = data || {};
-
   const columns = [
-    { title: "팀ID", dataIndex: "tmId", key: "tmId", width: "50%" },
     {
       title: "팀명",
       dataIndex: "tmName",
       key: "tmName",
-      width: "50%",
+    },
+    {
+      title: "팀장명",
+      dataIndex: "empName",
+      key: "empName",
+    },
+    {
+      title: "EMAIL",
+      dataIndex: "email",
+      key: "email",
     },
   ];
 
+  const onTeamClick = (rowId) => {
+    setSelectTmId((prevId) => (prevId === rowId ? undefined : rowId));
+  };
+
   return (
-    // <div>
-    //   <h4>팀</h4>
-    //   <div>
-    //     <table>
-    //       <thead>
-    //         <tr>
-    //           <th>팀ID</th>
-    //           <th>팀명</th>
-    //         </tr>
-    //       </thead>
-    //       <tbody>
-    //         {teamList &&
-    //           teamList.map((teamList) => (
-    //             <tr key={teamList.tmId}>
-    //               <td>{teamList.tmId}</td>
-    //               <td>{teamList.tmName}</td>
-    //               {/* <div>{teamList.}</div>
-    //       <div>{teamList.}</div>
-    //       <div>{teamList.}</div> */}
-    //             </tr>
-    //           ))}
-    //       </tbody>
-    //     </table>
-    //   </div>
-    // </div>
     <>
       {data && (
-        <Table columns={columns} dataSource={data} rowKey={(dt) => dt.tmId} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          rowKey={(dt) => dt.tmId}
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                onTeamClick(record.tmId);
+              },
+              style: { cursor: "pointer" },
+            };
+          }}
+        />
+      )}
+      {selectTmId && (
+        <div>
+          <TeamMemberList
+            selectTmId={selectTmId}
+            setSelectTmId={setSelectTmId}
+            token={token}
+          />
+        </div>
       )}
     </>
   );

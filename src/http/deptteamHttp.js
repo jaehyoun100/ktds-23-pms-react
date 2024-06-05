@@ -33,3 +33,21 @@ export const loadTeamList = async ({ token, selectedDeptId }) => {
 
   return json;
 };
+
+export const loadTeamMemberList = async ({ token, selectTmId }) => {
+  if (!token) {
+    return undefined;
+  }
+  const response = await fetch(
+    `http://localhost:8080/api/v1/team/${selectTmId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  const json = await response.json();
+
+  return json;
+};

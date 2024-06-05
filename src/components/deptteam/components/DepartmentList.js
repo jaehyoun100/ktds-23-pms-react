@@ -5,7 +5,9 @@ import Table from "../../../utils/Table.js";
 import s from "./departmentList.module.css";
 
 export default function DepartmentList({ token }) {
+  const [isRegistrationMode, setIsRegistrationMode] = useState(false);
   const [selectedDeptId, setSelectedDeptId] = useState();
+  const [selectTmId, setSelectTmId] = useState();
   const [data, setData] = useState();
 
   // departmentList;
@@ -23,10 +25,9 @@ export default function DepartmentList({ token }) {
     fetchingData();
   }, [memoizedLoaddepartmentList, memoizedToken]);
 
-  // ===============
-  console.log(data);
   const onDepartmentClick = (rowId) => {
     setSelectedDeptId((prevId) => (prevId === rowId ? undefined : rowId));
+    setSelectTmId(false);
   };
 
   // 컬럼에 데이터 넣기
@@ -57,6 +58,11 @@ export default function DepartmentList({ token }) {
     { label: "부서ID", value: "deptId" },
     { label: "부서장명", value: "empName" },
   ];
+
+  const onRegistrationDeptClickHandler = () => {};
+  const onRegistrationTmClickHandler = () => {};
+  const onRegistrationTmMemberClickHandler = () => {};
+
   return (
     <>
       {data && <div>총 {data.length}개의 부서가 검색되었습니다.</div>}
@@ -82,41 +88,28 @@ export default function DepartmentList({ token }) {
             </div>
           </>
         )}
-        {/* <div>
-        <h4>부서</h4>
-        <div>
-          <table>
-            <thead>
-              <tr>
-                <th>부서ID</th>
-                <th>부서명</th>
-              </tr>
-            </thead>
-            <tbody>
-              {departmentList &&
-                departmentList.map((department) => (
-                  <tr
-                    key={department.deptId}
-                    onClick={() => onDepartmentClick(department.deptId)}
-                  >
-                    <td>{department.deptId}</td>
-                    <td>{department.deptName}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-      </div> */}
         {selectedDeptId && (
           <div className={s.layout}>
             <TeamList
               selectedDeptId={selectedDeptId}
               setSelectedDeptId={setSelectedDeptId}
+              selectTmId={selectTmId}
+              setSelectTmId={setSelectTmId}
               token={token}
             />
           </div>
         )}
       </div>
+      {!isRegistrationMode && (
+        <>
+          <button onClick={onRegistrationDeptClickHandler}>부서 등록</button>
+          <button onClick={onRegistrationTmClickHandler}>팀 등록</button>
+          <button onClick={onRegistrationTmMemberClickHandler}>
+            팀원 등록
+          </button>
+          <button>인사 발령 기록</button>
+        </>
+      )}
     </>
   );
 }
