@@ -9,9 +9,7 @@ import { useNavigate } from "react-router";
 
 const CreateProjectApp = () => {
   const prjNameRef = useRef();
-  // const [prjName, setPrjName] = useState("");
   const prjMemoRef = useRef();
-
   const startDateRef = useRef();
   const endDateRef = useRef();
 
@@ -26,12 +24,10 @@ const CreateProjectApp = () => {
   const [pmCandidate, setPmCandidate] = useState([]);
   const [pmSelectedData, setPmSelectedData] = useState("PM을 선택해주세요");
 
-  const tokenInfo = useSelector((state) => {
-    return {
-      token: state.tokenInfo.token,
-      credentialsExpired: state.tokenInfo.credentialsExpired,
-    };
-  });
+  const tokenInfo = useSelector((state) => ({
+    token: state.tokenInfo.token,
+    credentialsExpired: state.tokenInfo.credentialsExpired,
+  }));
 
   useEffect(() => {
     const getClient = async () => {
@@ -40,15 +36,15 @@ const CreateProjectApp = () => {
         method: "GET",
       });
       const json = await response.json();
-      let list = [];
-      for (let i = 0; i < json.body.length; i++) {
-        list.push({ label: json.body[i].clntName, value: json.body[i].clntId });
-      }
+      const list = json.body.map((client) => ({
+        label: client.clntName,
+        value: client.clntId,
+      }));
       setClientData(list);
-      return json;
     };
     getClient();
   }, [tokenInfo.token]);
+
   useEffect(() => {
     const getDept = async () => {
       const response = await fetch("http://localhost:8080/api/v1/department", {
@@ -56,34 +52,33 @@ const CreateProjectApp = () => {
         method: "GET",
       });
       const json = await response.json();
-      console.log(json);
-      let list = [];
-      for (let i = 0; i < json.body.length; i++) {
-        list.push({ label: json.body[i].deptName, value: json.body[i].deptId });
-      }
+      const list = json.body.map((dept) => ({
+        label: dept.deptName,
+        value: dept.deptId,
+      }));
       setDeptData(list);
-      return json;
     };
     getDept();
   }, [tokenInfo.token]);
 
-  const onChangeFn = async () => {
-    console.log(deptSelectedData, "~~~");
-    if (deptSelectedData !== null) {
+  useEffect(() => {
+    const getPmCandidates = async () => {
+      if (deptSelectedData === "부서를 선택해주세요.") return;
+
       const response = await fetch(
         `http://localhost:8080/api/project/employee/findbydeptid/${deptSelectedData}`,
         { headers: { Authorization: tokenInfo.token }, method: "GET" }
       );
       const json = await response.json();
-      console.log(json);
-      let list = [];
-      for (let i = 0; i < json.body.length; i++) {
-        list.push({ label: json.body[i].empName, value: json.body[i].empId });
-      }
+      const list = json.body.map((employee) => ({
+        label: employee.empName,
+        value: employee.empId,
+      }));
       setPmCandidate(list);
-      return json;
-    }
-  };
+    };
+
+    getPmCandidates();
+  }, [deptSelectedData, tokenInfo.token]);
 
   const onChangeSelect = () => {
     if (
@@ -94,7 +89,9 @@ const CreateProjectApp = () => {
       alert("시작일이 끝 날짜보다 클 수 없습니다.");
     }
   };
+
   const navigate = useNavigate();
+
   const onClickCreateButtonHandler = async () => {
     const response = await fetch("http://localhost:8080/api/project/write", {
       method: "POST",
@@ -107,13 +104,15 @@ const CreateProjectApp = () => {
         clntInfo: clientSelectedData,
         deptId: deptSelectedData,
         pmId: pmSelectedData,
-        strtDt: startDateRef.current,
-        endDt: endDateRef.current,
+        strtDt: startDateRef.current.value,
+        endDt: endDateRef.current.value,
         prjMemo: prjMemoRef.current.value,
       }),
     });
+
     const json = await response.json();
     console.log(json);
+
     if (json.status === 200) {
       alert("프로젝트 생성에 성공했습니다.");
       navigate("/project");
@@ -142,7 +141,6 @@ const CreateProjectApp = () => {
             optionList={deptData}
             setSelectedData={setDeptSelectedData}
             selectedData={deptSelectedData}
-            onChangeFn={onChangeFn}
           />
         </div>
         <div>Project Manage</div>
