@@ -112,3 +112,20 @@ export const modifyRequirement = async (token, rqmId, formData) => {
 
   return json;
 };
+
+export const deleteRequirement = async (token, rqmId) => {
+    const response = await fetch(
+        `http://localhost:8080/api/v1/requirement/delete/${rqmId}`,
+        {
+            method: "POST",
+            headers: {
+                Authorization: token,
+            },
+            body: rqmId,
+        }
+    );
+
+    const json = await response.json();
+
+    return json;
+}

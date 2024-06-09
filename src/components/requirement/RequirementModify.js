@@ -151,6 +151,9 @@ export default function RequirementModify({
             ref={rqmTtlRef}
             defaultValue={requirement.rqmTtl}
           />
+          {modifyErrors.rqmTtl.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.rqmTtl}</div>
+          )}
         </div>
 
         {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
@@ -172,6 +175,9 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
+          {modifyErrors.prjId.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.prjId}</div>
+          )}
         </div>
 
         <label htmlFor="dvlrp">담당개발자</label>
@@ -192,6 +198,9 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
+          {modifyErrors.dvlrp.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.dvlrp}</div>
+          )}
         </div>
 
         <label htmlFor="cfrmr">확인자</label>
@@ -210,6 +219,9 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
+          {modifyErrors.cfrmr.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.cfrmr}</div>
+          )}
         </div>
 
         <label htmlFor="tstr">테스터</label>
@@ -228,6 +240,9 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
+          {modifyErrors.tstr.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.tstr}</div>
+          )}
         </div>
 
         {/** 날짜선택창 */}
@@ -241,6 +256,9 @@ export default function RequirementModify({
             defaultValue={requirement.strtDt}
             onChange={startDayHandler}
           />
+          {modifyErrors.strtDt.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.strtDt}</div>
+          )}
         </div>
         {/** 날짜선택창 */}
         <label htmlFor="end-date">종료예정일</label>
@@ -253,6 +271,9 @@ export default function RequirementModify({
             defaultValue={requirement.endDt}
             onChange={endDayHandler}
           />
+          {modifyErrors.endDt.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.endDt}</div>
+          )}
         </div>
         <label htmlFor="file">첨부파일</label>
         <input
@@ -287,6 +308,9 @@ export default function RequirementModify({
               onFocus={(event, editor) => {}}
             />
           </div>
+          {modifyErrors.rqmCntnt.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.rqmCntnt}</div>
+          )}
         </div>
 
         {/** 체크박스 일정상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}

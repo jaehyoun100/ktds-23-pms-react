@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./requirement.module.css";
-import { loadOneRequirement } from "../../http/requirementHttp";
+import { deleteRequirement, loadOneRequirement } from "../../http/requirementHttp";
 import RequirementModify from "./RequirementModify";
 
 export default function RequirementView() {
@@ -22,8 +22,18 @@ export default function RequirementView() {
     setIsModifyMode(true);
   };
 
-  const onRqmDeleteHandler = () => {
-    alert("삭제");
+  const onRqmDeleteHandler = async () => {
+    const check = window.confirm("삭제하시겠습니까?");
+    if(check){
+        const json = await deleteRequirement(token, rqmId);
+        if(json){
+            navigate("/requirement");
+        }
+        else{
+            alert("삭제할 권한이 없습니다.");
+        }
+    }
+    
   };
 
   const onClickHandler = () => {
@@ -51,6 +61,10 @@ export default function RequirementView() {
   }, [fetchLoadOneRequirement, fetchParams, prjId, rqmId]);
 
   const { body: data } = content || {};
+
+  if (!data) {
+    return <div>Loading...</div>; // 데이터 로딩 중
+  }
 
   return (
     <>
@@ -127,7 +141,7 @@ export default function RequirementView() {
           </>
         )}
 
-        <button onClick={onClickHandler}>요구사항 목록으로 이동</button>
+        <button onClick={onClickHandler}>목록으로 이동</button>
       </div>
     </>
   );

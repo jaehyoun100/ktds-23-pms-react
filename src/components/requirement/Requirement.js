@@ -26,43 +26,50 @@ export default function Requirement() {
 
   const { count, body: data } = requirement || {};
 
+  if(!data){
+    return <div>Loading...</div>; // 데이터 로딩 중
+  }
+
   return (
     <>
       {/** 토큰이 있고, 게시글을 선택하지 않았을 때 */}
-      <>
-        <div>총 {count}개의 요구사항이 검색되었습니다.</div>
-        <table>
-          <thead>
-            <tr>
-              <th>프로젝트</th>
-              <th>제목</th>
-              <th>일정상태</th>
-              <th>진행상태</th>
-              <th>작성자</th>
-              <th>작성일</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data &&
-              data.map((item) => (
-                <tr key={item.rqmId}>
-                  <td>{item.projectVO.prjName}</td>
-                  <td>
-                    <Link
-                      to={`/requirement/view?prjId=${item.projectVO.prjId}&rqmId=${item.rqmId}`}
-                    >
-                      {item.rqmTtl}
-                    </Link>
-                  </td>
-                  <td>{item.scdStsVO.cmcdName}</td>
-                  <td>{item.rqmStsVO.cmcdName}</td>
-                  <td>{item.crtrIdVO.empName}</td>
-                  <td>{item.crtDt}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </>
+      {data && (
+        <>
+            <div>총 {count}개의 요구사항이 검색되었습니다.</div>
+            <table>
+                <thead>
+                    <tr>
+                    <th>프로젝트</th>
+                    <th>제목</th>
+                    <th>일정상태</th>
+                    <th>진행상태</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data &&
+                    data.map((item) => (
+                        <tr key={item.rqmId}>
+                        <td>{item.projectVO.prjName}</td>
+                        <td>
+                            <Link
+                            to={`/requirement/view?prjId=${item.projectVO.prjId}&rqmId=${item.rqmId}`}
+                            >
+                            {item.rqmTtl}
+                            </Link>
+                        </td>
+                        <td>{item.scdStsVO.cmcdName}</td>
+                        <td>{item.rqmStsVO.cmcdName}</td>
+                        <td>{item.crtrIdVO.empName}</td>
+                        <td>{item.crtDt}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </>
+      )}
+      
       <div className="button-area right-align">
         <button>삭제</button>
         <button onClick={onRqmCreateHandler}>요구사항 생성</button>

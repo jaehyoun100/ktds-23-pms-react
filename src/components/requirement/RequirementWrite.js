@@ -152,6 +152,9 @@ export default function RequirementWrite() {
         <label htmlFor="rqm-ttl">요구사항 제목</label>
         <div>
           <input type="text" id="rqm-ttl" name="rqmTtl" ref={rqmTtlRef} />
+          {writeErrors.rqmTtl.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.rqmTtl}</div>
+          )}
         </div>
 
         {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
@@ -171,6 +174,9 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
+          {writeErrors.prjId.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.prjId}</div>
+          )}
         </div>
 
         <label htmlFor="dvlrp">담당개발자</label>
@@ -184,6 +190,9 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
+          {writeErrors.dvlrp.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.dvlrp}</div>
+          )}
         </div>
 
         <label htmlFor="cfrmr">확인자</label>
@@ -197,6 +206,9 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
+          {writeErrors.cfrmr.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.cfrmr}</div>
+          )}
         </div>
 
         <label htmlFor="tstr">테스터</label>
@@ -210,6 +222,9 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
+          {writeErrors.tstr.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.tstr}</div>
+          )}
         </div>
 
         {/** 날짜선택창 */}
@@ -223,6 +238,9 @@ export default function RequirementWrite() {
             defaultValue={today}
             onChange={startDayHandler}
           />
+          {writeErrors.strtDt.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.strtDt}</div>
+          )}
         </div>
         {/** 날짜선택창 */}
         <label htmlFor="end-date">종료예정일</label>
@@ -235,6 +253,9 @@ export default function RequirementWrite() {
             defaultValue={today}
             onChange={endDayHandler}
           />
+          {writeErrors.endDt.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.endDt}</div>
+          )}
         </div>
         <label htmlFor="file">첨부파일</label>
         <input type="file" id="file" name="file" ref={fileRef} />
@@ -250,7 +271,7 @@ export default function RequirementWrite() {
             ></textarea> */}
             <CKEditor
               editor={ClassicEditor}
-              data="<p>내용을 입력하세요.</p>"
+              data=""
               onReady={(editor) => {
                 // You can store the "editor" and use when it is needed.
                 console.log("Editor is ready to use!", editor);
@@ -263,6 +284,9 @@ export default function RequirementWrite() {
               onFocus={(event, editor) => {}}
             />
           </div>
+          {writeErrors.rqmCntnt.length > 0 && (
+            <div className={styles.errorMessage}>{writeErrors.rqmCntnt}</div>
+          )}
         </div>
 
         {/** 체크박스 일정상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { loadOutputs } from "../../http/outputHttp";
 
 export default function Output() {
   const [output, setOutput] = useState();
@@ -6,22 +7,19 @@ export default function Output() {
 
   useEffect(() => {
     // 게시글 불러오기
-    const loadOutputs = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/output/search`,
-        {
-          method: "GET",
-          headers: { Authorization: token },
-        }
-      );
-      const json = await response.json();
-      setOutput(json);
-    };
+    const getOutputs = async () => {
+        const json = await loadOutputs(token);
+        setOutput(json);
+    }
 
-    loadOutputs();
+    getOutputs();
   }, [token]);
 
   const { count, body: data } = output || {};
+
+  if(!data){
+    return <div>Loading...</div>; // 데이터 로딩 중
+  }
 
   return (
     <>
