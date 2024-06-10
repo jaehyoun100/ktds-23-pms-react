@@ -10,13 +10,18 @@ export default function MainInfo({ project }) {
   // const prjId = "PRJ_240502_000243";
 
   const [showInfoModal, setShowInfoModal] = useState(false);
-
-  const handleOpenModal = () => {
-    setShowInfoModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowInfoModal(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [clientData, setClientData] = useState({
+    title: project.clientVO.clntName,
+    contact: project.clientVO.cntct,
+    content: project.clientVO.info,
+  });
+  const handleSave = (newTitle, newContact, newContent) => {
+    setClientData({
+      title: newTitle,
+      contact: newContact,
+      content: newContent,
+    });
   };
 
   return (
@@ -36,7 +41,7 @@ export default function MainInfo({ project }) {
           {project.clientVO.clntName}{" "}
           <IoInformationCircleSharp
             className={styles.info}
-            onClick={handleOpenModal}
+            onClick={() => setModalVisible(true)}
           />
         </div>
       </div>
@@ -65,12 +70,17 @@ export default function MainInfo({ project }) {
         />
       </div>
       <InfoModal
-        show={showInfoModal}
-        onClose={handleCloseModal}
-        content={project.clientVO.info}
-        title={project.clientVO.clntName}
-        cancelContent="확인"
-        contact={project.clientVO.cntct}
+        show={modalVisible}
+        onClose={() => setModalVisible(false)}
+        // content={project.clientVO.info}
+        // title={project.clientVO.clntName}
+        // cancelContent="확인"
+        // contact={project.clientVO.cntct}
+        title={clientData.title}
+        contact={clientData.contact}
+        content={clientData.content}
+        cancelContent="닫기"
+        onSave={handleSave}
       />
     </div>
   );
