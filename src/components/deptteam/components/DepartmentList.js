@@ -3,12 +3,16 @@ import { loadDepartmentList } from "../../../http/deptteamHttp.js";
 import TeamList from "./TeamList.js";
 import Table from "../../../utils/Table.js";
 import s from "./departmentList.module.css";
+import DepartmentCreate from "./DepartmentCreate.js";
+import TeamCreate from "./TeamCreate.js";
 
 export default function DepartmentList({ token }) {
-  const [isRegistrationMode, setIsRegistrationMode] = useState(false);
+  const [isDeptRegistrationMode, setIsDeptRegistrationMode] = useState(false);
+  const [isTeamRegistrationMode, setIsTeamRegistrationMode] = useState(false);
   const [selectedDeptId, setSelectedDeptId] = useState();
   const [selectTmId, setSelectTmId] = useState();
   const [data, setData] = useState();
+  const [needReload, setNeedReload] = useState();
 
   // departmentList;
   const memoizedLoaddepartmentList = useCallback(loadDepartmentList, []);
@@ -59,15 +63,21 @@ export default function DepartmentList({ token }) {
     { label: "부서장명", value: "empName" },
   ];
 
-  const onRegistrationDeptClickHandler = () => {};
-  const onRegistrationTmClickHandler = () => {};
+  const onRegistrationDeptClickHandler = () => {
+    setIsDeptRegistrationMode(true);
+  };
+  const onRegistrationTmClickHandler = () => {
+    setIsTeamRegistrationMode(true);
+  };
   const onRegistrationTmMemberClickHandler = () => {};
 
   return (
     <>
-      {data && <div>총 {data.length}개의 부서가 검색되었습니다.</div>}
+      {!isTeamRegistrationMode && !isDeptRegistrationMode && data && (
+        <div>총 {data.length}개의 부서가 검색되었습니다.</div>
+      )}
       <div className={s.contentLayout}>
-        {data && (
+        {!isTeamRegistrationMode && !isDeptRegistrationMode && data && (
           <>
             <div className={s.layout}>
               <Table
@@ -88,27 +98,45 @@ export default function DepartmentList({ token }) {
             </div>
           </>
         )}
-        {selectedDeptId && (
-          <div className={s.layout}>
-            <TeamList
-              selectedDeptId={selectedDeptId}
-              setSelectedDeptId={setSelectedDeptId}
-              selectTmId={selectTmId}
-              setSelectTmId={setSelectTmId}
-              token={token}
-            />
-          </div>
-        )}
+        {selectedDeptId &&
+          !isDeptRegistrationMode &&
+          !isTeamRegistrationMode && (
+            <div className={s.layout}>
+              <TeamList
+                selectedDeptId={selectedDeptId}
+                setSelectedDeptId={setSelectedDeptId}
+                selectTmId={selectTmId}
+                setSelectTmId={setSelectTmId}
+                token={token}
+              />
+            </div>
+          )}
       </div>
-      {!isRegistrationMode && (
+      {!isDeptRegistrationMode && !isTeamRegistrationMode && (
         <>
-          <button onClick={onRegistrationDeptClickHandler}>부서 등록</button>
-          <button onClick={onRegistrationTmClickHandler}>팀 등록</button>
-          <button onClick={onRegistrationTmMemberClickHandler}>
-            팀원 등록
-          </button>
-          <button>인사 발령 기록</button>
+          <div className={s.buttonlist}>
+            <button>인사 발령 기록</button>
+            <button onClick={onRegistrationDeptClickHandler}>부서 등록</button>
+            <button onClick={onRegistrationTmClickHandler}>팀 등록</button>
+            <button onClick={onRegistrationTmMemberClickHandler}>
+              팀원 등록
+            </button>
+          </div>
         </>
+      )}
+      {isDeptRegistrationMode && (
+        <DepartmentCreate
+          setIsDeptRegistrationMode={setIsDeptRegistrationMode}
+          setNeedReload={setNeedReload}
+          token={token}
+        />
+      )}
+      {isTeamRegistrationMode && (
+        <TeamCreate
+          setIsTeamRegistrationMode={setIsTeamRegistrationMode}
+          setNeedReload={setNeedReload}
+          token={token}
+        />
       )}
     </>
   );
