@@ -4,8 +4,15 @@ import "react-calendar/dist/Calendar.css";
 import s from "../project.module.css";
 import styles from "../Calendar.module.css";
 import Button from "../../common/Button/Button";
+import { format } from "date-fns";
 
-const CalendarComponent = ({ events, saveMemo, memoRef }) => {
+const CalendarComponent = ({
+  events,
+  saveMemo,
+  memoRef,
+  isNeedRender,
+  setNeedRender,
+}) => {
   const [date, setDate] = useState(new Date());
   const [memo, setMemo] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
@@ -19,7 +26,7 @@ const CalendarComponent = ({ events, saveMemo, memoRef }) => {
       }
       todoHiddenRef.current.style.display = "none";
       const event = events.find(
-        (event) => event.date === selectedDate.toISOString().split("T")[0]
+        (event) => event.date === format(selectedDate, "yyyy-MM-dd")
       );
       setMemo(event ? event.memo : "");
     }
@@ -32,7 +39,7 @@ const CalendarComponent = ({ events, saveMemo, memoRef }) => {
 
   const handleSaveMemo = () => {
     if (selectedDate) {
-      saveMemo(selectedDate, memo);
+      saveMemo(format(selectedDate, "yyyy-MM-dd"), memo);
     }
     setMemo("");
   };
@@ -42,6 +49,14 @@ const CalendarComponent = ({ events, saveMemo, memoRef }) => {
       memoHiddenRef.current.style.display = "none";
       todoHiddenRef.current.style.display = "block";
     }
+    setNeedRender(false);
+  };
+
+  const tileContent = ({ date, view }) => {
+    if (view === "month") {
+      return <div>{date.getDate()}</div>;
+    }
+    return null;
   };
 
   return (
@@ -51,10 +66,11 @@ const CalendarComponent = ({ events, saveMemo, memoRef }) => {
           className={styles.reactCalendar}
           onChange={handleDateChange}
           value={date}
-          locale={"en"}
+          locale={"ko-KR"}
           next2Label={null}
           prev2Label={null}
           showNeighboringMonth={false}
+          tileContent={tileContent}
         />
         {selectedDate && (
           <div
@@ -104,8 +120,8 @@ const CalendarComponent = ({ events, saveMemo, memoRef }) => {
           <ul>
             <div className={s.todo}>해야할 일</div>
             <div className={s.ulContainer}>
-              {events.map((event) => (
-                <li key={event.id}>
+              {events.map((event, idx) => (
+                <li key={idx}>
                   <span className={s.eventDate}>{event.date}</span>
                   {"  "}
                   <span>{event.memo}</span>
