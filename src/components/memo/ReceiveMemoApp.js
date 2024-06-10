@@ -1,41 +1,50 @@
-import { useEffect, useRef, useState } from "react";
-import Checkbox from "../common/checkbox/Checkbox";
+import { useCallback, useMemo, useState } from "react";
 import ReceiveMemoView from "./ReceiveMemoView";
 import { BsEnvelope, BsStar } from "react-icons/bs";
 import Table from "../../utils/Table";
-import { Radio } from "antd";
-import { Navigate } from "react-router-dom";
+import { loadReceiveMemos } from "../../http/memoHttp";
+import { useFetch } from "../hook/useFetch";
 
 let pageNo = 0;
 
 export default function ReceiveMemoApp() {
   const token = localStorage.getItem("token");
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
   const [needLoad, setNeedLoad] = useState();
   const [selectRcvMemoId, setSelectRcvMemoId] = useState();
-  const [selectionType, setSelectionType] = useState("checkbox");
 
   const isSelect = selectRcvMemoId !== undefined;
 
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-    const loadReceiveMemos = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/memo/receive?pageNo=${pageNo}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      const json = await response.json();
-      setData(json);
-    };
-    loadReceiveMemos();
+  // useEffect(() => {
+  //   if (!token) {
+  //     return;
+  //   }
+  //   const loadReceiveMemos = async () => {
+  //     const response = await fetch(
+  //       `http://localhost:8080/api/memo/receive?pageNo=${pageNo}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //       }
+  //     );
+  //     const json = await response.json();
+  //     setData(json);
+  //   };
+  //   loadReceiveMemos();
+  // }, [token, needLoad]);
+
+  const fetchLoadReceiveMemos = useCallback(loadReceiveMemos, []);
+  const fetchParam = useMemo(() => {
+    return { token, needLoad };
   }, [token, needLoad]);
+
+  const { data, setData } = useFetch(
+    undefined,
+    fetchLoadReceiveMemos,
+    fetchParam
+  );
 
   const { count, pages, next } = data || {};
   const { body: receiveMemos } = data || {};
@@ -43,7 +52,6 @@ export default function ReceiveMemoApp() {
   console.log("receiveMemos >>", receiveMemos);
 
   const onRowClickHandler = async (rcvMemoId) => {
-    console.log(">>>>>>>>>>", rcvMemoId);
     setSelectRcvMemoId(rcvMemoId);
   };
 
@@ -118,7 +126,6 @@ export default function ReceiveMemoApp() {
     },
     getCheckboxProps: (receiveMemos) => ({
       disabled: receiveMemos.rcvMemoId === "Disabled User",
-      // Column configuration not to be checked
       rcvMemoId: receiveMemos.rcvMemoId,
     }),
   };
@@ -127,11 +134,11 @@ export default function ReceiveMemoApp() {
     <div>
       {token && !isSelect && (
         <>
-          <div>받은 쪽지함: 총 {count}개</div>
+          <div>받은 쪽지함: 총 {count}</div>
 
           <Table
             rowSelection={{
-              type: selectionType,
+              type: "checkbox",
               ...rowSelection,
             }}
             columns={columns}
