@@ -6,6 +6,7 @@ import SelectDate from "../../common/selectbox/SelectDate";
 import Button from "../../common/Button/Button";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import CreateClientModal from "./CreateClientModal";
 
 const CreateProjectApp = () => {
   const prjNameRef = useRef();
@@ -22,7 +23,7 @@ const CreateProjectApp = () => {
     useState("부서를 선택해주세요.");
 
   const [pmCandidate, setPmCandidate] = useState([]);
-  const [pmSelectedData, setPmSelectedData] = useState("PM을 선택해주세요.");
+  const [pmSelectedData, setPmSelectedData] = useState("PM을 선택해주세요");
 
   const tokenInfo = useSelector((state) => ({
     token: state.tokenInfo.token,
@@ -93,27 +94,6 @@ const CreateProjectApp = () => {
   const navigate = useNavigate();
 
   const onClickCreateButtonHandler = async () => {
-    if (!prjNameRef.current.value) {
-      alert("프로젝트명은 필수 입력사항입니다.");
-      prjNameRef.current.focus();
-      return;
-    }
-    if (clientSelectedData === "고객사를 선택해주세요.") {
-      alert("고객사는 필수 입력사항입니다.");
-      return;
-    }
-    if (deptSelectedData === "부서를 선택해주세요.") {
-      alert("담당부서는 필수 입력사항입니다.");
-      return;
-    }
-    if (pmSelectedData === "PM을 선택해주세요.") {
-      alert("PM은 필수 입력사항입니다.");
-      return;
-    }
-    if (!startDateRef.current || !endDateRef.current) {
-      alert("프로젝트 기간은 필수 입력사항입니다.");
-      return;
-    }
     const response = await fetch("http://localhost:8080/api/project/write", {
       method: "POST",
       headers: {
@@ -139,6 +119,22 @@ const CreateProjectApp = () => {
       navigate("/project");
     }
   };
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setShowInfoModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowInfoModal(false);
+  };
+
+  const onClickCreateNewClientHandler = async () => {
+    handleOpenModal();
+  };
+  const handleConfirm = () => {
+    alert("추가를 누름.");
+  };
 
   return (
     <div className={styles.createContainer}>
@@ -149,12 +145,15 @@ const CreateProjectApp = () => {
           <TextInput id="prjName" ref={prjNameRef} />
         </div>
         <div>고객사</div>
-        <div>
+        <div className={styles.displayInfoFlex}>
           <Selectbox
             optionList={clientData}
             setSelectedData={setClientSelectedData}
             selectedData={clientSelectedData}
           />
+          <Button onClickHandler={onClickCreateNewClientHandler}>
+            고객사 관리
+          </Button>
         </div>
         <div>부서</div>
         <div>
@@ -192,6 +191,13 @@ const CreateProjectApp = () => {
       <div className={styles.buttonArea}>
         <Button onClickHandler={onClickCreateButtonHandler}>생성</Button>
       </div>
+      <CreateClientModal
+        show={showInfoModal}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirm}
+        cancelContent="취소"
+        confirmContent="추가"
+      />
     </div>
   );
 };
