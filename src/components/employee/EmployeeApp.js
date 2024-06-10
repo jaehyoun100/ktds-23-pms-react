@@ -2,16 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, Input, Select } from "antd";
 import Table from "../../utils/Table";
 import { useNavigate } from "react-router-dom";
-import { CustomButton } from "./components/EmployeeView";
 import { useSelector } from "react-redux";
 
 export default function EmployeeApp() {
   const [data, setData] = useState([]);
-  const navigate = useNavigate();
-  // const [selectedList, setSelectedList] = useState();
-  // const [loading, setLoading] = useState();
+  const navigate = useNavigate(); // 페이지 네비게이션을 위한 hook
+
   // const [error, setError] = useState();
-  const { token } = useSelector((state) => state.tokenInfo);
+  const { token } = useSelector((state) => state.tokenInfo); // Redux에서 토큰 정보 가져오기
 
   // const loadData = useCallback(async () => {
   //   await fetch("http://localhost:8080/api/v1/employee", {
@@ -85,7 +83,7 @@ export default function EmployeeApp() {
     },
 
     {
-      title: "입사 날짜",
+      title: "입사일",
       dataIndex: "hireDt",
       key: "hireDt",
       width: "20%",
@@ -120,6 +118,8 @@ export default function EmployeeApp() {
   ];
   return (
     <>
+      <div>총 {data.length}명이 조회되었습니다.</div>
+      <br />
       <Table
         columns={columns}
         dataSource={data}

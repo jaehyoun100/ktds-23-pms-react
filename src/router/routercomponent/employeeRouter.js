@@ -6,6 +6,7 @@ const employeeRouter = {
   children: [
     { index: true, element: <EmployeeApp /> },
     { path: "view/:empId", element: <EmployeeView /> },
+    // { path: "register", element: <EmployeeRegist /> },
   ],
 };
 
