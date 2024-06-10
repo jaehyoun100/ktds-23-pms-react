@@ -50,14 +50,16 @@ export default function ProjectMain() {
 
         return json.body;
       };
-      if (projectId) {
-        const getProject = async () => {
-          const run = await test();
-          setProject(run);
+
+      const getProject = async () => {
+        const run = await test();
+        setProject(run);
+        console.log(run, "!!!!!!!!!!");
+        if (run.prjMemo !== null) {
           setMemo(run.prjMemo);
-        };
-        getProject();
-      }
+        }
+      };
+      getProject();
     }
   }, [projectId, tokenInfo.token]);
 

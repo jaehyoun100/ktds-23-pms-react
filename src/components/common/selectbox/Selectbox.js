@@ -34,7 +34,7 @@ export default function Selectbox({
     setSelected(item.label);
     setIsOpen(false);
     await setSelectedData(item.value);
-    selectRef.current = item.value;
+    selectRef && (selectRef.current = item.value);
     onChangeFn && (await onChangeFn());
   };
 
