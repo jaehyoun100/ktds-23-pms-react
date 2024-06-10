@@ -6,15 +6,12 @@ import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 
 export default function TeamMate() {
-  // 기존 팀원 리스트
   const [teammateList, setTeammateList] = useState([]);
-  // 기존 pm
   const [pm, setPm] = useState();
   const [deptId, setDeptId] = useState();
-  // 해당 부서의 구성원 리스트
   const [memberList, setMemberList] = useState([]);
-  const [selectedData, setSelectedData] =
-    useState("추가할 직원을 선택해주세요.");
+  const [isEditing, setIsEditing] = useState(false); // Selectbox 표시 여부 관리
+  const [temporaryList, setTemporaryList] = useState([]); // 임시 데이터 저장용
   const nameRef = useRef();
 
   const location = useLocation();
@@ -24,14 +21,18 @@ export default function TeamMate() {
       credentialsExpired: state.tokenInfo.credentialsExpired,
     };
   });
+
+  // 프로젝트 정보 로드
   useMemo(() => {
     const item = location.state.key;
+    console.log(item);
     console.log(item.project.projectTeammateList, "!@@@@");
     setTeammateList(item.project.projectTeammateList);
     setPm(item.project.pm);
     setDeptId(item.project.deptId);
   }, [location.state.key]);
 
+  // 부서 구성원 리스트 로드
   useEffect(() => {
     const getEmp = async () => {
       const response = await fetch(
@@ -58,37 +59,41 @@ export default function TeamMate() {
     if (buttonGroupHiddenRef.current) {
       buttonGroupHiddenRef.current.style.display = "none";
     }
-  }, []); // 마운트될 때 한 번 실행
+  }, []);
 
   const onPlusClickHandler = () => {
-    const item = { name: {}, role: {} };
-    setMemberList((prev) => [...prev, item]);
+    if (isEditing) {
+      setTemporaryList((prev) => [
+        ...prev,
+        { empName: "", empId: "", role: "" },
+      ]);
+    }
   };
 
-  const onSaveClickHandler = () => {
-    buttonGroupHiddenRef.current.style.display = "none";
-    buttonHiddenRef.current.style.display = "block";
+  const onSaveClickHandler = async () => {
+    alert("save를 클릭함.");
   };
 
   const onModifyClickHandler = () => {
+    setIsEditing(true);
     buttonGroupHiddenRef.current.style.display = "block";
     buttonHiddenRef.current.style.display = "none";
   };
 
-  const onChangeSelectHandler = async () => {
-    console.log(nameRef.current);
-    const response = await fetch(
-      `http://localhost:8080/api/v1/employee/${nameRef.current}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: tokenInfo.token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const json = await response.json();
-    console.log(json);
+  const onChangeSelectHandler = (selectedOption, idx, type) => {
+    if (selectedOption) {
+      setTemporaryList((prevList) =>
+        prevList.map((item, index) =>
+          index === idx
+            ? {
+                ...item,
+                [type]: selectedOption.label,
+                empId: type === "empName" ? selectedOption.value : item.empId,
+              }
+            : item
+        )
+      );
+    }
   };
 
   return (
@@ -104,25 +109,72 @@ export default function TeamMate() {
           {pm && (
             <tr>
               <td style={{ width: "300px" }}>{pm.employeeVO.empName}</td>
-              <td style={{ width: "300px" }}>PM</td>
+              <td style={{ width: "300px" }}>{pm.role}</td>
             </tr>
           )}
-          {teammateList?.map((item, idx) => (
+          {teammateList.map((item, idx) => (
             <tr key={idx}>
-              <td>
-                {memberList && (
+              <td style={{ width: "300px" }}>
+                {isEditing ? (
                   <Selectbox
                     optionList={memberList}
-                    setSelectedData={setSelectedData}
-                    selectedData={selectedData}
+                    selectedData={item.empName || "추가할 직원을 선택해주세요."}
                     style={{ width: "100%" }}
-                    onChangeFn={onChangeSelectHandler}
-                    selectRef={nameRef}
+                    onChangeFn={(selectedOption) =>
+                      onChangeSelectHandler(selectedOption, idx, "empName")
+                    }
                   />
+                ) : (
+                  item.empName
+                )}
+              </td>
+              <td style={{ width: "300px" }}>
+                {isEditing ? (
+                  <Selectbox
+                    optionList={[
+                      { label: "PL", value: "PL" },
+                      { label: "NONE", value: "NONE" },
+                    ]}
+                    selectedData={item.role || "직책을 선택해주세요."}
+                    style={{ width: "100%" }}
+                    onChangeFn={(selectedOption) =>
+                      onChangeSelectHandler(selectedOption, idx, "role")
+                    }
+                  />
+                ) : (
+                  ""
                 )}
               </td>
             </tr>
           ))}
+          {isEditing &&
+            temporaryList.map((item, idx) => (
+              <tr key={teammateList.length + idx}>
+                <td style={{ width: "300px" }}>
+                  <Selectbox
+                    optionList={memberList}
+                    selectedData={item.empName || "추가할 직원을 선택해주세요."}
+                    style={{ width: "100%" }}
+                    onChangeFn={(selectedOption) =>
+                      onChangeSelectHandler(selectedOption, idx, "empName")
+                    }
+                  />
+                </td>
+                <td style={{ width: "300px" }}>
+                  <Selectbox
+                    optionList={[
+                      { label: "PL", value: "PL" },
+                      { label: "NONE", value: "NONE" },
+                    ]}
+                    selectedData={item.role || "직책을 선택해주세요."}
+                    style={{ width: "100%" }}
+                    onChangeFn={(selectedOption) =>
+                      onChangeSelectHandler(selectedOption, idx, "role")
+                    }
+                  />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <div>
