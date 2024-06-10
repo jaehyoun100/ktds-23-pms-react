@@ -1,0 +1,72 @@
+.teamMateDisplayFlex {
+  display: flex;
+  align-items: center;
+}
+.svgTeammateContainer {
+  text-align: center;
+}
+.svgTeammateContainer > svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  color: var(--main-color);
+  cursor: pointer;
+}
+.svgTeammateContainer > svg :hover {
+  color: var(--second-color);
+}
+
+.teamMateContainer {
+  margin-top: 30px;
+  position: fixed;
+  left: 40%;
+}
+.teamMateTableContainer {
+  margin-top: 16px;
+  height: 400px;
+  max-height: 400px;
+  overflow: auto;
+  display: block;
+}
+.teamMateTable {
+  border: 1px solid #ccc;
+  text-align: center;
+  width: 100%;
+  border-collapse: collapse;
+}
+.teamMateTable > thead {
+  position: sticky;
+  top: 0;
+
+  z-index: 2;
+  background-color: #eaeaea;
+}
+.teamMateButtonArea {
+  margin-top: 15px;
+  text-align: right;
+}
+.teamMateEmpArea {
+  margin-top: 30px;
+  border: 2px solid var(--main-color);
+  border-radius: 10px;
+  position: relative;
+  left: 10%;
+  width: 500px;
+  height: 300px;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+.teamMateEmpPhoto {
+  width: 200px;
+  height: 150px;
+}
+.teamMateEmpInfo {
+  padding: 30px;
+  width: 300px;
+  height: 100%;
+}
+.teamMateEmpPhoto > svg {
+  width: 70%;
+  height: 70%;
+}
