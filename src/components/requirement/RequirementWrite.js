@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import {
-  loadForWriteData,
+  loadForWriteRequirementData,
   loadNameByPrjName,
   writeRequirement,
 } from "../../http/requirementHttp";
@@ -10,24 +10,24 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import styles from "./requirement.module.css";
 
 export default function RequirementWrite() {
-  const [writeData, setWriteData] = useState({
-    projectList: [],
-    scdSts: [],
-    rqmSts: [],
+  const [writeRequirementData, setWriteRequirementData] = useState({
+    projectList: [], // 프로젝트 리스트
+    scdSts: [], // 일정상태
+    rqmSts: [], // 진행상태
   });
   const [empData, setEmpData] = useState();
   const [editorData, setEditorData] = useState();
   const [writeErrors, setWriteErrors] = useState({
-    rqmTtl: [],
-    prjId: [],
-    dvlrp: [],
-    cfrmr: [],
-    tstr: [],
-    strtDt: [],
-    endDt: [],
-    rqmCntnt: [],
-    scdSts: [],
-    rqmSts: [],
+    rqmTtl: [], // 제목
+    prjId: [], // 프로젝트
+    dvlrp: [], // 담당개발자
+    cfrmr: [], // 확인자
+    tstr: [], // 테스터
+    strtDt: [], // 시작일
+    endDt: [], // 종료예정일
+    rqmCntnt: [], // 요구사항 내용
+    scdSts: [], // 일정상태
+    rqmSts: [], // 진행상태
   });
 
   const token = localStorage.getItem("token");
@@ -36,7 +36,7 @@ export default function RequirementWrite() {
   const today = new Date().toISOString().substring(0, 10);
 
   // FormData 전송을 위한 Ref
-  const rqmTtlRef = useRef(); // 제목
+  const rqmTtlRef = useRef(); // 요구사항 제목
   const prjIdRef = useRef(); // 프로젝트 ID
   const dvlrpRef = useRef(); // 담당 개발자
   const cfrmrRef = useRef(); // 확인자
@@ -94,46 +94,62 @@ export default function RequirementWrite() {
   };
 
   const onWriteClickHandler = async () => {
-    const rqmTtl = rqmTtlRef.current.value; // 제목
-    const prjId = prjIdRef.current.value; // 프로젝트 ID
-    const dvlrp = dvlrpRef.current.value; // 담당 개발자
-    const cfrmr = cfrmrRef.current.value; // 확인자
-    const tstr = tstrRef.current.value; // 테스터
-    const strtDt = strtDtRef.current.value; // 시작일
-    const endDt = endDtRef.current.value; // 종료 예정일
-    const file = fileRef.current.value; // 첨부파일
-    const rqmCntnt = editorData; // 요구사항 내용
-    const scdSts = scdStsRef.current.value; // 일정상태
-    const rqmSts = rqmStsRef.current.value; // 진행상태
+    const check = window.confirm("등록하시겠습니까?");
+    if (check) {
+      setWriteErrors({
+        rqmTtl: [],
+        prjId: [],
+        dvlrp: [],
+        cfrmr: [],
+        tstr: [],
+        strtDt: [],
+        endDt: [],
+        rqmCntnt: [],
+        scdSts: [],
+        rqmSts: [],
+      });
 
-    const formData = new FormData();
-    formData.append("rqmTtl", rqmTtl);
-    formData.append("prjId", prjId);
-    formData.append("dvlrp", dvlrp);
-    formData.append("cfrmr", cfrmr);
-    formData.append("tstr", tstr);
-    formData.append("strtDt", strtDt);
-    formData.append("endDt", endDt);
-    formData.append("file", file);
-    formData.append("rqmCntnt", rqmCntnt);
-    formData.append("scdSts", scdSts);
-    formData.append("rqmSts", rqmSts);
+      const rqmTtl = rqmTtlRef.current.value; // 제목
+      const prjId = prjIdRef.current.value; // 프로젝트 ID
+      const dvlrp = dvlrpRef.current.value; // 담당 개발자
+      const cfrmr = cfrmrRef.current.value; // 확인자
+      const tstr = tstrRef.current.value; // 테스터
+      const strtDt = strtDtRef.current.value; // 시작일
+      const endDt = endDtRef.current.value; // 종료 예정일
+      const file = fileRef.current.files[0]; // 첨부파일
+      const rqmCntnt = editorData; // 요구사항 내용
+      const scdSts = scdStsRef.current.value; // 일정상태
+      const rqmSts = rqmStsRef.current.value; // 진행상태
 
-    const json = await writeRequirement(token, formData);
-    if (json) {
-      navigate("/requirement");
-    }
-    if (json.body !== (true || false)) {
-      setWriteErrors(json.body);
+      const formData = new FormData();
+      formData.append("rqmTtl", rqmTtl);
+      formData.append("prjId", prjId);
+      formData.append("dvlrp", dvlrp);
+      formData.append("cfrmr", cfrmr);
+      formData.append("tstr", tstr);
+      formData.append("strtDt", strtDt);
+      formData.append("endDt", endDt);
+      formData.append("file", file);
+      formData.append("rqmCntnt", rqmCntnt);
+      formData.append("scdSts", scdSts);
+      formData.append("rqmSts", rqmSts);
+
+      const json = await writeRequirement(token, formData);
+      if (json.body === true) {
+        navigate("/requirement");
+      }
+      if (json.body !== (true || false)) {
+        setWriteErrors(json.body);
+      }
     }
   };
 
   useEffect(() => {
     // 프로젝트, 일정상태, 진행상태 데이터 불러오기
     const getRequirementWritePage = async () => {
-      const json = await loadForWriteData(token);
+      const json = await loadForWriteRequirementData(token);
       const { projectList, scdSts, rqmSts } = json.body;
-      setWriteData({
+      setWriteRequirementData({
         projectList,
         scdSts,
         rqmSts,
@@ -144,7 +160,7 @@ export default function RequirementWrite() {
   }, [token]);
 
   // 객체 분해를 사용해서 값 추출
-  const { projectList, scdSts, rqmSts } = writeData || {};
+  const { projectList, scdSts, rqmSts } = writeRequirementData || {};
 
   return (
     <>
@@ -152,7 +168,7 @@ export default function RequirementWrite() {
         <label htmlFor="rqm-ttl">요구사항 제목</label>
         <div>
           <input type="text" id="rqm-ttl" name="rqmTtl" ref={rqmTtlRef} />
-          {writeErrors.rqmTtl.length > 0 && (
+          {writeErrors.rqmTtl && writeErrors.rqmTtl.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.rqmTtl}</div>
           )}
         </div>
@@ -174,7 +190,7 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
-          {writeErrors.prjId.length > 0 && (
+          {writeErrors.prjId && writeErrors.prjId.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.prjId}</div>
           )}
         </div>
@@ -190,7 +206,7 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
-          {writeErrors.dvlrp.length > 0 && (
+          {writeErrors.dvlrp && writeErrors.dvlrp.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.dvlrp}</div>
           )}
         </div>
@@ -206,7 +222,7 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
-          {writeErrors.cfrmr.length > 0 && (
+          {writeErrors.cfrmr && writeErrors.cfrmr.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.cfrmr}</div>
           )}
         </div>
@@ -222,7 +238,7 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
-          {writeErrors.tstr.length > 0 && (
+          {writeErrors.tstr && writeErrors.tstr.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.tstr}</div>
           )}
         </div>
@@ -238,7 +254,7 @@ export default function RequirementWrite() {
             defaultValue={today}
             onChange={startDayHandler}
           />
-          {writeErrors.strtDt.length > 0 && (
+          {writeErrors.strtDt && writeErrors.strtDt.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.strtDt}</div>
           )}
         </div>
@@ -253,11 +269,11 @@ export default function RequirementWrite() {
             defaultValue={today}
             onChange={endDayHandler}
           />
-          {writeErrors.endDt.length > 0 && (
+          {writeErrors.endDt && writeErrors.endDt.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.endDt}</div>
           )}
         </div>
-        <label htmlFor="file">첨부파일</label>
+        <label htmlFor="file">요구사항 첨부파일</label>
         <input type="file" id="file" name="file" ref={fileRef} />
 
         {/** ckeditor를 이용한 내용넣기 */}
@@ -284,7 +300,7 @@ export default function RequirementWrite() {
               onFocus={(event, editor) => {}}
             />
           </div>
-          {writeErrors.rqmCntnt.length > 0 && (
+          {writeErrors.rqmCntnt && writeErrors.rqmCntnt.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.rqmCntnt}</div>
           )}
         </div>
@@ -301,7 +317,7 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
-          {writeErrors.scdSts.length > 0 && (
+          {writeErrors.scdSts && writeErrors.scdSts.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.scdSts}</div>
           )}
         </div>
@@ -318,7 +334,7 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
-          {writeErrors.rqmSts.length > 0 && (
+          {writeErrors.rqmSts && writeErrors.rqmSts.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.rqmSts}</div>
           )}
         </div>
@@ -326,7 +342,7 @@ export default function RequirementWrite() {
         <button type="button" data-type="write" onClick={onWriteClickHandler}>
           등록
         </button>
-        <button onClick={onClickHandler}>상위 목록으로 가기</button>
+        <button onClick={onClickHandler}>목록으로 이동</button>
       </div>
     </>
   );

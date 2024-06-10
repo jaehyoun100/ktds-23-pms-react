@@ -1,0 +1,8 @@
+.writeAndModifyGrid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: repeat(6 40px);
+}
+.errorMessage {
+  color: #f03939;
+}

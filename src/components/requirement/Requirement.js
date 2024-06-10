@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loadRequirements } from "../../http/requirementHttp";
+import Table from "../../utils/Table";
 
 export default function Requirement() {
   const [requirement, setRequirement] = useState();
@@ -26,50 +27,118 @@ export default function Requirement() {
 
   const { count, body: data } = requirement || {};
 
-  if(!data){
+  if (!data) {
     return <div>Loading...</div>; // 데이터 로딩 중
   }
 
+  // 테이블 컬럼
+  const columns = [
+    {
+      title: "프로젝트",
+      dataIndex: ["projectVO", "prjName"],
+      key: "prjName",
+      width: "30%",
+    },
+    {
+      title: "제목",
+      dataIndex: "rqmTtl",
+      key: "rqmTtl",
+      width: "20%",
+    },
+    {
+      title: "일정상태",
+      dataIndex: ["scdStsVO", "cmcdName"],
+      key: "cmcdName",
+      width: "10%",
+    },
+    {
+      title: "진행상태",
+      dataIndex: ["rqmStsVO", "cmcdName"],
+      key: "cmcdName",
+      width: "10%",
+    },
+    {
+      title: "작성자",
+      dataIndex: ["crtrIdVO", "empName"],
+      key: "empName",
+      width: "10%",
+    },
+    {
+      title: "작성일",
+      dataIndex: "crtDt",
+      key: "crtDt",
+      width: "20%",
+    },
+  ];
+
+  // 검색 필터
+  const filterOptions = [
+    {
+      label: "프로젝트",
+      value: "prjName",
+    },
+    {
+      label: "제목",
+      value: "rqmTtl",
+    },
+    {
+      label: "작성자",
+      value: "empName",
+    },
+  ];
+
   return (
     <>
-      {/** 토큰이 있고, 게시글을 선택하지 않았을 때 */}
+      {/* * 토큰이 있고, 게시글을 선택하지 않았을 때
       {data && (
         <>
-            <div>총 {count}개의 요구사항이 검색되었습니다.</div>
-            <table>
-                <thead>
-                    <tr>
-                    <th>프로젝트</th>
-                    <th>제목</th>
-                    <th>일정상태</th>
-                    <th>진행상태</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data &&
-                    data.map((item) => (
-                        <tr key={item.rqmId}>
-                        <td>{item.projectVO.prjName}</td>
-                        <td>
-                            <Link
-                            to={`/requirement/view?prjId=${item.projectVO.prjId}&rqmId=${item.rqmId}`}
-                            >
-                            {item.rqmTtl}
-                            </Link>
-                        </td>
-                        <td>{item.scdStsVO.cmcdName}</td>
-                        <td>{item.rqmStsVO.cmcdName}</td>
-                        <td>{item.crtrIdVO.empName}</td>
-                        <td>{item.crtDt}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+          <div>총 {count}개의 요구사항이 검색되었습니다.</div>
+          <table>
+            <thead>
+              <tr>
+                <th>프로젝트</th>
+                <th>제목</th>
+                <th>일정상태</th>
+                <th>진행상태</th>
+                <th>작성자</th>
+                <th>작성일</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data &&
+                data.map((item) => (
+                  <tr key={item.rqmId}>
+                    <td>{item.projectVO.prjName}</td>
+                    <td>
+                      <Link
+                        to={`/requirement/view?prjId=${item.projectVO.prjId}&rqmId=${item.rqmId}`}
+                      >
+                        {item.rqmTtl}
+                      </Link>
+                    </td>
+                    <td>{item.scdStsVO.cmcdName}</td>
+                    <td>{item.rqmStsVO.cmcdName}</td>
+                    <td>{item.crtrIdVO.empName}</td>
+                    <td>{item.crtDt}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </>
+      )} */}
+      {token && (
+        <>
+          <div>총 {count}개의 요구사항이 검색되었습니다.</div>
+          <Table
+            columns={columns}
+            dataSource={data}
+            rowKey={(dt) => dt.rqmId}
+            filter
+            filterOptions={filterOptions}
+          />
         </>
       )}
-      
+
       <div className="button-area right-align">
         <button>삭제</button>
         <button onClick={onRqmCreateHandler}>요구사항 생성</button>

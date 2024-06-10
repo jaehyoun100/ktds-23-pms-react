@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./requirement.module.css";
-import { deleteRequirement, loadOneRequirement } from "../../http/requirementHttp";
+import {
+  deleteRequirement,
+  loadOneRequirement,
+} from "../../http/requirementHttp";
 import RequirementModify from "./RequirementModify";
 
 export default function RequirementView() {
@@ -24,16 +27,14 @@ export default function RequirementView() {
 
   const onRqmDeleteHandler = async () => {
     const check = window.confirm("삭제하시겠습니까?");
-    if(check){
-        const json = await deleteRequirement(token, rqmId);
-        if(json){
-            navigate("/requirement");
-        }
-        else{
-            alert("삭제할 권한이 없습니다.");
-        }
+    if (check) {
+      const json = await deleteRequirement(token, rqmId);
+      if (json) {
+        navigate("/requirement");
+      } else {
+        alert("삭제할 권한이 없습니다.");
+      }
     }
-    
   };
 
   const onClickHandler = () => {
@@ -41,19 +42,23 @@ export default function RequirementView() {
   };
 
   const fetchParams = useMemo(() => {
-    return {token, needReloadDetail};
+    return { token, needReloadDetail };
   }, [token, needReloadDetail]);
 
   // Component를 실행시키자마자 API 요청으로 데이터를 받아오는 부분
   const fetchLoadOneRequirement = useCallback(async (params) => {
-    const {token, prjId, rqmId} = params;
+    const { token, prjId, rqmId } = params;
     return await loadOneRequirement(token, prjId, rqmId);
   }, []);
 
   useEffect(() => {
     // 선택한 요구사항 정보 불러오기
     const getOneRequirement = async () => {
-      const json = await fetchLoadOneRequirement({...fetchParams, prjId, rqmId});
+      const json = await fetchLoadOneRequirement({
+        ...fetchParams,
+        prjId,
+        rqmId,
+      });
       setContent(json);
     };
 
@@ -107,7 +112,11 @@ export default function RequirementView() {
               <div className={styles.subItem}>{data.cfrmrVO.empName}</div>
 
               <div className={styles.subItem}>파일</div>
-              <div className={styles.subItem}>{data.rqmFile}</div>
+              <div className={styles.subItem}>
+                <Link to={`/requirement/downloadFile/${data.rqmId}`}>
+                  {data.rqmFile}
+                </Link>
+              </div>
 
               <div className={styles.subItem}>테스터</div>
               <div className={styles.flexRow}>

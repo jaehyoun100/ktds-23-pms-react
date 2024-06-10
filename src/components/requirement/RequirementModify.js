@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./requirement.module.css";
 import {
-  loadForModifyData,
+  loadForModifyRequirementData,
   modifyRequirement,
 } from "../../http/requirementHttp";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -13,7 +13,7 @@ export default function RequirementModify({
   setIsModifyMode,
   setNeedReloadDetail,
 }) {
-  const [modifyData, setModifyData] = useState({
+  const [modifyRequirementData, setModifyRequirementData] = useState({
     requirement: [],
     projectList: [],
     scdSts: [],
@@ -56,40 +56,55 @@ export default function RequirementModify({
   };
 
   const onModifyClickHandler = async () => {
-    const rqmTtl = rqmTtlRef.current.value; // 제목
-    const prjId = prjIdRef.current.value; // 프로젝트 ID
-    const dvlrp = dvlrpRef.current.value; // 담당 개발자
-    const cfrmr = cfrmrRef.current.value; // 확인자
-    const tstr = tstrRef.current.value; // 테스터
-    const strtDt = strtDtRef.current.value; // 시작일
-    const endDt = endDtRef.current.value; // 종료 예정일
-    const file = fileRef.current.value; // 첨부파일
-    const rqmCntnt = editorData; // 요구사항 내용
-    const scdSts = scdStsRef.current.value; // 일정상태
-    const rqmSts = rqmStsRef.current.value; // 진행상태
+    const check = window.confirm("수정하시겠습니까?");
+    if (check) {
+      setModifyErrors({
+        rqmTtl: [],
+        prjId: [],
+        dvlrp: [],
+        cfrmr: [],
+        tstr: [],
+        strtDt: [],
+        endDt: [],
+        rqmCntnt: [],
+        scdSts: [],
+        rqmSts: [],
+      });
+      const rqmTtl = rqmTtlRef.current.value; // 제목
+      const prjId = prjIdRef.current.value; // 프로젝트 ID
+      const dvlrp = dvlrpRef.current.value; // 담당 개발자
+      const cfrmr = cfrmrRef.current.value; // 확인자
+      const tstr = tstrRef.current.value; // 테스터
+      const strtDt = strtDtRef.current.value; // 시작일
+      const endDt = endDtRef.current.value; // 종료 예정일
+      const file = fileRef.current.value; // 첨부파일
+      const rqmCntnt = editorData; // 요구사항 내용
+      const scdSts = scdStsRef.current.value; // 일정상태
+      const rqmSts = rqmStsRef.current.value; // 진행상태
 
-    console.log("rqmCntnt: ", rqmCntnt);
+      console.log("rqmCntnt: ", rqmCntnt);
 
-    const formData = new FormData();
-    formData.append("rqmTtl", rqmTtl);
-    formData.append("prjId", prjId);
-    formData.append("dvlrp", dvlrp);
-    formData.append("cfrmr", cfrmr);
-    formData.append("tstr", tstr);
-    formData.append("strtDt", strtDt);
-    formData.append("endDt", endDt);
-    formData.append("file", file);
-    formData.append("rqmCntnt", rqmCntnt);
-    formData.append("scdSts", scdSts);
-    formData.append("rqmSts", rqmSts);
+      const formData = new FormData();
+      formData.append("rqmTtl", rqmTtl);
+      formData.append("prjId", prjId);
+      formData.append("dvlrp", dvlrp);
+      formData.append("cfrmr", cfrmr);
+      formData.append("tstr", tstr);
+      formData.append("strtDt", strtDt);
+      formData.append("endDt", endDt);
+      formData.append("file", file);
+      formData.append("rqmCntnt", rqmCntnt);
+      formData.append("scdSts", scdSts);
+      formData.append("rqmSts", rqmSts);
 
-    const json = await modifyRequirement(token, requirement.rqmId, formData);
-    if (json) {
-      setIsModifyMode(false);
-      setNeedReloadDetail(Math.random());
-    }
-    if (json.body !== (true || false)) {
-      setModifyErrors(json.body);
+      const json = await modifyRequirement(token, requirement.rqmId, formData);
+      if (json.body === true) {
+        setIsModifyMode(false);
+        setNeedReloadDetail(Math.random());
+      }
+      if (json.body !== (true || false)) {
+        setModifyErrors(json.body);
+      }
     }
   };
 
@@ -113,13 +128,17 @@ export default function RequirementModify({
   useEffect(() => {
     // 프로젝트, 일정상태, 진행상태 데이터 불러오기
     const getRequirementWritePage = async () => {
-      const json = await loadForModifyData(token, projectId, requirementId);
+      const json = await loadForModifyRequirementData(
+        token,
+        projectId,
+        requirementId
+      );
       const { requirement, projectList, scdSts, rqmSts, prjTeammateList } =
         json.body;
 
       const teammateList = prjTeammateList.map((item) => item.employeeVO);
       console.log("teammateList: ", teammateList);
-      setModifyData({
+      setModifyRequirementData({
         requirement,
         projectList,
         scdSts,
@@ -133,7 +152,7 @@ export default function RequirementModify({
 
   // 객체 분해를 사용해서 값 추출
   const { requirement, projectList, scdSts, rqmSts, teammateList } =
-    modifyData || {};
+    modifyRequirementData || {};
 
   if (!requirement || !requirement.projectVO) {
     return <div>Loading...</div>; // 데이터 로딩 중
@@ -151,7 +170,7 @@ export default function RequirementModify({
             ref={rqmTtlRef}
             defaultValue={requirement.rqmTtl}
           />
-          {modifyErrors.rqmTtl.length > 0 && (
+          {modifyErrors.rqmTtl && modifyErrors.rqmTtl.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.rqmTtl}</div>
           )}
         </div>
@@ -175,7 +194,7 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
-          {modifyErrors.prjId.length > 0 && (
+          {modifyErrors.prjId && modifyErrors.prjId.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.prjId}</div>
           )}
         </div>
@@ -198,7 +217,7 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
-          {modifyErrors.dvlrp.length > 0 && (
+          {modifyErrors.dvlrp && modifyErrors.dvlrp.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.dvlrp}</div>
           )}
         </div>
@@ -219,7 +238,7 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
-          {modifyErrors.cfrmr.length > 0 && (
+          {modifyErrors.cfrmr && modifyErrors.cfrmr.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.cfrmr}</div>
           )}
         </div>
@@ -240,7 +259,7 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
-          {modifyErrors.tstr.length > 0 && (
+          {modifyErrors.tstr && modifyErrors.tstr.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.tstr}</div>
           )}
         </div>
@@ -256,7 +275,7 @@ export default function RequirementModify({
             defaultValue={requirement.strtDt}
             onChange={startDayHandler}
           />
-          {modifyErrors.strtDt.length > 0 && (
+          {modifyErrors.strtDt && modifyErrors.strtDt.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.strtDt}</div>
           )}
         </div>
@@ -271,18 +290,12 @@ export default function RequirementModify({
             defaultValue={requirement.endDt}
             onChange={endDayHandler}
           />
-          {modifyErrors.endDt.length > 0 && (
+          {modifyErrors.endDt && modifyErrors.endDt.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.endDt}</div>
           )}
         </div>
         <label htmlFor="file">첨부파일</label>
-        <input
-          type="file"
-          id="file"
-          name="file"
-          ref={fileRef}
-          defaultValue={requirement.file}
-        />
+        <input type="file" id="file" name="file" ref={fileRef} />
 
         {/** ckeditor를 이용한 내용넣기 */}
         <label htmlFor="rqm-cntnt">요구사항 내용</label>
@@ -308,7 +321,7 @@ export default function RequirementModify({
               onFocus={(event, editor) => {}}
             />
           </div>
-          {modifyErrors.rqmCntnt.length > 0 && (
+          {modifyErrors.rqmCntnt && modifyErrors.rqmCntnt.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.rqmCntnt}</div>
           )}
         </div>
@@ -330,7 +343,7 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
-          {modifyErrors.scdSts.length > 0 && (
+          {modifyErrors.scdSts && modifyErrors.scdSts.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.scdSts}</div>
           )}
         </div>
@@ -352,7 +365,7 @@ export default function RequirementModify({
                 </option>
               ))}
           </select>
-          {modifyErrors.rqmSts.length > 0 && (
+          {modifyErrors.rqmSts && modifyErrors.rqmSts.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.rqmSts}</div>
           )}
         </div>
