@@ -1,8 +1,6 @@
-// SurveyApp.js
-
 import React, { useEffect, useState } from "react";
-import SurveyAnswer from "./SurveyAnswer";
-import SurveyWrite from "./SurveyWiteApp";
+import SurveyAnswer from "./components/SurveyAnswer";
+import SurveyWrite from "./components/SurveyWriteApp";
 import { useSelector } from "react-redux";
 
 export default function SurveyApp() {
@@ -18,11 +16,12 @@ export default function SurveyApp() {
       credentialsExpired: state.tokenInfo.credentialsExpired,
     };
   });
+
   useEffect(() => {
     if (!tokenInfo.token) {
       return;
     }
-    const loadboard = async () => {
+    const loadsurvey = async () => {
       const response = await fetch("http://localhost:8080/api/survey/list", {
         method: "GET",
         headers: {
@@ -32,20 +31,9 @@ export default function SurveyApp() {
 
       const json = await response.json();
       setSurveys(json.body);
-      //console.log("teammate : ", json.body[0]);
-      //손봐야함
       console.log("SurveyApp json.body : ", json.body);
-      //본인이 속한 프로젝트를 가져옴 관리자면 다가져옴
-      //console.log("projectCommonCodeList : ", json.body[2]);
-      //공통코드를 가져옴(써놨길래 일단 가져옴)
-      //console.log("surveyYn : ", json.body[3]);
-      //의도를 모르겠네
-      //console.log("searchSurveyVO : ", json.body[4]);
-      //로그인한 사원의 정보
-      //console.log("isPM : ", json.body[5]);
-      //PM여부 확인
     };
-    loadboard();
+    loadsurvey();
   }, [tokenInfo.token]);
 
   //답변하기 버튼을 클릭했을 때
@@ -55,7 +43,8 @@ export default function SurveyApp() {
   };
 
   //설문 작성 버튼을 클릭했을 때
-  const surveyWriteQuestionClickHandler = () => {
+  const surveyWriteQuestionClickHandler = (projectId) => {
+    setSelectedProjectId(projectId);
     setWriteMode(true);
   };
 
@@ -69,8 +58,8 @@ export default function SurveyApp() {
                 <td>프로젝트 명</td>
                 <td>고객사</td>
                 <td>담당 부서</td>
-                {!surveys[5] && <td>설문</td>}
-                {surveys[5] && <td>설문 작성</td>}
+                {!surveys[3] && <td>설문</td>}
+                {surveys[3] && <td>설문 작성</td>}
               </tr>
             </thead>
             <tbody>
@@ -81,24 +70,11 @@ export default function SurveyApp() {
                       <td>{survey.prjName}</td>
                       <td>{survey.clntInfo}</td>
                       <td>{survey.deptVO.deptName}</td>
-                      {/* 
-                      PRJ_STS != 409 라면 프로젝트 미종료
-                      PRJ_STS = 409 & SRV_STS = N 이라면 설문 미생성
-                      PRJ_STS = 409 & SRV_STS = W 이라면 설문 작성중
-                      PRJ_STS = 409 & SRV_STS = Y 이라면 설문 답변
-
-                      SRV_CR_DATE 설문 등록일 
-                      SRV_END_DATE 설문 답변 마감일 
-
-                      
-                      */}
-
                       {survey.prjSts !== "409" ? (
                         <td>프젝 미종료</td>
                       ) : (
                         <>
-                          {!surveys[5] ? (
-                            //프로젝트의 설문 sts의 여부에 따라 조건부 랜더링을 하자
+                          {!surveys[3] ? (
                             <>
                               {survey.srvSts === "N" ? (
                                 <td
@@ -115,7 +91,11 @@ export default function SurveyApp() {
                                   ) : (
                                     <td>
                                       <button
-                                        onClick={() => surveyWriteAnswerClickHandler(survey.prjId)}
+                                        onClick={() =>
+                                          surveyWriteAnswerClickHandler(
+                                            survey.prjId
+                                          )
+                                        }
                                       >
                                         설문 답변
                                       </button>
@@ -126,21 +106,21 @@ export default function SurveyApp() {
                             </>
                           ) : (
                             <>
-                              {survey.srvSts === "N" &&
+                              {survey.srvSts === "N" ||
                               survey.srvSts === "W" ? (
-                                <></>
+                                <td>
+                                  <button
+                                    onClick={() =>
+                                      surveyWriteQuestionClickHandler(
+                                        survey.prjId
+                                      )
+                                    }
+                                  >
+                                    설문 작성
+                                  </button>
+                                </td>
                               ) : (
-                                <>
-                                  <td>
-                                    <button
-                                      onClick={surveyWriteQuestionClickHandler}
-                                    >
-                                      설문 작성
-                                    </button>
-                                    {/* 미작성 || 작성중이라면 버튼이 보이고 
-                                        작성이 완료되었다면 버튼을 사라지게 만들자 */}
-                                  </td>
-                                </>
+                                <td>설문 작성 완료</td>
                               )}
                             </>
                           )}
@@ -152,15 +132,6 @@ export default function SurveyApp() {
               )}
             </tbody>
           </table>
-          {/* <div height>
-            <select>
-              <option>프로젝트명</option>
-              <option>고객사</option>
-              <option>담당부서</option>
-            </select>
-            <input type="text" />
-            <button>검색</button>
-          </div> */}
         </>
       )}
       {answerMode && (
@@ -171,7 +142,12 @@ export default function SurveyApp() {
         />
       )}
       {writeMode && (
-        <SurveyWrite token={tokenInfo.token} setWriteMode={setWriteMode} />
+        <SurveyWrite
+          token={tokenInfo.token}
+          setWriteMode={setWriteMode}
+          surveys={surveys} // 설문 데이터를 SurveyWrite 컴포넌트로 전달
+          selectedProjectId={selectedProjectId} // 선택된 프로젝트 ID 전달
+        />
       )}
     </>
   );

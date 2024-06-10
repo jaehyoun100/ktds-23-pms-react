@@ -95,37 +95,7 @@ body {
   위와 같은 형식으로 사용하되 각 객체에 대한 id와 label for를 고유한 번호로 주어
   혼선이 없도록 한다. 만약 여러개를 사용할 시 위의 형식과 같이 사용한다.
 */
-input[type="radio"] {
-  /* 원래 기존 스타일 삭제 */
-  display: none;
-}
 
-input[type="radio"] + label {
-  /* 라디오 버튼 만들기 */
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 1px solid #000;
-  background-color: var(--border-color);
-  display: inline-block;
-  cursor: pointer;
-  vertical-align: middle;
-  border-radius: 50%; /* 원 모양으로 만들기 */
-  user-select: none; /* 드래그 금지 */
-  margin: 0.3rem;
-}
-
-input[type="radio"]:checked + label {
-  /* 체크되었을 때 */
-  background: var(--btn-color);
-}
-
-input[type="radio"] + label + label {
-  font-size: 1rem;
-  position: relative;
-  top: 3px;
-  cursor: pointer;
-  user-select: none;
-}
 
 div {
   margin: 0;
