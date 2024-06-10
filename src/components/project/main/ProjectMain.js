@@ -1,5 +1,5 @@
 import styles from "../project.module.css";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ChartContainer from "./ChartContainer";
 import MainInfo from "./MainInfo";
 import MainReadMe from "./MainReadMe";
@@ -8,24 +8,12 @@ import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import CalendarComponent from "./CalendarComponent";
 export default function ProjectMain() {
-  const [events, setEvents] = useState([
-    { id: 1, date: "2024-06-10", memo: "프로젝트 회의 1차" },
-    { id: 2, date: "2024-06-15", memo: "프로젝트 회의 2차" },
-    { id: 3, date: "2024-06-22", memo: "프로젝트 회의 3차" },
-    { id: 4, date: "2024-06-27", memo: "고객사 방문후 검토" },
-    { id: 5, date: "2024-07-04", memo: "프로젝트 중간 점검" },
-    { id: 6, date: "2024-07-11", memo: "프로젝트 회의 4차" },
-    { id: 7, date: "2024-07-20", memo: "프로젝트 최종 점검" },
-  ]);
-
-  const saveMemo = (date, memo) => {
-    // 여기에 메모를 저장하는 로직 추가
-    console.log("Saving memo:", date, memo);
-  };
-
   const [memo, setMemo] = useState();
   const [project, setProject] = useState();
   const [projectId, setProjectId] = useState();
+  const [calData, setCalData] = useState();
+  const [events, setEvents] = useState([]);
+  const [isNeedRender, setNeedRender] = useState(false);
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -39,7 +27,7 @@ export default function ProjectMain() {
   }, [location.state.key]);
   useEffect(() => {
     if (projectId) {
-      const test = async () => {
+      const getPrjApi = async () => {
         const response = await fetch(
           `http://localhost:8080/api/project/view/${projectId}`,
           { headers: { Authorization: tokenInfo.token }, method: "GET" }
@@ -52,7 +40,7 @@ export default function ProjectMain() {
       };
 
       const getProject = async () => {
-        const run = await test();
+        const run = await getPrjApi();
         setProject(run);
         console.log(run, "!!!!!!!!!!");
         if (run.prjMemo !== null) {
@@ -62,6 +50,59 @@ export default function ProjectMain() {
       getProject();
     }
   }, [projectId, tokenInfo.token]);
+  useEffect(() => {
+    if (projectId) {
+      const getCalendarApi = async () => {
+        const response = await fetch(
+          `http://localhost:8080/api/project/calendar/${projectId}`,
+          { headers: { Authorization: tokenInfo.token }, method: "GET" }
+        );
+        const json = await response.json();
+        return json.body;
+      };
+      const getCalendar = async () => {
+        const data = await getCalendarApi();
+        // console.log(data);
+        setCalData(data);
+      };
+      getCalendar();
+    }
+  }, [projectId, tokenInfo.token, isNeedRender]);
+
+  useEffect(() => {
+    setEvents([]);
+    if (calData) {
+      const sortedData = calData.sort(
+        (a, b) => new Date(a.clndDate) - new Date(b.clndDate)
+      );
+      console.log(calData);
+      for (let i of sortedData) {
+        setEvents((prev) => [
+          ...prev,
+          { date: i.clndDate.split(" ")[0], memo: i.clndContent },
+        ]);
+      }
+      setNeedRender(false);
+    }
+  }, [calData]);
+
+  const saveMemo = async (date, memo) => {
+    // 여기에 메모를 저장하는 로직 추가
+    console.log("Saving memo:", date, memo);
+    await fetch("http://localhost:8080/api/project/calendar", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: tokenInfo.token,
+      },
+      method: "POST",
+      body: JSON.stringify({
+        clndDate: date,
+        clndContent: memo,
+        prjId: projectId,
+      }),
+    });
+    setNeedRender(true);
+  };
 
   return (
     <>
@@ -73,7 +114,12 @@ export default function ProjectMain() {
               <MainInfo project={project} />
               <ChartContainer />
               <MainReadMe memo={memo} />
-              <CalendarComponent events={events} saveMemo={saveMemo} />
+              <CalendarComponent
+                events={events}
+                saveMemo={saveMemo}
+                isNeedRender={isNeedRender}
+                setNeedRender={setNeedRender}
+              />
             </div>
           </div>
         </>
