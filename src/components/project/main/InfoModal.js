@@ -22,16 +22,16 @@ const InfoModal = React.memo(
     useEffect(() => {
       if (
         titleRef.current &&
-        titleRef.current.value &&
-        titleRef.current.value.length > 30
+        (titleRef.current.value === "" || titleRef.current.value.length > 30)
       ) {
         setCanSave(false);
         return;
       }
+
       if (
         contactRef.current &&
-        contactRef.current.value &&
-        contactRef.current.value.length > 15
+        (contactRef.current.value === "" ||
+          contactRef.current.value.length > 15)
       ) {
         setCanSave(false);
         return;
@@ -121,6 +121,16 @@ const InfoModal = React.memo(
               )}
               {isEditing &&
               titleRef.current &&
+              (titleRef.current.value === null ||
+                titleRef.current.value === "") ? (
+                <span className={styles.alertMessage}>
+                  ※ 고객사명 필수 값입니다.
+                </span>
+              ) : (
+                <></>
+              )}
+              {isEditing &&
+              titleRef.current &&
               titleRef.current.value &&
               titleRef.current.value.length > 30 ? (
                 <span className={styles.alertMessage}>
@@ -142,6 +152,16 @@ const InfoModal = React.memo(
                 />
               ) : (
                 editContact
+              )}
+              {isEditing &&
+              contactRef.current &&
+              (contactRef.current.value === null ||
+                contactRef.current.value === "") ? (
+                <span className={styles.alertMessage}>
+                  ※ 연락처는 필수 값입니다.
+                </span>
+              ) : (
+                <></>
               )}
               {isEditing &&
               contactRef.current &&
