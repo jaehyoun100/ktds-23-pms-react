@@ -22,6 +22,7 @@ const ProjectListApp = () => {
   const [answerMode, setAnswerMode] = useState(false);
   const [writeMode, setWriteMode] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [reload, setReload] = useState();
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -64,7 +65,7 @@ const ProjectListApp = () => {
     };
     getProject();
   }, [tokenInfo.token]);
-
+  console.log("info", info);
   const surveyWriteAnswerClickHandler = (projectId) => {
     setSelectedProjectId(projectId);
     setAnswerMode(true);
@@ -153,11 +154,23 @@ const ProjectListApp = () => {
           ) : (
             <>
               {!info[3] ? (
-                <button
-                  onClick={() => surveyWriteAnswerClickHandler(record.prjId)}
-                >
-                  설문 답변
-                </button>
+                <>
+                  {info[4] && (
+                    <>
+                      {info[4][index].srvId === "N" ? (
+                        <button
+                          onClick={() =>
+                            surveyWriteAnswerClickHandler(record.prjId)
+                          }
+                        >
+                          설문 답변
+                        </button>
+                      ) : (
+                        "설문 완료"
+                      )}
+                    </>
+                  )}
+                </>
               ) : (
                 <button /* onClick={() => surveyResultClickHandler(record.prjId)} */
                 >
@@ -213,6 +226,7 @@ const ProjectListApp = () => {
           selectedProjectId={selectedProjectId}
           setAnswerMode={setAnswerMode}
           info={info}
+          setReload={setReload}
         />
       )}
       {writeMode && (
@@ -222,6 +236,7 @@ const ProjectListApp = () => {
           surveys={data} // 설문 데이터를 SurveyWrite 컴포넌트로 전달
           selectedProjectId={selectedProjectId} // 선택된 프로젝트 ID 전달
           info={info}
+          setReload={setReload}
         />
       )}
     </div>

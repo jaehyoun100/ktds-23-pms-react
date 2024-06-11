@@ -5,6 +5,7 @@ export default function SurveyAnswer({
   token,
   selectedProjectId,
   setAnswerMode,
+  setReload,
 }) {
   const [surveyLists, setSurveyLists] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -60,6 +61,7 @@ export default function SurveyAnswer({
     }
 
     setAnswerMode(false);
+    setReload(Math.random());
   };
 
   return (
