@@ -3,6 +3,8 @@ import SessionTimer from "./ContentTimer";
 import "./ContentTop.css";
 import { BsPersonLock, BsBell, BsBoxArrowRight } from "react-icons/bs";
 import { logout } from "../../http/userDetailHttp";
+import logoImg from "./Logo.png";
+
 export default function ContentTop() {
   const tokenDispatch = useDispatch();
   const onLogoutBtnClickHandler = () => {
@@ -11,11 +13,7 @@ export default function ContentTop() {
   return (
     <div className="main-content-top">
       <div className="content-top-left">
-        <img
-          className="logo-img"
-          src="https://item.kakaocdn.net/do/42827d1e8227c8b4251acffb9e899e4ea88f7b2cbb72be0bdfff91ad65b168ab"
-          alt="logo"
-        />
+        <img className="logo-img" src={logoImg} alt="logo" />
       </div>
       <div className="content-top-right">
         <SessionTimer />

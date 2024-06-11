@@ -2,6 +2,8 @@ import "./Sidebar.css";
 import MenuList from "./MenuList";
 import { useEffect, useState } from "react";
 import { LuMenu } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
+import { getEmployee } from "../../http/userDetailHttp";
 
 export default function Sidebar({ menus = [] }) {
   const [closeSideBar, setCloseSideBar] = useState(false);
@@ -31,6 +33,26 @@ export default function Sidebar({ menus = [] }) {
     };
   }, []);
 
+  const { token } = useSelector((state) => state.tokenInfo);
+  const [userInfo, setUserInfo] = useState();
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+    const userInfo = async () => {
+      const response = await fetch("http://localhost:8080/api/", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+      const json = await response.json();
+      console.log(json.body);
+      setUserInfo(json.body);
+    };
+    userInfo();
+  }, [token]);
+
   return (
     <div className={`sidebar ${closeSideBar === false ? null : "active"}`}>
       {/* <div className="sidebar"> */}
@@ -57,8 +79,13 @@ export default function Sidebar({ menus = [] }) {
         </div>
         {!closeSideBar && (
           <div className="info-emp">
-            <span className="info-name name-tag">김춘식</span>
-            <span className="info-dept dept-tag">SW개발 / 개발1팀</span>
+            {userInfo && (
+              <>
+                <span className="info-name name-tag">{userInfo.empName}</span>
+                <span className="info-dept dept-tag">{userInfo.departmentVO.deptName}</span>
+                <span className="dept-tag">{userInfo.teamVO.tmName}</span>
+              </>
+            )}
           </div>
         )}
       </div>
