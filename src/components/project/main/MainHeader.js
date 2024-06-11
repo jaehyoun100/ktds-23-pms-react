@@ -5,7 +5,14 @@ export default function MainHeader({ project }) {
   return (
     <div className={styles.headerContainer}>
       <div className={styles.flex}>
-        <h4>
+        <h4
+          onClick={() =>
+            navigate("/project/view", {
+              state: { key: project },
+            })
+          }
+          style={{ cursor: "pointer" }}
+        >
           <span>{project.deptVO.deptName} </span> /{" "}
           <span>{project.prjName}</span>
         </h4>
