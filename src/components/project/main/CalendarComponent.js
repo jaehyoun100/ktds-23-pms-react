@@ -12,6 +12,7 @@ const CalendarComponent = ({
   memoRef,
   isNeedRender,
   setNeedRender,
+  setIsHaveData,
 }) => {
   const [date, setDate] = useState(new Date());
   const [memo, setMemo] = useState("");
@@ -36,6 +37,17 @@ const CalendarComponent = ({
     setDate(date);
     setSelectedDate(date);
   };
+  const event = events.find(
+    (event) => event.date === format(selectedDate, "yyyy-MM-dd")
+  );
+  useEffect(() => {
+    if (event && event.memo !== "") {
+      setIsHaveData(true);
+    } else if (event === undefined) {
+      setIsHaveData(false);
+    }
+    console.log(event !== undefined, "memo!!!!!");
+  }, [event, setIsHaveData]);
 
   const handleSaveMemo = () => {
     if (selectedDate) {

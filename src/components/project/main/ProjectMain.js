@@ -1,5 +1,5 @@
 import styles from "../project.module.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ChartContainer from "./ChartContainer";
 import MainInfo from "./MainInfo";
 import MainReadMe from "./MainReadMe";
@@ -14,6 +14,7 @@ export default function ProjectMain() {
   const [calData, setCalData] = useState();
   const [events, setEvents] = useState([]);
   const [isNeedRender, setNeedRender] = useState(false);
+  const [isHaveData, setIsHaveData] = useState(false);
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -88,19 +89,34 @@ export default function ProjectMain() {
 
   const saveMemo = async (date, memo) => {
     // 여기에 메모를 저장하는 로직 추가
-    console.log("Saving memo:", date, memo);
-    await fetch("http://localhost:8080/api/project/calendar", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: tokenInfo.token,
-      },
-      method: "POST",
-      body: JSON.stringify({
-        clndDate: date,
-        clndContent: memo,
-        prjId: projectId,
-      }),
-    });
+    if (isHaveData) {
+      await fetch("http://localhost:8080/api/project/calendar", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: tokenInfo.token,
+        },
+        method: "PUT",
+        body: JSON.stringify({
+          clndDate: date,
+          clndContent: memo,
+          prjId: projectId,
+        }),
+      });
+    } else {
+      console.log("Saving memo:", date, memo);
+      await fetch("http://localhost:8080/api/project/calendar", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: tokenInfo.token,
+        },
+        method: "POST",
+        body: JSON.stringify({
+          clndDate: date,
+          clndContent: memo,
+          prjId: projectId,
+        }),
+      });
+    }
     setNeedRender(true);
   };
 
@@ -119,6 +135,7 @@ export default function ProjectMain() {
                 saveMemo={saveMemo}
                 isNeedRender={isNeedRender}
                 setNeedRender={setNeedRender}
+                setIsHaveData={setIsHaveData}
               />
             </div>
           </div>
