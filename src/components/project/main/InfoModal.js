@@ -20,19 +20,28 @@ const InfoModal = React.memo(
     const contactRef = useRef(clientData.cntct);
     const [canSave, setCanSave] = useState(true);
     useEffect(() => {
+      if (titleRef.current && titleRef.current.value === "") {
+        setCanSave(false);
+        return;
+      }
       if (
         titleRef.current &&
-        (titleRef.current.value === "" || titleRef.current.value.length > 30)
+        titleRef.current.value &&
+        titleRef.current.value.length > 30
+      ) {
+        setCanSave(false);
+        return;
+      }
+      if (
+        contactRef.current &&
+        contactRef.current.value &&
+        contactRef.current.value.length > 15
       ) {
         setCanSave(false);
         return;
       }
 
-      if (
-        contactRef.current &&
-        (contactRef.current.value === "" ||
-          contactRef.current.value.length > 15)
-      ) {
+      if (contactRef.current && contactRef.current.value === "") {
         setCanSave(false);
         return;
       }
