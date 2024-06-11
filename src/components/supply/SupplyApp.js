@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupplyList } from "../../http/supplyHttp";
 import SupplyView from "./components/SupplyView";
 import SupplyRegist from "./components/SupplyRegist";
+import SupplyLogView from "./components/SupplyLogView";
 import Table from "../../utils/Table";
 import style from "./supply.module.css";
-import SupplyLogView from "./components/SupplyLogView";
 
 export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();
@@ -94,7 +94,11 @@ export default function SupplyApp() {
   return (
     <>
       <div className={style.supplyAppContainer}>
-        <div className={style.tableComponent}>
+        <div
+          className={`${style.tableComponent} ${
+            isSelect ? style.collapsed : ""
+          }`}
+        >
           {token && !isRegistrationMode && !isSupplyLogViewMode && (
             <Table
               columns={isSelect ? simplifiedColumns : columns}
@@ -107,7 +111,7 @@ export default function SupplyApp() {
                   onClick: () => {
                     onRowClickHandler(record.splId);
                   },
-                  style: { cursor: "pointer" },
+                  className: style.pointerCursor,
                 };
               }}
             />
@@ -124,7 +128,11 @@ export default function SupplyApp() {
           )}
         </div>
         {isSelect && !isRegistrationMode && !isSupplyLogViewMode && (
-          <div className={style.supplyViewComponent}>
+          <div
+            className={`${style.supplyViewComponent} ${
+              isSelect ? "" : style.hidden
+            }`}
+          >
             <SupplyView
               selectedSplId={selectedSplId}
               setSelectedSplId={setSelectedSplId}
