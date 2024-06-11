@@ -19,6 +19,7 @@ export default function SurveyWrite({
   setWriteMode,
   info,
   selectedProjectId,
+  setReload,
 }) {
   const [questions, setQuestions] = useState([
     {
@@ -51,8 +52,8 @@ export default function SurveyWrite({
         await createSurveyPick(question.srvId, token, options);
       }
     }
-
     setWriteMode(false);
+    setReload(Math.random());
   };
 
   const temporarySaveHandler = () => {
