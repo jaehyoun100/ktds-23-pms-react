@@ -25,8 +25,6 @@ const InfoModal = React.memo(
         titleRef.current.value &&
         titleRef.current.value.length > 30
       ) {
-        alert("고객사명은 30자를 초과할 수 없습니다.");
-        titleRef.current.focus();
         setCanSave(false);
         return;
       }
@@ -35,24 +33,22 @@ const InfoModal = React.memo(
         contactRef.current.value &&
         contactRef.current.value.length > 15
       ) {
-        alert("연락처는 15자를 초과할 수 없습니다.");
-        contactRef.current.focus();
         setCanSave(false);
         return;
-      } else if (
+      }
+      if (
         contactRef.current &&
         contactRef.current.value &&
         isNaN(contactRef.current.value.replaceAll("-", ""))
       ) {
-        alert("문자열을 입력할 수 없습니다.");
         setCanSave(false);
         return;
-      } else if (
+      }
+      if (
         contactRef.current &&
         contactRef.current.value &&
         contactRef.current.value.split("-").length > 3
       ) {
-        alert("'-' 문자는 연락처 구분에만 사용 가능합니다.");
         setCanSave(false);
         return;
       }
@@ -123,6 +119,16 @@ const InfoModal = React.memo(
               ) : (
                 editTitle
               )}
+              {isEditing &&
+              titleRef.current &&
+              titleRef.current.value &&
+              titleRef.current.value.length > 30 ? (
+                <span className={styles.alertMessage}>
+                  ※ 고객사명은 30자를 초과할 수 없습니다.
+                </span>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
           <div className={styles.modalContact}>
@@ -136,6 +142,36 @@ const InfoModal = React.memo(
                 />
               ) : (
                 editContact
+              )}
+              {isEditing &&
+              contactRef.current &&
+              contactRef.current.value &&
+              contactRef.current.value.length > 15 ? (
+                <span className={styles.alertMessage}>
+                  ※ 연락처는 15자를 초과할 수 없습니다.
+                </span>
+              ) : (
+                <></>
+              )}
+              {isEditing &&
+              contactRef.current &&
+              contactRef.current.value &&
+              isNaN(contactRef.current.value.replaceAll("-", "")) ? (
+                <span className={styles.alertMessage}>
+                  ※ 문자열을 입력할 수 없습니다.
+                </span>
+              ) : (
+                <></>
+              )}
+              {isEditing &&
+              contactRef.current &&
+              contactRef.current.value &&
+              contactRef.current.value.split("-").length > 3 ? (
+                <span className={styles.alertMessage}>
+                  ※ '-' 문자는 연락처 구분에만 사용 가능합니다.
+                </span>
+              ) : (
+                <></>
               )}
             </div>
           </div>
