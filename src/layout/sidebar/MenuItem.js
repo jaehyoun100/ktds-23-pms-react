@@ -1,9 +1,11 @@
 import { useState } from "react";
 import MenuList from "./MenuList";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 export default function MenuItem({ item }) {
   const [displayCurrentChildren, setDisplayCurrentChildren] = useState({});
+
   const onMenuClickHandler = (getCurrentlabel) => {
     setDisplayCurrentChildren({
       ...displayCurrentChildren,
@@ -11,37 +13,40 @@ export default function MenuItem({ item }) {
     });
   };
 
-  // console.log(displayCurrentChildren);
-
   return (
     <>
       {item && (
         <li>
-          <div
-            className="menu-item"
+          <Link
+            className="side-bar-link"
+            to={item.to}
             onClick={() => onMenuClickHandler(item.label)}
           >
-            <div className="menu-item-icon">
-              {displayCurrentChildren[item.label] ? item.clickIcon : item.icon}
+            <div className="menu-item">
+              <div className="menu-item-icon">{item.icon}</div>
+              <div className="menu-item-left">
+                <p>{item.label}</p>
+                {item.children && item.children.length ? (
+                  <span onClick={() => onMenuClickHandler(item.label)}>
+                    {displayCurrentChildren[item.label] ? (
+                      <AiFillCaretUp />
+                    ) : (
+                      <AiFillCaretDown />
+                    )}
+                  </span>
+                ) : null}
+              </div>
             </div>
-            <div className="menu-item-left">
-              <p>{item.label}</p>
-              {item.children && item.children.length ? (
-                <span onClick={() => onMenuClickHandler(item.label)}>
-                  {displayCurrentChildren[item.label] ? (
-                    <AiFillCaretUp />
-                  ) : (
-                    <AiFillCaretDown />
-                  )}
-                </span>
-              ) : null}
-            </div>
+          </Link>
+          <div
+            className={`submenu-wrapper ${
+              displayCurrentChildren[item.label] ? "open" : "closed"
+            }`}
+          >
+            {item.children && item.children.length > 0 ? (
+              <MenuList list={item.children} />
+            ) : null}
           </div>
-          {item.children &&
-          item.children.length > 0 &&
-          displayCurrentChildren[item.label] ? (
-            <MenuList list={item.children} />
-          ) : null}
         </li>
       )}
     </>

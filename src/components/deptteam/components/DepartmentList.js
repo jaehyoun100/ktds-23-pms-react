@@ -5,10 +5,13 @@ import Table from "../../../utils/Table.js";
 import s from "./departmentList.module.css";
 import DepartmentCreate from "./DepartmentCreate.js";
 import TeamCreate from "./TeamCreate.js";
+import TeamMemberCreate from "./TeamMemberCreate.js";
 
 export default function DepartmentList({ token }) {
   const [isDeptRegistrationMode, setIsDeptRegistrationMode] = useState(false);
   const [isTeamRegistrationMode, setIsTeamRegistrationMode] = useState(false);
+  const [isTeamMemberRegistrationMode, setIsTeamMemberRegistrationMode] =
+    useState(false);
   const [selectedDeptId, setSelectedDeptId] = useState();
   const [selectTmId, setSelectTmId] = useState();
   const [data, setData] = useState();
@@ -69,36 +72,43 @@ export default function DepartmentList({ token }) {
   const onRegistrationTmClickHandler = () => {
     setIsTeamRegistrationMode(true);
   };
-  const onRegistrationTmMemberClickHandler = () => {};
+  const onRegistrationTmMemberClickHandler = () => {
+    setIsTeamMemberRegistrationMode(true);
+  };
 
   return (
     <>
-      {!isTeamRegistrationMode && !isDeptRegistrationMode && data && (
-        <div>총 {data.length}개의 부서가 검색되었습니다.</div>
-      )}
+      {!isTeamMemberRegistrationMode &&
+        !isTeamRegistrationMode &&
+        !isDeptRegistrationMode &&
+        data && <div>총 {data.length}개의 부서가 검색되었습니다.</div>}
       <div className={s.contentLayout}>
-        {!isTeamRegistrationMode && !isDeptRegistrationMode && data && (
-          <>
-            <div className={s.layout}>
-              <Table
-                columns={columns}
-                dataSource={data}
-                rowKey={(dt) => dt.deptId}
-                filter
-                filterOptions={filterOptions}
-                onRow={(record) => {
-                  return {
-                    onClick: () => {
-                      onDepartmentClick(record.deptId);
-                    },
-                    style: { cursor: "pointer" },
-                  };
-                }}
-              />
-            </div>
-          </>
-        )}
+        {!isTeamMemberRegistrationMode &&
+          !isTeamRegistrationMode &&
+          !isDeptRegistrationMode &&
+          data && (
+            <>
+              <div className={s.layout}>
+                <Table
+                  columns={columns}
+                  dataSource={data}
+                  rowKey={(dt) => dt.deptId}
+                  filter
+                  filterOptions={filterOptions}
+                  onRow={(record) => {
+                    return {
+                      onClick: () => {
+                        onDepartmentClick(record.deptId);
+                      },
+                      style: { cursor: "pointer" },
+                    };
+                  }}
+                />
+              </div>
+            </>
+          )}
         {selectedDeptId &&
+          !isTeamMemberRegistrationMode &&
           !isDeptRegistrationMode &&
           !isTeamRegistrationMode && (
             <div className={s.layout}>
@@ -112,18 +122,22 @@ export default function DepartmentList({ token }) {
             </div>
           )}
       </div>
-      {!isDeptRegistrationMode && !isTeamRegistrationMode && (
-        <>
+      {!isTeamMemberRegistrationMode &&
+        !isDeptRegistrationMode &&
+        !isTeamRegistrationMode && (
           <div className={s.buttonlist}>
             <button>인사 발령 기록</button>
             <button onClick={onRegistrationDeptClickHandler}>부서 등록</button>
-            <button onClick={onRegistrationTmClickHandler}>팀 등록</button>
-            <button onClick={onRegistrationTmMemberClickHandler}>
-              팀원 등록
-            </button>
+            {selectedDeptId && (
+              <button onClick={onRegistrationTmClickHandler}>팀 등록</button>
+            )}
+            {selectTmId && (
+              <button onClick={onRegistrationTmMemberClickHandler}>
+                팀원 등록
+              </button>
+            )}
           </div>
-        </>
-      )}
+        )}
       {isDeptRegistrationMode && (
         <DepartmentCreate
           setIsDeptRegistrationMode={setIsDeptRegistrationMode}
@@ -134,6 +148,13 @@ export default function DepartmentList({ token }) {
       {isTeamRegistrationMode && (
         <TeamCreate
           setIsTeamRegistrationMode={setIsTeamRegistrationMode}
+          setNeedReload={setNeedReload}
+          token={token}
+        />
+      )}
+      {isTeamMemberRegistrationMode && (
+        <TeamMemberCreate
+          setIsTeamMemberRegistrationMode={setIsTeamMemberRegistrationMode}
           setNeedReload={setNeedReload}
           token={token}
         />

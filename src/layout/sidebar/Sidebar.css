@@ -1,5 +1,6 @@
 /* sidebar */
 .sidebar {
+  transition: width 0.5s;
   background-color: #ffffff;
   width: 300px;
   height: 100%;
@@ -8,8 +9,7 @@
 
 .sidebar.active {
   width: 72px;
-
-} 
+}
 
 .sidebar-toggler {
   margin-bottom: 32px;
@@ -21,10 +21,10 @@
   height: 35px;
   border-radius: 2rem;
   z-index: 1; */
-
 }
 
 .user-info {
+  transition: all 0.5s;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -43,7 +43,7 @@
   height: 120px;
   overflow: hidden;
   overflow: hidden;
-  border: 2px solid #FFF;
+  border: 2px solid #fff;
   border-radius: 100%;
   margin-bottom: 10px;
   box-shadow: rgba(206, 206, 206, 0.185) 0px 5px 15px;
@@ -54,7 +54,7 @@
   height: 40px;
   overflow: hidden;
   overflow: hidden;
-  border: 2px solid #FFF;
+  border: 2px solid #fff;
   border-radius: 100%;
   margin-bottom: 10px;
   box-shadow: rgba(206, 206, 206, 0.185) 0px 5px 15px;
@@ -76,6 +76,8 @@
 }
 
 .navigation {
+  overflow: hidden;
+  transition: height 0.5s ease;
   margin-top: 28px;
   height: 600px;
   overflow-y: auto;
@@ -83,7 +85,7 @@
   &::-webkit-scrollbar {
     width: 4px;
   }
-  
+
   &::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 18px;
@@ -94,12 +96,21 @@
     border-radius: 18px;
   }
 }
+.navigation.open {
+  height: auto;
+}
+.navigation.close {
+  height: 0;
+}
 
 .menu-list {
   list-style: none;
   margin-top: 0px;
   margin-bottom: 0px;
   padding-left: 0px;
+}
+.menu-list > li {
+  transition: all 0.5s;
 }
 
 .menu-item {
@@ -129,7 +140,6 @@
   height: 20px;
 }
 
-
 .menu-item-left {
   display: flex;
   justify-content: space-between;
@@ -140,4 +150,35 @@
 
 .menu-item-left > p {
   margin-bottom: 0px;
+}
+
+.side-bar-link {
+  display: block;
+}
+
+/* 메뉴 아이템 열림/닫힘 애니메이션 */
+.menu-item-left > span {
+  transition: transform 0.5s;
+}
+
+.menu-item-left > span.rotate-up {
+  transform: rotate(-180deg);
+}
+
+.menu-item-left > span.rotate-down {
+  transform: rotate(0);
+}
+
+.submenu-wrapper {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 1s ease;
+}
+
+.submenu-wrapper.open {
+  max-height: 200px; /* 열릴 때 최대 높이 조절 */
+}
+
+.submenu-wrapper.closed {
+  max-height: 0; /* 닫힐 때 높이 0으로 설정 */
 }

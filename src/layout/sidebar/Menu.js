@@ -12,50 +12,56 @@ export const menus = [
     to: "/employee",
     icon: <BsHouseDoor />,
     clickIcon: <BsHouseDoorFill />,
-    children: [
-      {
-        label: "사원정보조회",
-        to: "search",
-      },
-      {
-        label: "사원이력조회",
-        to: "history",
-      },
-    ],
   },
   {
     label: "부서",
-    to: "/department",
+    to: "/deptteam",
+    icon: <BsHouseDoor />,
+    clickIcon: <BsHouseDoorFill />,
+  },
+  {
+    label: "비품",
+    to: "/supply",
     icon: <BsHouseDoor />,
     clickIcon: <BsHouseDoorFill />,
     children: [
       {
-        label: "부서/팀조회",
-        to: "search",
+        label: "소모품조회",
+        to: "/supply",
+      },
+      {
+        label: "대여품조회",
+        to: "/rentalsupply",
       },
     ],
   },
   {
-    label: "비품",
-    to: "/product",
+    label: "프로젝트",
+    to: "/project",
+    icon: <BsHouseDoor />,
+    clickIcon: <BsHouseDoorFill />,
+  },
+  {
+    label: "쪽지",
+    to: "/memo",
     icon: <BsHouseDoor />,
     clickIcon: <BsHouseDoorFill />,
     children: [
       {
-        label: "비품조회",
-        to: "list",
+        label: "쪽지쓰기",
+        to: "/",
       },
       {
-        label: "비품대여현황",
-        to: "rentalstate",
+        label: "쪽지수신함",
+        to: "/",
       },
       {
-        label: "비품관리목록",
-        to: "history",
+        label: "쪽지발신함",
+        to: "/",
       },
       {
-        label: "비품상세목록",
-        to: "detail",
+        label: "쪽지보관함",
+        to: "/",
       },
     ],
   },

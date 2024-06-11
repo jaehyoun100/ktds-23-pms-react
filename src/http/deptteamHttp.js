@@ -99,3 +99,20 @@ export const createTeam = async (token, name, empId, deptId) => {
 
   return json;
 };
+
+export const createTeamMember = async (token, name, empId, deptId) => {
+  const data = new FormData();
+  data.append("tmName", name);
+  data.append("tmLeadId", empId);
+  data.append("deptId", deptId);
+
+  const response = await fetch(`${url}/api/v1/team`, {
+    method: "POST",
+    headers: { Authorization: token },
+    body: data,
+  });
+
+  const json = await response.json();
+
+  return json;
+};

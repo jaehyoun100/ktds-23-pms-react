@@ -62,7 +62,7 @@ export default function Sidebar({ menus = [] }) {
           </div>
         )}
       </div>
-      <div className="navigation">
+      <div className={`navigation ${!closeSideBar ? "open" : "closed"}`}>
         {!closeSideBar && <MenuList list={menus} />}
       </div>
     </div>
