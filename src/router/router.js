@@ -10,6 +10,7 @@ import reviewRouter from "./routercomponent/reviewRouter";
 import surveyRouter from "./routercomponent/surveyRouter";
 import memoRouter from "./routercomponent/memoRouter";
 import employeeRouter from "./routercomponent/employeeRouter";
+import rentalSupplyRouter from "./routercomponent/rentalSupplyRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -23,6 +24,7 @@ export default function RouterAppProvider() {
         employeeRouter,
         requirementRouter,
         outputRouter,
+        rentalSupplyRouter,
         supplyRouter,
         deptteamRouter,
         reviewRouter,

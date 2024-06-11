@@ -1,12 +1,18 @@
+const url =
+  "http://" +
+  (window.location.host === "43.202.29.221"
+    ? "43.202.29.221"
+    : "localhost:8080");
+
 export const loadSupplyList = async ({ token, pageNo = 0 }) => {
   if (!token) {
     return undefined;
   }
 
-  const response = await fetch(
-    `http://localhost:8080/api/v1/supply?pageNo=${pageNo}`,
-    { method: "GET", headers: { Authorization: token } }
-  );
+  const response = await fetch(`${url}/api/v1/supply?pageNo=${pageNo}`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
 
   const json = await response.json();
 
@@ -14,10 +20,10 @@ export const loadSupplyList = async ({ token, pageNo = 0 }) => {
 };
 
 export const loadSupply = async ({ selectedSplId, token }) => {
-  const response = await fetch(
-    `http://localhost:8080/api/v1/supply/${selectedSplId}`,
-    { method: "GET", headers: { Authorization: token } }
-  );
+  const response = await fetch(`${url}/api/v1/supply/${selectedSplId}`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
 
   const json = await response.json();
 
@@ -52,7 +58,7 @@ export const registerSupply = async (
   data.append("file", image);
   data.append("splDtl", detail);
 
-  const response = await fetch("http://localhost:8080/api/v1/supply", {
+  const response = await fetch(`${url}/api/v1/supply`, {
     method: "POST",
     headers: { Authorization: token },
     body: data,
@@ -81,7 +87,7 @@ export const modifySupply = async (
   // data.append("splImg", image);
   data.append("splDtl", detail);
 
-  const response = await fetch(`http://localhost:8080/api/v1/supply/${splId}`, {
+  const response = await fetch(`${url}/api/v1/supply/${splId}`, {
     method: "PUT",
     headers: { Authorization: token },
     body: data,
@@ -93,7 +99,7 @@ export const modifySupply = async (
 };
 
 export const deleteSupply = async (splId, token) => {
-  const response = await fetch(`http://localhost:8080/api/v1/supply/${splId}`, {
+  const response = await fetch(`${url}/api/v1/supply/${splId}`, {
     method: "DELETE",
     headers: { Authorization: token },
   });
@@ -108,10 +114,10 @@ export const loadSupplyLogList = async ({ token, pageNo = 0 }) => {
     return undefined;
   }
 
-  const response = await fetch(
-    `http://localhost:8080/api/v1/supply/log?pageNo=${pageNo}`,
-    { method: "GET", headers: { Authorization: token } }
-  );
+  const response = await fetch(`${url}/api/v1/supply/log?pageNo=${pageNo}`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
 
   const json = await response.json();
 
