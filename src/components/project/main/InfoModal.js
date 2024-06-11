@@ -1,14 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../project.module.css";
 import TextInput from "../../common/input/TextInput";
 
 const InfoModal = React.memo(
-  ({ content, onClose, show, cancelContent, contact, title, onSave }) => {
+  ({
+    onClose,
+    show,
+    cancelContent,
+
+    onSave,
+    clientData,
+  }) => {
     // 초기 값으로 현재 데이터를 사용하여 상태 관리
     const [isEditing, setIsEditing] = useState(false);
-    const [editTitle, setEditTitle] = useState(title);
-    const [editContact, setEditContact] = useState(contact);
-    const [editContent, setEditContent] = useState(content);
+    const [editTitle, setEditTitle] = useState(clientData.clntName);
+    const [editContact, setEditContact] = useState(clientData.cntct);
+    const [editContent, setEditContent] = useState(clientData.info);
+    const titleRef = useRef(clientData.clntName);
+    const contactRef = useRef(clientData.cntct);
+    const [canSave, setCanSave] = useState(true);
+    useEffect(() => {
+      if (
+        titleRef.current &&
+        titleRef.current.value &&
+        titleRef.current.value.length > 30
+      ) {
+        alert("고객사명은 30자를 초과할 수 없습니다.");
+        titleRef.current.focus();
+        setCanSave(false);
+        return;
+      }
+      if (
+        contactRef.current &&
+        contactRef.current.value &&
+        contactRef.current.value.length > 15
+      ) {
+        alert("연락처는 15자를 초과할 수 없습니다.");
+        contactRef.current.focus();
+        setCanSave(false);
+        return;
+      } else if (
+        contactRef.current &&
+        contactRef.current.value &&
+        isNaN(contactRef.current.value.replaceAll("-", ""))
+      ) {
+        alert("문자열을 입력할 수 없습니다.");
+        setCanSave(false);
+        return;
+      } else if (
+        contactRef.current &&
+        contactRef.current.value &&
+        contactRef.current.value.split("-").length > 3
+      ) {
+        alert("'-' 문자는 연락처 구분에만 사용 가능합니다.");
+        setCanSave(false);
+        return;
+      }
+      setCanSave(true);
+    }, [titleRef.current?.value, contactRef.current?.value]);
 
     // 편집 모드 활성화 함수
     const handleEdit = () => {
@@ -17,6 +66,10 @@ const InfoModal = React.memo(
 
     // 저장 처리 함수
     const handleSave = () => {
+      if (!canSave) {
+        alert("형식에 맞춰 재입력 후 저장해주세요.");
+        return;
+      }
       // onSave 콜백으로 변경 사항 전달
       onSave(editTitle, editContact, editContent);
       // 저장 후 편집 모드 해제
@@ -26,10 +79,12 @@ const InfoModal = React.memo(
     // 편집 취소 함수
     const handleCancel = () => {
       // 수정 취소 시, 기존 데이터를 복구하고 편집 모드 해제
-      setEditTitle(title);
-      setEditContact(contact);
-      setEditContent(content);
+      setEditTitle(clientData.clntName);
+      setEditContact(clientData.cntct);
+      setEditContent(clientData.info);
       setIsEditing(false);
+      // titleRef.current.value = clientData.clntName;
+      // contactRef.current.value = clientData.cntct;
     };
 
     // 모달이 표시되지 않으면 null 반환
@@ -62,10 +117,11 @@ const InfoModal = React.memo(
               {isEditing ? (
                 <TextInput
                   value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
+                  onChangeHandler={(e) => setEditTitle(e.target.value)}
+                  ref={titleRef}
                 />
               ) : (
-                title
+                editTitle
               )}
             </div>
           </div>
@@ -75,10 +131,11 @@ const InfoModal = React.memo(
               {isEditing ? (
                 <TextInput
                   value={editContact}
-                  onChange={(e) => setEditContact(e.target.value)}
+                  onChangeHandler={(e) => setEditContact(e.target.value)}
+                  ref={contactRef}
                 />
               ) : (
-                contact
+                editContact
               )}
             </div>
           </div>
@@ -92,7 +149,7 @@ const InfoModal = React.memo(
                   onChange={(e) => setEditContent(e.target.value)}
                 />
               ) : (
-                content
+                editContent
               )}
             </div>
           </div>
