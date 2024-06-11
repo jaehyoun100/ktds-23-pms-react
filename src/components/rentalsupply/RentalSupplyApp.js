@@ -72,6 +72,13 @@ export default function RentalSupplyApp() {
     },
   ];
 
+  const simplifiedFilterOptions = [
+    {
+      label: "제품 명",
+      value: "rsplName",
+    },
+  ];
+
   const onRowClickHandler = (rowId) => {
     setSelectedRsplId((prevId) => (prevId === rowId ? undefined : rowId));
   };
@@ -94,7 +101,7 @@ export default function RentalSupplyApp() {
               dataSource={data}
               rowKey={(dt) => dt.rsplId}
               filter
-              filterOptions={filterOptions}
+              filterOptions={isSelect ? simplifiedFilterOptions : filterOptions}
               onRow={(record) => {
                 return {
                   onClick: () => {

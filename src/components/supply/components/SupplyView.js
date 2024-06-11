@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { deleteSupply, loadSupply } from "../../../http/supplyHttp";
+import {
+  deleteSupply,
+  loadSupply,
+  loadSupplyImage,
+} from "../../../http/supplyHttp";
 import SupplyModification from "./SupplyModification";
 
 export default function SupplyView({
@@ -12,6 +16,7 @@ export default function SupplyView({
   token,
 }) {
   const [data, setData] = useState();
+  const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const memoizedLoadSupply = useCallback(loadSupply, []);
@@ -24,11 +29,20 @@ export default function SupplyView({
       setIsLoading(true);
       const json = await memoizedLoadSupply(memoizedParam);
       setData(json);
+
+      if (json.body && json.body.splImg) {
+        const imageData = await loadSupplyImage({
+          splImg: json.body.splImg,
+          token,
+        });
+        setImage(imageData);
+      }
+
       setIsLoading(false);
     };
 
     fetchData();
-  }, [memoizedLoadSupply, memoizedParam, setData]);
+  }, [memoizedLoadSupply, memoizedParam, setData, token]);
 
   const { body: supplyBody } = data || {};
 
@@ -57,7 +71,13 @@ export default function SupplyView({
             <div>{supplyBody.splCtgr}</div>
             <div>{supplyBody.splPrice}</div>
             <div>{supplyBody.invQty}</div>
-            <div>이미지 보여줄 div</div>
+            <div>
+              {image ? (
+                <img src={image} alt={supplyBody.splName} />
+              ) : (
+                "이미지 불러오는 중..."
+              )}
+            </div>
             <div>{supplyBody.splDtl}</div>
           </div>
           <button onClick={onSupplyModificationModeClickHandler}>수정</button>

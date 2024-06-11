@@ -30,16 +30,15 @@ export const loadSupply = async ({ selectedSplId, token }) => {
   return json;
 };
 
-// export const loadSupplyImage = async ({ splImg, token }) => {
-//   const response = await fetch(
-//     `http://localhost:8080/api/v1/supply/image/${splImg}`,
-//     { method: "GET", headers: { Authorization: token } }
-//   );
+export const loadSupplyImage = async ({ splImg, token }) => {
+  const response = await fetch(`${url}/api/v1/supply/image/${splImg}`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
 
-//   const json = await response.json();
-
-//   return json;
-// };
+  const json = await response.json();
+  return json.body ? `data:image/jpeg;base64,${json.body}` : null;
+};
 
 export const registerSupply = async (
   token,

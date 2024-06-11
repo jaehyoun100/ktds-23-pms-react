@@ -72,6 +72,13 @@ export default function SupplyApp() {
     },
   ];
 
+  const simplifiedFilterOptions = [
+    {
+      label: "제품 명",
+      value: "splName",
+    },
+  ];
+
   const onRowClickHandler = (rowId) => {
     setSelectedSplId((prevId) => (prevId === rowId ? undefined : rowId));
   };
@@ -94,7 +101,7 @@ export default function SupplyApp() {
               dataSource={data}
               rowKey={(dt) => dt.splId}
               filter
-              filterOptions={filterOptions}
+              filterOptions={isSelect ? simplifiedFilterOptions : filterOptions}
               onRow={(record) => {
                 return {
                   onClick: () => {
