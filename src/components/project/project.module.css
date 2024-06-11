@@ -148,6 +148,7 @@ h1 {
   margin-right: 100px;
   cursor: pointer;
   font-weight: bold;
+  /* align-items:baseline; */
 }
 .headerMenu span {
   display: inline-block;
@@ -399,4 +400,16 @@ h1 {
   border: 1px solid var(--light-color);
   padding: 20px;
   overflow-y: auto;
+}
+
+.homeIcon{
+  color: var(--second-color);
+  margin:0;
+  font-size: 16px;
+  position: relative;
+  bottom: -4px;
+}
+
+.homeIcon:hover{
+  color: var(--main-color);
 }

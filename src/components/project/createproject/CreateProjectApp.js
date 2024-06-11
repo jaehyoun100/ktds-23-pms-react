@@ -9,10 +9,16 @@ import { useNavigate } from "react-router";
 import CreateClientModal from "./CreateClientModal";
 
 const CreateProjectApp = () => {
+  const [isAddClient, setIsAddClient] = useState(false);
   const prjNameRef = useRef();
   const prjMemoRef = useRef();
   const startDateRef = useRef();
   const endDateRef = useRef();
+
+  // 고객사 추가 정보
+  const titleRef = useRef();
+  const cntctRef = useRef();
+  const memoRef = useRef();
 
   const [clientData, setClientData] = useState([]);
   const [clientSelectedData, setClientSelectedData] =
@@ -44,7 +50,8 @@ const CreateProjectApp = () => {
       setClientData(list);
     };
     getClient();
-  }, [tokenInfo.token]);
+    setIsAddClient(false);
+  }, [tokenInfo.token, isAddClient]);
 
   useEffect(() => {
     const getDept = async () => {
@@ -132,8 +139,28 @@ const CreateProjectApp = () => {
   const onClickCreateNewClientHandler = async () => {
     handleOpenModal();
   };
-  const handleConfirm = () => {
-    alert("추가를 누름.");
+  const handleConfirm = async () => {
+    const response = await fetch("http://localhost:8080/api/project/client", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: tokenInfo.token,
+      },
+      body: JSON.stringify({
+        clntName: titleRef.current.value,
+        cntct: cntctRef.current.value,
+        info: memoRef.current.value,
+      }),
+    });
+    const json = await response.json();
+    if (json.status === 200) {
+      alert("고객사를 추가했습니다.");
+      setShowInfoModal(false);
+      titleRef.current.value = "";
+      cntctRef.current.value = "";
+      memoRef.current.value = "";
+    }
+    setIsAddClient(true);
   };
 
   return (
@@ -197,6 +224,9 @@ const CreateProjectApp = () => {
         onConfirm={handleConfirm}
         cancelContent="취소"
         confirmContent="추가"
+        titleRef={titleRef}
+        cntctRef={cntctRef}
+        memoRef={memoRef}
       />
     </div>
   );

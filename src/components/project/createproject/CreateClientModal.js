@@ -3,7 +3,16 @@ import styles from "../project.module.css";
 import TextInput from "../../common/input/TextInput";
 
 const CreateClientModal = React.memo(
-  ({ show, onClose, onConfirm, cancelContent, confirmContent }) => {
+  ({
+    show,
+    onClose,
+    onConfirm,
+    cancelContent,
+    confirmContent,
+    titleRef,
+    cntctRef,
+    memoRef,
+  }) => {
     if (!show) {
       return null;
     }
@@ -29,15 +38,15 @@ const CreateClientModal = React.memo(
 
           <div className={styles.modalTitle}>
             <div className={styles.modalTitleText}>고객사명 :</div>
-            <TextInput />
+            <TextInput ref={titleRef} />
           </div>
           <div className={styles.modalContact}>
             <div className={styles.modalContactText}>고객 연락처 :</div>
-            <TextInput />
+            <TextInput ref={cntctRef} />
           </div>
           <div className={styles.modalClientContent}>
             <div className={styles.modalClientText}>고객 정보 :</div>
-            <textarea className={styles.modalTextArea} />
+            <textarea className={styles.modalTextArea} ref={memoRef} />
           </div>
           <div className={styles.buttonContainer}>
             <button className={styles.button} onClick={onConfirm}>
