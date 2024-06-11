@@ -1,15 +1,16 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import Search from "../common/search/Search";
-import { loadDepartmentList, loadTeamList } from "../../http/deptteamHttp";
+import { loadDepartmentList } from "../../http/deptteamHttp";
 import { useFetch } from "../hook/useFetch";
 import style from "./Memo.module.css";
-import tree from "./testData";
 import SearchTeam from "./SearchTeam";
+import { BsFolder, BsFolder2Open } from "react-icons/bs";
+import SearchEmployee from "./SearchEmployee";
+import SearchAddReceiver from "./SearchAddReceiver";
 
 export default function SearchEmpMemo() {
   const token = localStorage.getItem("token");
   const [needDeptLoad, setNeedDeptLoad] = useState();
-  const [needTeamLoad, setNeedTeamLoad] = useState();
   const [selectedData, setSelectedData] = useState("Select Option");
   const optionList = [
     { label: "부서", value: "deptId" },
@@ -17,37 +18,58 @@ export default function SearchEmpMemo() {
     { label: "사원명", value: "empId" },
     { label: "이메일", value: "email" },
   ];
+
   const textRef = useRef(null);
+
+  const [openedDeptId, setOpenedDeptId] = useState(null);
+  const [selectedDeptId, setSelectedDeptId] = useState();
+  const [selectTmId, setSelectedTmId] = useState();
+  const [rcvList, setRcvList] = useState();
+  const [rcvRefList, setRcvRefList] = useState();
+  const [rcvSecretRefList, setRcvSecretRefList] = useState();
+
+  const [checkedEmployees, setCheckedEmployees] = useState([]);
 
   // 부서목록
   const fetchLoadDeptList = useCallback(loadDepartmentList, []);
   const fetchDeptParam = useMemo(() => {
     return { token, needDeptLoad };
   }, [token, needDeptLoad]);
-  const { deptData, setDeptData } = useFetch(
+  const { data, setData } = useFetch(
     undefined,
     fetchLoadDeptList,
     fetchDeptParam
   );
-  const { body: deptList } = deptData || {};
+  const { body: deptList } = data || {};
   // console.log(deptList);
-
-  // 팀목록
-  // const fetchLoadTeamList = useCallback(loadTeamList, []);
-  // const fetchTeamParam = useMemo(() => {
-  //   return { token, needTeamLoad };
-  // }, [token, needTeamLoad]);
-  // const { teamData, setTeamData } = useFetch(
-  //   undefined,
-  //   fetchLoadTeamList,
-  //   fetchTeamParam
-  // );
-  // const { body: teamList } = teamData || {};
-  // console.log(teamList);
 
   const onClickHandler = () => {
     const searchKeyword = textRef.current.value;
     // 주소록 찾기
+  };
+
+  const onOpenClickHandler = (deptId) => {
+    setSelectedDeptId(deptId);
+    setOpenedDeptId(deptId === openedDeptId ? null : deptId);
+    setSelectedTmId("");
+  };
+
+  // 자식에서 teamId 전달
+  const onTeamClick = (teamId) => {
+    setSelectedTmId(teamId);
+  };
+
+  // 자식에서 checkedEmployees(수신자목록) 전달
+  const onAddRcv = () => {
+    console.log("---------", checkedEmployees);
+    setRcvList(checkedEmployees);
+  };
+
+  const onAddRcvRef = (checkedEmployees) => {
+    setRcvRefList(checkedEmployees);
+  };
+  const onAddRcvSecretRef = (checkedEmployees) => {
+    setRcvSecretRefList(checkedEmployees);
   };
 
   return (
@@ -65,19 +87,63 @@ export default function SearchEmpMemo() {
         <div className="col-1-3">
           부서/팀
           <div>
-            {/* {deptList &&
-              deptList.map((dept) => (
-                <div key={dept.deptId}>{dept.deptName}</div>
-              ))} */}
             <div className={style.tree}>
-              {tree.children.map((dept) => (
-                <SearchTeam item={dept} />
-              ))}
+              {deptList &&
+                deptList.map((dept) => (
+                  <>
+                    <div
+                      key={dept.deptId}
+                      className={style.treeItem}
+                      onClick={() => onOpenClickHandler(dept.deptId)}
+                    >
+                      {dept &&
+                        (openedDeptId === dept.deptId ? (
+                          <>
+                            <BsFolder2Open />
+                          </>
+                        ) : (
+                          <BsFolder />
+                        ))}
+                      {dept.deptName}
+                    </div>
+                    <div>
+                      {dept && openedDeptId === dept.deptId && (
+                        <>
+                          <SearchTeam
+                            token={token}
+                            selectedDeptId={selectedDeptId}
+                            onTeamClick={onTeamClick}
+                            setSelectedTmId={setSelectedTmId}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </>
+                ))}
             </div>
           </div>
         </div>
-        <div className="col-1-3">사원</div>
-        <div className="col-1-3">수신</div>
+        <div className="col-1-3">
+          <div className="searchTitle">사원</div>
+          <SearchEmployee
+            token={token}
+            selectedDeptId={selectedDeptId}
+            selectTmId={selectTmId}
+            onAddRcv={onAddRcv}
+            onAddRcvRef={onAddRcvRef}
+            onAddRcvSecretRef={onAddRcvSecretRef}
+            checkedEmployees={checkedEmployees}
+            setCheckedEmployees={setCheckedEmployees}
+          />
+        </div>
+        <div className="col-1-3">
+          <div className="searchTitle">수신</div>
+          <SearchAddReceiver
+            rcvList={rcvList}
+            rcvRefList={rcvRefList}
+            rcvSecretRefList={rcvSecretRefList}
+          />
+        </div>
       </div>
     </div>
   );

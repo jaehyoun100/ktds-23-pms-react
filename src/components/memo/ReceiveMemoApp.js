@@ -9,32 +9,12 @@ let pageNo = 0;
 
 export default function ReceiveMemoApp() {
   const token = localStorage.getItem("token");
-  // const [data, setData] = useState({});
   const [needLoad, setNeedLoad] = useState();
   const [selectRcvMemoId, setSelectRcvMemoId] = useState();
 
   const isSelect = selectRcvMemoId !== undefined;
 
-  // useEffect(() => {
-  //   if (!token) {
-  //     return;
-  //   }
-  //   const loadReceiveMemos = async () => {
-  //     const response = await fetch(
-  //       `http://localhost:8080/api/memo/receive?pageNo=${pageNo}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: token,
-  //         },
-  //       }
-  //     );
-  //     const json = await response.json();
-  //     setData(json);
-  //   };
-  //   loadReceiveMemos();
-  // }, [token, needLoad]);
-
+  // 수신 쪽지 목록
   const fetchLoadReceiveMemos = useCallback(loadReceiveMemos, []);
   const fetchParam = useMemo(() => {
     return { token, needLoad };

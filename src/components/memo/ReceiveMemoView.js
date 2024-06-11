@@ -15,10 +15,9 @@ export default function ReceiveMemoView({
   setSelectRcvMemoId,
   setNeedLoad,
 }) {
-  // const [data, setData] = useState();
-  // const [isLoading, setIsLoading] = useState(true);
   const [needViewReload, setNeedViewReload] = useState();
 
+  // 쪽지 상세정보 조회
   const fetchLoadReceiveMemo = useCallback(loadReceiveMemo, []);
   const fetchParam = useMemo(() => {
     return { selectRcvMemoId, token, needViewReload };
@@ -29,30 +28,7 @@ export default function ReceiveMemoView({
     fetchLoadReceiveMemo,
     fetchParam
   );
-
-  // 쪽지 상세정보 조회
-  // useEffect(() => {
-  //   const loadReceiveMemo = async () => {
-  //     const response = await fetch(
-  //       `http://localhost:8080/api/memo/receive/${selectRcvMemoId}`,
-  //       { method: "GET", headers: { Authorization: token } }
-  //     );
-  //     const json = await response.json();
-  //     setData(json);
-  //     setIsLoading(false);
-  //     console.log(json);
-  //   };
-  //   loadReceiveMemo();
-  // }, [token, selectRcvMemoId]);
-
   const { body: receiveMemo } = data || {};
-  const [isSave, setIsSave] = useState(false);
-
-  // useEffect(() => {
-  //   if (!isLoading && receiveMemo !== null) {
-  //     setIsSave(receiveMemo.rcvSaveYn);
-  //   }
-  // }, [isLoading, receiveMemo, needViewReload]);
 
   // 쪽지 보관
   const onClickSaveReceiveMenoHandler = async () => {
@@ -65,22 +41,6 @@ export default function ReceiveMemoView({
       alert(json.errors);
     }
   };
-  // const onClickSaveReceiveMenoHandler = async () => {
-  //   const newSaveState = isSave === "N" ? "Y" : "N";
-
-  //   const response = await fetch(
-  //     `http://localhost:8080/api/memo/receive/save/${selectRcvMemoId}`,
-  //     {
-  //       method: "PUT",
-  //       headers: { Authorization: token, "Content-Type": "application/json" },
-  //       body: JSON.stringify({ rcvSaveYn: newSaveState }),
-  //     }
-  //   );
-  //   const json = await response.json();
-  //   const body = json.body;
-  //   setIsSave(body.rcvSaveYn);
-  //   setNeedViewReload(Math.random());
-  // };
 
   // 목록 조회
   const onBoardListClickHandler = () => {
