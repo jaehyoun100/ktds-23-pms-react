@@ -3,36 +3,27 @@ import { Button, Input, Select } from "antd";
 import Table from "../../utils/Table";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import RegBtn from "./components/Popup/RegBtn";
+import { loadData } from "../../http/employeeHttp";
 
 export default function EmployeeApp() {
   const [data, setData] = useState([]);
   const navigate = useNavigate(); // 페이지 네비게이션을 위한 hook
-
   // const [error, setError] = useState();
   const { token } = useSelector((state) => state.tokenInfo); // Redux에서 토큰 정보 가져오기
 
-  // const loadData = useCallback(async () => {
-  //   await fetch("http://localhost:8080/api/v1/employee", {
-  //     method: "GET",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => setData(data.body));
-  // }, []);
-
-  const loadData = useCallback(async () => {
-    const response = await fetch(`http://localhost:8080/api/v1/employee`, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    });
-    const json = await response.json();
-    setData(json.body);
-  }, [token]);
-
   useEffect(() => {
-    if (token) loadData();
-  }, [token, loadData]);
+    const fetchData = async () => {
+      const json = await loadData({ token });
+      if (json) {
+        setData(json.body);
+      }
+    };
+
+    if (token) {
+      fetchData();
+    }
+  }, [token]);
 
   const columns = [
     {
@@ -127,6 +118,7 @@ export default function EmployeeApp() {
         filter
         filterOptions={filterOptions}
       />
+      <RegBtn />
     </>
   );
 }
