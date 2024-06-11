@@ -7,21 +7,35 @@ import { useSelector } from "react-redux";
 import Profile from "./Profile";
 
 export default function MainInfo({ project }) {
+  const tokenInfo = useSelector((state) => ({
+    token: state.tokenInfo.token,
+    credentialsExpired: state.tokenInfo.credentialsExpired,
+  }));
   // const prjId = "PRJ_240502_000243";
 
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [clientData, setClientData] = useState({
-    title: project.clientVO.clntName,
-    contact: project.clientVO.cntct,
-    content: project.clientVO.info,
-  });
-  const handleSave = (newTitle, newContact, newContent) => {
-    setClientData({
-      title: newTitle,
-      contact: newContact,
-      content: newContent,
+  const [clientData, setClientData] = useState(project.clientVO);
+  console.log(clientData, "client!!!!");
+  const handleSave = async (newTitle, newContact, newContent) => {
+    await fetch("http://localhost:8080/api/project/client", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: tokenInfo.token,
+      },
+      body: JSON.stringify({
+        clntName: newTitle,
+        cntct: newContact,
+        info: newContent,
+        clntId: project.clientVO.clntId,
+      }),
     });
+    // setClientData({
+    //   title: newTitle,
+    //   contact: newContact,
+    //   content: newContent,
+    // });
   };
 
   return (
@@ -72,13 +86,7 @@ export default function MainInfo({ project }) {
       <InfoModal
         show={modalVisible}
         onClose={() => setModalVisible(false)}
-        // content={project.clientVO.info}
-        // title={project.clientVO.clntName}
-        // cancelContent="확인"
-        // contact={project.clientVO.cntct}
-        title={clientData.title}
-        contact={clientData.contact}
-        content={clientData.content}
+        clientData={clientData}
         cancelContent="닫기"
         onSave={handleSave}
       />
