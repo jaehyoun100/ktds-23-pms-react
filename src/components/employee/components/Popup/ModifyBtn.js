@@ -37,7 +37,7 @@ export default function ModifyBtn({
   return (
     <>
       <Button
-        style={{ borderColor: "#fff" }}
+        style={{ borderColor: "#fff", float: "right" }}
         onClick={handleShowPopup}
         {...buttonProps}
       >

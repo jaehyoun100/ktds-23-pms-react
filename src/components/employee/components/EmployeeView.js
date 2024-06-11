@@ -8,6 +8,8 @@ import DepartChangeHistory from "./DepartChangeHistory";
 import WorkChangeHistory from "./WorkChangeHistory";
 import ModifyBtn from "./Popup/ModifyBtn";
 import { loadOneData, handleUpdateEmployee } from "../../../http/employeeHttp";
+import MenuBtn from "./Popup/MenuBtn";
+import RegBtn from "./Popup/RegBtn";
 
 const { Title } = Typography;
 
@@ -18,7 +20,6 @@ export default function EmployeeView() {
   //!!!! 훅 사용한 값은 위에, 바로 밑에 state 순서로 정렬
   const { empId } = useParams();
   const { token } = useSelector((state) => state.tokenInfo);
-  console.log("Token:", token);
   const [data, setData] = useState([]);
   const [isModal, setIsModal] = useState(false); // 모달 상태 (기본 false)
   const [dataList, setDataList] = useState({
@@ -46,13 +47,13 @@ export default function EmployeeView() {
       {
         title: "비밀번호",
         type: "string",
-        dataIndex: "salt",
+        dataIndex: "pwd",
         required: true,
       },
       {
         title: "비밀번호 확인",
         type: "string",
-        dataIndex: "salt",
+        dataIndex: "pwd",
         required: true,
       },
       {
@@ -77,15 +78,15 @@ export default function EmployeeView() {
         })),
         required: true,
       },
-      {
-        title: "팀",
-        type: "select",
-        dataIndex: "tmId",
-        option: dataList.team.map(({ dataId, dataName }) => ({
-          label: dataName,
-          value: dataId,
-        })),
-      },
+      // {
+      //   title: "팀",
+      //   type: "select",
+      //   dataIndex: "tmId",
+      //   option: dataList.team.map(({ dataId, dataName }) => ({
+      //     label: dataName,
+      //     value: dataId,
+      //   })),
+      // },
       {
         title: "직무",
         type: "select",
@@ -263,7 +264,9 @@ export default function EmployeeView() {
       <Title level={3}>사원정보</Title>
       <ImageWrapper>
         <img src={imgBase64} alt="프로필이미지" />
+        <RegBtn />
       </ImageWrapper>
+
       {/* Descriptions의 column prop에는 한 row에 표시할 column개수를 브라우저 화면 사이즈 별로 지정.
       기본=3개 */}
       <Descriptions
@@ -280,6 +283,7 @@ export default function EmployeeView() {
         options={inputOptions}
         onOk={handleUpdateEmployeeAndReloadData}
       />
+      <MenuBtn />
     </EmployeeInfoWrapper>
   );
 }
@@ -297,11 +301,11 @@ const EmployeeInfoWrapper = styled.div`
 
 const ImageWrapper = styled.div`
   text-align: right;
-  margin-bottom: img {
-    width: 200px;
-    border: 1px solid #d6d6d6;
-    border-radius: 50%;
-  }
+  // margin-bottom: img {
+  //   width: 200px;
+  //   border: 1px solid #d6d6d6;
+  //   border-radius: 50%;
+  // }
 `;
 
 export const CustomButton = styled(Button)`
