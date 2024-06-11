@@ -26,8 +26,12 @@ export const getEmployee = (token) => {
  */
 export const getToken = (empId, pwd) => {
   return async (dispatch) => {
-    const url = `http://localhost:8080/auth/token`;
-    const response = await fetch(url, {
+    const url =
+      "http://" +
+      (window.location.host === "43.202.29.221"
+        ? "43.202.29.221"
+        : "localhost:8080");
+    const response = await fetch(url + "/auth/token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
