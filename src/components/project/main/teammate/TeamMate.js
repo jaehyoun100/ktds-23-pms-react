@@ -13,17 +13,16 @@ export default function TeamMate() {
   const [projectId, setprojectId] = useState([]);
   const [pm, setPm] = useState(null);
   const [deptId, setDeptId] = useState();
-  const [selectedData, setSelectedData] = useState([
-    "추가할 직원을 선택해주세요",
-  ]);
-  const [selectedRoleData, setSelectedRoleData] = useState([
-    "직책을 선택해주세요.",
-  ]);
+  const [selectedData, setSelectedData] = useState([]);
+  const [selectedRoleData, setSelectedRoleData] = useState([]);
   const [memberList, setMemberList] = useState([]);
-  const [memberInfo, setMemberInfo] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [temporaryList, setTemporaryList] = useState([]);
   const nameRef = useRef();
+
+  useEffect(() => {
+    console.log(selectedData, selectedRoleData);
+  }, [selectedData, selectedRoleData]);
 
   const location = useLocation();
   const tokenInfo = useSelector((state) => ({
@@ -37,7 +36,6 @@ export default function TeamMate() {
     const item = location.state.key;
     console.log(item);
     setprojectId(item.project);
-    console.log(projectId);
 
     const pmData = item.project.pm;
     const teamListWithoutPm = item.project.projectTeammateList.filter(
@@ -55,25 +53,23 @@ export default function TeamMate() {
       if (deptId) {
         const response = await fetch(
           `http://localhost:8080/api/project/employee/findbydeptid/${deptId}`,
-          { headers: { Authorization: tokenInfo.token }, method: "GET" }
+          {
+            headers: {
+              Authorization: tokenInfo.token,
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          }
         );
+        console.log(response, ")!@!@!@!@!@");
         const json = await response.json();
-        console.log(json, ")!@!@!@!@!@");
+        console.log(json, "!@!@!@");
         const members = json.body.map((emp) => ({
           label: emp.empName,
           value: emp.empId,
         }));
-        const memberInfo = json.body.map((emp) => ({
-          id: emp.empId,
-          name: emp.empName,
-          prfl: emp.prfl,
-          cntct: emp.cntct,
-          joblevel: emp.cmcdName,
-          email: emp.email,
-          addr: emp.addr,
-        }));
+
         console.log(members, "231231231");
-        console.log(memberInfo);
         setMemberList(members);
       }
     };
@@ -125,12 +121,11 @@ export default function TeamMate() {
   };
 
   // 삭제 핸들러 함수
-  const onDeleteHandler = (idx, listType) => {
-    if (listType === "teammateList") {
-      setTeammateList((prev) => prev.filter((_, index) => index !== idx));
-    } else if (listType === "temporaryList") {
-      setTemporaryList((prev) => prev.filter((_, index) => index !== idx));
-    }
+  const onDeleteHandler = (idx) => {
+    setTemporaryList((prev) => prev.filter((_, index) => index !== idx));
+
+    setSelectedData((prev) => prev.filter((_, index) => index !== idx));
+    setSelectedRoleData((prev) => prev.filter((_, index) => index !== idx));
   };
 
   return (
@@ -155,63 +150,20 @@ export default function TeamMate() {
                   <td></td> {/* 삭제 아이콘 자리 비우기 */}
                 </tr>
               )}
-              {teammateList.map((item, idx) => (
-                <tr key={idx}>
-                  <td style={{ width: "300px" }}>
-                    {isEditing ? (
-                      <Selectbox
-                        optionList={memberList}
-                        selectedData={selectedData[idx]}
-                        setSelectedData={setSelectedData}
-                        style={{ width: "100%" }}
-                        onChangeFn={(selectedOption) =>
-                          onChangeSelectHandler(selectedOption, idx, "empName")
-                        }
-                      />
-                    ) : (
-                      item.empName
-                    )}
-                  </td>
-                  <td style={{ width: "300px" }}>
-                    {isEditing ? (
-                      <Selectbox
-                        optionList={[
-                          { label: "PL", value: "PL" },
-                          { label: "NONE", value: "NONE" },
-                        ]}
-                        selectedData={selectedRoleData[idx]}
-                        setSelectedData={setSelectedRoleData}
-                        style={{ width: "100%" }}
-                        onChangeFn={(selectedOption) =>
-                          onChangeSelectHandler(selectedOption, idx, "role")
-                        }
-                      />
-                    ) : (
-                      item.role
-                    )}
-                  </td>
-                  {isEditing && (
-                    <td>
-                      <CiCircleMinus
-                        onClick={() => onDeleteHandler(idx, "teammateList")}
-                      />
-                    </td>
-                  )}
-                </tr>
-              ))}
               {isEditing &&
                 temporaryList.map((item, idx) => (
                   <tr key={teammateList.length + idx}>
                     <td style={{ width: "300px" }}>
                       <Selectbox
                         optionList={memberList}
-                        selectedData={selectedData[idx]}
+                        selectedData={selectedData}
                         setSelectedData={setSelectedData}
                         idx={idx}
                         style={{ width: "100%" }}
                         onChangeFn={(selectedOption) =>
                           onChangeSelectHandler(selectedOption, idx, "empName")
                         }
+                        initial="추가할 직원을 선택해주세요"
                       />
                     </td>
                     <td style={{ width: "300px" }}>
@@ -221,12 +173,14 @@ export default function TeamMate() {
                             { label: "PL", value: "PL" },
                             { label: "NONE", value: "NONE" },
                           ]}
-                          selectedData={selectedRoleData[idx]}
+                          idx={idx}
+                          selectedData={selectedRoleData}
                           setSelectedData={setSelectedRoleData}
                           style={{ width: "100%" }}
                           onChangeFn={(selectedOption) =>
                             onChangeSelectHandler(selectedOption, idx, "role")
                           }
+                          initial="직책을 선택해주세요"
                         />
                       </div>
                     </td>

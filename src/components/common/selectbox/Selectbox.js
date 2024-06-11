@@ -22,10 +22,11 @@ export default function Selectbox({
   selectRef,
   idx,
   onChangeHandler,
+  initial,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(
-    selectedData ? selectedData : optionList[0].label
+    initial ? initial : selectedData ? selectedData : optionList[0].label
   );
 
   const toggleDropdown = () => {
@@ -33,18 +34,24 @@ export default function Selectbox({
   };
 
   const handleOptionClick = async (item) => {
-    setSelected(item.label);
-    setIsOpen(false);
-    setSelectedData && (await setSelectedData(item.value));
-    selectRef && (selectRef.current = item.value);
-    onChangeFn && (await onChangeFn());
-    console.log(idx);
+    console.log(item.value);
     if (idx) {
-      setSelectedData((prev) => [
-        ...prev.slice(0, idx),
-        selected,
-        ...prev.slice(idx + 1),
-      ]);
+      setSelected(item.label);
+      console.log(selectedData, "origin");
+      const newArray = Array.isArray(selectedData)
+        ? [...selectedData]
+        : [...[selectedData]];
+      console.log(newArray, "new");
+      newArray[idx] = item.value;
+      setSelectedData(newArray);
+      setIsOpen(false);
+    } else {
+      console.log("spdpsps");
+      setSelected(item.label);
+      setIsOpen(false);
+      setSelectedData && (await setSelectedData(item.value));
+      selectRef && (selectRef.current = item.value);
+      onChangeFn && (await onChangeFn());
     }
   };
 
