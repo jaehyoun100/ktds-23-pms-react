@@ -2,7 +2,12 @@ import styles from "./selectbox.module.css";
 import React, { useRef } from "react";
 import { DatePicker } from "antd";
 
-const SelectDate = ({ startDateRef, endDateRef, onChangeSelect }) => {
+const SelectDate = ({
+  startDateRef,
+  endDateRef,
+  onChangeSelect,
+  onChangeHandler,
+}) => {
   // const startDateRef = useRef(null);
   // const endDateRef = useRef(null);
 
@@ -38,7 +43,7 @@ const SelectDate = ({ startDateRef, endDateRef, onChangeSelect }) => {
   };
 
   return (
-    <div>
+    <div onChange={onChangeHandler}>
       <DatePicker
         className={styles.datePicker}
         onChange={handleStartDateChange}

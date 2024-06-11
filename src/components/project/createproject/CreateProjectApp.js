@@ -14,6 +14,9 @@ const CreateProjectApp = () => {
   const prjMemoRef = useRef();
   const startDateRef = useRef();
   const endDateRef = useRef();
+  const [canSave, setCanSave] = useState(true);
+  const [editTitle, setEditTitle] = useState("");
+  const [customerInfo, setCustomerInfo] = useState("");
 
   // 고객사 추가 정보
   const titleRef = useRef();
@@ -27,6 +30,7 @@ const CreateProjectApp = () => {
   const [deptData, setDeptData] = useState([]);
   const [deptSelectedData, setDeptSelectedData] =
     useState("부서를 선택해주세요.");
+  const [dateInfo, setDateInfo] = useState("");
 
   const [pmCandidate, setPmCandidate] = useState([]);
   const [pmSelectedData, setPmSelectedData] = useState("PM을 선택해주세요");
@@ -36,6 +40,7 @@ const CreateProjectApp = () => {
     credentialsExpired: state.tokenInfo.credentialsExpired,
   }));
 
+  // 고객사 정보 가져오기
   useEffect(() => {
     const getClient = async () => {
       const response = await fetch("http://localhost:8080/api/project/client", {
@@ -53,6 +58,7 @@ const CreateProjectApp = () => {
     setIsAddClient(false);
   }, [tokenInfo.token, isAddClient]);
 
+  // 부서 정보 가져오기
   useEffect(() => {
     const getDept = async () => {
       const response = await fetch("http://localhost:8080/api/v1/department", {
@@ -69,6 +75,7 @@ const CreateProjectApp = () => {
     getDept();
   }, [tokenInfo.token]);
 
+  // 부서에 따른 PM 후보자 가져오기
   useEffect(() => {
     const getPmCandidates = async () => {
       if (deptSelectedData === "부서를 선택해주세요.") return;
@@ -88,19 +95,71 @@ const CreateProjectApp = () => {
     getPmCandidates();
   }, [deptSelectedData, tokenInfo.token]);
 
+  // 날짜 선택 변경 시 처리
   const onChangeSelect = () => {
     if (
       startDateRef.current &&
       endDateRef.current &&
       startDateRef.current > endDateRef.current
     ) {
-      alert("시작일이 끝 날짜보다 클 수 없습니다.");
+      setCanSave(false);
+      return;
     }
+    setCanSave(true);
   };
 
   const navigate = useNavigate();
 
+  // 프로젝트명 유효성 검사
+  useEffect(() => {
+    if (
+      prjNameRef.current &&
+      (prjNameRef.current.value === "" || prjNameRef.current.value.length > 30)
+    ) {
+      setCanSave(false);
+      return;
+    }
+    if (
+      startDateRef.current &&
+      endDateRef.current &&
+      startDateRef.current > endDateRef.current
+    ) {
+      setCanSave(false);
+      return;
+    }
+
+    setCanSave(true);
+  }, [prjNameRef.current?.value]);
+
+  // 유효성 검사: 고객사, 부서, PM 선택 확인
+  useEffect(() => {
+    if (
+      clientSelectedData === "고객사를 선택해주세요." ||
+      deptSelectedData === "부서를 선택해주세요." ||
+      pmSelectedData === "PM을 선택해주세요"
+    ) {
+      setCanSave(false);
+    } else {
+      setCanSave(true);
+    }
+  }, [clientSelectedData, deptSelectedData, pmSelectedData]);
+
+  // 프로젝트 생성 버튼 클릭 핸들러
   const onClickCreateButtonHandler = async () => {
+    if (!canSave) {
+      alert("형식에 맞춰 재입력 후 저장해주세요.");
+      return;
+    }
+    if (clientSelectedData === "고객사를 선택해주세요.") {
+      return;
+    }
+    if (deptSelectedData === "부서를 선택해주세요.") {
+      return;
+    }
+    if (pmSelectedData === "PM을 선택해주세요") {
+      return;
+    }
+
     const response = await fetch("http://localhost:8080/api/project/write", {
       method: "POST",
       headers: {
@@ -126,6 +185,8 @@ const CreateProjectApp = () => {
       navigate("/project");
     }
   };
+
+  // 고객사 추가 모달 관련 상태
   const [showInfoModal, setShowInfoModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -136,10 +197,18 @@ const CreateProjectApp = () => {
     setShowInfoModal(false);
   };
 
+  // 새로운 고객사 추가 핸들러
   const onClickCreateNewClientHandler = async () => {
     handleOpenModal();
   };
+
+  // 모달 내에서 고객사 추가 확인 버튼 핸들러
   const handleConfirm = async () => {
+    console.log(canSave);
+    if (!canSave) {
+      alert("형식에 맞춰 재입력 후 저장해주세요.");
+      return;
+    }
     const response = await fetch("http://localhost:8080/api/project/client", {
       method: "POST",
       headers: {
@@ -160,6 +229,7 @@ const CreateProjectApp = () => {
       cntctRef.current.value = "";
       memoRef.current.value = "";
     }
+
     setIsAddClient(true);
   };
 
@@ -169,18 +239,50 @@ const CreateProjectApp = () => {
       <div className={styles.createGrid}>
         <div>프로젝트명</div>
         <div>
-          <TextInput id="prjName" ref={prjNameRef} />
+          <TextInput
+            id="prjName"
+            onChangeHandler={(e) => setEditTitle(e.target.value)}
+            ref={prjNameRef}
+          />
+          {prjNameRef.current &&
+          prjNameRef.current.value &&
+          prjNameRef.current.value.length > 30 ? (
+            <span className={styles.alertMessage}>
+              ※ 프로젝트명은 30자를 초과할 수 없습니다.
+            </span>
+          ) : (
+            <></>
+          )}
+          {prjNameRef.current &&
+          (prjNameRef.current.value === null ||
+            prjNameRef.current.value === "") ? (
+            <span className={styles.alertMessage}>
+              ※ 프로젝트명은 필수 값입니다.
+            </span>
+          ) : (
+            <></>
+          )}
         </div>
         <div>고객사</div>
-        <div className={styles.displayInfoFlex}>
-          <Selectbox
-            optionList={clientData}
-            setSelectedData={setClientSelectedData}
-            selectedData={clientSelectedData}
-          />
-          <Button onClickHandler={onClickCreateNewClientHandler}>
-            고객사 관리
-          </Button>
+        <div>
+          <div className={styles.displayInfoFlex}>
+            <Selectbox
+              optionList={clientData}
+              setSelectedData={setClientSelectedData}
+              selectedData={clientSelectedData}
+              onChangeHandler={(e) => setCustomerInfo(e.target.value)}
+            />
+            <Button onClickHandler={onClickCreateNewClientHandler}>
+              고객사 관리
+            </Button>
+          </div>
+          {clientSelectedData === "고객사를 선택해주세요." ? (
+            <span className={styles.alertMessage}>
+              ※ 고객사는 필수 항목입니다.
+            </span>
+          ) : (
+            <></>
+          )}
         </div>
         <div>부서</div>
         <div>
@@ -189,6 +291,13 @@ const CreateProjectApp = () => {
             setSelectedData={setDeptSelectedData}
             selectedData={deptSelectedData}
           />
+          {deptSelectedData === "부서를 선택해주세요." ? (
+            <span className={styles.alertMessage}>
+              ※ 부서는 필수 항목입니다.
+            </span>
+          ) : (
+            <></>
+          )}
         </div>
         <div>Project Manage</div>
         <div>
@@ -197,14 +306,29 @@ const CreateProjectApp = () => {
             setSelectedData={setPmSelectedData}
             selectedData={pmSelectedData}
           />
+          {pmSelectedData === "PM을 선택해주세요" ? (
+            <span className={styles.alertMessage}>※ PM은 필수 항목입니다.</span>
+          ) : (
+            <></>
+          )}
         </div>
         <div>프로젝트 기간</div>
         <div>
           <SelectDate
             onChangeSelect={onChangeSelect}
+            onChangeHandler={(e) => setDateInfo(e.target.value)}
             startDateRef={startDateRef}
             endDateRef={endDateRef}
           />
+          {startDateRef.current &&
+          endDateRef.current &&
+          startDateRef.current > endDateRef.current ? (
+            <span className={styles.alertMessage}>
+              ※ 끝 날짜는 시작날짜보다 이전일 수 없습니다.
+            </span>
+          ) : (
+            <></>
+          )}
         </div>
         <div>Project Readme</div>
         <div className={styles.contentBoxContainer}>
@@ -227,6 +351,7 @@ const CreateProjectApp = () => {
         titleRef={titleRef}
         cntctRef={cntctRef}
         memoRef={memoRef}
+        setCanSave={setCanSave}
       />
     </div>
   );
