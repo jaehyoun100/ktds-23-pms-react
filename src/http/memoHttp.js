@@ -108,3 +108,19 @@ export const deleteReceiveMemo = async (token, selectRcvMemoId) => {
   const json = await response.json();
   return json;
 };
+
+// SH
+export const loadDepartmentMemberList = async ({ token, selectedDeptId }) => {
+  if (!token) {
+    return undefined;
+  }
+  const response = await fetch(`${url}/api/memo/member/${selectedDeptId}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+  const json = await response.json();
+
+  return json;
+};

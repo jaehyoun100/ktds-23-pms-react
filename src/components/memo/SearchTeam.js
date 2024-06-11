@@ -1,33 +1,50 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import style from "./Memo.module.css";
-import { BsPlusSquare, BsFolder, BsFolder2Open } from "react-icons/bs";
+import { loadTeamList } from "../../http/deptteamHttp";
+import { useFetch } from "../hook/useFetch";
+import SearchEmployee from "./SearchEmployee";
 
-export default function SearchTeam({ item }) {
-  const [isOpened, setIsOpened] = useState(false);
+export default function SearchTeam({
+  token,
+  selectedDeptId,
+  setSelectedTmId,
+  onTeamClick,
+}) {
+  const [needTeamLoad, setNeedTeamLoad] = useState();
+  // const [selectTmId, setSelectedTmId] = useState();
 
-  const onOpenClickHandler = () => {
-    if (item.children) {
-      setIsOpened(!isOpened);
-    }
+  // 팀목록
+  const fetchLoadTeamList = useCallback(loadTeamList, []);
+  const fetchTeamParam = useMemo(() => {
+    return { selectedDeptId, token, needTeamLoad };
+  }, [selectedDeptId, token, needTeamLoad]);
+  const { data, setData } = useFetch(
+    undefined,
+    fetchLoadTeamList,
+    fetchTeamParam
+  );
+  const { body: teamList } = data || {};
+
+  const onClickHandler = (tmId) => {
+    setSelectedTmId(tmId);
+    // 부모로 전달
+    onTeamClick(tmId);
   };
 
   return (
-    <div className={style.treeItem}>
-      <button onClick={onOpenClickHandler}>
-        {item.children && (isOpened ? <BsFolder2Open /> : <BsFolder />)}
-        {item.name}
-      </button>
-      {item.children && (
-        <div
-          className={`${style.treeSubItem} ${
-            isOpened ? "" : style.subMenuShrunk
-          }`}
-        >
-          {item.children.length
-            ? item.children.map((subitem) => <SearchTeam item={subitem} />)
-            : "팀 없음"}
-        </div>
-      )}
+    <div>
+      <div>
+        {teamList &&
+          teamList.map((team) => (
+            <div
+              key={team.tmId}
+              className={style.treeSubItem}
+              onClick={() => onClickHandler(team.tmId)}
+            >
+              {team.tmName}
+            </div>
+          ))}
+      </div>
     </div>
   );
 }
