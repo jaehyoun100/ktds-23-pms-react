@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Input, Select } from "antd";
 import Table from "../../utils/Table";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import RegBtn from "./components/Popup/RegBtn";
 import { loadData } from "../../http/employeeHttp";
+import { Button } from "antd";
 
-export default function EmployeeApp() {
+export default function EmployeeApp({ btnText }) {
   const [data, setData] = useState([]);
   const navigate = useNavigate(); // 페이지 네비게이션을 위한 hook
+  // 게시글 선택을 위한 state (상세내용)
+  const [selectedEmpId, setSelectedEmpId] = useState();
   // const [error, setError] = useState();
   const { token } = useSelector((state) => state.tokenInfo); // Redux에서 토큰 정보 가져오기
 
@@ -118,7 +120,9 @@ export default function EmployeeApp() {
         filter
         filterOptions={filterOptions}
       />
-      <RegBtn />
+      <Button style={{ borderColor: "#fff", float: "right" }}>
+        {btnText || "사원등록"}
+      </Button>
     </>
   );
 }

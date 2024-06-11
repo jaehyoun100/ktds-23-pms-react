@@ -39,7 +39,7 @@ export default function RegBtn({
     <>
       {
         <Button
-          style={{ borderColor: "#fff" }}
+          style={{ borderColor: "#fff", float: "right" }}
           onClick={handleShowPopup}
           {...buttonProps}
         >
