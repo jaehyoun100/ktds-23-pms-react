@@ -1,18 +1,64 @@
+/* SupplyApp 컴포넌트를 위한 css */
 .supplyAppContainer {
   display: flex;
   justify-content: space-between;
+  transition: all 0.3s ease-in-out;
 }
 
 .tableComponent {
   flex: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.tableComponent.collapsed {
+  flex: 0.3;
 }
 
 .supplyViewComponent {
   flex: 1;
   margin-left: 20px;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-.supplyRequestReason {
-  flex: 1;
-  margin-left: 20px;
+.supplyViewComponent.hidden {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.pointerCursor {
+  cursor: pointer;
+}
+
+/* SupplyView 컴포넌트를 위한 css */
+.supplyViewContainer {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-left: 1px solid #e8e8e8;
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+}
+
+.supplyDetails {
+  margin-bottom: 20px;
+}
+
+.supplyDetailItem {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.supplyDetailItem label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.supplyActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.supplyActions button {
+  margin-left: 10px;
 }
