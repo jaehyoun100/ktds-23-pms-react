@@ -37,9 +37,10 @@ const CalendarComponent = ({
     setDate(date);
     setSelectedDate(date);
   };
-  const event = events.find(
-    (event) => event.date === format(selectedDate, "yyyy-MM-dd")
-  );
+
+  const event =
+    selectedDate &&
+    events.find((event) => event.date === format(selectedDate, "yyyy-MM-dd"));
   useEffect(() => {
     if (event && event.memo !== "") {
       setIsHaveData(true);
