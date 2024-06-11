@@ -13,7 +13,14 @@ export default function TeamMate() {
   const [projectId, setprojectId] = useState([]);
   const [pm, setPm] = useState(null);
   const [deptId, setDeptId] = useState();
+  const [selectedData, setSelectedData] = useState([
+    "추가할 직원을 선택해주세요",
+  ]);
+  const [selectedRoleData, setSelectedRoleData] = useState([
+    "직책을 선택해주세요.",
+  ]);
   const [memberList, setMemberList] = useState([]);
+  const [memberInfo, setMemberInfo] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [temporaryList, setTemporaryList] = useState([]);
   const nameRef = useRef();
@@ -24,6 +31,7 @@ export default function TeamMate() {
     credentialsExpired: state.tokenInfo.credentialsExpired,
   }));
 
+  console.log(selectedData);
   // 프로젝트 정보 로드
   useMemo(() => {
     const item = location.state.key;
@@ -55,7 +63,17 @@ export default function TeamMate() {
           label: emp.empName,
           value: emp.empId,
         }));
+        const memberInfo = json.body.map((emp) => ({
+          id: emp.empId,
+          name: emp.empName,
+          prfl: emp.prfl,
+          cntct: emp.cntct,
+          joblevel: emp.cmcdName,
+          email: emp.email,
+          addr: emp.addr,
+        }));
         console.log(members, "231231231");
+        console.log(memberInfo);
         setMemberList(members);
       }
     };
@@ -143,9 +161,8 @@ export default function TeamMate() {
                     {isEditing ? (
                       <Selectbox
                         optionList={memberList}
-                        selectedData={
-                          item.empName || "추가할 직원을 선택해주세요."
-                        }
+                        selectedData={selectedData[idx]}
+                        setSelectedData={setSelectedData}
                         style={{ width: "100%" }}
                         onChangeFn={(selectedOption) =>
                           onChangeSelectHandler(selectedOption, idx, "empName")
@@ -162,7 +179,8 @@ export default function TeamMate() {
                           { label: "PL", value: "PL" },
                           { label: "NONE", value: "NONE" },
                         ]}
-                        selectedData={item.role || "직책을 선택해주세요."}
+                        selectedData={selectedRoleData[idx]}
+                        setSelectedData={setSelectedRoleData}
                         style={{ width: "100%" }}
                         onChangeFn={(selectedOption) =>
                           onChangeSelectHandler(selectedOption, idx, "role")
@@ -176,7 +194,6 @@ export default function TeamMate() {
                     <td>
                       <CiCircleMinus
                         onClick={() => onDeleteHandler(idx, "teammateList")}
-                        style={{ cursor: "pointer", color: "red" }}
                       />
                     </td>
                   )}
@@ -188,9 +205,9 @@ export default function TeamMate() {
                     <td style={{ width: "300px" }}>
                       <Selectbox
                         optionList={memberList}
-                        selectedData={
-                          item.empName || "추가할 직원을 선택해주세요."
-                        }
+                        selectedData={selectedData[idx]}
+                        setSelectedData={setSelectedData}
+                        idx={idx}
                         style={{ width: "100%" }}
                         onChangeFn={(selectedOption) =>
                           onChangeSelectHandler(selectedOption, idx, "empName")
@@ -204,7 +221,8 @@ export default function TeamMate() {
                             { label: "PL", value: "PL" },
                             { label: "NONE", value: "NONE" },
                           ]}
-                          selectedData={item.role || "직책을 선택해주세요."}
+                          selectedData={selectedRoleData[idx]}
+                          setSelectedData={setSelectedRoleData}
                           style={{ width: "100%" }}
                           onChangeFn={(selectedOption) =>
                             onChangeSelectHandler(selectedOption, idx, "role")

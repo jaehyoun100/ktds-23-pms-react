@@ -20,6 +20,7 @@ export default function Selectbox({
   style,
   onChangeFn,
   selectRef,
+  idx,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(
@@ -33,9 +34,17 @@ export default function Selectbox({
   const handleOptionClick = async (item) => {
     setSelected(item.label);
     setIsOpen(false);
-    await setSelectedData(item.value);
+    setSelectedData && (await setSelectedData(item.value));
     selectRef && (selectRef.current = item.value);
     onChangeFn && (await onChangeFn());
+    console.log(idx);
+    if (idx) {
+      setSelectedData((prev) => [
+        ...prev.slice(0, idx),
+        selected,
+        ...prev.slice(idx + 1),
+      ]);
+    }
   };
 
   return (
