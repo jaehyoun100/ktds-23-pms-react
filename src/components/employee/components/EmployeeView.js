@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { Button, Descriptions, Typography } from "antd";
 import { Navigate, useParams } from "react-router-dom";
-import Table from "../../../utils/Table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import GradeChangeHistory from "./GradeChangeHistory";
 import DepartChangeHistory from "./DepartChangeHistory";
 import WorkChangeHistory from "./WorkChangeHistory";
 import ModifyBtn from "./Popup/ModifyBtn";
+import { loadOneData, handleUpdateEmployee } from "../../../http/employeeHttp";
 
 const { Title } = Typography;
 
@@ -18,14 +18,15 @@ export default function EmployeeView() {
   //!!!! 훅 사용한 값은 위에, 바로 밑에 state 순서로 정렬
   const { empId } = useParams();
   const { token } = useSelector((state) => state.tokenInfo);
+  console.log("Token:", token);
   const [data, setData] = useState([]);
   const [isModal, setIsModal] = useState(false); // 모달 상태 (기본 false)
-  const [isModifyEmployee, setIsModifyEmployee] = useState(false); // 수정 상태 사원의 데이터
   const [dataList, setDataList] = useState({
     depart: [],
     team: [],
     job: [],
     grade: [],
+    workSts: [],
   });
 
   const inputOptions = useMemo(
@@ -40,6 +41,18 @@ export default function EmployeeView() {
         title: "이메일",
         type: "string",
         dataIndex: "email",
+        required: true,
+      },
+      {
+        title: "비밀번호",
+        type: "string",
+        dataIndex: "salt",
+        required: true,
+      },
+      {
+        title: "비밀번호 확인",
+        type: "string",
+        dataIndex: "salt",
         required: true,
       },
       {
@@ -62,6 +75,7 @@ export default function EmployeeView() {
           label: dataName,
           value: dataId,
         })),
+        required: true,
       },
       {
         title: "팀",
@@ -80,6 +94,7 @@ export default function EmployeeView() {
           label: dataName,
           value: dataId,
         })),
+        required: true,
       },
       {
         title: "직급",
@@ -89,34 +104,52 @@ export default function EmployeeView() {
           label: dataName,
           value: dataId,
         })),
+        required: true,
+      },
+      {
+        title: "재직상태",
+        type: "select",
+        dataIndex: "workSts",
+        option: dataList.workSts.map(({ dataId, dataName }) => ({
+          label: dataName,
+          value: dataId,
+        })),
+        required: true,
       },
     ],
     [dataList]
   );
 
-  const loadOneData = useCallback(async () => {
-    const response = await fetch(
-      `http://localhost:8080/api/v1/employee/view/${empId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: token,
-        },
+  // loadOneData
+  useEffect(() => {
+    const fetchData = async () => {
+      if (token && empId) {
+        try {
+          const json = await loadOneData({ token, empId }); // token과 empId 전달
+          setData(json.body);
+        } catch (error) {
+          console.error(error);
+        }
       }
-    );
-    const json = await response.json();
-    setData(json.body);
+    };
+
+    fetchData();
   }, [token, empId]);
 
+  const url =
+    "http://" +
+    (window.location.host === "43.202.29.221"
+      ? "43.202.29.221"
+      : "localhost:8080");
   const loadDataLists = useCallback(async () => {
-    const response = await fetch("http://localhost:8080/api/v1/employee/data", {
+    const response = await fetch(`${url}/api/v1/employee/data`, {
       headers: {
         Authorization: token,
       },
     });
     const json = await response.json();
     setDataList(json.body);
-  }, []);
+  }, [token, url]);
 
   const items = useMemo(
     () => [
@@ -154,7 +187,8 @@ export default function EmployeeView() {
       {
         key: "workSts",
         label: "재직상태",
-        children: data?.workSts,
+        children: `${data?.commonCodeVO?.cmcdName}(${data.workSts})`,
+        // children: data?.workSts,
       },
       {
         key: "hireDt",
@@ -184,29 +218,20 @@ export default function EmployeeView() {
     ],
     [data]
   );
+  console.log(data);
 
-  const handleUpdateEmployee = useCallback(
+  // 수정
+  const handleUpdateEmployeeAndReloadData = useCallback(
     async (data) => {
       try {
-        const res = await fetch(
-          `http://localhost:8080/api/v1/employee/modify/${empId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token,
-            },
-            body: JSON.stringify(data),
-          }
-        );
-        if (res.status === 200) {
-          loadOneData();
-        }
-      } catch (e) {
-        console.error(e);
+        await handleUpdateEmployee({ data, token, empId }); // 데이터 업데이트
+        const updatedData = await loadOneData({ token, empId }); // 업데이트된 데이터 다시 가져오기
+        setData(updatedData.body);
+      } catch (error) {
+        console.error("Error:", error);
       }
     },
-    [empId, loadOneData, token]
+    [empId, token]
   );
 
   // 모달 수정 완료 후 확인 버튼 눌렀을 때 호출 함수
@@ -216,8 +241,10 @@ export default function EmployeeView() {
     // 예: await updateEmployee(isModifyEmployee);
 
     setIsModal(false); // 모달 닫기
-    loadOneData(); // 데이터 다시 로드
-  }, [loadOneData]);
+    const updatedData = await loadOneData({ token, empId });
+    setData(updatedData.body); // 데이터 다시 로드
+    // loadOneData(); // 데이터 다시 로드
+  }, [empId, token]);
 
   // 모달의 취소 버튼 클릭 시 호출되는 함수
   const ModifyHandleCancel = () => {
@@ -227,9 +254,9 @@ export default function EmployeeView() {
   // useEffect는 항상 다른 함수나 state, 변수를 참조할수 있기 때문에
   // return 바로 위에 둘것!!!!!!!!!!!!!!!!!!!!!
   useEffect(() => {
-    loadOneData();
+    // loadOneData();
     loadDataLists();
-  }, [loadOneData, loadDataLists]);
+  }, [loadDataLists]);
 
   return (
     <EmployeeInfoWrapper>
@@ -251,7 +278,7 @@ export default function EmployeeView() {
       <ModifyBtn
         data={data}
         options={inputOptions}
-        onOk={handleUpdateEmployee}
+        onOk={handleUpdateEmployeeAndReloadData}
       />
     </EmployeeInfoWrapper>
   );

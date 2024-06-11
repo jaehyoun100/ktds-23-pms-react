@@ -37,11 +37,15 @@ export default function RegBtn({
 
   return (
     <>
-      {permission.create && (
-        <Button style={{ borderColor: "#fff" }} onClick={handleShowPopup} {...buttonProps}>
+      {
+        <Button
+          style={{ borderColor: "#fff" }}
+          onClick={handleShowPopup}
+          {...buttonProps}
+        >
           {btnText || "등록"}
         </Button>
-      )}
+      }
       {open && (
         <InputPopup
           onChange={handleChangeData}
