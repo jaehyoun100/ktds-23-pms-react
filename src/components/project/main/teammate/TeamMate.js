@@ -15,14 +15,12 @@ export default function TeamMate() {
   const [deptId, setDeptId] = useState();
   const [selectedData, setSelectedData] = useState([]);
   const [selectedRoleData, setSelectedRoleData] = useState([]);
+  const [lastModifiedIndex, setLastModifiedIndex] = useState(null); // 마지막 변경된 인덱스 추적 상태
   const [memberList, setMemberList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [temporaryList, setTemporaryList] = useState([]);
+  const [lastModifyData, setLastModifyData] = useState([]);
   const nameRef = useRef();
-
-  useEffect(() => {
-    console.log(selectedData, selectedRoleData);
-  }, [selectedData, selectedRoleData]);
 
   const location = useLocation();
   const tokenInfo = useSelector((state) => ({
@@ -30,11 +28,9 @@ export default function TeamMate() {
     credentialsExpired: state.tokenInfo.credentialsExpired,
   }));
 
-  console.log(selectedData);
   // 프로젝트 정보 로드
   useMemo(() => {
     const item = location.state.key;
-    console.log(item);
     setprojectId(item.project);
 
     const pmData = item.project.pm;
@@ -61,15 +57,11 @@ export default function TeamMate() {
             method: "GET",
           }
         );
-        console.log(response, ")!@!@!@!@!@");
         const json = await response.json();
-        console.log(json, "!@!@!@");
         const members = json.body.map((emp) => ({
           label: emp.empName,
           value: emp.empId,
         }));
-
-        console.log(members, "231231231");
         setMemberList(members);
       }
     };
@@ -117,13 +109,34 @@ export default function TeamMate() {
             : item
         )
       );
+      // 현재 인덱스를 업데이트
+      setLastModifiedIndex(idx);
     }
   };
 
+  // Helper function to get the last modified data
+  const getLastModifiedData = () => {
+    if (lastModifiedIndex !== null) {
+      return {
+        empName: selectedData[lastModifiedIndex],
+      };
+    }
+    return null;
+  };
+
+  // Example usage
+  useEffect(() => {
+    if (lastModifiedIndex !== null) {
+      const lastModifiedData = {
+        empName: selectedData[lastModifiedIndex],
+      };
+      setLastModifyData(lastModifiedData.empName);
+    }
+  }, [lastModifiedIndex, selectedData]);
+  console.log("마지막 변경된 empId", lastModifyData);
   // 삭제 핸들러 함수
   const onDeleteHandler = (idx) => {
     setTemporaryList((prev) => prev.filter((_, index) => index !== idx));
-
     setSelectedData((prev) => prev.filter((_, index) => index !== idx));
     setSelectedRoleData((prev) => prev.filter((_, index) => index !== idx));
   };
