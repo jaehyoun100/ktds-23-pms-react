@@ -4,9 +4,10 @@ import Search from "../../common/search/Search";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Table from "../../../utils/Table";
-import { getReviewYN } from "../../../http/reviewHttp";
+import { getEmpPrjList, getReviewYN } from "../../../http/reviewHttp";
 import SurveyAnswer from "../../survey/components/SurveyAnswer";
 import SurveyWrite from "../../survey/components/SurveyWriteApp";
+import { set } from "date-fns";
 
 const ProjectListApp = () => {
   const [data, setData] = useState([]);
@@ -16,7 +17,7 @@ const ProjectListApp = () => {
     useState("옵션 선택해주세요.");
   const [currencyList, setCurrencyList] = useState([]);
   // 후기
-  const [prjIdList, setPrjId] = useState([]);
+  const [prjIdList, setPrjIdList] = useState([]);
   const [reviewResult, setReviewResult] = useState([]);
   const [info, setInfo] = useState({});
   const [answerMode, setAnswerMode] = useState(false);
@@ -61,16 +62,26 @@ const ProjectListApp = () => {
       setSearchDataCommonCode(newFilterOption);
       setFilterOptions(newFilterOption);
       setInfo(run);
-
-      let projectIdArr = [];
-      for (let i = 0; i < run[1].projectList.length; i++) {
-        projectIdArr[i] = run[1].projectList[i].prjId;
-      }
-      setPrjId(projectIdArr);
     };
     getProject();
   }, [tokenInfo.token]);
-  console.log("info", info);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const result = async () => {
+      const empPrjList = await getEmpPrjList(token);
+      let projectIdArr = [];
+      for (let i = 0; i < empPrjList.body.length; i++) {
+        projectIdArr[i] = empPrjList.body[i].prjId;
+      }
+
+      // setPrjIdList(projectIdArr);
+      const body = await getReviewYN(token, projectIdArr);
+      setReviewResult(body.body);
+    };
+    result();
+  }, []);
+
   const surveyWriteAnswerClickHandler = (projectId) => {
     setSelectedProjectId(projectId);
     setAnswerMode(true);
@@ -123,7 +134,12 @@ const ProjectListApp = () => {
       key: "cmcdName",
       width: "auto",
     },
-    { title: "후기작성", dataIndex: "", key: "", width: "auto" },
+    {
+      title: "후기작성",
+      dataIndex: "result0",
+      key: "result0",
+      width: "auto",
+    },
     {
       title: "설문작성",
       dataIndex: "srvSts",
