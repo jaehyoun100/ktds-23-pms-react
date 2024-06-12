@@ -94,3 +94,18 @@ export const getReviewYN = async (token, prjIdList) => {
   const json = await response.json();
   return json;
 };
+
+// 사원이 속한 프로젝트 List 가져오기
+export const getEmpPrjList = async (token) => {
+  const response = await fetch(
+    "http://localhost:8080/api/review/writes/prjList",
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  const json = await response.json();
+  return json;
+};
