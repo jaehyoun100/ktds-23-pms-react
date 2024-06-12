@@ -172,7 +172,7 @@
 .submenu-wrapper {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 1s ease;
+  transition: max-height 0.5s ease;
 }
 
 .submenu-wrapper.open {

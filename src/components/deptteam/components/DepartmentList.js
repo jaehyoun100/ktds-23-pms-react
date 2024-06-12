@@ -6,6 +6,8 @@ import s from "./departmentList.module.css";
 import DepartmentCreate from "./DepartmentCreate.js";
 import TeamCreate from "./TeamCreate.js";
 import TeamMemberCreate from "./TeamMemberCreate.js";
+import DepartmentDetail from "./DepartmentDetail.js";
+import TeamDetail from "./TeamDetail.js";
 
 export default function DepartmentList({ token }) {
   const [isDeptRegistrationMode, setIsDeptRegistrationMode] = useState(false);
@@ -121,44 +123,72 @@ export default function DepartmentList({ token }) {
               />
             </div>
           )}
+        <div>
+          {isDeptRegistrationMode && (
+            <DepartmentCreate
+              setIsDeptRegistrationMode={setIsDeptRegistrationMode}
+              setNeedReload={setNeedReload}
+              token={token}
+            />
+          )}
+          {isTeamRegistrationMode && (
+            <TeamCreate
+              setIsTeamRegistrationMode={setIsTeamRegistrationMode}
+              setNeedReload={setNeedReload}
+              token={token}
+            />
+          )}
+          {isTeamMemberRegistrationMode && (
+            <TeamMemberCreate
+              setIsTeamMemberRegistrationMode={setIsTeamMemberRegistrationMode}
+              setNeedReload={setNeedReload}
+              token={token}
+            />
+          )}
+        </div>
       </div>
-      {!isTeamMemberRegistrationMode &&
-        !isDeptRegistrationMode &&
-        !isTeamRegistrationMode && (
-          <div className={s.buttonlist}>
-            <button>인사 발령 기록</button>
-            <button onClick={onRegistrationDeptClickHandler}>부서 등록</button>
-            {selectedDeptId && (
-              <button onClick={onRegistrationTmClickHandler}>팀 등록</button>
+
+      <div className={s.buttonanddetail}>
+        <div className={s.detail}>
+          {!isTeamMemberRegistrationMode &&
+            !isDeptRegistrationMode &&
+            !isTeamRegistrationMode &&
+            selectedDeptId && (
+              <div className={s.detail1}>
+                <DepartmentDetail
+                  selectedDeptId={selectedDeptId}
+                  token={token}
+                />
+              </div>
             )}
-            {selectTmId && (
-              <button onClick={onRegistrationTmMemberClickHandler}>
-                팀원 등록
+          {!isTeamMemberRegistrationMode &&
+            !isDeptRegistrationMode &&
+            !isTeamRegistrationMode &&
+            selectTmId && (
+              <div className={s.detail2}>
+                <TeamDetail selectTmId={selectTmId} token={token} />
+              </div>
+            )}
+        </div>
+        {!isTeamMemberRegistrationMode &&
+          !isDeptRegistrationMode &&
+          !isTeamRegistrationMode && (
+            <div className={s.buttonlist}>
+              <button>인사 발령 기록</button>
+              <button onClick={onRegistrationDeptClickHandler}>
+                부서 등록
               </button>
-            )}
-          </div>
-        )}
-      {isDeptRegistrationMode && (
-        <DepartmentCreate
-          setIsDeptRegistrationMode={setIsDeptRegistrationMode}
-          setNeedReload={setNeedReload}
-          token={token}
-        />
-      )}
-      {isTeamRegistrationMode && (
-        <TeamCreate
-          setIsTeamRegistrationMode={setIsTeamRegistrationMode}
-          setNeedReload={setNeedReload}
-          token={token}
-        />
-      )}
-      {isTeamMemberRegistrationMode && (
-        <TeamMemberCreate
-          setIsTeamMemberRegistrationMode={setIsTeamMemberRegistrationMode}
-          setNeedReload={setNeedReload}
-          token={token}
-        />
-      )}
+              {selectedDeptId && (
+                <button onClick={onRegistrationTmClickHandler}>팀 등록</button>
+              )}
+              {selectTmId && (
+                <button onClick={onRegistrationTmMemberClickHandler}>
+                  팀원 등록
+                </button>
+              )}
+            </div>
+          )}
+      </div>
     </>
   );
 }

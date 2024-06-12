@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createDepartment } from "../../../http/deptteamHttp";
+import { createTeam } from "../../../http/deptteamHttp";
 
 export default function TeamCreate({
   setIsTeamRegistrationMode,
@@ -46,7 +46,7 @@ export default function TeamCreate({
   const onRegisterClickHandler = async () => {
     for (const field of inputFields) {
       const { name, empId, deptId } = field;
-      const json = await createDepartment(token, name, empId, deptId);
+      const json = await createTeam(token, name, empId, deptId);
 
       if (json.errors) {
         json.errors.forEach((error) => {

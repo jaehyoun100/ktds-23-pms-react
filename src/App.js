@@ -4,7 +4,7 @@ import ToolkitProvider from "./store/toolkit/store";
 function App() {
   return (
     <ToolkitProvider>
-      <ComponentSetting />;
+      <ComponentSetting />
     </ToolkitProvider>
   );
 }
