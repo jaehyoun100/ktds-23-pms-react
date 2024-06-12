@@ -49,15 +49,15 @@ export const menus = [
     children: [
       {
         label: "쪽지쓰기",
-        to: "/",
+        to: "/memo/writeMemo",
       },
       {
         label: "쪽지수신함",
-        to: "/",
+        to: "/memo/receive",
       },
       {
         label: "쪽지발신함",
-        to: "/",
+        to: "/memo/send",
       },
       {
         label: "쪽지보관함",

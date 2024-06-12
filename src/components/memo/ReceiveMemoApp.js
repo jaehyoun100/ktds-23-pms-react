@@ -29,8 +29,6 @@ export default function ReceiveMemoApp() {
   const { count, pages, next } = data || {};
   const { body: receiveMemos } = data || {};
 
-  console.log("receiveMemos >>", receiveMemos);
-
   const onRowClickHandler = async (rcvMemoId) => {
     setSelectRcvMemoId(rcvMemoId);
   };

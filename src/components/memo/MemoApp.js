@@ -1,22 +1,13 @@
 import { useState } from "react";
 import "./Memo.module.css";
-import SendMemoApp from "./SendMemoApp";
-import Button from "../common/Button/Button";
-import WriteMemo from "./WirteMemo";
+import ReceiveMemoApp from "./ReceiveMemoApp";
 
 export default function Memo() {
-  const [isWriteMode, setIsWriteMode] = useState(false);
-
-  const onWriteMemoClickHandler = () => {
-    setIsWriteMode(true);
-  };
+  // 전체쪽지함으로 변경
 
   return (
     <>
-      <Button onClickHandler={onWriteMemoClickHandler}>쪽지 쓰기</Button>
-      {!isWriteMode && <SendMemoApp />}
-      {/* <ReceiveMemoApp /> */}
-      {isWriteMode && <WriteMemo setIsWriteMode={setIsWriteMode} />}
+      <ReceiveMemoApp />
     </>
   );
 }

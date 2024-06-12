@@ -1,4 +1,31 @@
-.memo-container {
+Button {
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="text"]:hover,
+input[type="text"]:active, 
+input[type="text"]:focus {
+  all: unset;
+}
+
+input[type="text"].wirteInput {
+  height: 32px;
+}
+
+textarea,
+textarea:hover,
+textarea:active,
+textarea:focus {
+  all: unset;
+}
+
+input[type="textarea"].wirteTextArea {
+  background-color: transparent;
+}
+
+
+.memoContainer {
   background-color: #ffffff;
   padding: 15px;
   
@@ -69,6 +96,133 @@
   margin-bottom: 35px;
 }
 
+/* Write */
+.memoToolBar {
+  margin: 0 25px;
+  padding: 8px 0;
+  border-bottom: 2px solid var(--third-color);
+}
+
+.memoToolBar > Button {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.memoContenArea {
+  display: flex;
+  -webkit-box-flex: 1;
+  background-color: #fff;
+}
+
+.memoWrite {
+  min-height: 0;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.memoWriteOption {
+  padding-top: 10px;
+  z-index: 30;
+}
+
+.memoWriteOptionItem {
+  position: relative;
+  }
+  
+  .memoWriteOptionItemInner {
+    display: flex;
+    flex: 1 1 auto;
+    -webkit-box-align: start;
+    align-items: center;
+    margin: 0 25px;
+}
+
+.writeTitleArea {
+  box-sizing: border-box;
+  display: flex;
+  /* flex : 0 1 30%; */
+  -webkit-box-align: center;
+  align-items: center;
+  padding: 5px 0 6px 11px;
+  width: 100px;
+}
+
+.writeOptionArea {
+  display: flex;
+  flex : 1 1 0%;
+  -webkit-box-align: start;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 5px 11px 6px 0;
+  border-bottom: 1px solid var(--third-color);
+}
+
+.writeOptionArea:hover,
+.writeOptionArea:active,
+.writeOptionArea:focus {
+  border-bottom: 1px solid var(--second-color);
+}
+
+.writeTitleArea >label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.writeOptionBoxArea {
+  display: flex;
+  flex : 1 1 0%;
+  -webkit-box-align: start;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 5px 11px 6px 0;
+  margin: 10px 0;
+  /* border: 1px solid var(--third-color); */
+  border-radius: 5px;
+}
+
+.writeUserInfo {
+  display: flex;
+  flex : 1 1 0%;
+  flex-wrap: wrap;
+}
+
+.writeUserInfoInput {
+  /* margin: 0; */
+  padding: 0;
+  background-color: none;
+  width: 100% !important;
+}
+
+.writeButton {
+  display: block;
+  flex : 0 0 auto;
+}
+
+.memoWriteEditor {
+  margin-top: 10px;
+}
+
+.memoWriteEditorInner {
+  margin: 0 30px;
+  padding: 10px;
+  border-top: 2px solid var(--third-color);
+  /* border-radius: 5px; */
+}
+
+.memoWriteEditorInner:hover,
+.memoWriteEditorInner:active,
+.memoWriteEditorInner:focus {
+  border-color: var(--second-color);
+}
+
+.writeMemoTextArea {
+  width: -webkit-fill-available;
+  height: 95%;
+}
+
+/* Modal */
 .modal {
   position: fixed;
   z-index: 1;
@@ -144,7 +298,7 @@
 }
 
 .receiveBox {
-  font-weight: 800;
+  /* font-weight: 800; */
 }
 
 .rcvBox {

@@ -4,7 +4,7 @@ import { loadDepartmentList } from "../../http/deptteamHttp";
 import { useFetch } from "../hook/useFetch";
 import style from "./Memo.module.css";
 import SearchTeam from "./SearchTeam";
-import { BsFolder, BsFolder2Open } from "react-icons/bs";
+import { BsFolder, BsFolder2Open, BsDashSquare } from "react-icons/bs";
 import SearchEmployee from "./SearchEmployee";
 import SearchAddReceiver from "./SearchAddReceiver";
 
@@ -24,11 +24,6 @@ export default function SearchEmpMemo() {
   const [openedDeptId, setOpenedDeptId] = useState(null);
   const [selectedDeptId, setSelectedDeptId] = useState();
   const [selectTmId, setSelectedTmId] = useState();
-  const [rcvList, setRcvList] = useState();
-  const [rcvRefList, setRcvRefList] = useState();
-  const [rcvSecretRefList, setRcvSecretRefList] = useState();
-
-  const [checkedEmployees, setCheckedEmployees] = useState([]);
 
   // 부서목록
   const fetchLoadDeptList = useCallback(loadDepartmentList, []);
@@ -41,7 +36,6 @@ export default function SearchEmpMemo() {
     fetchDeptParam
   );
   const { body: deptList } = data || {};
-  // console.log(deptList);
 
   const onClickHandler = () => {
     const searchKeyword = textRef.current.value;
@@ -59,19 +53,6 @@ export default function SearchEmpMemo() {
     setSelectedTmId(teamId);
   };
 
-  // 자식에서 checkedEmployees(수신자목록) 전달
-  const onAddRcv = () => {
-    console.log("---------", checkedEmployees);
-    setRcvList(checkedEmployees);
-  };
-
-  const onAddRcvRef = (checkedEmployees) => {
-    setRcvRefList(checkedEmployees);
-  };
-  const onAddRcvSecretRef = (checkedEmployees) => {
-    setRcvSecretRefList(checkedEmployees);
-  };
-
   return (
     <div>
       <div className="searchBar">
@@ -85,7 +66,7 @@ export default function SearchEmpMemo() {
       </div>
       <div className={style.flex}>
         <div className="col-1-3">
-          부서/팀
+          <div className="searchTitle">부서/팀</div>
           <div>
             <div className={style.tree}>
               {deptList &&
@@ -129,20 +110,11 @@ export default function SearchEmpMemo() {
             token={token}
             selectedDeptId={selectedDeptId}
             selectTmId={selectTmId}
-            onAddRcv={onAddRcv}
-            onAddRcvRef={onAddRcvRef}
-            onAddRcvSecretRef={onAddRcvSecretRef}
-            checkedEmployees={checkedEmployees}
-            setCheckedEmployees={setCheckedEmployees}
           />
         </div>
         <div className="col-1-3">
           <div className="searchTitle">수신</div>
-          <SearchAddReceiver
-            rcvList={rcvList}
-            rcvRefList={rcvRefList}
-            rcvSecretRefList={rcvSecretRefList}
-          />
+          <SearchAddReceiver />
         </div>
       </div>
     </div>

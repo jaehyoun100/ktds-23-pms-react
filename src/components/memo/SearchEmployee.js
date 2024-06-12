@@ -3,22 +3,19 @@ import { useFetch } from "../hook/useFetch";
 import { loadDepartmentMemberList } from "../../http/memoHttp";
 import Button from "../common/Button/Button";
 import style from "./Memo.module.css";
+import { memoAddrAction } from "../../store/toolkit/slice/memoAddrSlice";
+import { useDispatch } from "react-redux";
 
-export default function SearchEmployee({
-  token,
-  selectedDeptId,
-  selectTmId,
-  onAddRcv,
-  onAddRcvRef,
-  onAddRcvSecretRef,
-  checkedEmployees,
-  setCheckedEmployees,
-}) {
+export default function SearchEmployee({ token, selectedDeptId, selectTmId }) {
+  // toolkit
+  const memoDispatch = useDispatch();
   const [needLoad, setNeedLoad] = useState();
-  // const [checkedEmployees, setCheckedEmployees] = useState([]);
+  const [checkedRcvList, setCheckedRcvList] = useState([]);
+
   const isDeptId = selectedDeptId !== null && selectedDeptId !== "";
   const isTmId = selectTmId !== null && selectTmId !== "";
 
+  // 부서원 조회
   const fetchLoadDeptMemberList = useCallback(loadDepartmentMemberList, []);
   const fetchDeptMemberParam = useMemo(() => {
     return { selectedDeptId, token, needLoad };
@@ -30,55 +27,54 @@ export default function SearchEmployee({
   );
   const { body: deptMemberList } = data || {};
 
-  // const onAddEmpHandler = (empId, empName, email) => {
-  //   const isChecked = checkedEmployees.includes(empId);
-
-  //   if (isChecked) {
-  //     setCheckedEmployees(checkedEmployees.filter((id) => id !== empId));
-  //   } else {
-  //     setCheckedEmployees([...checkedEmployees, { empId, empName, email }]);
-  //   }
-  // };
-
-  // const handleCheckboxChange = (empId) => {
-  //   setCheckedEmployees((prevCheckedEmployees) => {
-  //     if (prevCheckedEmployees.includes(empId)) {
-  //       // 이미 체크된 경우, 해당 아이템을 배열에서 제거
-  //       return prevCheckedEmployees.filter((id) => id !== empId);
-  //     } else {
-  //       // 체크되지 않은 경우, 해당 아이템을 배열에 추가
-  //       return [...prevCheckedEmployees, empId];
-  //     }
-  //   });
-  // };
-
+  // 선택 사원 배열
   const handleCheckboxChange = (emp) => {
-    setCheckedEmployees((prevCheckedEmployees) => {
-      if (prevCheckedEmployees.some((item) => item.empId === emp.empId)) {
-        // 이미 체크된 경우, 해당 아이템을 배열에서 제거
-        return prevCheckedEmployees.filter((item) => item.empId !== emp.empId);
+    setCheckedRcvList((prevCheckedRcvList) => {
+      if (prevCheckedRcvList.some((item) => item.empId === emp.empId)) {
+        return prevCheckedRcvList.filter((item) => item.empId !== emp.empId);
       } else {
-        // 체크되지 않은 경우, 해당 아이템을 배열에 추가
-        return [...prevCheckedEmployees, emp];
+        return [...prevCheckedRcvList, emp];
       }
     });
   };
 
-  console.log("10823049>> ", checkedEmployees);
-
   // 수신 목록 전달
   const onAddRcvClickHadler = () => {
-    onAddRcv(checkedEmployees);
+    if (checkedRcvList.length < 1) {
+      alert("수신인를 선택해주세요");
+    }
+    memoDispatch(
+      memoAddrAction.addRcvList({
+        rcvList: checkedRcvList,
+      })
+    );
+    setCheckedRcvList([]);
   };
 
   // 참조 목록 전달
   const onAddRcvRefClickHadler = () => {
-    onAddRcvRef(checkedEmployees);
+    if (checkedRcvList.length < 1) {
+      alert("참조인를 선택해주세요");
+    }
+    memoDispatch(
+      memoAddrAction.addRcvRefList({
+        rcvRefList: checkedRcvList,
+      })
+    );
+    setCheckedRcvList([]);
   };
 
   // 숨은참조 목록 전달
   const onAddRcvSecretRefClickHadler = () => {
-    onAddRcvSecretRef(checkedEmployees);
+    if (checkedRcvList.length < 1) {
+      alert("숨은참조인를 선택해주세요");
+    }
+    memoDispatch(
+      memoAddrAction.addRcvSecretRefList({
+        rcvSecretRefList: checkedRcvList,
+      })
+    );
+    setCheckedRcvList([]);
   };
 
   return (
@@ -93,7 +89,7 @@ export default function SearchEmployee({
               <input
                 type="checkBox"
                 id={emp.empId}
-                checked={checkedEmployees.some(
+                checked={checkedRcvList.some(
                   (item) => item.empId === emp.empId
                 )}
                 onChange={() => handleCheckboxChange(emp)}
@@ -109,9 +105,19 @@ export default function SearchEmployee({
           deptMemberList.map(
             (emp) =>
               emp.tmId === selectTmId && (
-                <div key={emp.empId}>
-                  {emp.empName} ({emp.email})
-                </div>
+                <>
+                  <input
+                    type="checkBox"
+                    id={emp.empId}
+                    checked={checkedRcvList.some(
+                      (item) => item.empId === emp.empId
+                    )}
+                    onChange={() => handleCheckboxChange(emp)}
+                  />
+                  <div key={emp.empId}>
+                    {emp.empName} ({emp.email})
+                  </div>
+                </>
               )
           )}
       </div>

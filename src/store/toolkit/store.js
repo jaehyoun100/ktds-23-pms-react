@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { tokenSliceStore } from "./slice/tokenSlice";
 import { userDetailSliceStore } from "./slice/userDetailSlice";
+import { memoAddrSliceStore } from "./slice/memoAddrSlice";
 
 //redux store 생성
 const toolkitStore = configureStore({
   reducer: {
     employee: userDetailSliceStore.reducer,
     tokenInfo: tokenSliceStore.reducer,
+    receiverList: memoAddrSliceStore.reducer,
   },
 });
 

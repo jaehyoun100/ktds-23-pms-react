@@ -1,5 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
-import { loadSendMemo } from "../../http/memoHttp";
+import {
+  cancelSendMemo,
+  deleteSendMemo,
+  loadSendMemo,
+  saveSendMemo,
+} from "../../http/memoHttp";
 import { useFetch } from "../hook/useFetch";
 import Button from "../common/Button/Button";
 import { BsStar, BsStarFill } from "react-icons/bs";
@@ -25,9 +30,43 @@ export default function SendMemoView({
 
   const { body: sendMemo } = data || {};
 
-  const onBoardListClickHandler = () => {};
-  const onDeleteClickHandler = () => {};
-  const onClickSaveSendMenoHandler = () => {};
+  // 발신함 이동
+  const onBoardListClickHandler = () => {
+    setSelectSendMemoId(undefined);
+  };
+
+  // 쪽지 보관
+  const onClickSaveSendMenoHandler = async () => {
+    const newSaveState = sendMemo.sendSaveYn === "N" ? "Y" : "N";
+
+    const json = await saveSendMemo(token, selectSendMemoId, newSaveState);
+    if (json.body) {
+      setNeedViewReLoad(Math.random());
+    } else if (json.errors) {
+      alert(json.erros);
+    }
+  };
+
+  // 쪽지 삭제
+  const onDeleteClickHandler = async () => {
+    const json = await deleteSendMemo(token, selectSendMemoId);
+    if (json.body) {
+      setSelectSendMemoId(undefined);
+      setNeedLoad(Math.random);
+    } else {
+      alert(json.errors);
+    }
+  };
+
+  // 발신 취소
+  const onCancelClickHandler = async () => {
+    const json = await cancelSendMemo(token, selectSendMemoId);
+    if (json.body) {
+      alert("발신이 취소되었습니다");
+    } else {
+      alert(json.errors);
+    }
+  };
 
   return (
     <div>
@@ -37,13 +76,14 @@ export default function SendMemoView({
           <div className="button-area">
             <Button onClickHandler={onBoardListClickHandler}>목록</Button>
             <Button onClickHandler={onDeleteClickHandler}>삭제</Button>
+            <Button onClickHandler={onCancelClickHandler}>발신취소</Button>
           </div>
           <div>
             {sendMemo && (
               <div className="grid" key={selectSendMemoId}>
-                {sendMemo.rcvSaveYn && (
+                {sendMemo.sendSaveYn && (
                   <div id="grid-save" onClick={onClickSaveSendMenoHandler}>
-                    {sendMemo.rcvSaveYn === "Y" ? <BsStarFill /> : <BsStar />}
+                    {sendMemo.sendSaveYn === "Y" ? <BsStarFill /> : <BsStar />}
                   </div>
                 )}
                 <h4 id="grid-title">{sendMemo.memoTtl}</h4>
