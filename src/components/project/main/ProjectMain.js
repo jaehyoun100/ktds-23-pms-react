@@ -5,6 +5,7 @@ import MainInfo from "./MainInfo";
 import MainReadMe from "./MainReadMe";
 import MainHeader from "./MainHeader";
 import { useLocation } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CalendarComponent from "./CalendarComponent";
 export default function ProjectMain() {
@@ -15,6 +16,7 @@ export default function ProjectMain() {
   const [events, setEvents] = useState([]);
   const [isNeedRender, setNeedRender] = useState(false);
   const [isHaveData, setIsHaveData] = useState(false);
+  const [allData, setAllData] = useState();
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -22,8 +24,15 @@ export default function ProjectMain() {
     };
   });
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleModifyClick = () => {
+    navigate("/project/modify", { state: { allData } });
+  };
+
   useMemo(() => {
     const item = location.state.key;
+    console.log(item);
     setProjectId(item.prjId);
   }, [location.state.key]);
   useEffect(() => {
@@ -43,6 +52,7 @@ export default function ProjectMain() {
       const getProject = async () => {
         const run = await getPrjApi();
         setProject(run);
+        setAllData(run);
         console.log(run, "!!!!!!!!!!");
         if (run.prjMemo !== null) {
           setMemo(run.prjMemo);
@@ -130,6 +140,7 @@ export default function ProjectMain() {
               <MainInfo project={project} />
               <ChartContainer />
               <MainReadMe memo={memo} />
+
               <CalendarComponent
                 events={events}
                 saveMemo={saveMemo}
@@ -137,6 +148,9 @@ export default function ProjectMain() {
                 setNeedRender={setNeedRender}
                 setIsHaveData={setIsHaveData}
               />
+            </div>
+            <div className={styles.modifyButtonArea}>
+              <button onClick={handleModifyClick}>프로젝트 수정</button>
             </div>
           </div>
         </>

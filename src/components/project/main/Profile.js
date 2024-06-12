@@ -1,7 +1,11 @@
 import React from "react";
 import s from "../project.module.css";
 
-const Profile = ({ profileFile }) => {
+const Profile = ({ profileFile, profileValue }) => {
+  const onProfileClickHandler = () => {
+    alert("프로필을 누름.");
+    console.log(profileValue);
+  };
   const styles = {
     backgroundImage: `url(${
       profileFile !== null
@@ -14,7 +18,7 @@ const Profile = ({ profileFile }) => {
     height: "40px",
   };
 
-  return <div style={styles}></div>;
+  return <div style={styles} onClick={onProfileClickHandler}></div>;
 };
 
 export default Profile;

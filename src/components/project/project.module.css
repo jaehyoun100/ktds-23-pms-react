@@ -421,3 +421,11 @@ h1 {
 .homeIcon:hover {
   color: var(--main-color);
 }
+
+.modifyButtonArea {
+  text-align: right;
+}
+.modifyButtonArea > button {
+  margin-right: 50px;
+  margin-bottom: 20px;
+}
