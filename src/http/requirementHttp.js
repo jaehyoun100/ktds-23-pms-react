@@ -122,3 +122,32 @@ export const deleteRequirement = async (token, rqmId) => {
 
   return json;
 };
+
+export const requirementFileDownload = async (token, selectedRequirementId) => {
+  const response = await fetch(
+    `${url}/api/v1/requirement/downloadFile/${selectedRequirementId}`,
+    {
+      method: "GET",
+      headers: { Authorization: token },
+    }
+  );
+  // const json = await response.json();
+
+  return response;
+};
+
+export const delayRequirement = async (token, selectedRequirementId) => {
+  const response = await fetch(
+    `${url}/api/v1/requirement/delaycall/${selectedRequirementId}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+
+  const json = await response.json();
+
+  return json;
+};

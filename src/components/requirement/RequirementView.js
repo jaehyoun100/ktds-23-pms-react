@@ -2,8 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./requirement.module.css";
 import {
+  delayRequirement,
   deleteRequirement,
   loadOneRequirement,
+  requirementFileDownload,
 } from "../../http/requirementHttp";
 import RequirementModify from "./RequirementModify";
 
@@ -39,6 +41,37 @@ export default function RequirementView() {
 
   const onClickHandler = () => {
     navigate("/requirement");
+  };
+
+  const onFileClickHandler = async (requirementId, fileName) => {
+    // 클릭 시 파일 다운로드
+    const response = await requirementFileDownload(token, requirementId);
+
+    if (!response.ok) {
+      console.error(
+        `File download failed with status code: ${response.status}`
+      );
+      throw new Error("File download failed");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  const delayCallHandler = async (requirementId) => {
+    // 클릭 시 '연기신청' 상태로 변경
+    const check = window.confirm("연기신청을 하시겠습니까?");
+    if (check) {
+      const json = await delayRequirement(token, requirementId);
+      console.log(json);
+      setNeedReloadDetail(Math.random());
+    }
   };
 
   const fetchParams = useMemo(() => {
@@ -97,9 +130,26 @@ export default function RequirementView() {
               <div className={styles.subItem}>일정상태</div>
               <div className={styles.flexRow}>
                 <div className={styles.subItem}>{data.scdStsVO.cmcdName}</div>
-                <button className={styles.subItem}>연기</button>
-                <button className={styles.subItem}>승인</button>
-                <button className={styles.subItem}>거절</button>
+                {data.rqmStsVO.cmcdName !== "개발완료" && (
+                  <>
+                    {data.scdStsVO.cmcdName !== "연기필요" ? (
+                      <>
+                        {/** 연기 버튼을 클릭 시 '연기필요' 상태로 바뀜 */}
+                        <button
+                          className={styles.subItem}
+                          onClick={() => delayCallHandler(data.rqmId)}
+                        >
+                          연기
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button className={styles.subItem}>승인</button>
+                        <button className={styles.subItem}>거절</button>
+                      </>
+                    )}
+                  </>
+                )}
               </div>
 
               <div className={styles.subItem}>담당개발자</div>
@@ -112,10 +162,11 @@ export default function RequirementView() {
               <div className={styles.subItem}>{data.cfrmrVO.empName}</div>
 
               <div className={styles.subItem}>파일</div>
-              <div className={styles.subItem}>
-                <Link to={`/requirement/downloadFile/${data.rqmId}`}>
-                  {data.rqmFile}
-                </Link>
+              <div
+                className={styles.subItem}
+                onClick={() => onFileClickHandler(data.rqmId, data.rqmFile)}
+              >
+                {data.rqmFile}
               </div>
 
               <div className={styles.subItem}>테스터</div>

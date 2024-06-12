@@ -77,7 +77,10 @@ export default function RequirementModify({
       const tstr = tstrRef.current.value; // 테스터
       const strtDt = strtDtRef.current.value; // 시작일
       const endDt = endDtRef.current.value; // 종료 예정일
-      const file = fileRef.current.value; // 첨부파일
+      const file =
+        fileRef.current.files[0] === undefined
+          ? null
+          : fileRef.current.files[0]; // 첨부파일
       const rqmCntnt = editorData; // 요구사항 내용
       const scdSts = scdStsRef.current.value; // 일정상태
       const rqmSts = rqmStsRef.current.value; // 진행상태
@@ -295,7 +298,10 @@ export default function RequirementModify({
           )}
         </div>
         <label htmlFor="file">첨부파일</label>
-        <input type="file" id="file" name="file" ref={fileRef} />
+        <div>
+          <input type="file" id="file" name="file" ref={fileRef} />
+          {requirement.rqmFile && <div>기존 파일명: {requirement.rqmFile}</div>}
+        </div>
 
         {/** ckeditor를 이용한 내용넣기 */}
         <label htmlFor="rqm-cntnt">요구사항 내용</label>

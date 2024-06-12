@@ -48,7 +48,6 @@ export const loadForModifyOutputData = async ({ token, selectedOutputId }) => {
   if (!token) {
     return undefined;
   }
-  console.log("???????", selectedOutputId);
   const response = await fetch(
     `${url}/api/v1/output/modify/${selectedOutputId}`,
     {
@@ -92,4 +91,30 @@ export const deleteOutput = async (token, selectedOutputId) => {
   const json = await response.json();
 
   return json;
+};
+
+export const outputFileDownload = async (token, selectedOutputId) => {
+  const response = await fetch(
+    `${url}/api/v1/output/downloadFile/${selectedOutputId}`,
+    {
+      method: "GET",
+      headers: { Authorization: token },
+    }
+  );
+  // const json = await response.json();
+
+  return response;
+};
+
+export const getFileDataForModify = async (token, originFileName) => {
+  const response = await fetch(`${url}/api/v1/output/file/${originFileName}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  // const json = await response.json();
+
+  return response;
 };

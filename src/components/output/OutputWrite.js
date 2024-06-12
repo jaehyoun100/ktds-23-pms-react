@@ -42,6 +42,7 @@ export default function OutoutWrite() {
       const outType = outTypeRef.current.value; // 산출물 종류
       const outVer = outVerRef.current.value; // 프로젝트 진행상태(산출물 버전)
       const file = fileRef.current.files[0]; // 첨부파일
+      console.log(fileRef, "aswefawrg");
 
       if (file === undefined) {
         alert("파일은 필수입니다.");

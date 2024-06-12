@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { deleteOutput, loadOutputs } from "../../http/outputHttp";
+import {
+  deleteOutput,
+  loadOutputs,
+  outputFileDownload,
+} from "../../http/outputHttp";
 import { Link, useNavigate } from "react-router-dom";
 import OutputModify from "./OutputModify";
 import Table from "../../utils/Table";
@@ -35,6 +39,27 @@ export default function Output() {
 
   const onOutputCreateHandler = () => {
     navigate("/output/write");
+  };
+
+  const onFileClickHandler = async (outputId, fileName) => {
+    // 클릭 시 파일 다운로드
+    const response = await outputFileDownload(token, outputId);
+
+    if (!response.ok) {
+      console.error(
+        `File download failed with status code: ${response.status}`
+      );
+      throw new Error("File download failed");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   };
 
   const fetchParams = useMemo(() => {
@@ -139,7 +164,7 @@ export default function Output() {
 
   return (
     <>
-      {/* * 토큰이 있고, 게시글을 선택하지 않았을 때 */}
+      {/** 데이터가 불러와졌고, 수정모드가 아니면  */}
       {data && !isModifyMode && (
         <>
           <div>총 {count}개의 산출물이 검색되었습니다.</div>
@@ -168,9 +193,13 @@ export default function Output() {
                       {item.outVerSts.cmcdName} Ver.{item.level}
                     </td>
                     <td>
-                      <Link to={`/output/downloadFile/${item.outId}`}>
+                      <div
+                        onClick={() =>
+                          onFileClickHandler(item.outId, item.outFile)
+                        }
+                      >
                         {item.outFile}
-                      </Link>
+                      </div>
                     </td>
                     <td>{item.crtrIdVO.empName}</td>
                     <td>{item.crtDt}</td>
