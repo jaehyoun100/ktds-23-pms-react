@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 import { tokenSliceStore } from "./slice/tokenSlice";
 import { userDetailSliceStore } from "./slice/userDetailSlice";
 import { memoAddrSliceStore } from "./slice/memoAddrSlice";
+import { confirmModalSliceStore } from "./slice/confirmModalSlice";
 
 //redux store 생성
 const toolkitStore = configureStore({
@@ -10,6 +11,7 @@ const toolkitStore = configureStore({
     employee: userDetailSliceStore.reducer,
     tokenInfo: tokenSliceStore.reducer,
     receiverList: memoAddrSliceStore.reducer,
+    confirmModalInfo: confirmModalSliceStore.reducer,
   },
 });
 

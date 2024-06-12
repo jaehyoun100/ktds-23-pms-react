@@ -59,16 +59,19 @@ import s from "./modal.module.css";
 const ConfirmModal = React.memo(
   ({
     content,
-    onClose,
     show,
     cancelContent,
     confirmContent,
     confirmOnClick,
+    cancelOnclick,
   }) => {
     if (!show) {
       return null;
     }
 
+    const onCloseHandler = () => {
+      show = false;
+    };
     return (
       <dialog
         open
@@ -79,7 +82,7 @@ const ConfirmModal = React.memo(
         <div className={s.gridModal}>
           <div
             className={s.modalClose}
-            onClick={onClose}
+            onClick={onCloseHandler}
             role="button"
             aria-label="Close modal"
             style={{ cursor: "pointer" }}
@@ -98,7 +101,7 @@ const ConfirmModal = React.memo(
             </button>
             <button
               className={`${s.confirmButton} ${s.button}`}
-              onClick={onClose}
+              onClick={cancelOnclick}
             >
               {cancelContent}
             </button>

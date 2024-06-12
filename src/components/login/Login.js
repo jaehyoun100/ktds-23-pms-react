@@ -35,7 +35,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <ConfirmModal />
       <div className="container">
         <div className="item header"></div>
         <div className="item"></div>
