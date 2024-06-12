@@ -116,7 +116,10 @@ export default function RequirementWrite() {
       const tstr = tstrRef.current.value; // 테스터
       const strtDt = strtDtRef.current.value; // 시작일
       const endDt = endDtRef.current.value; // 종료 예정일
-      const file = fileRef.current.files[0]; // 첨부파일
+      const file =
+        fileRef.current.files[0] === undefined
+          ? null
+          : fileRef.current.files[0]; // 첨부파일
       const rqmCntnt = editorData; // 요구사항 내용
       const scdSts = scdStsRef.current.value; // 일정상태
       const rqmSts = rqmStsRef.current.value; // 진행상태

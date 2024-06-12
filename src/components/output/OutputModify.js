@@ -42,12 +42,10 @@ export default function OutputModify({
       const prjId = prjIdRef.current.value; // 프로젝트 ID
       const outType = outTypeRef.current.value; // 산출물 종류
       const outVer = outVerRef.current.value; // 프로젝트 진행상태(산출물 버전)
-      const file = fileRef.current.files[0]; // 첨부파일
-
-      if (file === undefined) {
-        alert("파일은 필수입니다.");
-        return;
-      }
+      const file =
+        fileRef.current.files[0] === undefined
+          ? null
+          : fileRef.current.files[0]; // 첨부파일
 
       const formData = new FormData();
       formData.append("outTtl", outTtl);
@@ -68,7 +66,7 @@ export default function OutputModify({
   };
 
   useEffect(() => {
-    // 프로젝트, 산출물 타입, 프로젝트 진행상태 데이터 불러오기
+    // 산출물, 프로젝트, 산출물 타입, 프로젝트 진행상태 데이터 불러오기
     const getOutputWritePage = async () => {
       const json = await loadForModifyOutputData({ token, selectedOutputId });
       const { output, projectList, outputType, prjSts } = json.body;
@@ -116,9 +114,6 @@ export default function OutputModify({
             ref={prjIdRef}
             defaultValue={output.prjId}
           >
-            {/* <c:forEach items="${projectList}" var="project">
-              <option value="${project.prjId}">${project.prjName}</option>
-            </c:forEach> */}
             <option value="">프로젝트를 선택해주세요</option>
             {projectList &&
               projectList.map((item) => (
@@ -140,9 +135,6 @@ export default function OutputModify({
             ref={outTypeRef}
             defaultValue={output.outType}
           >
-            {/* <c:forEach items="${outputType}" var="output">
-              <option value="${output.cmcdId}">${output.cmcdName}</option>
-            </c:forEach> */}
             <option value="">산출물 종류를 선택해주세요</option>
             {outputType &&
               outputType.map((item) => (
@@ -164,9 +156,6 @@ export default function OutputModify({
             ref={outVerRef}
             defaultValue={output.outVer}
           >
-            {/* <c:forEach items="${prjSts}" var="prjSts">
-              <option value="${prjSts.cmcdId}">${prjSts.cmcdName}</option>
-            </c:forEach> */}
             <option value="">진행상태를 선택해주세요</option>
             {prjSts &&
               prjSts.map((item) => (
@@ -186,6 +175,7 @@ export default function OutputModify({
           {modifyErrors.outFile && modifyErrors.outFile.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.outFile}</div>
           )}
+          {output.outFile && <div>기존 파일명: {output.outFile}</div>}
         </div>
 
         <div className="button-area right-align">

@@ -44,6 +44,14 @@ export default function Requirement() {
       dataIndex: "rqmTtl",
       key: "rqmTtl",
       width: "20%",
+      render: (data, row) => (
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate(`/employee/view/${row.empId}`)}
+        >
+          {data}
+        </span>
+      ),
     },
     {
       title: "일정상태",
@@ -89,7 +97,7 @@ export default function Requirement() {
 
   return (
     <>
-      {/* * 토큰이 있고, 게시글을 선택하지 않았을 때
+      {/* * 토큰이 있고, 게시글을 선택하지 않았을 때 */}
       {data && (
         <>
           <div>총 {count}개의 요구사항이 검색되었습니다.</div>
@@ -125,8 +133,8 @@ export default function Requirement() {
             </tbody>
           </table>
         </>
-      )} */}
-      {token && (
+      )}
+      {/* {token && (
         <>
           <div>총 {count}개의 요구사항이 검색되었습니다.</div>
           <Table
@@ -137,7 +145,7 @@ export default function Requirement() {
             filterOptions={filterOptions}
           />
         </>
-      )}
+      )} */}
 
       <div className="button-area right-align">
         <button>삭제</button>
