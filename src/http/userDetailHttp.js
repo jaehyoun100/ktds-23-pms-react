@@ -1,5 +1,12 @@
+import Content from "../layout/content/Content";
 import { tokenActions } from "../store/toolkit/slice/tokenSlice";
 import { employeeActions } from "../store/toolkit/slice/userDetailSlice";
+
+const url =
+  "http://" +
+  (window.location.host === "43.202.29.221"
+    ? "43.202.29.221"
+    : "localhost:8080");
 
 /**
  * Token 값을 받아서 서버에서 empVO 를 가져온 다음
@@ -26,11 +33,6 @@ export const getEmployee = (token) => {
  */
 export const getToken = (empId, pwd) => {
   return async (dispatch) => {
-    const url =
-      "http://" +
-      (window.location.host === "43.202.29.221"
-        ? "43.202.29.221"
-        : "localhost:8080");
     const response = await fetch(url + "/auth/token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -53,9 +55,19 @@ export const getToken = (empId, pwd) => {
     }
   };
 };
-export const logout = () => {
+export const logout = (token, isLeaveWork) => {
   // TODO 확인 모달창을 통해 퇴근인지 로그아웃인지 체크 필요함
   return async (dispatch) => {
+    const response = await fetch(url + "/api/logout", {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isLeaveWork: isLeaveWork }),
+    });
+    const json = response.json();
+
     dispatch(tokenActions.logout({ token: "" }));
   };
 };

@@ -1,14 +1,23 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SessionTimer from "./ContentTimer";
 import "./ContentTop.css";
 import { BsPersonLock, BsBell, BsBoxArrowRight } from "react-icons/bs";
 import { logout } from "../../http/userDetailHttp";
 import logoImg from "./Logo.png";
+import { confirmModalActions } from "../../store/toolkit/slice/confirmModalSlice";
 
 export default function ContentTop() {
-  const tokenDispatch = useDispatch();
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.tokenInfo);
   const onLogoutBtnClickHandler = () => {
-    tokenDispatch(logout());
+    // dispatch(
+    //   confirmModalActions.set({
+    //     content: "종료 방식을 선택해주세요",
+    //     confirmContent: "퇴 근",
+    //     cancelContent: "로그아웃",
+    //   })
+    // );
+    dispatch(logout(token, false));
   };
   return (
     <div className="main-content-top">
