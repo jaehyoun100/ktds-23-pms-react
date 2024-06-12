@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import Button from "../../common/Button/Button";
 import Search from "../../common/search/Search";
 import { useSelector } from "react-redux";
@@ -37,24 +37,29 @@ const ProjectListApp = () => {
         method: "GET",
       });
       const json = await response.json();
+      console.log(json.body, "!@#!@ASASDASAS");
       return json.body;
     };
     const getProject = async () => {
       const run = await getList();
       setData(run[1]);
-      console.log(run[1]);
+      console.log(run[1], "!!!!!");
 
       let optionList = [];
       let filterOptionArray = [];
       for (let i = 0; i < run[0].length; i++) {
         optionList[i] = { value: run[0][i].cmcdId, name: run[0][i].cmcdName };
+
         filterOptionArray[i] = {
           value: run[0][i].cmcdId,
           label: run[0][i].cmcdName,
         };
       }
-      setSearchDataCommonCode(optionList);
-      setFilterOptions(filterOptionArray);
+
+      const newFilterOption = [{ label: "프로젝트명", value: "prjName" }];
+
+      setSearchDataCommonCode(newFilterOption);
+      setFilterOptions(newFilterOption);
       setInfo(run);
 
       let projectIdArr = [];
@@ -204,7 +209,7 @@ const ProjectListApp = () => {
           <Table
             columns={columns}
             dataSource={data.projectList}
-            rowKey={(dt) => dt.id}
+            rowKey={(data) => data.id}
             filter
             filterOptions={filterOptions}
           />
