@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { registerSupply } from "../../../http/supplyHttp";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { loadSupplyCategory, registerSupply } from "../../../http/supplyHttp";
+import style from "../supply.module.css";
 
 export default function SupplyRegist({
   setIsRegistrationMode,
   setNeedReload,
   token,
 }) {
+  const [categoryList, setCategoryList] = useState([]);
   const [inputFields, setInputFields] = useState([
     {
       name: "",
       category: "",
+      customCategory: "",
       price: "",
       stock: "",
       image: null,
@@ -17,6 +20,21 @@ export default function SupplyRegist({
       detail: "",
     },
   ]);
+
+  const memoizedLoadSupplyCategory = useCallback(loadSupplyCategory, []);
+  const memoizedToken = useMemo(() => {
+    return { token };
+  }, [token]);
+
+  useEffect(() => {
+    const fetchingData = async () => {
+      const json = await memoizedLoadSupplyCategory({ ...memoizedToken });
+      const categories = json.supplyList.map((item) => item.splCtgr);
+      setCategoryList(categories);
+    };
+
+    fetchingData();
+  }, [memoizedLoadSupplyCategory, memoizedToken]);
 
   const handleInputChange = (index, event) => {
     const values = [...inputFields];
@@ -36,6 +54,7 @@ export default function SupplyRegist({
       {
         name: "",
         category: "",
+        customCategory: "",
         price: "",
         stock: "",
         image: null,
@@ -57,11 +76,14 @@ export default function SupplyRegist({
 
   const onRegisterClickHandler = async () => {
     for (const field of inputFields) {
-      const { name, category, price, stock, image, detail } = field;
+      const { name, category, customCategory, price, stock, image, detail } =
+        field;
+      const finalCategory =
+        category === "직접 입력" ? customCategory : category;
       const json = await registerSupply(
         token,
         name,
-        category,
+        finalCategory,
         price,
         stock,
         image,
@@ -80,20 +102,40 @@ export default function SupplyRegist({
   };
 
   return (
-    <>
+    <div className={style.supplyRegistContainer}>
+      <div className={style.supplyRegistHeader}>
+        <h3>소모품 등록</h3>
+      </div>
       {inputFields.map((inputField, index) => (
-        <div key={index}>
-          <div>
+        <div key={index} className={style.supplyForm}>
+          <div className={style.formGroup}>
             <label htmlFor={`category-${index}`}>카테고리</label>
-            <input
-              type="text"
+            <select
               id={`category-${index}`}
               name="category"
               value={inputField.category}
               onChange={(event) => handleInputChange(index, event)}
-            />
+            >
+              <option value="">카테고리를 선택하세요</option>
+              {categoryList.map((category, i) => (
+                <option key={i} value={category}>
+                  {category}
+                </option>
+              ))}
+              <option value="직접 입력">직접 입력</option>
+            </select>
+            {inputField.category === "직접 입력" && (
+              <input
+                type="text"
+                name="customCategory"
+                value={inputField.customCategory}
+                onChange={(event) => handleInputChange(index, event)}
+                placeholder="카테고리를 입력하세요"
+                className={style.customCategoryInput}
+              />
+            )}
           </div>
-          <div>
+          <div className={style.formGroup}>
             <label htmlFor={`name-${index}`}>제품 명</label>
             <input
               type="text"
@@ -103,27 +145,30 @@ export default function SupplyRegist({
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
-          <div>
-            <label htmlFor={`price-${index}`}>제품 가격</label>
-            <input
-              type="number"
-              id={`price-${index}`}
-              name="price"
-              value={inputField.price}
-              onChange={(event) => handleInputChange(index, event)}
-            />
+          <div className={`${style.formGroup} ${style.inlineGroup}`}>
+            <div>
+              <label htmlFor={`price-${index}`}>제품 가격</label>
+              <input
+                type="number"
+                id={`price-${index}`}
+                name="price"
+                value={inputField.price}
+                onChange={(event) => handleInputChange(index, event)}
+              />
+            </div>
+            <div>
+              <label htmlFor={`stock-${index}`}>재고</label>
+              <input
+                type="number"
+                id={`stock-${index}`}
+                name="stock"
+                value={inputField.stock}
+                onChange={(event) => handleInputChange(index, event)}
+              />
+            </div>
           </div>
-          <div>
-            <label htmlFor={`stock-${index}`}>재고</label>
-            <input
-              type="number"
-              id={`stock-${index}`}
-              name="stock"
-              value={inputField.stock}
-              onChange={(event) => handleInputChange(index, event)}
-            />
-          </div>
-          <div>
+
+          <div className={style.formGroup}>
             <label htmlFor={`image-${index}`}>이미지</label>
             <input
               type="file"
@@ -137,18 +182,19 @@ export default function SupplyRegist({
                 <img
                   src={inputField.imagePreview}
                   alt={`미리보기-${index}`}
-                  style={{ width: "100px", height: "100px", marginTop: "10px" }}
+                  className={style.formGroup.img}
                 />
               </div>
             )}
           </div>
-          <div>
+          <div className={style.formGroup}>
             <label htmlFor={`detail-${index}`}>제품 설명</label>
             <textarea
               id={`detail-${index}`}
               name="detail"
               value={inputField.detail}
               onChange={(event) => handleInputChange(index, event)}
+              className={style.detailTextarea}
             ></textarea>
           </div>
           <div>
@@ -167,6 +213,6 @@ export default function SupplyRegist({
         <button onClick={onRegisterClickHandler}>등록</button>
         <button onClick={onCancelClickHandler}>취소</button>
       </div>
-    </>
+    </div>
   );
 }

@@ -11,11 +11,11 @@
 }
 
 .tableComponent.collapsed {
-  flex: 0.3;
+  flex: 0.4;
 }
 
 .supplyViewComponent {
-  flex: 1;
+  flex: 0.6;
   margin-left: 20px;
   opacity: 1;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -32,33 +32,157 @@
 
 /* SupplyView 컴포넌트를 위한 css */
 .supplyViewContainer {
-  padding: 20px;
   background-color: #f9f9f9;
-  border-left: 1px solid #e8e8e8;
-  transition: all 0.3s ease-in-out;
-  height: 100%;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.supplyViewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.supplyViewHeader h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
 }
 
 .supplyDetails {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.supplyDetailItem {
-  margin-bottom: 10px;
+.detailItem {
   display: flex;
   justify-content: space-between;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-.supplyDetailItem label {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.supplyActions {
+.detailItemInline {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.supplyActions button {
-  margin-left: 10px;
+.detailItem label {
+  font-weight: bold;
+  color: #333;
+}
+
+.detailItem span {
+  color: #555;
+}
+
+.supplyImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  margin-bottom: 20px;
+  background-color: #eaeaea;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.supplyImageContainer img {
+  max-height: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.supplyImageContainer.enlargedImage {
+  height: 400px;
+}
+
+.loadingText {
+  font-size: 1rem;
+  color: #999;
+}
+
+/* SupplyRegist 컴포넌트를 위한 css */
+.supplyRegistContainer {
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.supplyRegistHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.supplyRegistHeader h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.supplyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.formGroup label {
+  font-weight: bold;
+  color: #333;
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.formGroup select {
+  height: 40px;
+}
+
+.formGroup img {
+  max-width: 100px;
+  max-height: 100px;
+  margin-top: 10px;
+}
+
+.formGroup.inlineGroup {
+  display: flex;
+  gap: 20px;
+}
+
+.formGroup.inlineGroup div {
+  flex: 1;
+}
+
+.formGroup.inlineGroup input {
+  width: 100%;
+}
+
+.detailTextarea {
+  height: 200px;
 }

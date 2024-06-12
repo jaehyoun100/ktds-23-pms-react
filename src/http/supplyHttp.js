@@ -40,6 +40,16 @@ export const loadSupplyImage = async ({ splImg, token }) => {
   return json.body ? `data:image/jpeg;base64,${json.body}` : null;
 };
 
+export const loadSupplyCategory = async ({ token }) => {
+  const response = await fetch(`${url}/api/v1/supply/category`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
+
+  const json = await response.json();
+  return json.body;
+};
+
 export const registerSupply = async (
   token,
   name,
@@ -75,7 +85,7 @@ export const modifySupply = async (
   category,
   price,
   stock,
-  // image,
+  image,
   detail
 ) => {
   const data = new FormData();
@@ -83,7 +93,7 @@ export const modifySupply = async (
   data.append("splCtgr", category);
   data.append("splPrice", price);
   data.append("invQty", stock);
-  // data.append("splImg", image);
+  data.append("file", image);
   data.append("splDtl", detail);
 
   const response = await fetch(`${url}/api/v1/supply/${splId}`, {

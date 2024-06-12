@@ -5,6 +5,7 @@ import {
   loadSupplyImage,
 } from "../../../http/supplyHttp";
 import SupplyModification from "./SupplyModification";
+import style from "../supply.module.css";
 
 export default function SupplyView({
   selectedSplId,
@@ -17,6 +18,7 @@ export default function SupplyView({
 }) {
   const [data, setData] = useState();
   const [image, setImage] = useState(null);
+  const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const memoizedLoadSupply = useCallback(loadSupply, []);
@@ -62,26 +64,50 @@ export default function SupplyView({
     }
   };
 
+  const toggleImageSize = () => {
+    setIsImageEnlarged((prev) => !prev);
+  };
+
   return (
-    <div>
+    <div className={style.supplyViewContainer}>
       {supplyBody && !isSupplyModificationMode && (
         <>
-          <div>
+          <div className={style.supplyViewHeader}>
             <h3>{supplyBody.splName}</h3>
-            <div>{supplyBody.splCtgr}</div>
-            <div>{supplyBody.splPrice}</div>
-            <div>{supplyBody.invQty}</div>
-            <div>
-              {image ? (
-                <img src={image} alt={supplyBody.splName} />
-              ) : (
-                "이미지 불러오는 중..."
-              )}
-            </div>
-            <div>{supplyBody.splDtl}</div>
           </div>
-          <button onClick={onSupplyModificationModeClickHandler}>수정</button>
-          <button onClick={onDeleteClickHandler}>삭제</button>
+          <div className={style.supplyDetails}>
+            <div className={style.detailItem}>
+              <label>카테고리</label>
+              <span>{supplyBody.splCtgr}</span>
+            </div>
+            <div className={style.detailItem}>
+              <label>가격</label>
+              <span>{supplyBody.splPrice}</span>
+            </div>
+            <div className={style.detailItem}>
+              <label>재고</label>
+              <span>{supplyBody.invQty}</span>
+            </div>
+          </div>
+          <div
+            className={`${style.supplyImageContainer} ${
+              isImageEnlarged ? style.enlargedImage : ""
+            }`}
+            onClick={toggleImageSize}
+          >
+            {image ? (
+              <img src={image} alt={supplyBody.splName} />
+            ) : (
+              <div className={style.loadingText}>이미지 없음</div>
+            )}
+          </div>
+          <div className={style.detailItem}>
+            <span>{supplyBody.splDtl}</span>
+          </div>
+          <div>
+            <button onClick={onSupplyModificationModeClickHandler}>수정</button>
+            <button onClick={onDeleteClickHandler}>삭제</button>
+          </div>
         </>
       )}
       {isSupplyModificationMode && (

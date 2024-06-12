@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { modifySupply } from "../../../http/supplyHttp";
+import { useEffect, useRef, useState } from "react";
+import { modifySupply, loadSupplyImage } from "../../../http/supplyHttp";
 
 export default function SupplyModification({
   setIsSupplyModificationMode,
@@ -11,15 +11,30 @@ export default function SupplyModification({
   const supplyCategoryRef = useRef();
   const supplyPriceRef = useRef();
   const supplyStockRef = useRef();
-  //   const supplyImageRef = useRef();
+  const supplyImageRef = useRef();
   const supplyDetailRef = useRef();
+  const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (supplyBody.splImg) {
+        const imageData = await loadSupplyImage({
+          splImg: supplyBody.splImg,
+          token,
+        });
+        setImagePreview(imageData);
+      }
+    };
+
+    fetchImage();
+  }, [supplyBody.splImg, token]);
 
   const onModificationClickHandler = async () => {
     const name = supplyNameRef.current.value;
     const category = supplyCategoryRef.current.value;
     const price = supplyPriceRef.current.value;
     const stock = supplyStockRef.current.value;
-    // const image = supplyImageRef.current.files[0];
+    const image = supplyImageRef.current.files[0];
     const detail = supplyDetailRef.current.value;
 
     const json = await modifySupply(
@@ -29,7 +44,7 @@ export default function SupplyModification({
       category,
       price,
       stock,
-      //   image,
+      image,
       detail
     );
 
@@ -45,6 +60,13 @@ export default function SupplyModification({
 
   const onCancelClickHandler = () => {
     setIsSupplyModificationMode(false);
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   return (
@@ -89,17 +111,26 @@ export default function SupplyModification({
           ref={supplyStockRef}
         />
       </div>
-      {/* <div>
+      <div>
         <label htmlFor="image">이미지</label>
         <input
           type="file"
           id="image"
           name="image"
           accept="image/*"
-          defaultValue={supplyBody.splImg}
           ref={supplyImageRef}
+          onChange={handleImageChange}
         />
-      </div> */}
+        {imagePreview && (
+          <div>
+            <img
+              src={imagePreview}
+              alt="미리보기"
+              style={{ width: "100px", height: "100px", marginTop: "10px" }}
+            />
+          </div>
+        )}
+      </div>
       <div>
         <label htmlFor="detail">제품 설명</label>
         <textarea
