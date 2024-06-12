@@ -4,6 +4,7 @@ import { deleteKnowledge } from "../../http/KnowledgeHttp";
 import KnowledgeUpdate from "./KnowledgeUpdate";
 import { KnowledgeRecommand } from "../../http/KnowledgeHttp";
 import KnowledgeMainReply from "./Reply/KnowledgMainReply";
+import "./knowleddgeview.css";
 
 export default function KnowledgeView({
   selectedSplId,
@@ -23,8 +24,8 @@ export default function KnowledgeView({
   };
 
   // 지식 관리 추천
-  const recommendKnowledge = async () =>{
-    const json= await KnowledgeRecommand(selectedSplId, token)
+  const recommendKnowledge = async () => {
+    const json = await KnowledgeRecommand(selectedSplId, token);
 
     if (json.errors) {
       json.errors.forEach((error) => {
@@ -34,8 +35,7 @@ export default function KnowledgeView({
       setSelectedSplId(undefined);
       setNeedReload(Math.random());
     }
-
-  }
+  };
 
   const memoizedLoadKnowledge = useCallback(loadKnowledge, []);
   const memoizedParam = useMemo(() => {
@@ -56,14 +56,14 @@ export default function KnowledgeView({
 
   const { body: knowledgeBody } = data || {};
 
-
-  // 글작성자만 수정 삭제 가능하도록 설정S
+  // 글작성자만 수정 삭제 가능하도록 설정
   const { crtrId } = knowledgeBody || {};
-  const isSelfWritten = token && knowledgeBody && knowledgeBody.crtrId === crtrId;
-  
+  const isSelfWritten =
+    token && knowledgeBody && knowledgeBody.crtrId === crtrId;
+
   // 글작성자만  삭제 가능하도록 설정
   const deleteKnowledgeClickHandler = async () => {
-    if(isSelfWritten){
+    if (isSelfWritten) {
       const json = await deleteKnowledge(knowledgeBody.knlId, token);
 
       if (json.body) {
@@ -74,71 +74,77 @@ export default function KnowledgeView({
         alert(json.errors);
       }
     }
-    
   };
-  
+
   // 글작성자만 수정  가능하도록 설정
-  const UpdateClickHandler = () =>{
-    if(isSelfWritten){
+  const UpdateClickHandler = () => {
+    if (isSelfWritten) {
       setIsUpdateMode(true);
     }
-    
-  }
+  };
 
   return (
-    
     <>
       {token && !isUpdateMode && (
-        <div>
-        <table>
-          <thead>
-            <tr>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>작성일</th>
-              <th>첨부파일</th>
-              <th>지식내용</th>
-            </tr>
-          </thead>
-          <tbody>
-            {knowledgeBody && (
-              <tr>
-                <td>{knowledgeBody.knlTtl}</td>
-                <td>{knowledgeBody.crtrId}</td>
-                <td>{knowledgeBody.crtDt}</td>
-                <td>{knowledgeBody.fileName}</td>
-                <td>{knowledgeBody.knlCntnt}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div>
-          <button onClick={recommendKnowledge}>추천하기</button>
-          <button onClick={UpdateClickHandler}>수정</button>
-          <button onClick={deleteKnowledgeClickHandler}>삭제</button>
-          <button onClick={backToListHandler}>목록보기</button>
+        <div class="board-container">
+          {knowledgeBody && (
+            <div class="board-content">
+              <div class="board-stats">
+                <div class="board-views">
+                  제목 <input type="text" defaultValue={knowledgeBody.knlTtl} />
+                </div>
+              </div>
+              <div class="board-stats">
+                <div class="board-views">
+                  작성자
+                  <input type="text" defaultValue={knowledgeBody.crtrId} />
+                </div>
+              </div>
+              <div class="board-stats">
+                <div class="board-views">
+                  작성일{" "}
+                  <input type="text" defaultValue={knowledgeBody.crtDt} />
+                </div>
+              </div>
+              <div class="board-stats">
+                <div class="board-views">
+                  첨부파일
+                  <input type="text" defaultValue={knowledgeBody.fileName} />
+                </div>
+              </div>
+              <div class="board-stats">
+                <div class="board-views">지식내용</div>
+              </div>
+              <textarea
+                className="knowledge-form-textarea"
+                defaultValue={knowledgeBody.knlCntnt}
+              ></textarea>
+              <div>
+                <button onClick={recommendKnowledge}>추천하기</button>
+                <button onClick={UpdateClickHandler}>수정</button>
+                <button onClick={deleteKnowledgeClickHandler}>삭제</button>
+                <button onClick={backToListHandler}>목록보기</button>
+              </div>
+              <span style={{ background: "#fff", padding: "0 10px" }}></span>
+              <KnowledgeMainReply
+                pPostId={selectedSplId}
+                token={token}
+                setSelectedSplId={setSelectedSplId}
+                setNeedReload={setNeedReload}
+                needReload={needReload}
+              />
+            </div>
+          )}
         </div>
-         <KnowledgeMainReply pPostId={selectedSplId} token={token}  setSelectedSplId={setSelectedSplId} setNeedReload={setNeedReload}  needReload={needReload} />
-      </div>
-      
       )}
       {isUpdateMode && (
         <KnowledgeUpdate
-        knowledgeBody={knowledgeBody}
-        setNeedReload={setNeedReload}
-        setIsUpdateMode={setIsUpdateMode}
-        token={token}/>
+          knowledgeBody={knowledgeBody}
+          setNeedReload={setNeedReload}
+          setIsUpdateMode={setIsUpdateMode}
+          token={token}
+        />
       )}
-
-    
-    
-      
     </>
-  
-    
-    
-   
-    
   );
-  
 }

@@ -1,0 +1,116 @@
+/* Basic CSS styles */
+.board-container {
+  width: 80%;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+}
+
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.board-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.board-info {
+  text-align: right;
+}
+
+.board-content {
+  margin-bottom: 20px;
+}
+
+.board-attachment {
+  margin-bottom: 10px;
+}
+
+.board-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.board-description {
+  margin-bottom: 20px;
+}
+
+.board-actions {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.btn-like,
+.btn-edit,
+.btn-delete,
+.btn-list {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.btn-like:hover,
+.btn-edit:hover,
+.btn-delete:hover,
+.btn-list:hover {
+  background-color: #eee;
+}
+
+.board-comment {
+  margin-bottom: 20px;
+}
+
+.comment-input {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  resize: none;
+}
+
+.btn-submit,
+.btn-cancel {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.btn-submit:hover,
+.btn-cancel:hover {
+  background-color: #eee;
+}
+
+.knowledge-form {
+  width: 500px; /* Adjust width as needed */
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Center the form horizontally */
+}
+
+.knowledge-form-textarea {
+  width: 95%;
+  min-height: 100px; /* Set a minimum height for the textarea */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.knowledge-form-button {
+  width: 100px; /* Adjust width as needed */
+  height: 30px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-left: 10px; /* Add spacing between buttons */
+}

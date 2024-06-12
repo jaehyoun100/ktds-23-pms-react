@@ -2,12 +2,12 @@ import { useCallback, useMemo, useState, useEffect } from "react";
 import { loadknowledgeList } from "../../http/KnowledgeHttp";
 import KnowledgeCreate from "./KnowledgeCreate";
 import KnowledgeView from "./KnowledgeView";
-import KnowledgeMainReply from "./Reply/KnowledgMainReply";
+import Table from "../../utils/Table";
 
 let pageNo = 0;
 export default function KnowledgeMain() {
   const [selectedSplId, setSelectedSplId] = useState();
-  const [Knowledgelist, setKnowledge] = useState();
+  const [Knowledgelist, setKnowledge] = useState([]);
   const [isCreateMode, setIsCreateMode] = useState(false);
   const [needReload, setNeedReload] = useState();
 
@@ -23,14 +23,61 @@ export default function KnowledgeMain() {
   useEffect(() => {
     const fetchingData = async () => {
       const json = await memoizedLoadKnowLedgeList({ ...memoizedToken });
-      setKnowledge(json);
+      setKnowledge(json.body);
       setNeedReload(false);
     };
 
     fetchingData();
   }, [memoizedLoadKnowLedgeList, memoizedToken]);
 
-  const { body: Knowledge } = Knowledgelist || {};
+  const columns = [
+    {
+      title: "제목",
+      dataIndex: "knlTtl",
+      key: "knlTtl",
+      // width: "20%"
+    },
+    {
+      title: "작성자",
+      dataIndex: "crtrId",
+      key: "crtrId",
+    },
+    {
+      title: "내용",
+      dataIndex: "knlCntnt",
+      key: "knlCntnt",
+    },
+    {
+      title: "조회수",
+      dataIndex: "knlCnt",
+      key: "knlCnt",
+    },
+    {
+      title: "추천수",
+      dataIndex: "knlRecCnt",
+      key: "knlRecCnt",
+    },
+    {
+      title: "작성일",
+      dataIndex: "crtDt",
+      key: "crtDt",
+    },
+  ];
+
+  const filterOptions = [
+    {
+      label: "제목",
+      value: "knlTtl",
+    },
+    {
+      label: "작성자",
+      value: "crtrId",
+    },
+    {
+      label: "내용",
+      value: "knlCntnt",
+    },
+  ];
 
   // 상세보기 페이지
   const onRowClickHandler = (rowId) => {
@@ -45,41 +92,25 @@ export default function KnowledgeMain() {
     <>
       {token && !isSelect && !isCreateMode && (
         <>
-          <div>
-            <table>
-              <thead>
-                <tr>
-                  <th>제목</th>
-                  <th>작성자</th>
-                  <th>내용</th>
-                  <th>조회수</th>
-                  <th>추천수</th>
-                  <th>작성일</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Knowledge &&
-                  Knowledge.map((knowledgeItem) => (
-                    <tr
-                      key={knowledgeItem.knlId}
-                      onClick={() => onRowClickHandler(knowledgeItem.knlId)}
-                    >
-                      <td>{knowledgeItem.knlTtl}</td>
-                      <td>{knowledgeItem.crtrId}</td>
-                      <td>{knowledgeItem.knlCntnt}</td>
-                      <td>{knowledgeItem.knlCnt}</td>
-                      <td>{knowledgeItem.knlRecCnt}</td>
-                      <td>{knowledgeItem.crtDt}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-            
-          </div>
+          <Table
+            columns={columns}
+            dataSource={Knowledgelist}
+            rowKey={(dt) => dt.knlId}
+            filter
+            filterOptions={filterOptions}
+            onRow={(record) => {
+              return {
+                onClick: () => {
+                  onRowClickHandler(record.knlId);
+                },
+                style: { cursor: "pointer" },
+              };
+            }}
+          />
           <button onClick={onCreateModeClickHandler}>신규등록</button>
-         
         </>
       )}
+
       {token && isSelect && !isCreateMode && (
         <KnowledgeView
           selectedSplId={selectedSplId}

@@ -1,0 +1,110 @@
+body {
+  font-family: sans-serif;
+}
+
+.App {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff; /* 하얀색 바탕 */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  margin-bottom: 20px;
+  width: 300px;
+}
+
+.search-bar input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-bar button[type="button"] {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.table-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.knowledge-form {
+  width: 500px; /* Adjust width as needed */
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Center the form horizontally */
+}
+
+.knowledge-form-field {
+  margin-bottom: 15px;
+}
+
+.knowledge-form-label {
+  display: block; /* Make labels on separate lines */
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.knowledge-form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.knowledge-form-textarea {
+  width: 95%;
+  min-height: 100px; /* Set a minimum height for the textarea */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.knowledge-form-button-area {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  margin-top: 15px;
+}
+
+.knowledge-form-button {
+  width: 100px; /* Adjust width as needed */
+  height: 30px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-left: 10px; /* Add spacing between buttons */
+}
