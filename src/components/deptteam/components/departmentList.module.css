@@ -1,10 +1,33 @@
 .contentLayout {
   display: flex;
   justify-content: space-between;
+  height: 580px;
+  overflow: auto;
 }
 .layout {
   width: 49%;
 }
+
+.buttonanddetail {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between; /* 좌우로 정렬 */
+  align-items: flex-start; /* 선택 사항: 상단 정렬 */
+  flex-grow: 1;
+}
+.detail {
+  display: flex;
+  width: 880px;
+}
+.detail1 {
+  margin-right: 1rem;
+  width: 50%;
+}
+.detail2 {
+  width: 50%;
+}
 .buttonlist {
   text-align: right;
+  display: flex;
+  justify-content: flex-end;
 }

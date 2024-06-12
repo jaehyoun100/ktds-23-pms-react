@@ -1,0 +1,9 @@
+.detail {
+  display: flex;
+  justify-content: space-between;
+}
+.detailpickture {
+  height: 7.5rem;
+  width: 6rem;
+  margin-left: 3rem;
+}

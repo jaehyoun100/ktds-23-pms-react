@@ -37,6 +37,21 @@ export const loadDepartmentDetail = async ({ token, selectedDeptId }) => {
   return json;
 };
 
+export const loadTeamDetail = async ({ token, selectTmId }) => {
+  if (!token) {
+    return undefined;
+  }
+  const response = await fetch(`${url}/api/v1/team/detail/${selectTmId}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+  const json = await response.json();
+
+  return json;
+};
+
 export const loadTeamList = async ({ token, selectedDeptId }) => {
   if (!token) {
     return undefined;
@@ -100,13 +115,12 @@ export const createTeam = async (token, name, empId, deptId) => {
   return json;
 };
 
-export const createTeamMember = async (token, name, empId, deptId) => {
+export const createTeamMember = async (token, tmId, deptId) => {
   const data = new FormData();
-  data.append("tmName", name);
-  data.append("tmLeadId", empId);
+  data.append("tmId", tmId);
   data.append("deptId", deptId);
 
-  const response = await fetch(`${url}/api/v1/team`, {
+  const response = await fetch(`${url}/api/v1/team/member`, {
     method: "POST",
     headers: { Authorization: token },
     body: data,
