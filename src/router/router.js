@@ -11,6 +11,7 @@ import surveyRouter from "./routercomponent/surveyRouter";
 import memoRouter from "./routercomponent/memoRouter";
 import employeeRouter from "./routercomponent/employeeRouter";
 import rentalSupplyRouter from "./routercomponent/rentalSupplyRouter";
+import ContentMain from "../components/contents/ContentMain";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -20,6 +21,10 @@ export default function RouterAppProvider() {
       element: <Main />,
       errorElement: <NotFoundError />,
       children: [
+        {
+          index: true,
+          element: <ContentMain />,
+        },
         projectRouter,
         employeeRouter,
         requirementRouter,
