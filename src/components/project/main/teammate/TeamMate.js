@@ -151,7 +151,7 @@ export default function TeamMate() {
               <tr>
                 <th>이름</th>
                 <th>역할</th>
-                {!isEditing && <th></th>}
+                {/* {!isEditing && <th></th>} */}
                 {isEditing && <th>삭제</th>} {/* 삭제 컬럼 추가 */}
               </tr>
             </thead>
@@ -160,7 +160,7 @@ export default function TeamMate() {
                 <tr>
                   <td style={{ width: "300px" }}>{pm.employeeVO.empName}</td>
                   <td style={{ width: "300px" }}>{pm.role}</td>
-                  <td></td> {/* 삭제 아이콘 자리 비우기 */}
+                  {isEditing && <td></td>} {/* 삭제 아이콘 자리 비우기 */}
                 </tr>
               )}
               {isEditing &&

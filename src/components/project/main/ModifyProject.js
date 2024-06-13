@@ -33,6 +33,7 @@ const ModifyProject = () => {
     const { clientVO } = allData?.allData;
     const { deptVO } = allData?.allData;
     const { pm } = allData?.allData;
+    const { prjId } = allData?.allData;
     if (prjName) {
       setProjectName(prjName);
     }
@@ -44,6 +45,9 @@ const ModifyProject = () => {
     }
     if (pm) {
       setOriginPm(pm.employeeVO.empName);
+    }
+    if (prjId) {
+      setProjectId(prjId);
     }
   }, [allData]);
 
@@ -214,23 +218,26 @@ const ModifyProject = () => {
     if (pmSelectedData === "PM을 선택해주세요") {
       return;
     }
-
-    const response = await fetch("http://localhost:8080/api/project/write", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: tokenInfo.token,
-      },
-      body: JSON.stringify({
-        prjName: prjNameRef.current.value,
-        clntInfo: clientSelectedData,
-        deptId: deptSelectedData,
-        pmId: pmSelectedData,
-        strtDt: startDateRef.current,
-        endDt: endDateRef.current,
-        prjMemo: prjMemoRef.current.value,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:8080/api/project/write/${projectId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: tokenInfo.token,
+        },
+        body: JSON.stringify({
+          prjId: projectId,
+          prjName: prjNameRef.current.value,
+          clntInfo: clientSelectedData,
+          deptId: deptSelectedData,
+          pmId: pmSelectedData,
+          strtDt: startDateRef.current,
+          endDt: endDateRef.current,
+          prjMemo: prjMemoRef.current.value,
+        }),
+      }
+    );
 
     const json = await response.json();
     console.log(json);
