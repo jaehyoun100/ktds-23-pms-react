@@ -16,16 +16,20 @@ export function MainProject() {
 export function MainCalendar() {
   return (
     <>
-      <div className="cont2-content1">
-        <div className="border">
-          <div className="common-dashboard-cont">
-            <FaRegCalendarAlt FaRegCalendarCheck className="icons" /> 달력
-          </div>
+      <div className="border">
+        <div className="common-dashboard-cont">
+          <FaRegCalendarAlt FaRegCalendarCheck className="icons" /> 달력
         </div>
-        <div className="border">
-          <div className="common-dashboard-cont">
-            <FaRegCalendarCheck className="icons" /> 일정
-          </div>
+      </div>
+    </>
+  );
+}
+export function MainScaduale() {
+  return (
+    <>
+      <div className="border">
+        <div className="common-dashboard-cont">
+          <FaRegCalendarCheck className="icons" /> 일정
         </div>
       </div>
     </>
