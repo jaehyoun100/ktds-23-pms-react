@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import style from "./Memo.module.css";
 import { BsDashSquare } from "react-icons/bs";
-import { memoAddrAction } from "../../store/toolkit/slice/memoAddrSlice";
+import style from "../Memo.module.css";
+import { memoAddrAction } from "../../../store/toolkit/slice/memoAddrSlice";
 
 export default function SearchAddReceiver() {
   const memoDispatch = useDispatch();

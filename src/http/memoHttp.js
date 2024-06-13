@@ -40,7 +40,7 @@ export const sendMemo = async (
   memoTtl,
   memoCntnt,
   file,
-  rcvMemoList
+  receiveMemoVO
 ) => {
   if (!token) {
     return;
@@ -48,12 +48,14 @@ export const sendMemo = async (
 
   const filename = file === undefined ? null : file;
   const formData = new FormData();
-  formData.append("sendId", sendId);
+  // formData.append("sendId", sendId);
   formData.append("memoTtl", memoTtl);
   formData.append("memoCntnt", memoCntnt);
   formData.append("file", filename);
-  formData.append("receiveMemoVOList", JSON.stringify(rcvMemoList));
-  console.log(rcvMemoList);
+
+  for (const memoVO in receiveMemoVO) {
+    formData.append("receiveInfoList", receiveMemoVO[memoVO]);
+  }
 
   const response = await fetch(`${url}/api/memo/send`, {
     method: "POST",
@@ -61,8 +63,7 @@ export const sendMemo = async (
     body: formData,
   });
   const json = await response.json();
-  console.log(json);
-  // return json;
+  return json;
 };
 
 // 발신 취소

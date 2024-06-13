@@ -1,10 +1,10 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import { useFetch } from "../hook/useFetch";
-import { loadDepartmentMemberList } from "../../http/memoHttp";
-import Button from "../common/Button/Button";
-import style from "./Memo.module.css";
-import { memoAddrAction } from "../../store/toolkit/slice/memoAddrSlice";
+import { useCallback, useMemo, useState } from "react";
+import style from "../Memo.module.css";
 import { useDispatch } from "react-redux";
+import { loadDepartmentMemberList } from "../../../http/memoHttp";
+import { useFetch } from "../../hook/useFetch";
+import { memoAddrAction } from "../../../store/toolkit/slice/memoAddrSlice";
+import Button from "../../common/Button/Button";
 
 export default function SearchEmployee({ token, selectedDeptId, selectTmId }) {
   // toolkit

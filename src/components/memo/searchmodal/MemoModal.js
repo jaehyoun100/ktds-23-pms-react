@@ -1,4 +1,4 @@
-import style from "./Memo.module.css";
+import style from "../Memo.module.css";
 import { BsX } from "react-icons/bs";
 
 export default function MemoModal({ id, header, body, footer, onClose }) {

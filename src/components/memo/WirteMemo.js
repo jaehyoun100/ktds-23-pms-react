@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../common/Button/Button";
-import MemoModal from "./MemoModal";
-import SearchEmpMemo from "./SearchEmpMemo";
 import style from "./Memo.module.css";
 import { useSelector } from "react-redux";
 import { sendMemo } from "../../http/memoHttp";
-import { getEmployee } from "../../http/userDetailHttp";
+import { useNavigate } from "react-router-dom";
+import SearchEmpMemo from "./searchmodal/SearchEmpMemo";
+import MemoModal from "./searchmodal/MemoModal";
 
-export default function WriteMemo({ setIsWriteMode }) {
+export default function WriteMemo() {
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   const fileRef = useRef();
@@ -15,7 +16,7 @@ export default function WriteMemo({ setIsWriteMode }) {
   const memoCntntRef = useRef();
 
   const [showAddrModal, setShowAddrModal] = useState(false);
-  const [rcvMemoData, setRcvMemoData] = useState([]);
+  const [receiveMemoVO, setReceiveMemoVO] = useState([]);
 
   // 수신자 목록
   const { rcvList, rcvRefList, rcvSecretRefList } = useSelector(
@@ -43,56 +44,42 @@ export default function WriteMemo({ setIsWriteMode }) {
     }
 
     // 데이터 생성
-    const sendId = "0112003";
+    // const sendId = "0112003";
     const memoTtl = memoTtlRef.current.value;
     const memoCntnt = memoCntntRef.current.value;
     const file = fileRef.current.files[0];
 
     const json = await sendMemo(
       token,
-      sendId,
+      // sendId,
       memoTtl,
       memoCntnt,
       file,
-      rcvMemoData
+      receiveMemoVO
     );
-    // console.log(json);
+
+    if (json.body) {
+      alert("쪽지가 발송되었습니다.");
+      navigate("/memo/send");
+    } else if (json.errors) {
+      alert(json.errors);
+    }
   };
 
   useEffect(() => {
     const newData = rcvList.map((emp) => [emp.empId, "1401"]);
-    setRcvMemoData(newData);
+    // emp.empId,
+    // "1401",
+    setReceiveMemoVO(newData);
     if (rcvRefList.length > 0) {
       const newData = rcvRefList.map((emp) => [emp.empId, "1402"]);
-      setRcvMemoData((prev) => [...prev, ...newData]);
+      setReceiveMemoVO((prev) => [...prev, ...newData]);
     }
     if (rcvSecretRefList.length > 0) {
       const newData = rcvSecretRefList.map((emp) => [emp.empId, "1403"]);
-      setRcvMemoData((prev) => [...prev, ...newData]);
+      setReceiveMemoVO((prev) => [...prev, ...newData]);
     }
   }, [rcvList, rcvRefList, rcvSecretRefList]);
-
-  // const createRcvMemoData = () => {
-  //   const newData = rcvList.map((emp) => ({
-  //     rcvId: emp.empId,
-  //     rcvCode: "1401",
-  //   }));
-  //   setRcvMemoData(newData);
-  //   if (rcvRefList.length > 0) {
-  //     const newData = rcvRefList.map((emp) => ({
-  //       rcvId: emp.empId,
-  //       rcvCode: "1402",
-  //     }));
-  //     setRcvMemoData((prev) => [...prev, ...newData]);
-  //   }
-  //   if (rcvSecretRefList.length > 0) {
-  //     const newData = rcvSecretRefList.map((emp) => ({
-  //       rcvId: emp.empId,
-  //       rcvCode: "1403",
-  //     }));
-  //     setRcvMemoData((prev) => [...prev, ...newData]);
-  //   }
-  // };
 
   return (
     <div className={style.memoContainer}>
@@ -213,7 +200,7 @@ export default function WriteMemo({ setIsWriteMode }) {
                   {/* <label htmlFor="memoCntnt">내용</label> */}
                   <textarea
                     id="memoCntnt"
-                    className={`${style.writeMemoTextArea} ${style.wirteTextArea}`}
+                    className={`${style.writeMemoTextArea}`}
                     ref={memoCntntRef}
                   ></textarea>
                 </div>
