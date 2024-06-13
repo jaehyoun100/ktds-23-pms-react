@@ -16,6 +16,8 @@ export default function Output() {
   const [needReload, setNeedReload] = useState();
   const token = localStorage.getItem("token");
 
+  const [userData, setUserData] = useState();
+
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
@@ -81,6 +83,24 @@ export default function Output() {
 
     getOutputs();
   }, [fetchLoadOutputs, fetchParams, token]);
+
+  // 로그인 유저의 정보를 받아오는 API
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+    const userInfo = async () => {
+      const response = await fetch("http://localhost:8080/api/", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+      const json = await response.json();
+      setUserData(json.body);
+    };
+    userInfo();
+  }, [token]);
 
   const { count, body: data } = output || {};
 
@@ -204,14 +224,40 @@ export default function Output() {
                     <td>{item.crtrIdVO.empName}</td>
                     <td>{item.crtDt}</td>
                     <td>
-                      <button onClick={() => onOutputModifyHandler(item.outId)}>
-                        수정
-                      </button>
+                      {/** 로그인한 유저가 작성자이거나 관리자이면 버튼 활성화 */}
+                      {userData.empName === item.crtrIdVO.empName ||
+                      userData.admnCode === "301" ? (
+                        <button
+                          onClick={() => onOutputModifyHandler(item.outId)}
+                        >
+                          수정
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => onOutputModifyHandler(item.outId)}
+                          disabled
+                        >
+                          수정
+                        </button>
+                      )}
                     </td>
                     <td>
-                      <button onClick={() => onOutputDeleteHandler(item.outId)}>
-                        삭제
-                      </button>
+                      {/** 로그인한 유저가 작성자이거나 관리자이면 버튼 활성화 */}
+                      {userData.empName === item.crtrIdVO.empName ||
+                      userData.admnCode === "301" ? (
+                        <button
+                          onClick={() => onOutputDeleteHandler(item.outId)}
+                        >
+                          삭제
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => onOutputDeleteHandler(item.outId)}
+                          disabled
+                        >
+                          삭제
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -219,6 +265,19 @@ export default function Output() {
           </table>
         </>
       )}
+
+      {/* {token && (
+        <>
+          <div>총 {count}개의 요구사항이 검색되었습니다.</div>
+          <Table
+            columns={columns}
+            dataSource={data}
+            rowKey={(dt) => dt.rqmId}
+            filter
+            filterOptions={filterOptions}
+          />
+        </>
+      )} */}
 
       {data && isModifyMode && (
         <OutputModify

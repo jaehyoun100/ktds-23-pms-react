@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./requirement.module.css";
 import {
+  delayApprove,
   delayRequirement,
   deleteRequirement,
   loadOneRequirement,
   requirementFileDownload,
+  requirementTestResult,
 } from "../../http/requirementHttp";
 import RequirementModify from "./RequirementModify";
 
 export default function RequirementView() {
-  const [content, setContent] = useState();
+  const [content, setContent] = useState({
+    requirement: [],
+    isPmAndPl: [],
+  });
   const [isModifyMode, setIsModifyMode] = useState(false);
   const [needReloadDetail, setNeedReloadDetail] = useState();
   const token = localStorage.getItem("token");
@@ -18,6 +23,8 @@ export default function RequirementView() {
   const query = new URLSearchParams(useLocation().search);
   const prjId = query.get("prjId");
   const rqmId = query.get("rqmId");
+
+  const [userData, setUserData] = useState();
 
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
@@ -74,6 +81,39 @@ export default function RequirementView() {
     }
   };
 
+  const delayAccessHandler = async (requirementId, isApprove) => {
+    // 승인, 거절 버튼 클릭에 따라서 다르게 처리
+    const check = isApprove
+      ? window.confirm("승인하시겠습니까?")
+      : window.confirm("거절하시겠습니까?");
+
+    if (check) {
+      const json = await delayApprove(token, requirementId, isApprove);
+      console.log(json);
+      setNeedReloadDetail(Math.random());
+    }
+  };
+
+  const testResultHandler = async (requirementId, testResult) => {
+    // 완료, 실패 버튼 클릭에 따라서 다르게 처리
+    const check = window.confirm("결과를 전송하시겠습니까?");
+    if (check) {
+      const json = await requirementTestResult(
+        token,
+        requirementId,
+        testResult
+      );
+      console.log(json);
+
+      if (json.body === true) {
+        setNeedReloadDetail(Math.random());
+      }
+      if (json.body !== (true || false)) {
+        alert(json.body);
+      }
+    }
+  };
+
   const fetchParams = useMemo(() => {
     return { token, needReloadDetail };
   }, [token, needReloadDetail]);
@@ -84,6 +124,24 @@ export default function RequirementView() {
     return await loadOneRequirement(token, prjId, rqmId);
   }, []);
 
+  // 로그인 유저의 정보를 받아오는 API
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+    const userInfo = async () => {
+      const response = await fetch("http://localhost:8080/api/", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+      const json = await response.json();
+      setUserData(json.body);
+    };
+    userInfo();
+  }, [token]);
+
   useEffect(() => {
     // 선택한 요구사항 정보 불러오기
     const getOneRequirement = async () => {
@@ -92,15 +150,23 @@ export default function RequirementView() {
         prjId,
         rqmId,
       });
-      setContent(json);
+      const { requirement, isPmAndPl } = json.body;
+      setContent({
+        requirement,
+        isPmAndPl,
+      });
+      console.log("isPmAndPl: ", isPmAndPl);
     };
 
     getOneRequirement();
   }, [fetchLoadOneRequirement, fetchParams, prjId, rqmId]);
 
-  const { body: data } = content || {};
+  // 객체 분해해서 값 추출
+  const { requirement: data, isPmAndPl } = content || {};
 
-  if (!data) {
+  // const { body: data } = content || {};
+
+  if (!data || !data.projectVO) {
     return <div>Loading...</div>; // 데이터 로딩 중
   }
 
@@ -144,8 +210,28 @@ export default function RequirementView() {
                       </>
                     ) : (
                       <>
-                        <button className={styles.subItem}>승인</button>
-                        <button className={styles.subItem}>거절</button>
+                        {/** 관리자이거나 PM or PL일 경우 승인, 거절 버튼 보여주기 */}
+                        {(userData.admnCode === "301" ||
+                          isPmAndPl === true) && (
+                          <>
+                            <button
+                              className={styles.subItem}
+                              onClick={() =>
+                                delayAccessHandler(data.rqmId, true)
+                              }
+                            >
+                              승인
+                            </button>
+                            <button
+                              className={styles.subItem}
+                              onClick={() =>
+                                delayAccessHandler(data.rqmId, false)
+                              }
+                            >
+                              거절
+                            </button>
+                          </>
+                        )}
                       </>
                     )}
                   </>
@@ -172,7 +258,30 @@ export default function RequirementView() {
               <div className={styles.subItem}>테스터</div>
               <div className={styles.flexRow}>
                 <div className={styles.subItem}>{data.tstrVO.empName}</div>
-                <button className={styles.subItem}>결과제출</button>
+                {data.rqmSts === "604" && // 단위테스트 진행중이고
+                  (data.tstrVO.empName === userData.empName || // 로그인한 사용자 = 테스터이거나
+                    userData.admnCode === "301") && ( // 관리자일때
+                    <>
+                      <div
+                        className={styles.subItem}
+                        style={{ marginLeft: "20px" }}
+                      >
+                        테스트 결과:{" "}
+                      </div>
+                      <button
+                        className={styles.subItem}
+                        onClick={() => testResultHandler(data.rqmId, true)}
+                      >
+                        완료
+                      </button>
+                      <button
+                        className={styles.subItem}
+                        onClick={() => testResultHandler(data.rqmId, false)}
+                      >
+                        실패
+                      </button>
+                    </>
+                  )}
               </div>
             </div>
           </div>
@@ -194,15 +303,33 @@ export default function RequirementView() {
       )}
 
       <div className="button-area right-align">
-        {!isModifyMode && content && (
-          <>
-            <button onClick={onRqmModifyHandler}>수정</button>
-            <button onClick={onRqmDeleteHandler}>삭제</button>
-          </>
-        )}
+        {!isModifyMode &&
+          data &&
+          // 로그인한 유저가 작성자이거나 관리자일때
+          (userData.empName === data.crtrIdVO.empName ||
+            userData.admnCode === "301") && (
+            <>
+              {/** 작성자이거나 관리자일때 수정, 삭제 버튼 보여줌 */}
+              <button onClick={onRqmModifyHandler}>수정</button>
+              <button onClick={onRqmDeleteHandler}>삭제</button>
+            </>
+          )}
 
         <button onClick={onClickHandler}>목록으로 이동</button>
       </div>
+
+      {/* <div className="info-emp">
+        {userData && (
+          <>
+            <div className="info-name name-tag">{userData.empName}</div>
+            <div className="info-dept dept-tag">
+              {userData.departmentVO.deptName}
+            </div>
+            <div className="dept-tag">{userData.teamVO.tmName}</div>
+            <div className="dept-tag">{userData.admnCode}</div>
+          </>
+        )}
+      </div> */}
     </>
   );
 }
