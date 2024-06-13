@@ -38,7 +38,7 @@ const ProjectListApp = () => {
         method: "GET",
       });
       const json = await response.json();
-      console.log("getList : ", json);
+      //console.log("getList : ", json);
       return json.body;
     };
     const getProject = async () => {
@@ -92,12 +92,12 @@ const ProjectListApp = () => {
     setWriteMode(true);
   };
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (data.projectList !== undefined) {
       Object.assign(data.projectList, reviewResult);
-      console.log(data);
+      // console.log(data);
     }
-  });
+  }); */
 
   const columns = [
     {
@@ -143,9 +143,16 @@ const ProjectListApp = () => {
     },
     {
       title: "후기작성",
-      dataIndex: ["result", "result0"],
-      key: "result0",
       width: "auto",
+      render: (srvsts, _, index) => {
+        return (
+          <>
+            {info[4] && info[4][index] && (
+              <>{info[4][index].rvYn}</>
+            )}
+          </>
+        );
+      },
     },
     {
       title: "설문작성",
@@ -153,10 +160,14 @@ const ProjectListApp = () => {
       key: "srvSts",
       width: "auto",
       render: (srvsts, record, index) => {
-        if (info[1].projectList[index].prjSts !== "409") {
-          return "프로젝트 미종료";
+        if (info[1]?.projectList[index]?.prjSts !== "409") {
+         /*  return "미종료";  */
+          return (<>
+            {info[1].projectList[index].prjSts}
+            </>
+          );
         }
-
+  
         if (srvsts === "N") {
           return info[2].admnCode === "301" && !info[3] ? (
             "미생성"
@@ -183,9 +194,9 @@ const ProjectListApp = () => {
             <>
               {!info[3] ? (
                 <>
-                  {info[4] && (
+                  {info[4] && info[4][index] && (
                     <>
-                      {info[4][index].srvId === "N" ? (
+                      {info[4][index].srvYn === "N" ? (
                         <button
                           onClick={() =>
                             surveyWriteAnswerClickHandler(record.prjId)
