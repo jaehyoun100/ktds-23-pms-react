@@ -20,6 +20,7 @@ export default function TeamMate() {
   const [isEditing, setIsEditing] = useState(false);
   const [temporaryList, setTemporaryList] = useState([]);
   const [lastModifyData, setLastModifyData] = useState([]);
+  const [selectedEmpData, setSelectedEmpData] = useState();
   const nameRef = useRef();
 
   const location = useLocation();
@@ -114,6 +115,30 @@ export default function TeamMate() {
     }
   };
 
+  useEffect(() => {
+    const getEmpData = async () => {
+      const response = await fetch(
+        `http://localhost:8080/api/v1/employee/view/${lastModifyData}`,
+        {
+          headers: {
+            Authorization: tokenInfo.token,
+            "Content-Type": "application/json",
+          },
+          method: "GET",
+        }
+      );
+      const json = await response.json();
+      return json;
+    };
+
+    const data = async () => {
+      const getdata = await getEmpData();
+      await setSelectedEmpData(getdata.body);
+    };
+    data();
+  }, [lastModifyData, tokenInfo.token]);
+  console.log(selectedEmpData);
+
   // Helper function to get the last modified data
   const getLastModifiedData = () => {
     if (lastModifiedIndex !== null) {
@@ -133,7 +158,6 @@ export default function TeamMate() {
       setLastModifyData(lastModifiedData.empName);
     }
   }, [lastModifiedIndex, selectedData]);
-  console.log("마지막 변경된 empId", lastModifyData);
   // 삭제 핸들러 함수
   const onDeleteHandler = (idx) => {
     setTemporaryList((prev) => prev.filter((_, index) => index !== idx));
