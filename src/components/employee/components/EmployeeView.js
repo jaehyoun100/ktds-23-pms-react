@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { Button, Descriptions, Typography } from "antd";
-import { Navigate, useParams } from "react-router-dom";
+import { Button, Descriptions, Typography, message } from "antd";
+import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import GradeChangeHistory from "./GradeChangeHistory";
@@ -21,7 +21,6 @@ export default function EmployeeView() {
   const { empId } = useParams();
   const { token } = useSelector((state) => state.tokenInfo);
   const [data, setData] = useState([]);
-  const [isModal, setIsModal] = useState(false); // 모달 상태 (기본 false)
   const [dataList, setDataList] = useState({
     depart: [],
     team: [],
@@ -29,6 +28,8 @@ export default function EmployeeView() {
     grade: [],
     workSts: [],
   });
+
+  // TODO: 비밀번호 변경 버튼 추가
 
   const inputOptions = useMemo(
     () => [
@@ -42,18 +43,6 @@ export default function EmployeeView() {
         title: "이메일",
         type: "string",
         dataIndex: "email",
-        required: true,
-      },
-      {
-        title: "비밀번호",
-        type: "string",
-        dataIndex: "pwd",
-        required: true,
-      },
-      {
-        title: "비밀번호 확인",
-        type: "string",
-        dataIndex: "pwd",
         required: true,
       },
       {
@@ -78,15 +67,6 @@ export default function EmployeeView() {
         })),
         required: true,
       },
-      // {
-      //   title: "팀",
-      //   type: "select",
-      //   dataIndex: "tmId",
-      //   option: dataList.team.map(({ dataId, dataName }) => ({
-      //     label: dataName,
-      //     value: dataId,
-      //   })),
-      // },
       {
         title: "직무",
         type: "select",
@@ -167,28 +147,28 @@ export default function EmployeeView() {
       {
         key: "deptName",
         label: "부서",
-        children: data?.departmentVO?.deptName,
+        children: data?.deptName,
       },
       {
         key: "tmName",
         label: "팀",
-        children: data?.teamVO?.tmName,
+        children: data?.tmName,
       },
 
       {
         key: "jobName",
         label: "직무",
-        children: data?.jobVO?.jobName,
+        children: data?.jobName,
       },
       {
         key: "pstnId",
         label: "직급",
-        children: `${data?.commonCodeVO?.cmcdName}(${data.pstnId})`,
+        children: `${data?.pstnName}(${data.pstnId})`,
       },
       {
         key: "workSts",
         label: "재직상태",
-        children: `${data?.commonCodeVO?.cmcdName}(${data.workSts})`,
+        children: `${data?.workStsName}(${data?.workSts})`,
         // children: data?.workSts,
       },
       {
@@ -226,32 +206,15 @@ export default function EmployeeView() {
     async (data) => {
       try {
         await handleUpdateEmployee({ data, token, empId }); // 데이터 업데이트
+      } catch (error) {
+        message.warning("수정 실패하였습니다.");
+      } finally {
         const updatedData = await loadOneData({ token, empId }); // 업데이트된 데이터 다시 가져오기
         setData(updatedData.body);
-      } catch (error) {
-        console.error("Error:", error);
       }
     },
     [empId, token]
   );
-
-  // 모달 수정 완료 후 확인 버튼 눌렀을 때 호출 함수
-  // !!!함수 실행시점에 loadOneData라는 함수에 변경이 있을수 있으므로, useCallback 사용하고, 참조배열에 loadOneData 추가.
-  const ModifyHandleOk = useCallback(async () => {
-    // 여기에 수정 요청을 보내는 로직을 추가
-    // 예: await updateEmployee(isModifyEmployee);
-
-    setIsModal(false); // 모달 닫기
-    const updatedData = await loadOneData({ token, empId });
-    setData(updatedData.body); // 데이터 다시 로드
-    // loadOneData(); // 데이터 다시 로드
-  }, [empId, token]);
-
-  // 모달의 취소 버튼 클릭 시 호출되는 함수
-  const ModifyHandleCancel = () => {
-    setIsModal(false); // 모달 닫기
-  };
-
   // useEffect는 항상 다른 함수나 state, 변수를 참조할수 있기 때문에
   // return 바로 위에 둘것!!!!!!!!!!!!!!!!!!!!!
   useEffect(() => {

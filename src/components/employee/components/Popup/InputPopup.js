@@ -8,6 +8,7 @@ import React, {
 import {
   Button,
   Checkbox,
+  DatePicker,
   Descriptions,
   Form,
   Input,
@@ -20,8 +21,11 @@ import {
 import { produce } from "immer";
 // import { Scrollbar } from "react-scrollbars-custom";
 import Spacer from "../Spacer";
+import dayjs from "dayjs";
 
 const { TextArea, Password } = Input;
+
+const now = dayjs();
 
 export default function InputPopup({
   modalWidth,
@@ -94,6 +98,17 @@ export default function InputPopup({
     [editData]
   );
 
+  const handleDateChange = useCallback(
+    (key) => (_, dateStr) => {
+      setEditData(
+        produce((draft) => {
+          draft[key] = dateStr;
+        })
+      );
+    },
+    [editData]
+  );
+
   const renderInput = useCallback(
     ({ type, dataIndex, option, readOnly }) => {
       switch (type) {
@@ -103,6 +118,15 @@ export default function InputPopup({
               value={editData[dataIndex]}
               onChange={handleInputChange(dataIndex)}
               disabled={readOnly}
+            />
+          );
+        case "date":
+          return (
+            <DatePicker
+              value={editData[dataIndex]}
+              onChange={handleDateChange(dataIndex)}
+              disabled={readOnly}
+              format="YYYY-MM-DD"
             />
           );
         case "number":
