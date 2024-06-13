@@ -4,7 +4,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function MainChart({ completed, inProgress }) {
+export default function MainChart({ completed, inProgress, children }) {
   const data = {
     labels: ["Completed", "In Progress"],
     datasets: [
@@ -30,6 +30,18 @@ export default function MainChart({ completed, inProgress }) {
 
   return (
     <div style={{ height: "200px", width: "200px" }}>
+      <div
+        style={{
+          textAlign: "center",
+          color: "var(--main-color)",
+          fontWeight: "bold",
+          marginBottom: "5px",
+        }}
+      >
+        {`[ `}
+        {children}
+        {` ]`}
+      </div>
       <Pie data={data} options={options} />
     </div>
   );

@@ -57,13 +57,19 @@ export default function ChartContainer() {
     <div
       style={{
         display: "flex",
-        justifyContent: "space-around",
+        gap: "25px",
         marginTop: "80px",
       }}
     >
-      <MainChart completed={completed1} inProgress={inProgress1} />
-      <MainChart completed={completed2} inProgress={inProgress2} />
-      <MainChart completed={completed3} inProgress={inProgress3} />
+      <MainChart completed={completed1} inProgress={inProgress1}>
+        요구사항
+      </MainChart>
+      <MainChart completed={completed2} inProgress={inProgress2}>
+        이슈관리
+      </MainChart>
+      <MainChart completed={completed3} inProgress={inProgress3}>
+        묻고답하기
+      </MainChart>
     </div>
   );
 }
