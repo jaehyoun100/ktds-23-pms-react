@@ -1,14 +1,14 @@
-import "../ContentMain.css";
+import w from "../ContentMain.module.css";
 import { PiUserCircle } from "react-icons/pi";
 import jaeDragon from "../jaeDragon.jpg";
 
 export function MainEmployeeImg() {
   return (
     <>
-       <div className="border">
+      <div className={w.border}>
         <img
           src={jaeDragon}
-          className="myInfoImg"
+          className={w.myInfoImg}
           alt="로그인한 유저의 프로필 사진"
         />
       </div>
@@ -18,13 +18,16 @@ export function MainEmployeeImg() {
 export function MainEmployee() {
   return (
     <>
-      <div className="border">
-        <div className="common-dashboard-cont">
-          <PiUserCircle className="icons" /> 내 정보
+      <div className={w.border}>
+        <div className={w.commonDashboardCont}>
+          <PiUserCircle className={w.icons} /> 내 정보
         </div>
-        <div>박재현 상무 | 0011001</div>
-        <div>(jaehyoun@pms.com)</div>
-        <div>인사부 | 인사 1팀</div>
+        <div className={w.myInfoContainer}>
+          <MainEmployeeImg />
+          <div>박재현 상무 | 0011001</div>
+          <div>(jaehyoun@pms.com)</div>
+          <div>인사부 | 인사 1팀</div>
+        </div>
       </div>
     </>
   );
@@ -33,7 +36,7 @@ export function MainEmployee() {
 export function MemuEmployee() {
   return (
     <>
-      <div className="border">인사</div>
+      <div className={w.border}>인사</div>
     </>
   );
 }

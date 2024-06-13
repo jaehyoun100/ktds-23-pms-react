@@ -1,4 +1,4 @@
-import "./ContentMain.css";
+import w from "./ContentMain.module.css";
 import {
   MainEmployee,
   MainEmployeeImg,
@@ -18,21 +18,20 @@ import { MemuApproval } from "./maincomponents/Approval";
 
 export default function ContentMain() {
   return (
-    <div className="dashboard">
-      <div className="cont1">
-        <div className="cont1-content1">
-          <MainEmployeeImg />
+    <div className={w.dashboard}>
+      <div className={w.cont1}>
+        <div className={w.cont1Content1}>
           <MainEmployee />
           <MainCommute />
         </div>
         <MainMemo />
-        <div className="cont1-content3">
+        <div className={w.cont1Content3}>
           <MainProject />
           <MainIssue />
         </div>
       </div>
 
-      <div className="cont2">
+      <div className={w.cont2}>
         <MainCalendar />
         <MainScaduale />
 
