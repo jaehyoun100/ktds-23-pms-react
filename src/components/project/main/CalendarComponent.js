@@ -56,7 +56,6 @@ const CalendarComponent = ({
     }
     setMemo("");
   };
-
   const handleChangeMemo = () => {
     if (memoHiddenRef.current) {
       memoHiddenRef.current.style.display = "none";
@@ -66,8 +65,28 @@ const CalendarComponent = ({
   };
 
   const tileContent = ({ date, view }) => {
+    if (
+      view === "month" &&
+      events.find((x) => x.date === format(date, "yyyy-MM-dd"))
+    ) {
+      return (
+        <div className={styles.date}>
+          {date.getDate()}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "absolute",
+            }}
+          >
+            <div className={styles.dot}></div>
+          </div>
+        </div>
+      );
+    }
     if (view === "month") {
-      return <div>{date.getDate()}</div>;
+      return <div className={styles.date}>{date.getDate()}</div>;
     }
     return null;
   };
@@ -76,7 +95,7 @@ const CalendarComponent = ({
     <div>
       <div className={s.calendarContainer}>
         <Calendar
-          className={styles.reactCalendar}
+          className={`${styles.reactCalendar} react-calendar`}
           onChange={handleDateChange}
           value={date}
           locale={"ko-KR"}
