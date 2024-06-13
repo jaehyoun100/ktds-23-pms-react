@@ -242,9 +242,46 @@ export default function TeamMate() {
         </div>
         <div className={s.teamMateEmpArea}>
           <div className={s.teamMateEmpPhoto}>
-            <IoPersonCircleSharp />
+            {selectedEmpData && selectedEmpData.originPrflFileName !== null ? (
+              selectedEmpData.originPrflFileName
+            ) : (
+              <IoPersonCircleSharp />
+            )}
           </div>
-          <div className={s.teamMateEmpInfo}>사원 정보 공간입니다.</div>
+          <div className={s.teamMateEmpInfo}>
+            <div className={s.teamMateEmpInfoFlex}>
+              <div>이름 :</div>
+              <div>{selectedEmpData && selectedEmpData.empName}</div>
+            </div>
+            <div className={s.teamMateEmpInfoFlex}>
+              <div>소속 :</div>
+              <div>
+                {selectedEmpData && selectedEmpData.departmentVO.deptName}
+                {selectedEmpData && "/"}
+                {selectedEmpData && selectedEmpData.teamVO?.tmName}
+              </div>
+            </div>
+            <div className={s.teamMateEmpInfoFlex}>
+              <div>직급 :</div>
+              <div>{selectedEmpData && selectedEmpData.cmcdName}</div>
+            </div>
+            <div className={s.teamMateEmpInfoFlex}>
+              <div>직무 :</div>
+              <div>{selectedEmpData && selectedEmpData.jobVO.jobName}</div>
+            </div>
+            <div className={s.teamMateEmpInfoFlex}>
+              <div>생년월일 :</div>
+              <div>{selectedEmpData && selectedEmpData.brth}</div>
+            </div>
+            <div className={s.teamMateEmpInfoFlex}>
+              <div>이메일 :</div>
+              <div>{selectedEmpData && selectedEmpData.email}</div>
+            </div>
+            <div className={s.teamMateEmpInfoFlex}>
+              <div>주소 :</div>
+              <div>{selectedEmpData && selectedEmpData.addr}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
