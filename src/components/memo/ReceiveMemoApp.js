@@ -1,6 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
 import ReceiveMemoView from "./ReceiveMemoView";
-import { BsEnvelope, BsStar } from "react-icons/bs";
+import {
+  BsEnvelope,
+  BsEnvelopeOpen,
+  BsStar,
+  BsFillStarFill,
+} from "react-icons/bs";
 import Table from "../../utils/Table";
 import { loadReceiveMemos } from "../../http/memoHttp";
 import { useFetch } from "../hook/useFetch";
@@ -46,13 +51,14 @@ export default function ReceiveMemoApp() {
       dataIndex: "rcvSaveYn",
       key: "rcvSaveYn",
       width: "5%",
-      style: "",
+      render: (text) => (text === "Y" ? <BsFillStarFill /> : <BsStar />),
     },
     {
       title: <BsEnvelope />,
       dataIndex: "rcvDate",
       key: "rcvDate",
       width: "5%",
+      render: (text) => (text !== null ? <BsEnvelopeOpen /> : <BsEnvelope />),
     },
     {
       title: "제목",

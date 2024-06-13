@@ -1,8 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
-import style from "./Memo.module.css";
-import { loadTeamList } from "../../http/deptteamHttp";
-import { useFetch } from "../hook/useFetch";
-import SearchEmployee from "./SearchEmployee";
+import style from "../Memo.module.css";
+import { loadTeamList } from "../../../http/deptteamHttp";
+import { useFetch } from "../../hook/useFetch";
 
 export default function SearchTeam({
   token,

@@ -2,28 +2,15 @@ Button {
   font-size: 14px;
 }
 
-/* input[type="text"],
-input[type="text"]:hover,
-input[type="text"]:active, 
-input[type="text"]:focus {
-  all: unset;
-} */
-
 input[type="text"].wirteInput {
-  height: 32px;
-}
-
-/* textarea,
-textarea:hover,
-textarea:active,
-textarea:focus {
-  all: unset;
-} */
-
-input[type="textarea"].wirteTextArea {
   background-color: transparent;
 }
 
+input[type="text"].wirteInput:hover, 
+input[type="text"].wirteInput:active, 
+input[type="text"].wirteInput:focus {
+  border: none;
+}
 
 .memoContainer {
   background-color: #ffffff;
@@ -124,6 +111,32 @@ input[type="textarea"].wirteTextArea {
 .memoListArea {
   margin: 0 25px;
   padding: 8px 0;
+}
+
+.tableRow {
+  height: 60px; /* 각 행의 높이를 설정 */
+}
+
+.cellSpan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.listIcon { 
+  width: 25px;
+  height: 25px;
+  color: var(--third-color);
+}
+
+.listIconActive { 
+  width: 25px;
+  height: 25px;
+  color: var(--main-color);
 }
 
 /*********************************** Write ***********************************/
@@ -252,6 +265,13 @@ input[type="textarea"].wirteTextArea {
 .writeMemoTextArea {
   width: -webkit-fill-available;
   height: 95%;
+  background-color: transparent;
+}
+
+.writeMemoTextArea:hover, 
+.writeMemoTextArea:active, 
+.writeMemoTextArea:focus {
+  border: none;
 }
 
 /* Modal */

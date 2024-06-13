@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import Search from "../common/search/Search";
-import { loadDepartmentList } from "../../http/deptteamHttp";
-import { useFetch } from "../hook/useFetch";
-import style from "./Memo.module.css";
+import { BsFolder, BsFolder2Open } from "react-icons/bs";
+import { loadDepartmentList } from "../../../http/deptteamHttp";
+import { useFetch } from "../../hook/useFetch";
 import SearchTeam from "./SearchTeam";
-import { BsFolder, BsFolder2Open, BsDashSquare } from "react-icons/bs";
+import style from "../Memo.module.css";
 import SearchEmployee from "./SearchEmployee";
 import SearchAddReceiver from "./SearchAddReceiver";
+import Search from "antd/es/input/Search";
 
 export default function SearchEmpMemo() {
   const token = localStorage.getItem("token");
