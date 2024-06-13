@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import s from "../project.module.css";
+import ProfileModal from "./ProfileModal";
 
 const Profile = ({ profileFile, profileValue }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   const onProfileClickHandler = () => {
-    alert("프로필을 누름.");
+    setShowModal(true);
     console.log(profileValue);
   };
   const styles = {
@@ -18,7 +24,17 @@ const Profile = ({ profileFile, profileValue }) => {
     height: "40px",
   };
 
-  return <div style={styles} onClick={onProfileClickHandler}></div>;
+  return (
+    <>
+      <div style={styles} onClick={onProfileClickHandler}></div>
+      <ProfileModal
+        show={showModal}
+        onClose={handleCloseModal}
+        closeContent="확인"
+        selectedEmpData={profileValue}
+      />
+    </>
+  );
 };
 
 export default Profile;

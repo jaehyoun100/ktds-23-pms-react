@@ -44,13 +44,13 @@ export default function MainInfo({ project }) {
       <div
         className={`${styles.displayFlex} ${styles.infoDisplay} ${styles.infoFirst}`}
       >
-        <div>프로젝트 기간</div>
+        <div className={styles.infoTitle}>프로젝트 기간</div>
         <div>
           {project.strtDt} ~ {project.endDt}
         </div>
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
-        <div>고객사</div>
+        <div className={styles.infoTitle}>고객사</div>
         <div className={styles.displayInfoFlex}>
           {" "}
           {project.clientVO.clntName}{" "}
@@ -61,7 +61,7 @@ export default function MainInfo({ project }) {
         </div>
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
-        <div>참여원</div>
+        <div className={styles.infoTitle}>참여원</div>
         {project.projectTeammateList.map((item, idx) => (
           <div key={item.tmId}>
             <Profile
@@ -81,7 +81,7 @@ export default function MainInfo({ project }) {
         ))}
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
-        <div>진행정도</div>
+        <div className={styles.infoTitle}>진행정도</div>
         <ProjectSubChart
           totalTasks={project.totalRequireCnt}
           completedTasks={project.requireCnt}

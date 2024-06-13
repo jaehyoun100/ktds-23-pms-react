@@ -16,9 +16,10 @@ h1 {
   display: flex;
 }
 .info {
+  margin-left: 10px;
   align-items: center;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   color: var(--second-color);
   cursor: pointer;
 }
@@ -189,13 +190,13 @@ h1 {
   margin-left: 40px;
   margin-top: 30px;
 }
-.infoDisplay :first-child {
-  width: 120px;
-  font-weight: 700;
-}
+
 .infoDisplay > div {
   margin-right: 20px;
   font-size: 17px;
+}
+.infoTitle {
+  width: 120px;
 }
 
 /* Modal Window */
@@ -217,6 +218,7 @@ h1 {
   padding: 1rem;
   background-color: #fdfdfd;
 }
+
 .clientModalWindow {
   position: fixed;
   top: 50%;
@@ -428,4 +430,74 @@ h1 {
 .modifyButtonArea > button {
   margin-right: 50px;
   margin-bottom: 20px;
+}
+
+.modalInfoWindow {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  width: 490px;
+  max-width: 90%;
+  height: 400px;
+  max-height: 90%;
+  padding: 1rem;
+  background-color: #fdfdfd;
+}
+.closeInfoModal {
+  width: 400px;
+  text-align: right;
+}
+.infoEmpPhoto {
+  width: 150px;
+  height: 150px;
+}
+.infoEmpPhoto > svg {
+  width: 80%;
+  height: 80%;
+}
+.infoEmpArea {
+  margin-top: 30px;
+  border-radius: 10px;
+  position: relative;
+  left: 0%;
+  width: 450px;
+  height: 280px;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+.infoEmpInfo {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.infoEmpPhoto > svg {
+  width: 80%;
+  height: 80%;
+}
+.infoEmpInfo > div {
+  font-size: 15px;
+}
+.infoEmpInfoFlex {
+  display: flex;
+  align-items: start;
+}
+.infoEmpInfoFlex :first-child {
+  width: 80px;
+}
+.infoEmpInfoFlex > div {
+  text-align: left;
+  width: 200px;
+}
+.infoInputSpace {
+  margin-top: 10px;
+  text-align: right;
+  padding-right: 5px;
 }
