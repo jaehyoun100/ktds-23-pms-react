@@ -4,6 +4,7 @@ import { BsEnvelope, BsStar } from "react-icons/bs";
 import Table from "../../utils/Table";
 import { loadReceiveMemos } from "../../http/memoHttp";
 import { useFetch } from "../hook/useFetch";
+import style from "./Memo.module.css";
 
 let pageNo = 0;
 
@@ -45,18 +46,13 @@ export default function ReceiveMemoApp() {
       dataIndex: "rcvSaveYn",
       key: "rcvSaveYn",
       width: "5%",
+      style: "",
     },
     {
       title: <BsEnvelope />,
       dataIndex: "rcvDate",
       key: "rcvDate",
       width: "5%",
-    },
-    {
-      title: "발신일",
-      dataIndex: "rcvDate",
-      key: "rcvDate",
-      width: "20%",
     },
     {
       title: "제목",
@@ -75,7 +71,7 @@ export default function ReceiveMemoApp() {
       title: "수신일",
       dataIndex: ["sendMemoVO", "sendDate"],
       key: "sendDate",
-      width: "5%",
+      width: "15%",
     },
   ];
 
@@ -109,22 +105,31 @@ export default function ReceiveMemoApp() {
   };
 
   return (
-    <div>
+    <div className={style.memoContainer}>
       {token && !isSelect && (
         <>
-          <div>받은 쪽지함: 총 {count}</div>
+          <div className={style.memoHeader}>
+            <div className={style.titleArea}>
+              <h2 className={style.memoboxTitle}>
+                <span className={style.memoboxText}>받은쪽지함</span>
+                <span className={style.memoboxText}>{count}</span>
+              </h2>
+            </div>
+          </div>
 
-          <Table
-            rowSelection={{
-              type: "checkbox",
-              ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={receiveMemos}
-            rowKey={(dt) => dt.rcvMemoId}
-            filter
-            filterOptions={filterOptions}
-          />
+          <div className={style.memoListArea}>
+            <Table
+              rowSelection={{
+                type: "checkbox",
+                ...rowSelection,
+              }}
+              columns={columns}
+              dataSource={receiveMemos}
+              rowKey={(dt) => dt.rcvMemoId}
+              filter
+              filterOptions={filterOptions}
+            />
+          </div>
         </>
       )}
       {token && isSelect && (

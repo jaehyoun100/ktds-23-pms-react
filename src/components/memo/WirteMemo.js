@@ -1,28 +1,28 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../common/Button/Button";
 import MemoModal from "./MemoModal";
 import SearchEmpMemo from "./SearchEmpMemo";
 import style from "./Memo.module.css";
 import { useSelector } from "react-redux";
+import { sendMemo } from "../../http/memoHttp";
+import { getEmployee } from "../../http/userDetailHttp";
 
 export default function WriteMemo({ setIsWriteMode }) {
   const token = localStorage.getItem("token");
 
-  const rcvListRef = useRef();
-  const rcvRefListRef = useRef();
-  const rcvSecretRefListRef = useRef();
-  const memoTtlRef = useRef();
   const fileRef = useRef();
+  const memoTtlRef = useRef();
   const memoCntntRef = useRef();
 
-  const [rcvData, setRcvData] = useState([]);
   const [showAddrModal, setShowAddrModal] = useState(false);
+  const [rcvMemoData, setRcvMemoData] = useState([]);
 
-  // 수신자 목록 가져오기
+  // 수신자 목록
   const { rcvList, rcvRefList, rcvSecretRefList } = useSelector(
     (state) => state.receiverList
   );
 
+  // modal open/close
   const onEmpListClickHandler = () => {
     setShowAddrModal(true);
   };
@@ -32,29 +32,79 @@ export default function WriteMemo({ setIsWriteMode }) {
   };
 
   const onSelectRcvHandler = () => {
-    console.log("확인 1 ", rcvList);
-    console.log("확인 2 ", rcvRefList);
-    console.log("확인 3 ", rcvSecretRefList);
     setShowAddrModal(false);
   };
 
+  // 쪽지 보내기
   const onWriteMemoClickHandler = async () => {
-    // if (rcvIdRef.current) {
-    //   const rcvId = rcvIdRef.current.value;
-    //   setRcvData((prevData) => [...prevData, [rcvId, "1401"]]);
-    // }
-    // console.log(rcvData);
-    // const memoTtl = memoTtlRef.current.value;
-    // const file = fileRef.current.files[0];
-    // const memoCntnt = memoCntntRef.current.value;
-    // const json = await writeMemo(token, rcvData, memoTtl, file, memoCntnt);
-    // console.log(">>>>", json);
+    if (rcvList.length < 1) {
+      alert("수신인을 입력해주세요");
+      return;
+    }
+
+    // 데이터 생성
+    const sendId = "0112003";
+    const memoTtl = memoTtlRef.current.value;
+    const memoCntnt = memoCntntRef.current.value;
+    const file = fileRef.current.files[0];
+
+    const json = await sendMemo(
+      token,
+      sendId,
+      memoTtl,
+      memoCntnt,
+      file,
+      rcvMemoData
+    );
+    // console.log(json);
   };
+
+  useEffect(() => {
+    const newData = rcvList.map((emp) => [emp.empId, "1401"]);
+    setRcvMemoData(newData);
+    if (rcvRefList.length > 0) {
+      const newData = rcvRefList.map((emp) => [emp.empId, "1402"]);
+      setRcvMemoData((prev) => [...prev, ...newData]);
+    }
+    if (rcvSecretRefList.length > 0) {
+      const newData = rcvSecretRefList.map((emp) => [emp.empId, "1403"]);
+      setRcvMemoData((prev) => [...prev, ...newData]);
+    }
+  }, [rcvList, rcvRefList, rcvSecretRefList]);
+
+  // const createRcvMemoData = () => {
+  //   const newData = rcvList.map((emp) => ({
+  //     rcvId: emp.empId,
+  //     rcvCode: "1401",
+  //   }));
+  //   setRcvMemoData(newData);
+  //   if (rcvRefList.length > 0) {
+  //     const newData = rcvRefList.map((emp) => ({
+  //       rcvId: emp.empId,
+  //       rcvCode: "1402",
+  //     }));
+  //     setRcvMemoData((prev) => [...prev, ...newData]);
+  //   }
+  //   if (rcvSecretRefList.length > 0) {
+  //     const newData = rcvSecretRefList.map((emp) => ({
+  //       rcvId: emp.empId,
+  //       rcvCode: "1403",
+  //     }));
+  //     setRcvMemoData((prev) => [...prev, ...newData]);
+  //   }
+  // };
 
   return (
     <div className={style.memoContainer}>
       {!showAddrModal && (
         <>
+          <div className={style.memoHeader}>
+            <div className={style.titleArea}>
+              <h2 className={style.memoboxTitle}>
+                <span>쪽지쓰기</span>
+              </h2>
+            </div>
+          </div>
           <div className={style.memoToolBar}>
             <Button onClickHandler={onWriteMemoClickHandler}>보내기</Button>
             <Button>취소</Button>
@@ -75,7 +125,6 @@ export default function WriteMemo({ setIsWriteMode }) {
                           type="text"
                           id="rcvList"
                           className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                          ref={rcvListRef}
                           defaultValue={rcvList.map(
                             (emp) => `${emp.empName} (${emp.email})`
                           )}
@@ -100,7 +149,6 @@ export default function WriteMemo({ setIsWriteMode }) {
                         type="text"
                         id="rcvMemoId"
                         className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                        ref={rcvRefListRef}
                         defaultValue={rcvRefList.map(
                           (emp) => `${emp.empName} (${emp.email})`
                         )}
@@ -117,9 +165,8 @@ export default function WriteMemo({ setIsWriteMode }) {
                     <div className={style.writeOptionArea}>
                       <input
                         type="text"
-                        id="rcvMemoId"
+                        style={{ disabled: true }}
                         className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                        ref={rcvSecretRefListRef}
                         defaultValue={rcvSecretRefList.map(
                           (emp) => `${emp.empName} (${emp.email})`
                         )}
