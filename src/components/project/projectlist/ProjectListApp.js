@@ -38,13 +38,12 @@ const ProjectListApp = () => {
         method: "GET",
       });
       const json = await response.json();
-      console.log(json.body, "!@#!@ASASDASAS");
+
       return json.body;
     };
     const getProject = async () => {
       const run = await getList();
       setData(run[1]);
-      console.log(run[1], "!!!!!");
 
       let optionList = [];
       let filterOptionArray = [];
@@ -65,6 +64,7 @@ const ProjectListApp = () => {
     };
     getProject();
   }, [tokenInfo.token]);
+  console.log(info);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -91,6 +91,12 @@ const ProjectListApp = () => {
     setSelectedProjectId(projectId);
     setWriteMode(true);
   };
+
+  useEffect(() => {
+    if (data.projectList !== undefined) {
+      Object.assign(data.projectList, reviewResult);
+    }
+  });
 
   const columns = [
     {
@@ -136,7 +142,7 @@ const ProjectListApp = () => {
     },
     {
       title: "후기작성",
-      dataIndex: "result0",
+      dataIndex: ["result", "result0"],
       key: "result0",
       width: "auto",
     },
