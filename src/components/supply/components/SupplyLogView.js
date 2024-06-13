@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { loadSupplyLogList } from "../../../http/supplyHttp";
+import { loadSupplyApprovalList } from "../../../http/supplyHttp";
 import Table from "../../../utils/Table";
 import style from "../supply.module.css";
 
@@ -8,27 +8,29 @@ export default function SupplyLogView({
   needReload,
   token,
 }) {
-  const [selectedSplLogId, setSelectedSplLogId] = useState();
-  const [selectedReqRsn, setSelectedReqRsn] = useState("");
+  // const [selectedSplLogId, setSelectedSplLogId] = useState();
+  // const [selectedReqRsn, setSelectedReqRsn] = useState("");
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
-  const isSelect = selectedSplLogId !== undefined;
+  // const isSelect = selectedSplLogId !== undefined;
 
-  const memoizedLoadSupplyLogList = useCallback(loadSupplyLogList, []);
+  const memoizedLoadSupplyApprovalList = useCallback(
+    loadSupplyApprovalList,
+    []
+  );
   const memoizedToken = useMemo(() => {
     return { token, needReload };
   }, [token, needReload]);
 
   useEffect(() => {
     const fetchingData = async () => {
-      const json = await memoizedLoadSupplyLogList({ ...memoizedToken });
+      const json = await memoizedLoadSupplyApprovalList({ ...memoizedToken });
 
       const flattenedData = json.body.map((item) => ({
         ...item,
-        splCtgr: item.supplyVO.splCtgr,
-        splName: item.supplyVO.splName,
         empName: `${item.employeeVO.empName} (${item.employeeVO.email})`,
+        reqDt: item.approvalVO.apprDate,
       }));
 
       setData(flattenedData);
@@ -36,13 +38,16 @@ export default function SupplyLogView({
     };
 
     fetchingData();
-  }, [memoizedLoadSupplyLogList, memoizedToken]);
+  }, [memoizedLoadSupplyApprovalList, memoizedToken]);
 
   const columns = [
     {
       title: "신청인",
       dataIndex: "empName",
       key: "empName",
+    },
+    {
+      title: "신청 유형",
     },
     {
       title: "카테고리",
@@ -64,20 +69,25 @@ export default function SupplyLogView({
       dataIndex: "reqDt",
       key: "reqDt",
     },
+    {
+      title: "승인 여부",
+      dataIndex: "splApprYn",
+      key: "splApprYn",
+    },
   ];
 
-  const simplifiedColumns = [
-    {
-      title: "신청인",
-      dataIndex: "empName",
-      key: "empName",
-    },
-    {
-      title: "제품 명",
-      dataIndex: "splName",
-      key: "splName",
-    },
-  ];
+  // const simplifiedColumns = [
+  //   {
+  //     title: "신청인",
+  //     dataIndex: "empName",
+  //     key: "empName",
+  //   },
+  //   {
+  //     title: "제품 명",
+  //     dataIndex: "splName",
+  //     key: "splName",
+  //   },
+  // ];
 
   const filterOptions = [
     {
@@ -94,12 +104,12 @@ export default function SupplyLogView({
     },
   ];
 
-  const onRowClickHandler = (row) => {
-    setSelectedSplLogId((prevId) =>
-      prevId === row.splLogId ? undefined : row.splLogId
-    );
-    setSelectedReqRsn(row.reqRsn);
-  };
+  // const onRowClickHandler = (row) => {
+  //   setSelectedSplLogId((prevId) =>
+  //     prevId === row.splLogId ? undefined : row.splLogId
+  //   );
+  //   setSelectedReqRsn(row.reqRsn);
+  // };
 
   const backToListButtonHandler = () => {
     setIsSupplyLogViewMode(false);
@@ -110,27 +120,27 @@ export default function SupplyLogView({
       <div className={style.supplyAppContainer}>
         <div className={style.tableComponent}>
           <Table
-            columns={isSelect ? simplifiedColumns : columns}
+            columns={columns}
             dataSource={data}
             rowKey={(dt) => dt.splLogId}
             filter
             filterOptions={filterOptions}
-            onRow={(record) => {
-              return {
-                onClick: () => {
-                  onRowClickHandler(record);
-                },
-                style: { cursor: "pointer" },
-              };
-            }}
+            // onRow={(record) => {
+            //   return {
+            //     onClick: () => {
+            //       onRowClickHandler(record);
+            //     },
+            //     style: { cursor: "pointer" },
+            //   };
+            // }}
           />
         </div>
-        {isSelect && (
+        {/* {isSelect && (
           <div className={style.supplyRequestReason}>
             <h3>신청 사유</h3>
             <p>{selectedReqRsn}</p>
           </div>
-        )}
+        )} */}
       </div>
       <button onClick={backToListButtonHandler}>목록으로</button>
     </>

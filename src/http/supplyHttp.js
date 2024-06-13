@@ -118,7 +118,7 @@ export const deleteSupply = async (splId, token) => {
   return json;
 };
 
-export const loadSupplyLogList = async ({ token, pageNo = 0 }) => {
+export const loadSupplyApprovalList = async ({ token, pageNo = 0 }) => {
   if (!token) {
     return undefined;
   }

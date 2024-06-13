@@ -37,13 +37,20 @@ export default function SupplyRegist({
   }, [memoizedLoadSupplyCategory, memoizedToken]);
 
   const handleInputChange = (index, event) => {
+    const { name, value } = event.target;
     const values = [...inputFields];
-    if (event.target.name === "image") {
+
+    if (name === "image") {
       const file = event.target.files[0];
-      values[index][event.target.name] = file;
+      values[index][name] = file;
       values[index].imagePreview = URL.createObjectURL(file);
     } else {
-      values[index][event.target.name] = event.target.value;
+      if ((name === "price" || name === "stock") && value.includes("-")) {
+        alert("음수는 입력할 수 없습니다.");
+        values[index][name] = "";
+      } else {
+        values[index][name] = value;
+      }
     }
     setInputFields(values);
   };

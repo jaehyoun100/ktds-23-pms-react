@@ -15,6 +15,7 @@ export default function SupplyApp() {
   const [needReload, setNeedReload] = useState();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hideZeroInventory, setHideZeroInventory] = useState(false);
 
   const token = localStorage.getItem("token");
   const isSelect = selectedSplId !== undefined;
@@ -39,17 +40,19 @@ export default function SupplyApp() {
       title: "카테고리",
       dataIndex: "splCtgr",
       key: "splCtgr",
-      // width: "20%"
+      width: "20%",
     },
     {
       title: "제품 명",
       dataIndex: "splName",
       key: "splName",
+      // width: "20%",
     },
     {
       title: "재고",
       dataIndex: "invQty",
       key: "invQty",
+      width: "10%",
     },
   ];
 
@@ -91,6 +94,14 @@ export default function SupplyApp() {
     setIsSupplyLogViewMode(true);
   };
 
+  const handleCheckboxChange = (e) => {
+    setHideZeroInventory(e.target.checked);
+  };
+
+  const filteredData = hideZeroInventory
+    ? data.filter((item) => item.invQty > 0)
+    : data;
+
   return (
     <>
       <div className={style.supplyAppContainer}>
@@ -100,21 +111,33 @@ export default function SupplyApp() {
           }`}
         >
           {token && !isRegistrationMode && !isSupplyLogViewMode && (
-            <Table
-              columns={isSelect ? simplifiedColumns : columns}
-              dataSource={data}
-              rowKey={(dt) => dt.splId}
-              filter
-              filterOptions={isSelect ? simplifiedFilterOptions : filterOptions}
-              onRow={(record) => {
-                return {
-                  onClick: () => {
-                    onRowClickHandler(record.splId);
-                  },
-                  className: style.pointerCursor,
-                };
-              }}
-            />
+            <>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={hideZeroInventory}
+                  onChange={handleCheckboxChange}
+                />
+                재고 없는 비품 감추기
+              </label>
+              <Table
+                columns={isSelect ? simplifiedColumns : columns}
+                dataSource={filteredData}
+                rowKey={(dt) => dt.splId}
+                filter
+                filterOptions={
+                  isSelect ? simplifiedFilterOptions : filterOptions
+                }
+                onRow={(record) => {
+                  return {
+                    onClick: () => {
+                      onRowClickHandler(record.splId);
+                    },
+                    className: style.pointerCursor,
+                  };
+                }}
+              />
+            </>
           )}
           {!isRegistrationMode && !isSupplyLogViewMode && (
             <>

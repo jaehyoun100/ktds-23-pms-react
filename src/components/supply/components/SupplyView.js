@@ -29,6 +29,7 @@ export default function SupplyView({
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
+      setImage(null); // Reset the image state
       const json = await memoizedLoadSupply(memoizedParam);
       setData(json);
 
