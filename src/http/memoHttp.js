@@ -34,12 +34,26 @@ export const loadSendMemo = async ({ token, selectSendMemoId }) => {
 };
 
 // 쪽지 발송
-export const writeMemo = async (token, rcvId, memoTtl, file, memoCntnt) => {
+export const sendMemo = async (
+  token,
+  sendId,
+  memoTtl,
+  memoCntnt,
+  file,
+  rcvMemoList
+) => {
+  if (!token) {
+    return;
+  }
+
+  const filename = file === undefined ? null : file;
   const formData = new FormData();
-  formData.append("rcvId", rcvId);
+  formData.append("sendId", sendId);
   formData.append("memoTtl", memoTtl);
   formData.append("memoCntnt", memoCntnt);
-  formData.append("file", file);
+  formData.append("file", filename);
+  formData.append("receiveMemoVOList", JSON.stringify(rcvMemoList));
+  console.log(rcvMemoList);
 
   const response = await fetch(`${url}/api/memo/send`, {
     method: "POST",
@@ -47,7 +61,8 @@ export const writeMemo = async (token, rcvId, memoTtl, file, memoCntnt) => {
     body: formData,
   });
   const json = await response.json();
-  return json;
+  console.log(json);
+  // return json;
 };
 
 // 발신 취소

@@ -4,6 +4,7 @@ import { useFetch } from "../hook/useFetch";
 import { BsEnvelope, BsStar } from "react-icons/bs";
 import Table from "../../utils/Table";
 import SendMemoView from "./SendMemoView";
+import style from "./Memo.module.css";
 
 let pageNo = 0;
 
@@ -23,6 +24,8 @@ export default function SendMemoApp() {
   const { data, setData } = useFetch(undefined, fetchLoadSendMemos, fetchParam);
   const { count, pages, next } = data || {};
   const { body: sendMemos } = data || {};
+
+  console.log(sendMemos);
 
   const onRowClickHandler = async (sendMemoId) => {
     setSelectSendMemoId(sendMemoId);
@@ -104,21 +107,30 @@ export default function SendMemoApp() {
   };
 
   return (
-    <div>
+    <div className={style.memoContainer}>
       {token && !isSelect && (
         <>
-          <div>보낸 쪽지함: 총 {count}</div>
-          <Table
-            rowSelection={{
-              type: "checkbox",
-              ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={sendMemos}
-            rowKey={(dt) => dt.sendMemoId}
-            filter
-            filterOptions={filterOptions}
-          />
+          <div className={style.memoHeader}>
+            <div className={style.titleArea}>
+              <h2 className={style.memoboxTitle}>
+                <span className={style.memoboxText}>보낸쪽지함</span>
+                <span className={style.memoboxText}>{count}</span>
+              </h2>
+            </div>
+          </div>
+          <div className={style.memoListArea}>
+            <Table
+              rowSelection={{
+                type: "checkbox",
+                ...rowSelection,
+              }}
+              columns={columns}
+              dataSource={sendMemos}
+              rowKey={(dt) => dt.sendMemoId}
+              filter
+              filterOptions={filterOptions}
+            />
+          </div>
         </>
       )}
       {token && isSelect && (
