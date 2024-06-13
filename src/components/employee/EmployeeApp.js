@@ -16,6 +16,20 @@ const defaultValues = {
   pstnId: "",
   workSts: "",
   mngrYn: "N",
+  hireDt: "",
+  brth: "",
+};
+
+const registData = {
+  empName: "",
+  email: "",
+  addr: "",
+  cntct: "",
+  deptId: "",
+  jobId: "",
+  pstnId: "",
+  workSts: "",
+  mngrYn: "N",
   hireDt: dayjs(),
   brth: dayjs(),
 };
@@ -85,15 +99,6 @@ export default function EmployeeApp() {
         required: true,
       },
       {
-        title: "관리자여부",
-        type: "radio",
-        dataIndex: "mngrYn",
-        option: [
-          { label: "아니오", value: "N" },
-          { label: "예", value: "Y" },
-        ],
-      },
-      {
         title: "연락처",
         type: "string",
         dataIndex: "cntct",
@@ -137,6 +142,16 @@ export default function EmployeeApp() {
           label: dataName,
           value: dataId,
         })),
+        required: true,
+      },
+      {
+        title: "임원여부",
+        type: "radio",
+        dataIndex: "mngrYn",
+        option: [
+          { label: "아니오", value: "N" },
+          { label: "예", value: "Y" },
+        ],
         required: true,
       },
     ],
@@ -229,14 +244,8 @@ export default function EmployeeApp() {
 
   const handleAddEmployee = useCallback(
     async (data) => {
-      try {
-        await handleRegistEmployee({ data, token });
-        await fetchData(); // 데이터 다시 불러오기
-        // TODO: 등록 성공 메시지 표시
-      } catch (error) {
-        console.error("사원 등록 오류:", error);
-        // TODO: 오류 처리 및 메시지 표시
-      }
+      await handleRegistEmployee({ data, token });
+      await fetchData(); // 데이터 다시 불러오기
     },
     [token, fetchData]
   );
@@ -262,7 +271,7 @@ export default function EmployeeApp() {
       <Button style={{ borderColor: "#fff", float: "right" }}>{btnText || "사원등록"}</Button>
       } */}
       <RegBtn
-        data={defaultValues}
+        data={registData}
         defaultValues={defaultValues}
         options={inputOptions}
         btnText="사원등록"
