@@ -87,6 +87,12 @@ const CalendarComponent = ({
     }
     if (view === "month") {
       return <div className={styles.date}>{date.getDate()}</div>;
+    } else if (view === "year") {
+      return (
+        <div className={styles.date} style={{ fontSize: "14px" }}>
+          {date.getMonth() + 1}월
+        </div>
+      );
     }
     return null;
   };

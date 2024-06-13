@@ -336,7 +336,7 @@ h1 {
   border-color: #2c3e50;
 }
 .calendarContainer {
-  margin-left: 70px;
+  /* margin-left: 70px; */
   display: flex;
 }
 .calendarMemoContainer {
