@@ -16,7 +16,7 @@ export default function TeamMate() {
   const [deptId, setDeptId] = useState();
   const [selectedData, setSelectedData] = useState([]);
   const [selectedRoleData, setSelectedRoleData] = useState([]);
-  const [lastModifiedIndex, setLastModifiedIndex] = useState(null); // 마지막 변경된 인덱스 추적 상태
+  const [lastModifiedIndex, setLastModifiedIndex] = useState(null);
   const [memberList, setMemberList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [temporaryList, setTemporaryList] = useState([]);
@@ -30,7 +30,10 @@ export default function TeamMate() {
     credentialsExpired: state.tokenInfo.credentialsExpired,
   }));
 
-  // 프로젝트 정보 로드
+  useEffect(() => {
+    console.log(selectedData, selectedRoleData);
+  }, [selectedData, selectedRoleData]);
+
   useMemo(() => {
     const item = location.state.key;
     setprojectId(item.project);
@@ -47,6 +50,7 @@ export default function TeamMate() {
 
   // 부서 구성원 리스트 로드
   const memoizedGetEmp = useCallback(getEmp, []);
+
   useEffect(() => {
     memoizedGetEmp(deptId, tokenInfo.token, setMemberList);
   }, [deptId, tokenInfo.token, memoizedGetEmp]);
@@ -92,7 +96,6 @@ export default function TeamMate() {
             : item
         )
       );
-      // 현재 인덱스를 업데이트
       setLastModifiedIndex(idx);
     }
   };
@@ -107,17 +110,6 @@ export default function TeamMate() {
   }, [lastModifyData, tokenInfo.token, memoizedGetEmpData]);
   console.log(selectedEmpData);
 
-  // Helper function to get the last modified data
-  const getLastModifiedData = () => {
-    if (lastModifiedIndex !== null) {
-      return {
-        empName: selectedData[lastModifiedIndex],
-      };
-    }
-    return null;
-  };
-
-  // Example usage
   useEffect(() => {
     if (lastModifiedIndex !== null) {
       const lastModifiedData = {
@@ -126,11 +118,19 @@ export default function TeamMate() {
       setLastModifyData(lastModifiedData.empName);
     }
   }, [lastModifiedIndex, selectedData]);
-  // 삭제 핸들러 함수
+
   const onDeleteHandler = (idx) => {
-    setTemporaryList((prev) => prev.filter((_, index) => index !== idx));
-    setSelectedData((prev) => prev.filter((_, index) => index !== idx));
-    setSelectedRoleData((prev) => prev.filter((_, index) => index !== idx));
+    const updatedTemporaryList = [...temporaryList];
+    updatedTemporaryList.splice(idx, 1);
+    setTemporaryList(updatedTemporaryList);
+
+    const updatedSelectedData = [...selectedData];
+    updatedSelectedData.splice(idx, 1);
+    setSelectedData(updatedSelectedData);
+
+    const updatedSelectedRoleData = [...selectedRoleData];
+    updatedSelectedRoleData.splice(idx, 1);
+    setSelectedRoleData(updatedSelectedRoleData);
   };
 
   return (
@@ -143,8 +143,7 @@ export default function TeamMate() {
               <tr>
                 <th>이름</th>
                 <th>역할</th>
-                {/* {!isEditing && <th></th>} */}
-                {isEditing && <th>삭제</th>} {/* 삭제 컬럼 추가 */}
+                {isEditing && <th>삭제</th>}
               </tr>
             </thead>
             <tbody>
@@ -152,7 +151,7 @@ export default function TeamMate() {
                 <tr>
                   <td style={{ width: "300px" }}>{pm.employeeVO.empName}</td>
                   <td style={{ width: "300px" }}>{pm.role}</td>
-                  {isEditing && <td></td>} {/* 삭제 아이콘 자리 비우기 */}
+                  {isEditing && <td></td>}
                 </tr>
               )}
               {isEditing &&
@@ -190,9 +189,7 @@ export default function TeamMate() {
                       </div>
                     </td>
                     <td className={s.svgTeammateContainer}>
-                      <CiCircleMinus
-                        onClick={() => onDeleteHandler(idx, "temporaryList")}
-                      />
+                      <CiCircleMinus onClick={() => onDeleteHandler(idx)} />
                     </td>
                   </tr>
                 ))}
