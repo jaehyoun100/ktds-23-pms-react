@@ -1,5 +1,5 @@
 import styles from "../project.module.css";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ChartContainer from "./ChartContainer";
 import MainInfo from "./MainInfo";
 import MainReadMe from "./MainReadMe";
@@ -8,6 +8,12 @@ import { useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CalendarComponent from "./CalendarComponent";
+import {
+  getCalendarApi,
+  getPrjApi,
+  postMemo,
+  putMemo,
+} from "../../../http/projectHttp";
 export default function ProjectMain() {
   const [memo, setMemo] = useState();
   const [project, setProject] = useState();
@@ -35,50 +41,34 @@ export default function ProjectMain() {
     console.log(item);
     setProjectId(item.prjId);
   }, [location.state.key]);
+
+  const memoizedgetPrjApi = useCallback(getPrjApi, []);
+
   useEffect(() => {
     if (projectId) {
-      const getPrjApi = async () => {
-        const response = await fetch(
-          `http://localhost:8080/api/project/view/${projectId}`,
-          { headers: { Authorization: tokenInfo.token }, method: "GET" }
-        );
-
-        const json = await response.json();
-        console.log(json);
-
-        return json.body;
-      };
-
       const getProject = async () => {
-        const run = await getPrjApi();
+        const run = await memoizedgetPrjApi(tokenInfo.token, projectId);
         setProject(run);
         setAllData(run);
-        console.log(run, "!!!!!!!!!!");
         if (run.prjMemo !== null) {
           setMemo(run.prjMemo);
         }
       };
       getProject();
     }
-  }, [projectId, tokenInfo.token]);
+  }, [projectId, tokenInfo.token, memoizedgetPrjApi]);
+
+  const memoizedgetCalendarApi = useCallback(getCalendarApi, []);
   useEffect(() => {
     if (projectId) {
-      const getCalendarApi = async () => {
-        const response = await fetch(
-          `http://localhost:8080/api/project/calendar/${projectId}`,
-          { headers: { Authorization: tokenInfo.token }, method: "GET" }
-        );
-        const json = await response.json();
-        return json.body;
-      };
       const getCalendar = async () => {
-        const data = await getCalendarApi();
+        const data = await memoizedgetCalendarApi(tokenInfo.token, projectId);
         // console.log(data);
         setCalData(data);
       };
       getCalendar();
     }
-  }, [projectId, tokenInfo.token, isNeedRender]);
+  }, [projectId, tokenInfo.token, isNeedRender, memoizedgetCalendarApi]);
 
   useEffect(() => {
     setEvents([]);
@@ -97,35 +87,14 @@ export default function ProjectMain() {
     }
   }, [calData]);
 
+  const memoizedPutMemo = useCallback(putMemo, []);
+  const memoizedPostMemo = useCallback(postMemo, []);
+
   const saveMemo = async (date, memo) => {
-    // 여기에 메모를 저장하는 로직 추가
     if (isHaveData) {
-      await fetch("http://localhost:8080/api/project/calendar", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: tokenInfo.token,
-        },
-        method: "PUT",
-        body: JSON.stringify({
-          clndDate: date,
-          clndContent: memo,
-          prjId: projectId,
-        }),
-      });
+      memoizedPutMemo(date, memo, projectId, tokenInfo.token);
     } else {
-      console.log("Saving memo:", date, memo);
-      await fetch("http://localhost:8080/api/project/calendar", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: tokenInfo.token,
-        },
-        method: "POST",
-        body: JSON.stringify({
-          clndDate: date,
-          clndContent: memo,
-          prjId: projectId,
-        }),
-      });
+      memoizedPostMemo(date, memo, projectId, tokenInfo.token);
     }
     setNeedRender(true);
   };

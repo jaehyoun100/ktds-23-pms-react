@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import Selectbox from "../../../common/selectbox/Selectbox";
 import s from "./TeamMate.module.css";
 import Button from "../../../common/Button/Button";
@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { CiCircleMinus } from "react-icons/ci";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import MainHeader from "../MainHeader";
+import { getEmp, getEmpData } from "../../../../http/projectHttp";
 
 export default function TeamMate() {
   const [teammateList, setTeammateList] = useState([]);
@@ -45,29 +46,10 @@ export default function TeamMate() {
   }, [location.state.key]);
 
   // 부서 구성원 리스트 로드
+  const memoizedGetEmp = useCallback(getEmp, []);
   useEffect(() => {
-    const getEmp = async () => {
-      if (deptId) {
-        const response = await fetch(
-          `http://localhost:8080/api/project/employee/findbydeptid/${deptId}`,
-          {
-            headers: {
-              Authorization: tokenInfo.token,
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          }
-        );
-        const json = await response.json();
-        const members = json.body.map((emp) => ({
-          label: emp.empName,
-          value: emp.empId,
-        }));
-        setMemberList(members);
-      }
-    };
-    getEmp();
-  }, [deptId, tokenInfo.token]);
+    memoizedGetEmp(deptId, tokenInfo.token, setMemberList);
+  }, [deptId, tokenInfo.token, memoizedGetEmp]);
 
   const buttonGroupHiddenRef = useRef(null);
   const buttonHiddenRef = useRef(null);
@@ -115,28 +97,14 @@ export default function TeamMate() {
     }
   };
 
+  const memoizedGetEmpData = useCallback(getEmpData, []);
   useEffect(() => {
-    const getEmpData = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/employee/view/${lastModifyData}`,
-        {
-          headers: {
-            Authorization: tokenInfo.token,
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-        }
-      );
-      const json = await response.json();
-      return json;
-    };
-
     const data = async () => {
-      const getdata = await getEmpData();
+      const getdata = await memoizedGetEmpData(lastModifyData, tokenInfo.token);
       await setSelectedEmpData(getdata.body);
     };
     data();
-  }, [lastModifyData, tokenInfo.token]);
+  }, [lastModifyData, tokenInfo.token, memoizedGetEmpData]);
   console.log(selectedEmpData);
 
   // Helper function to get the last modified data
