@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "../project.module.css";
 import ProjectSubChart from "./ProjectSubChart";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import InfoModal from "./InfoModal";
 import { useSelector } from "react-redux";
 import Profile from "./Profile";
+import { putClientData } from "../../../http/projectHttp";
 
 export default function MainInfo({ project }) {
   const tokenInfo = useSelector((state) => ({
@@ -18,25 +19,15 @@ export default function MainInfo({ project }) {
   const [clientData, setClientData] = useState(project.clientVO);
   console.log(clientData, "client!!!!");
 
+  const memoizedPutClientData = useCallback(putClientData, []);
   const handleSave = async (newTitle, newContact, newContent) => {
-    await fetch("http://localhost:8080/api/project/client", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: tokenInfo.token,
-      },
-      body: JSON.stringify({
-        clntName: newTitle,
-        cntct: newContact,
-        info: newContent,
-        clntId: project.clientVO.clntId,
-      }),
-    });
-    // setClientData({
-    //   title: newTitle,
-    //   contact: newContact,
-    //   content: newContent,
-    // });
+    memoizedPutClientData(
+      newTitle,
+      newContact,
+      newContent,
+      tokenInfo.token,
+      project
+    );
   };
 
   return (
