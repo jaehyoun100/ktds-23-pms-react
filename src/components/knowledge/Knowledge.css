@@ -43,7 +43,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-table {
+/* table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -56,7 +56,7 @@ td {
 
 th {
   background-color: #f2f2f2;
-}
+} */
 
 .knowledge-form {
   width: 500px; /* Adjust width as needed */
