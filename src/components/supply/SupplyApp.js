@@ -46,7 +46,6 @@ export default function SupplyApp() {
       title: "제품 명",
       dataIndex: "splName",
       key: "splName",
-      // width: "20%",
     },
     {
       title: "재고",

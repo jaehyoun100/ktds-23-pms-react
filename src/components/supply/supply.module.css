@@ -1,7 +1,7 @@
 /* SupplyApp 컴포넌트를 위한 css */
 .supplyAppContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   transition: all 0.3s ease-in-out;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .supplyViewComponent {
-  flex: 0.5;
+  flex: 0.3;
   margin-left: 20px;
   opacity: 1;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -185,4 +185,10 @@
 
 .detailTextarea {
   height: 200px;
+}
+
+/* SupplyLogView 컴포넌트를 위한 css */
+.supplyLogTableComponent {
+  flex: 1;
+  transition: all 0.3s ease-in-out;
 }
