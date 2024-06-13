@@ -2,16 +2,22 @@ import "../ContentMain.css";
 import { PiUserCircle } from "react-icons/pi";
 import jaeDragon from "../jaeDragon.jpg";
 
-export function MainEmployee() {
+export function MainEmployeeImg() {
   return (
     <>
-      <div className="border">
+       <div className="border">
         <img
           src={jaeDragon}
           className="myInfoImg"
           alt="로그인한 유저의 프로필 사진"
         />
       </div>
+    </>
+  );
+}
+export function MainEmployee() {
+  return (
+    <>
       <div className="border">
         <div className="common-dashboard-cont">
           <PiUserCircle className="icons" /> 내 정보

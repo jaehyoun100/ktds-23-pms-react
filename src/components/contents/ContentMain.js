@@ -1,9 +1,14 @@
 import "./ContentMain.css";
-import { MainEmployee, MemuEmployee } from "./maincomponents/Employee";
+import {
+  MainEmployee,
+  MainEmployeeImg,
+  MemuEmployee,
+} from "./maincomponents/Employee";
 import MainCommute from "./maincomponents/Commute";
 import {
   MainCalendar,
   MainProject,
+  MainScaduale,
   MenuProject,
 } from "./maincomponents/Project";
 import MainMemo from "./maincomponents/Memo";
@@ -16,14 +21,12 @@ export default function ContentMain() {
     <div className="dashboard">
       <div className="cont1">
         <div className="cont1-content1">
-          <div className="cont1-content1-line1">
-            <MainEmployee />
-            <MainCommute />
-          </div>
-          <MainMemo />
+          <MainEmployeeImg />
+          <MainEmployee />
+          <MainCommute />
         </div>
-
-        <div className="cont1-content2">
+        <MainMemo />
+        <div className="cont1-content3">
           <MainProject />
           <MainIssue />
         </div>
@@ -31,12 +34,12 @@ export default function ContentMain() {
 
       <div className="cont2">
         <MainCalendar />
-        <div className="cont2-content2">
-          <MemuEmployee />
-          <MenuProject />
-          <MemuProduct />
-          <MemuApproval />
-        </div>
+        <MainScaduale />
+
+        <MemuEmployee />
+        <MenuProject />
+        <MemuProduct />
+        <MemuApproval />
       </div>
     </div>
   );
