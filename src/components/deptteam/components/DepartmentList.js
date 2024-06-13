@@ -8,6 +8,7 @@ import TeamCreate from "./TeamCreate.js";
 import TeamMemberCreate from "./TeamMemberCreate.js";
 import DepartmentDetail from "./DepartmentDetail.js";
 import TeamDetail from "./TeamDetail.js";
+import Modal from "./DeptTeamModal.js"; // 모달 컴포넌트를 import 합니다.
 
 export default function DepartmentList({ token }) {
   const [isDeptRegistrationMode, setIsDeptRegistrationMode] = useState(false);
@@ -18,6 +19,8 @@ export default function DepartmentList({ token }) {
   const [selectTmId, setSelectTmId] = useState();
   const [data, setData] = useState();
   const [needReload, setNeedReload] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
 
   // departmentList;
   const memoizedLoaddepartmentList = useCallback(loadDepartmentList, []);
@@ -68,14 +71,49 @@ export default function DepartmentList({ token }) {
     { label: "부서장명", value: "empName" },
   ];
 
+  // modal 열고 닫는 메소드들
+  const openModal = (content) => {
+    setModalContent(content);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent(null);
+  };
+
   const onRegistrationDeptClickHandler = () => {
-    setIsDeptRegistrationMode(true);
+    openModal(
+      <DepartmentCreate
+        setIsDeptRegistrationMode={setIsDeptRegistrationMode}
+        setNeedReload={setNeedReload}
+        token={token}
+        setIsModalOpen={setIsModalOpen}
+        setModalContent={setModalContent}
+      />
+    );
   };
   const onRegistrationTmClickHandler = () => {
-    setIsTeamRegistrationMode(true);
+    openModal(
+      <TeamCreate
+        setIsTeamRegistrationMode={setIsTeamRegistrationMode}
+        setNeedReload={setNeedReload}
+        token={token}
+        setIsModalOpen={setIsModalOpen}
+        setModalContent={setModalContent}
+      />
+    );
   };
   const onRegistrationTmMemberClickHandler = () => {
-    setIsTeamMemberRegistrationMode(true);
+    openModal(
+      <TeamMemberCreate
+        setIsTeamMemberRegistrationMode={setIsTeamMemberRegistrationMode}
+        setNeedReload={setNeedReload}
+        token={token}
+        setIsModalOpen={setIsModalOpen}
+        setModalContent={setModalContent}
+      />
+    );
   };
 
   return (
@@ -158,6 +196,9 @@ export default function DepartmentList({ token }) {
                 <DepartmentDetail
                   selectedDeptId={selectedDeptId}
                   token={token}
+                  setIsModalOpen={setIsModalOpen}
+                  setModalContent={setModalContent}
+                  openModal={openModal}
                 />
               </div>
             )}
@@ -166,7 +207,13 @@ export default function DepartmentList({ token }) {
             !isTeamRegistrationMode &&
             selectTmId && (
               <div className={s.detail2}>
-                <TeamDetail selectTmId={selectTmId} token={token} />
+                <TeamDetail
+                  selectTmId={selectTmId}
+                  token={token}
+                  setIsModalOpen={setIsModalOpen}
+                  setModalContent={setModalContent}
+                  openModal={openModal}
+                />
               </div>
             )}
         </div>
@@ -189,6 +236,9 @@ export default function DepartmentList({ token }) {
             </div>
           )}
       </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {modalContent}
+      </Modal>
     </>
   );
 }

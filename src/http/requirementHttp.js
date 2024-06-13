@@ -151,3 +151,43 @@ export const delayRequirement = async (token, selectedRequirementId) => {
 
   return json;
 };
+
+export const delayApprove = async (token, selectedRequirementId, isApprove) => {
+  const response = await fetch(
+    `${url}/api/v1/requirement/delayapprove/${selectedRequirementId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: isApprove.toString(),
+    }
+  );
+
+  const json = await response.json();
+
+  return json;
+};
+
+export const requirementTestResult = async (
+  token,
+  selectedRequirementId,
+  testApprove
+) => {
+  const response = await fetch(
+    `${url}/api/v1/requirement/testresult/${selectedRequirementId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: testApprove.toString(),
+    }
+  );
+
+  const json = await response.json();
+
+  return json;
+};

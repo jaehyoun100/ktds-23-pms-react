@@ -5,6 +5,8 @@ export default function TeamCreate({
   setIsTeamRegistrationMode,
   setNeedReload,
   token,
+  setIsModalOpen,
+  setModalContent,
 }) {
   const [inputFields, setInputFields] = useState([
     {
@@ -41,6 +43,8 @@ export default function TeamCreate({
 
   const onCancelClickHandler = () => {
     setIsTeamRegistrationMode(false);
+    setIsModalOpen(false);
+    setModalContent(null);
   };
 
   const onRegisterClickHandler = async () => {
@@ -61,6 +65,7 @@ export default function TeamCreate({
 
   return (
     <>
+      <h4>새로운 팀 등록</h4>
       {inputFields.map((inputField, index) => (
         <div key={index}>
           <div>
