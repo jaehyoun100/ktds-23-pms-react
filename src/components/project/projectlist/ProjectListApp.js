@@ -159,11 +159,11 @@ const ProjectListApp = () => {
       dataIndex: "srvSts",
       key: "srvSts",
       width: "auto",
-      render: (srvsts, record, index) => {
-        if (info[1]?.projectList[index]?.prjSts !== "409") {
+      render: (srvsts, record, index, prjId) => {
+        if (record.prjSts !== "409") {
          /*  return "미종료";  */
           return (<>
-            {info[1].projectList[index].prjSts}
+            {record.prjSts}
             </>
           );
         }
