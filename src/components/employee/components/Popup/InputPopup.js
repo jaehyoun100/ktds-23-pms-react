@@ -95,7 +95,7 @@ export default function InputPopup({
         })
       );
     },
-    [editData]
+    []
   );
 
   const handleDateChange = useCallback(
@@ -106,7 +106,7 @@ export default function InputPopup({
         })
       );
     },
-    [editData]
+    []
   );
 
   const renderInput = useCallback(

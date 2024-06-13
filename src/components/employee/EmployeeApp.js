@@ -35,12 +35,12 @@ export default function EmployeeApp() {
   // const [error, setError] = useState();
   const { token } = useSelector((state) => state.tokenInfo); // Redux에서 토큰 정보 가져오기
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const json = await loadData({ token });
     if (json) {
       setData(json.body);
     }
-  };
+  }, [token]);
 
   const url =
     "http://" +
@@ -222,21 +222,29 @@ export default function EmployeeApp() {
     },
     // {
     //   label: "부서명",
-    //   value: "departmentVO", "deptName",
+    //   value: "departmentVO",
+    //   dataIndex: "deptName", // 실제 검색할 필드
     // },
   ];
 
   const handleAddEmployee = useCallback(
     async (data) => {
-      await handleRegistEmployee({ data, token });
+      try {
+        await handleRegistEmployee({ data, token });
+        await fetchData(); // 데이터 다시 불러오기
+        // TODO: 등록 성공 메시지 표시
+      } catch (error) {
+        console.error("사원 등록 오류:", error);
+        // TODO: 오류 처리 및 메시지 표시
+      }
     },
-    [token]
+    [token, fetchData]
   );
 
   useEffect(() => {
     loadDataLists();
     fetchData();
-  }, []);
+  }, [loadDataLists, fetchData]);
 
   return (
     <>
