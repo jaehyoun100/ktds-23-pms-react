@@ -341,7 +341,7 @@ h1 {
 }
 .calendarMemoContainer {
   border: 1px solid #333;
-  width: 280px;
+  width: 400px;
   height: 340px;
   padding: 10px;
   border-radius: 5px;
@@ -353,13 +353,13 @@ h1 {
   margin-bottom: 20px;
 }
 .calendarMemoContainer > textarea {
-  width: 256px;
-  height: 214px;
+  width: 370px;
+  height: 220px;
   margin-bottom: 10px;
 }
 .calendarTodo {
   margin-left: 10px;
-  width: 280px;
+  width: 400px;
   height: 340px;
   box-sizing: border-box;
   border-radius: 4px;
@@ -392,8 +392,8 @@ h1 {
   color: var(--dark-color);
 }
 .ulContainer {
-  width: 270px;
-  height: 240px;
+  width: 390px;
+  height: 260px;
   margin-left: 4px;
   margin-right: 4px;
   border-radius: 5px;

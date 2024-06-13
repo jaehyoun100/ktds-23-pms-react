@@ -131,7 +131,7 @@ const CalendarComponent = ({
           ref={todoHiddenRef}
         >
           <ul>
-            <div className={s.todo}>해야할 일</div>
+            <div className={s.todo}>프로젝트 일정 관리</div>
             <div className={s.ulContainer}>
               {events.map((event, idx) => (
                 <li key={idx}>
