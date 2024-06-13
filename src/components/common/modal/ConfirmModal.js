@@ -44,6 +44,7 @@
         cancelContent="아니오"
         confirmContent="예"
         confirmOnClick={handleConfirm}
+        cancelOnclick={handleCloseConfirmModal}
       />
     </>
   );
@@ -60,6 +61,7 @@ const ConfirmModal = React.memo(
   ({
     content,
     show,
+    onCloseHandler,
     cancelContent,
     confirmContent,
     confirmOnClick,
@@ -69,9 +71,6 @@ const ConfirmModal = React.memo(
       return null;
     }
 
-    const onCloseHandler = () => {
-      show = false;
-    };
     return (
       <dialog
         open

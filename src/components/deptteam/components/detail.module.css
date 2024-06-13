@@ -1,9 +1,30 @@
 .detail {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
+
+.detailinfo > h4 {
+  font-size: 1.5rem;
+  color: #333;
+}
+/* .detailinfo > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+} */
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .detailpickture {
-  height: 7.5rem;
+  height: 7rem;
   width: 6rem;
-  margin-left: 3rem;
+  /* margin-left: 20px; */
+  margin-bottom: 0.5rem;
 }

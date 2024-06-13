@@ -5,6 +5,8 @@ export default function DepartmentCreate({
   setIsDeptRegistrationMode,
   setNeedReload,
   token,
+  setIsModalOpen,
+  setModalContent,
 }) {
   const [inputFields, setInputFields] = useState([
     {
@@ -39,6 +41,8 @@ export default function DepartmentCreate({
 
   const onCancelClickHandler = () => {
     setIsDeptRegistrationMode(false);
+    setIsModalOpen(false);
+    setModalContent(null);
   };
 
   const onRegisterClickHandler = async () => {
@@ -59,6 +63,7 @@ export default function DepartmentCreate({
 
   return (
     <>
+      <h4>새로운 부서 등록</h4>
       {inputFields.map((inputField, index) => (
         <div key={index}>
           <div>
