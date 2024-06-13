@@ -1,20 +1,22 @@
 import React from "react";
 import s from "../project.module.css";
+import { IoPersonCircleSharp } from "react-icons/io5";
 
 const ProfileModal = React.memo(
-  ({ content, profileValue, onClose, show, closeContent }) => {
+  ({ content, profileValue, onClose, show, closeContent, selectedEmpData }) => {
     if (!show) {
       return null;
     }
 
     return (
       <dialog
+        style={{ zIndex: "2" }}
         open
-        className={s.modalWindow}
+        className={s.modalInfoWindow}
         role="alertdialog"
         aria-modal="true"
       >
-        <div className={s.gridModal}>
+        <div>
           <div
             className={s.modalClose}
             onClick={onClose}
@@ -24,11 +26,68 @@ const ProfileModal = React.memo(
           >
             X
           </div>
-          <div className={s.modalContent}>
-            <div className={s.modalProfile}>{content}</div>
-            <div className={s.modalText}>{content}</div>
+          <div className={s.infoEmpArea}>
+            <div className={s.infoEmpPhoto}>
+              {selectedEmpData &&
+              selectedEmpData.employeeVO.originPrflFileName !== null ? (
+                selectedEmpData.originPrflFileName
+              ) : (
+                <IoPersonCircleSharp />
+              )}
+            </div>
+            <div className={s.modalInfoContent}>
+              <div className={s.infoEmpInfo} style={{ width: "270px" }}>
+                <div className={s.infoEmpInfoFlex}>
+                  <div>이름 :</div>
+                  <div>
+                    {selectedEmpData && selectedEmpData.employeeVO.empName}
+                  </div>
+                </div>
+                <div className={s.infoEmpInfoFlex}>
+                  <div>소속 :</div>
+                  <div>
+                    {selectedEmpData &&
+                      selectedEmpData.employeeVO.departmentVO.deptName}
+                    {selectedEmpData && "/"}
+                    {selectedEmpData &&
+                      selectedEmpData.employeeVO.teamVO?.tmName}
+                  </div>
+                </div>
+                <div className={s.infoEmpInfoFlex}>
+                  <div>직급 :</div>
+                  <div>
+                    {selectedEmpData && selectedEmpData.employeeVO.cmcdName}
+                  </div>
+                </div>
+                <div className={s.infoEmpInfoFlex}>
+                  <div>직무 :</div>
+                  <div>
+                    {selectedEmpData &&
+                      selectedEmpData.employeeVO.jobVO.jobName}
+                  </div>
+                </div>
+                <div className={s.infoEmpInfoFlex}>
+                  <div>생년월일 :</div>
+                  <div>
+                    {selectedEmpData && selectedEmpData.employeeVO.brth}
+                  </div>
+                </div>
+                <div className={s.infoEmpInfoFlex}>
+                  <div>이메일 :</div>
+                  <div>
+                    {selectedEmpData && selectedEmpData.employeeVO.email}
+                  </div>
+                </div>
+                <div className={s.infoEmpInfoFlex}>
+                  <div>주소 :</div>
+                  <div>
+                    {selectedEmpData && selectedEmpData.employeeVO.addr}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className={s.inputSpace}>
+          <div className={s.infoInputSpace}>
             <button
               className={`${s.confirmButton} ${s.button}`}
               onClick={onClose}
