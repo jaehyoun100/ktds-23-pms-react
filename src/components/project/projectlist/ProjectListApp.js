@@ -38,7 +38,7 @@ const ProjectListApp = () => {
         method: "GET",
       });
       const json = await response.json();
-
+      console.log("getList : ", json);
       return json.body;
     };
     const getProject = async () => {
@@ -95,6 +95,7 @@ const ProjectListApp = () => {
   useEffect(() => {
     if (data.projectList !== undefined) {
       Object.assign(data.projectList, reviewResult);
+      console.log(data);
     }
   });
 
