@@ -58,15 +58,39 @@
   display: flex;
 }
 .teamMateEmpPhoto {
-  width: 200px;
+  width: 150px;
   height: 150px;
 }
 .teamMateEmpInfo {
-  padding: 30px;
-  width: 300px;
-  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .teamMateEmpPhoto > svg {
-  width: 70%;
-  height: 70%;
+  width: 80%;
+  height: 80%;
+}
+.teamMateEmpInfo > div {
+  font-size: 15px;
+}
+.teamMateEmpInfoFlex {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.teamMateEmpInfoFlex > div {
+  width: 240px;
+  text-align: left;
+}
+
+.teamMateEmpInfoFlex :first-child {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--main-color);
+  margin-right: 15px;
+  width: 70px;
+  text-align: right;
+
+  justify-content: space-between; /* Flex 아이템 간의 간격을 균등하게 배치 */
 }
