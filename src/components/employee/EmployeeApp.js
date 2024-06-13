@@ -1,31 +1,147 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Table from "../../utils/Table";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import RegBtn from "./components/Popup/RegBtn";
-import { loadData } from "../../http/employeeHttp";
-import { Button } from "antd";
+import { handleRegistEmployee, loadData } from "../../http/employeeHttp";
+import dayjs from "dayjs";
 
-export default function EmployeeApp({ btnText }) {
+const defaultValues = {
+  empName: "",
+  email: "",
+  addr: "",
+  cntct: "",
+  deptId: "",
+  jobId: "",
+  pstnId: "",
+  workSts: "",
+  mngrYn: "N",
+  hireDt: dayjs(),
+  brth: dayjs(),
+};
+
+export default function EmployeeApp() {
   const [data, setData] = useState([]);
   const navigate = useNavigate(); // 페이지 네비게이션을 위한 hook
   // 게시글 선택을 위한 state (상세내용)
-  const [selectedEmpId, setSelectedEmpId] = useState();
+  const [dataList, setDataList] = useState({
+    depart: [],
+    team: [],
+    job: [],
+    grade: [],
+    workSts: [],
+  });
+
   // const [error, setError] = useState();
   const { token } = useSelector((state) => state.tokenInfo); // Redux에서 토큰 정보 가져오기
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const json = await loadData({ token });
-      if (json) {
-        setData(json.body);
-      }
-    };
-
-    if (token) {
-      fetchData();
+  const fetchData = async () => {
+    const json = await loadData({ token });
+    if (json) {
+      setData(json.body);
     }
-  }, [token]);
+  };
+
+  const url =
+    "http://" +
+    (window.location.host === "43.202.29.221"
+      ? "43.202.29.221"
+      : "localhost:8080");
+
+  const loadDataLists = useCallback(async () => {
+    const response = await fetch(`${url}/api/v1/employee/data`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    const json = await response.json();
+    setDataList(json.body);
+  }, [token, url]);
+
+  const inputOptions = useMemo(
+    () => [
+      {
+        title: "사원명",
+        type: "string",
+        dataIndex: "empName",
+        required: true,
+      },
+      {
+        title: "주소",
+        type: "string",
+        dataIndex: "addr",
+        required: true,
+      },
+      {
+        title: "입사일자",
+        type: "date",
+        dataIndex: "hireDt",
+        required: true,
+      },
+      {
+        title: "생일",
+        type: "date",
+        dataIndex: "brth",
+        required: true,
+      },
+      {
+        title: "관리자여부",
+        type: "radio",
+        dataIndex: "mngrYn",
+        option: [
+          { label: "아니오", value: "N" },
+          { label: "예", value: "Y" },
+        ],
+      },
+      {
+        title: "연락처",
+        type: "string",
+        dataIndex: "cntct",
+        required: true,
+      },
+      {
+        title: "부서",
+        type: "select",
+        dataIndex: "deptId",
+        option: dataList.depart.map(({ dataId, dataName }) => ({
+          label: dataName,
+          value: dataId,
+        })),
+        required: true,
+      },
+      {
+        title: "직무",
+        type: "select",
+        dataIndex: "jobId",
+        option: dataList.job.map(({ dataId, dataName }) => ({
+          label: dataName,
+          value: dataId,
+        })),
+        required: true,
+      },
+      {
+        title: "직급",
+        type: "select",
+        dataIndex: "pstnId",
+        option: dataList.grade.map(({ dataId, dataName }) => ({
+          label: dataName,
+          value: dataId,
+        })),
+        required: true,
+      },
+      {
+        title: "재직상태",
+        type: "select",
+        dataIndex: "workSts",
+        option: dataList.workSts.map(({ dataId, dataName }) => ({
+          label: dataName,
+          value: dataId,
+        })),
+        required: true,
+      },
+    ],
+    [dataList]
+  );
 
   const columns = [
     {
@@ -55,7 +171,7 @@ export default function EmployeeApp({ btnText }) {
       render: (data, row) => (
         <span
           style={{ cursor: "pointer" }}
-          onClick={() => navigate(`/employee/view/${row.empId}`)}
+          onClick={() => navigate(`/employee/${row.empId}`)}
         >
           {data}
         </span>
@@ -109,6 +225,19 @@ export default function EmployeeApp({ btnText }) {
     //   value: "departmentVO", "deptName",
     // },
   ];
+
+  const handleAddEmployee = useCallback(
+    async (data) => {
+      await handleRegistEmployee({ data, token });
+    },
+    [token]
+  );
+
+  useEffect(() => {
+    loadDataLists();
+    fetchData();
+  }, []);
+
   return (
     <>
       <div>총 {data.length}명이 조회되었습니다.</div>
@@ -120,9 +249,20 @@ export default function EmployeeApp({ btnText }) {
         filter
         filterOptions={filterOptions}
       />
-      <Button style={{ borderColor: "#fff", float: "right" }}>
-        {btnText || "사원등록"}
-      </Button>
+      {/* {
+        userInfo.deptId === "DEPT_230101_000010" &&
+      <Button style={{ borderColor: "#fff", float: "right" }}>{btnText || "사원등록"}</Button>
+      } */}
+      <RegBtn
+        data={defaultValues}
+        defaultValues={defaultValues}
+        options={inputOptions}
+        btnText="사원등록"
+        onOk={handleAddEmployee}
+      />
     </>
   );
 }
+
+// TODO: 로그인 시, Redux store와 sessionStorage 로그인한 유저 정보 저장하도록 요구.
+// 그 후,
