@@ -136,7 +136,6 @@ const CalendarComponent = ({
               {events.map((event, idx) => (
                 <li key={idx}>
                   <span className={s.eventDate}>{event.date}</span>
-                  {"  "}
                   <span>{event.memo}</span>
                 </li>
               ))}

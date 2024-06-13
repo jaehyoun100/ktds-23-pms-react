@@ -55,32 +55,27 @@ export default function KnowledgeView({
   }, [memoizedLoadKnowledge, memoizedParam, setData]);
 
   const { body: knowledgeBody } = data || {};
+  console.log(knowledgeBody);
 
   // 글작성자만 수정 삭제 가능하도록 설정
   const { crtrId } = knowledgeBody || {};
-  const isSelfWritten =
-    token && knowledgeBody && knowledgeBody.crtrId === crtrId;
 
   // 글작성자만  삭제 가능하도록 설정
   const deleteKnowledgeClickHandler = async () => {
-    if (isSelfWritten) {
-      const json = await deleteKnowledge(knowledgeBody.knlId, token);
+    const json = await deleteKnowledge(knowledgeBody.knlId, token);
 
-      if (json.body) {
-        setSelectedSplId(undefined);
-        setNeedReload(Math.random());
-      } else {
-        console.log(json);
-        alert(json.errors);
-      }
+    if (json.body) {
+      setSelectedSplId(undefined);
+      setNeedReload(Math.random());
+    } else {
+      console.log(json);
+      alert(json.errors);
     }
   };
 
   // 글작성자만 수정  가능하도록 설정
   const UpdateClickHandler = () => {
-    if (isSelfWritten) {
-      setIsUpdateMode(true);
-    }
+    setIsUpdateMode(true);
   };
 
   return (

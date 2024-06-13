@@ -12,6 +12,7 @@ import memoRouter from "./routercomponent/memoRouter";
 import employeeRouter from "./routercomponent/employeeRouter";
 import rentalSupplyRouter from "./routercomponent/rentalSupplyRouter";
 import ContentMain from "../components/contents/ContentMain";
+import knowledgeRounter from "./routercomponent/knowledgeRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -35,6 +36,7 @@ export default function RouterAppProvider() {
         reviewRouter,
         memoRouter,
         surveyRouter,
+        knowledgeRounter,
       ],
     },
   ]);
