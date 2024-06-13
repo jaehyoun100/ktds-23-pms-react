@@ -5,7 +5,8 @@ import {
 } from "../../../http/KnowledgeReplyHttp";
 import KnowledgeReplyWrite from "./knowReplywrite";
 import { deleteKnowledgeReply } from "../../../http/KnowledgeReplyHttp";
-import "./knowleddgeview.css";
+import "../knowleddgeview.css";
+import { replyRecommand } from "../../../http/KnowledgeReplyHttp";
 
 export default function KnowledgeMainReply(
   { pPostId, token, setSelectedSplId, setNeedReload },
@@ -54,6 +55,7 @@ export default function KnowledgeMainReply(
       if (json.errors) {
         json.errors.forEach((error) => {
           alert(error);
+          return;
         });
       } else {
         alert("삭제에 성공하였습니다");
@@ -62,6 +64,30 @@ export default function KnowledgeMainReply(
       }
     }
   };
+
+  //댓글 추천
+  const RecommandReply = async () => {
+    if (selectedReplies.length === 0) {
+      // Handle no replies selected case (e.g., display an alert)
+      alert("체크박스를 선택 입력하세요");
+      return;
+    } else {
+      const str = selectedReplies.toString();
+      const json = await replyRecommand(str, token);
+
+      if (json.errors) {
+        json.errors.forEach((error) => {
+          alert(error);
+          return;
+        });
+      } else if (json.body) {
+        alert("추천에 성공하였습니다");
+        setSelectedSplId(undefined);
+        setNeedReload(Math.random());
+      }
+    }
+  };
+
   const handleEditComment = async (e, replyItem) => {
     e.preventDefault();
     if (selectedReplies.length === 0) {
@@ -120,7 +146,8 @@ export default function KnowledgeMainReply(
                 <div class="checkbox">
                   <input
                     type="checkbox"
-                    id="checkbox"
+                    name="selectedReplies"
+                    value={replyItem.rplId}
                     onChange={handleCheckboxChange}
                   />
                   <label for="checkbox"> {replyItem.rplCntnt}</label>
@@ -142,27 +169,27 @@ export default function KnowledgeMainReply(
                   >
                     수정
                   </button>
+                  <button onClick={RecommandReply}>추천</button>
                 </div>
-                <div>
-                  {isEditing[replyItem.rplId] && (
-                    <td>
-                      <form
-                        className="knowledge-form"
-                        onSubmit={(e) => handleEditComment(e, replyItem)}
-                      >
-                        <textarea
-                          type="text"
-                          defaultValue={replyItem.rplCntnt}
-                          className="knowledge-form-textarea"
-                          ref={contentref}
-                        />
 
-                        <button type="submit">저장</button>
-                        <button onClick={cancelsave}>취소</button>
-                      </form>
-                    </td>
-                  )}
-                </div>
+                {isEditing[replyItem.rplId] && (
+                  <td>
+                    <form
+                      className="knowledge-form"
+                      onSubmit={(e) => handleEditComment(e, replyItem)}
+                    >
+                      <textarea
+                        type="text"
+                        defaultValue={replyItem.rplCntnt}
+                        className="knowledge-form-textarea"
+                        ref={contentref}
+                      />
+
+                      <button type="submit">저장</button>
+                      <button onClick={cancelsave}>취소</button>
+                    </form>
+                  </td>
+                )}
               </div>
             ))}
         </>
