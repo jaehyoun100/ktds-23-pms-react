@@ -4,7 +4,7 @@ import RouterAppProvider from "../../router/router";
 import ConfirmModal from "../../components/common/modal/ConfirmModal";
 
 export default function ComponentSetting() {
-  const { token, credentialsExpired } = useSelector((state) => state.tokenInfo);
+  const { token } = useSelector((state) => state.tokenInfo);
   const {
     show,
     content,
