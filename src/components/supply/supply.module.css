@@ -6,16 +6,16 @@
 }
 
 .tableComponent {
-  flex: 1;
+  flex: 0.5;
   transition: all 0.3s ease-in-out;
 }
 
 .tableComponent.collapsed {
-  flex: 0.4;
+  flex: 0.32;
 }
 
 .supplyViewComponent {
-  flex: 0.6;
+  flex: 0.5;
   margin-left: 20px;
   opacity: 1;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
