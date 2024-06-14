@@ -3,9 +3,7 @@
  */
 
 // view 메서드
-export const viewWriteReviewPage = async (token) => {
-  const selectedProjectId = "PRJ_240501_000224";
-
+export const viewWriteReviewPage = async (token, selectedProjectId) => {
   const response = await fetch(
     `http://localhost:8080/api/review/writes/${selectedProjectId}`,
     {
@@ -102,6 +100,23 @@ export const getEmpPrjList = async (token) => {
     {
       method: "GET",
       headers: {
+        Authorization: token,
+      },
+    }
+  );
+  const json = await response.json();
+  return json;
+};
+
+// 관리자 또는 PM 일 경우 프로젝트에 대한 모든 후기 가져오기
+export const getReviewResult = async (token, project) => {
+  const prjId = project.prjId;
+
+  const response = await fetch(
+    `http://localhost:8080/api/review/writes/reviewResult/${prjId}`,
+    {
+      method: "GET",
+      header: {
         Authorization: token,
       },
     }

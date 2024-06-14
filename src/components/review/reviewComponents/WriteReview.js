@@ -5,9 +5,14 @@
 import { useEffect, useRef } from "react";
 import styles from "../reviewCss/write.module.css";
 import { viewWriteReviewPage, writeReview } from "../../../http/reviewHttp";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import ProjectListApp from "../../project/projectlist/ProjectListApp";
 
 export default function WriteReview() {
   const token = localStorage.getItem("token");
+  const location = useLocation();
+  const projectInfo = location.state || {};
+  const navigate = useNavigate();
 
   useEffect(() => {
     viewWriteReviewPage(token);
@@ -17,11 +22,13 @@ export default function WriteReview() {
   const prjIdRef = useRef();
 
   // 임시 콘솔
-  console.log(prjIdRef);
+  console.log(projectInfo);
+  console.log(projectInfo.writeReview.prjName);
+  console.log(projectInfo.writeReview.prjId);
 
   const onSaveClickHandler = async () => {
     const rvCntnt = rvCntntRef.current.value;
-    const prjId = "PRJ_240501_000224";
+    const prjId = projectInfo.writeReview.prjId;
     const json = await writeReview(token, rvCntnt, prjId);
 
     if (json.errors) {
@@ -32,14 +39,18 @@ export default function WriteReview() {
     }
 
     console.log(token);
+    reloadProjectView();
+  };
+
+  const reloadProjectView = () => {
+    navigate("/project");
   };
 
   return (
     <>
       <div className={styles.gridContainer}>
         <div className={styles.prjSubContainer}>
-          {/* 프로젝트 제목 삽입 */}
-          <div className={styles.prjSub}>project</div>
+          <div className={styles.prjSub}>{projectInfo.writeReview.prjName}</div>
         </div>
         <br></br>
         <br></br>

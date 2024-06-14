@@ -21,6 +21,7 @@ export default function ContentMain() {
     <div className={w.dashboard}>
       <div className={w.cont1}>
         <div className={w.cont1Content1}>
+          <MainEmployeeImg />
           <MainEmployee />
           <MainCommute />
         </div>

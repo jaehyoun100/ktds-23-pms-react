@@ -22,12 +22,9 @@ export function MainEmployee() {
         <div className={w.commonDashboardCont}>
           <PiUserCircle className={w.icons} /> 내 정보
         </div>
-        <div className={w.myInfoContainer}>
-          <MainEmployeeImg />
-          <div>박재현 상무 | 0011001</div>
-          <div>(jaehyoun@pms.com)</div>
-          <div>인사부 | 인사 1팀</div>
-        </div>
+        <div>박재현 상무 | 0011001</div>
+        <div>(jaehyoun@pms.com)</div>
+        <div>인사부 | 인사 1팀</div>
       </div>
     </>
   );
