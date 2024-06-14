@@ -1,0 +1,210 @@
+/* 기본적인 페이지 스타일 */
+.viewpage {
+  width: 80%; /* 페이지 너비 (원하는 대로 조정 가능) */
+  margin: 0 auto; /* 가운데 정렬 */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.commentauthor {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.commentcontent {
+  word-break: break-word; /* 긴 댓글 자동 줄바꿈 */
+}
+
+.knowledgeform {
+  width: 700px; /* Adjust width as needed */
+  height: 100px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Center the form horizontally */
+}
+
+.viewpage .column {
+  flex: 1 0 25%; /* 컬럼 너비 (25%) */
+  padding: 10px; /* 컬럼 간 여백 */
+  box-sizing: border-box; /* 패딩 포함 너비 계산 */
+}
+
+/* 버튼 스타일 */
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+  background-color: linear-gradient(to right, #007bff, #fff);
+  margin-right: 10px; /* 버튼 간 간격 */
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+/* 댓글 작성 폼 */
+.commentform {
+  margin-top: 20px;
+  height: 100px;
+}
+
+.commentform label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.commentform input,
+.commentform textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.commentform textarea {
+  height: 100px; /* 높이 조정 가능 */
+  resize: vertical; /* 필요에 따라 리사이즈 기능 추가 */
+}
+.commentcontent {
+  word-break: break-word; /* 긴 댓글 자동 줄바꿈 */
+}
+
+.commentform button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* 댓글 목록 */
+.commentlist {
+  margin-top: 20px;
+}
+
+.comment {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.commentauthor {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.commentcontent {
+  word-break: break-word; /* 긴 댓글 자동 줄바꿈 */
+}
+
+/* 댓글 버튼 */
+.commentbuttons {
+  margin-top: 10px;
+  text-align: right; /* 버튼들을 오른쪽으로 정렬 */
+  margin: 5px;
+}
+
+.commentbutton {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.commentbuttons .commentbutton {
+  margin-right: 10px; /* 2cm 간격 */
+}
+
+.commentbuttons .commentbutton:last-child {
+  margin-right: 0; /* 마지막 버튼 간격 제거 */
+}
+
+/* 제목, 작성자, 작성일, 첨부파일, 지식내용 버튼 스타일 */
+.knowledgeinfo {
+  margin-bottom: 20px;
+}
+
+.knowledgeinfo .attachment {
+  margin-bottom: 10px;
+}
+
+.knowledgeinfo .attachment a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.knowledgeinfo .knowledgecontent {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.knowledgeinfo .buttongroup {
+  justify-content: space-between; /* 기존 코드 */
+  justify-content: flex end; /* 좌우 2개씩 배치 */
+}
+
+.knowledgeinfo .button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.knowledgeinfo .button:hover {
+  background-color: #0056b3;
+}
+
+/* 테이블 스타일 */
+.knowledgetable {
+  margin-bottom: 20px;
+  border-collapse: collapse; /* 테이블 셀 테두리 병합 */
+  width: 100%; /* 테이블 너비 100% */
+}
+
+.knowledgetable th,
+.knowledgetable td {
+  padding: 10px; /* 셀 패딩 */
+  border: 1px solid #ccc; /* 셀 테두리 */
+  text-align: left; /* 텍스트 정렬 */
+}
+
+.knowledgetable th {
+  background-color: #f2f2f2; /* 제목 배경색 */
+  font-weight: bold; /* 제목 글꼴 두께 */
+}
+
+.knowledgetable tr:nth-child(odd) {
+  background-color: #fff; /* 홀수 행 배경색 */
+}
+
+.knowledgetable tr:nth-child(even) {
+  background-color: #f5f5f5; /* 짝수 행 배경색 */
+}
+
+.knowledgeinfo .button-group {
+  justify-content: flex-end; /* 버튼들을 오른쪽 끝으로 정렬 */
+}
+
+.knowledgeinfo .button-group {
+  display: flex; /* 버튼들을 가로로 나열 */
+  flex-wrap: wrap; /* 행이 가득 찬 후 다음 행으로 넘어감 */
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Add spacing between form and comments */
+}

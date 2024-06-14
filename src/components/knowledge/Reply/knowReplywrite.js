@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { createNewKnowledgeReply } from "../../../http/KnowledgeReplyHttp";
-
-import "../knowleddgeview.css";
+import styles from "../knowleddgeview.module.css";
 
 export default function KnowledgeReplyWrite(
   { pPostId, token, setSelectedSplId, setNeedReload },
@@ -14,6 +13,7 @@ export default function KnowledgeReplyWrite(
 
     if (!content) {
       alert("내용을 입력해 주세요");
+      return;
     }
 
     const json = await createNewKnowledgeReply(content, pPostId, token);
@@ -28,17 +28,19 @@ export default function KnowledgeReplyWrite(
   };
 
   return (
-    <div>
-      <div class="board-comment">
+    <div class={styles.commentform}>
+      <form>
+        <label for="comment">댓글:</label>
         <textarea
-          class="comment-input"
+          id="comment"
           placeholder="내용을 입력해주세요"
           ref={ReplyRef}
         ></textarea>
-        <button class="btn-submit" onClick={onSaveClickHandler}>
+
+        <button type="submit" onClick={onSaveClickHandler}>
           등록
         </button>
-      </div>
+      </form>
     </div>
   );
 }

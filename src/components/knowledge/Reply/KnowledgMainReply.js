@@ -5,8 +5,8 @@ import {
 } from "../../../http/KnowledgeReplyHttp";
 import KnowledgeReplyWrite from "./knowReplywrite";
 import { deleteKnowledgeReply } from "../../../http/KnowledgeReplyHttp";
-import "../knowleddgeview.css";
 import { replyRecommand } from "../../../http/KnowledgeReplyHttp";
+import styles from "../knowleddgeview.module.css";
 
 export default function KnowledgeMainReply(
   { pPostId, token, setSelectedSplId, setNeedReload },
@@ -129,53 +129,62 @@ export default function KnowledgeMainReply(
 
   return (
     <>
-      <div>
-        <KnowledgeReplyWrite
-          pPostId={pPostId}
-          token={token}
-          setSelectedSplId={setSelectedSplId}
-          setNeedReload={setNeedReload}
-        />
-      </div>
+      <>
+        <div className={styles.registrationform}>
+          <KnowledgeReplyWrite
+            pPostId={pPostId}
+            token={token}
+            setSelectedSplId={setSelectedSplId}
+            setNeedReload={setNeedReload}
+          />
+        </div>
+      </>
 
       {token && (
         <>
           {knowledgeReplyBody &&
             knowledgeReplyBody.map((replyItem) => (
-              <div class="container">
-                <div class="checkbox">
-                  <input
-                    type="checkbox"
-                    name="selectedReplies"
-                    value={replyItem.rplId}
-                    onChange={handleCheckboxChange}
-                  />
-                  <label for="checkbox"> {replyItem.rplCntnt}</label>
+              <div class={styles.commentlist}>
+                <div class={styles.comment}>
+                  <div class={styles.commentauthor}>
+                    {replyItem.crtrId} {replyItem.crtDt}
+                  </div>
+                  <div class={styles.commentcontent}>
+                    <input
+                      type="checkbox"
+                      name="selectedReplies"
+                      value={replyItem.rplId}
+                      onChange={handleCheckboxChange}
+                    />
+                    {replyItem.rplCntnt}
+                  </div>
+                  <div class={styles.commentbuttons}>
+                    <button
+                      class={styles.commentbutton}
+                      onClick={() =>
+                        setIsEditing({ ...isEditing, [replyItem.rplId]: true })
+                      }
+                    >
+                      수정
+                    </button>
+                    <button
+                      class={styles.commentbutton}
+                      onClick={deleteKnowledgeReplyClickHandler}
+                    >
+                      삭제
+                    </button>
+                    <button
+                      class={styles.commentbutton}
+                      onClick={RecommandReply}
+                    >
+                      추천
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  {replyItem.crtrId} {replyItem.crtDt}
-                </div>
-                <div class="buttons">
-                  <button
-                    class="btn delete"
-                    onClick={deleteKnowledgeReplyClickHandler}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    onClick={() =>
-                      setIsEditing({ ...isEditing, [replyItem.rplId]: true })
-                    }
-                  >
-                    수정
-                  </button>
-                  <button onClick={RecommandReply}>추천</button>
-                </div>
-
                 {isEditing[replyItem.rplId] && (
                   <td>
                     <form
-                      className="knowledge-form"
+                      className={styles.viewpage}
                       onSubmit={(e) => handleEditComment(e, replyItem)}
                     >
                       <textarea
