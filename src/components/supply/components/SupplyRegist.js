@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupplyCategory, registerSupply } from "../../../http/supplyHttp";
 import style from "../supply.module.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-export default function SupplyRegist({
-  setIsRegistrationMode,
-  setNeedReload,
-  token,
-}) {
+export default function SupplyRegist() {
   const [categoryList, setCategoryList] = useState([]);
   const [inputFields, setInputFields] = useState([
     {
@@ -20,6 +18,9 @@ export default function SupplyRegist({
       detail: "",
     },
   ]);
+
+  const { token } = useSelector((state) => state.tokenInfo);
+  const navigate = useNavigate();
 
   const memoizedLoadSupplyCategory = useCallback(loadSupplyCategory, []);
   const memoizedToken = useMemo(() => {
@@ -55,30 +56,30 @@ export default function SupplyRegist({
     setInputFields(values);
   };
 
-  const handleAddFields = () => {
-    setInputFields([
-      ...inputFields,
-      {
-        name: "",
-        category: "",
-        customCategory: "",
-        price: "",
-        stock: "",
-        image: null,
-        imagePreview: null,
-        detail: "",
-      },
-    ]);
-  };
+  // const handleAddFields = () => {
+  //   setInputFields([
+  //     ...inputFields,
+  //     {
+  //       name: "",
+  //       category: "",
+  //       customCategory: "",
+  //       price: "",
+  //       stock: "",
+  //       image: null,
+  //       imagePreview: null,
+  //       detail: "",
+  //     },
+  //   ]);
+  // };
 
-  const handleRemoveFields = (index) => {
-    const values = [...inputFields];
-    values.splice(index, 1);
-    setInputFields(values);
-  };
+  // const handleRemoveFields = (index) => {
+  //   const values = [...inputFields];
+  //   values.splice(index, 1);
+  //   setInputFields(values);
+  // };
 
   const onCancelClickHandler = () => {
-    setIsRegistrationMode(false);
+    navigate(-1);
   };
 
   const onRegisterClickHandler = async () => {
@@ -102,8 +103,7 @@ export default function SupplyRegist({
           alert(error);
         });
       } else if (json.body) {
-        setIsRegistrationMode(false);
-        setNeedReload(Math.random());
+        navigate(-1);
       }
     }
   };
@@ -204,7 +204,7 @@ export default function SupplyRegist({
               className={style.detailTextarea}
             ></textarea>
           </div>
-          <div>
+          {/* <div>
             <button type="button" onClick={handleAddFields}>
               +
             </button>
@@ -213,7 +213,7 @@ export default function SupplyRegist({
                 -
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       ))}
       <div>

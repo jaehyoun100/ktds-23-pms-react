@@ -2,22 +2,23 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupplyApprovalList } from "../../../http/supplyHttp";
 import Table from "../../../utils/Table";
 import style from "../supply.module.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-export default function SupplyLogView({
-  setIsSupplyLogViewMode,
-  needReload,
-  token,
-}) {
+export default function SupplyLogView() {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+
+  const { token } = useSelector((state) => state.tokenInfo);
+  const navigate = useNavigate();
 
   const memoizedLoadSupplyApprovalList = useCallback(
     loadSupplyApprovalList,
     []
   );
   const memoizedToken = useMemo(() => {
-    return { token, needReload };
-  }, [token, needReload]);
+    return { token };
+  }, [token]);
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -88,7 +89,7 @@ export default function SupplyLogView({
   ];
 
   const backToListButtonHandler = () => {
-    setIsSupplyLogViewMode(false);
+    navigate(-1);
   };
 
   return (
