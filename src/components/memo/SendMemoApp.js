@@ -45,7 +45,6 @@ export default function SendMemoApp() {
   // 쪽지 보관
   const onClickSaveSendMenoHandler = async (sendMemoId, sendSaveYn) => {
     const newSaveState = sendSaveYn === "N" ? "Y" : "N";
-
     const json = await saveSendMemo(token, sendMemoId, newSaveState);
     if (json.body) {
       setNeedLoad(Math.random());

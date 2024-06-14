@@ -29,10 +29,12 @@ export default function SendMemoView({
   );
 
   const { body: sendMemo } = data || {};
+  console.log(sendMemo);
 
   // 발신함 이동
   const onBoardListClickHandler = () => {
     setSelectSendMemoId(undefined);
+    setNeedLoad(Math.random());
   };
 
   // 쪽지 보관
