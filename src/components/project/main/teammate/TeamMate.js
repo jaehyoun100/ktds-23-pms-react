@@ -68,7 +68,7 @@ export default function TeamMate() {
     if (isEditing) {
       setTemporaryList((prev) => [
         ...prev,
-        { empName: "", empId: "", role: "" },
+        { empName: "", empId: "", role: "", key: Date.now() },
       ]);
     }
   };
@@ -156,7 +156,7 @@ export default function TeamMate() {
               )}
               {isEditing &&
                 temporaryList.map((item, idx) => (
-                  <tr key={teammateList.length + idx}>
+                  <tr key={item.key}>
                     <td style={{ width: "300px" }}>
                       <Selectbox
                         optionList={memberList}
