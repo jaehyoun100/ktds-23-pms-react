@@ -237,7 +237,7 @@ export default function EmployeeApp() {
     },
     // {
     //   label: "부서명",
-    //   value: "departmentVO",
+    //   value: "deptId",
     //   dataIndex: "deptName", // 실제 검색할 필드
     // },
   ];

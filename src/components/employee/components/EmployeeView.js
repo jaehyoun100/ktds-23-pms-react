@@ -10,6 +10,7 @@ import ModifyBtn from "./Popup/ModifyBtn";
 import { loadOneData, handleUpdateEmployee } from "../../../http/employeeHttp";
 import MenuBtn from "./Popup/MenuBtn";
 import RegBtn from "./Popup/RegBtn";
+import PasswordBtn from "./Popup/PasswordBtn";
 
 const { Title } = Typography;
 
@@ -34,7 +35,31 @@ export default function EmployeeView() {
   const fileInput = useRef(null);
   const [file, setFile] = useState(null);
 
-  // TODO: 비밀번호 변경 버튼 추가
+  // 비밀번호 변경
+  const inputOptions2 = useMemo(
+    () => [
+      {
+        title: "기존 비밀번호",
+        type: "string",
+        dataIndex: "pwd",
+        required: true,
+      },
+      {
+        title: "새로운 비밀번호",
+        type: "string",
+        dataIndex: "newPwd",
+        required: true,
+      },
+
+      {
+        title: "비밀번호 확인",
+        type: "string",
+        dataIndex: "confirmPwd",
+        required: true,
+      },
+    ],
+    []
+  );
 
   const inputOptions = useMemo(
     () => [
@@ -334,6 +359,11 @@ export default function EmployeeView() {
       <GradeChangeHistory />
       <DepartChangeHistory />
       <WorkChangeHistory />
+      <PasswordBtn
+        data={data}
+        options={inputOptions2}
+        onOk={handleUpdateEmployeeAndReloadData}
+      />
       <ModifyBtn
         data={data}
         options={inputOptions}
