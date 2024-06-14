@@ -7,7 +7,7 @@ import Table from "../../../utils/Table";
 import { getEmpPrjList, getReviewYN } from "../../../http/reviewHttp";
 import SurveyAnswer from "../../survey/components/SurveyAnswer";
 import SurveyWrite from "../../survey/components/SurveyWriteApp";
-import { set } from "date-fns";
+import { format, set } from "date-fns";
 
 const ProjectListApp = () => {
   const [data, setData] = useState([]);
@@ -139,6 +139,17 @@ const ProjectListApp = () => {
       dataIndex: "endDt",
       key: "endDt",
       width: "10%",
+      render: (date) => {
+        return (
+          <>
+            {new Date(date) > new Date() ? (
+              "D - " + format(new Date(date) - new Date(), "d")
+            ) : (
+              <>{new Date(date) === new Date() ? "D - DAY" : "마감"}</>
+            )}
+          </>
+        );
+      },
     },
     {
       title: "진행상황",
