@@ -122,7 +122,12 @@ const ProjectListApp = () => {
       key: "deptName",
       width: "15%",
     },
-    { title: "PM", dataIndex: "pm", key: "pm", width: "10%" },
+    {
+      title: "PM",
+      dataIndex: ["pm", "employeeVO", "empName"],
+      key: "pm",
+      width: "10%",
+    },
     {
       title: "고객사",
       dataIndex: ["clientVO", "clntName"],
