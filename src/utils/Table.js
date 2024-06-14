@@ -14,6 +14,7 @@ export default function Table({
   buttonName,
   buttonClassName,
   btnOnClickHandler,
+  tableStyleClass,
   ...props
 }) {
   const [filterParam, setFilterParam] = useState({ type: "", keyword: "" });
@@ -57,7 +58,7 @@ export default function Table({
             <div>
               <Select
                 options={filterOptions}
-                style={{ width: 150 }}
+                style={{ width: 150, marginRight: "15px" }}
                 value={filterParam.type}
                 onChange={handleInputChange("type")}
               />
@@ -79,6 +80,7 @@ export default function Table({
         </Card>
       )}
       <AntTable
+        className={tableStyleClass}
         dataSource={
           dataSource
             ? dataSource?.filter((dt) =>

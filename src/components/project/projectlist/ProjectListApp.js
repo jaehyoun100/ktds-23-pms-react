@@ -104,7 +104,7 @@ const ProjectListApp = () => {
       title: "프로젝트명",
       dataIndex: "prjName",
       key: "prjName",
-      width: "auto",
+      width: "25%",
       render: (data, row) => (
         <span
           style={{ cursor: "pointer" }}
@@ -120,30 +120,30 @@ const ProjectListApp = () => {
       title: "담당부서",
       dataIndex: ["deptVO", "deptName"],
       key: "deptName",
-      width: "auto",
+      width: "15%",
     },
-    { title: "PM", dataIndex: "pm", key: "pm", width: "auto" },
+    { title: "PM", dataIndex: "pm", key: "pm", width: "10%" },
     {
       title: "고객사",
       dataIndex: ["clientVO", "clntName"],
       key: "clntName",
-      width: "auto",
+      width: "10%",
     },
     {
       title: "프로젝트 기한",
       dataIndex: "endDt",
       key: "endDt",
-      width: "auto",
+      width: "10%",
     },
     {
       title: "진행상황",
       dataIndex: ["prjStsCode", "cmcdName"],
       key: "cmcdName",
-      width: "auto",
+      width: "10%",
     },
     {
       title: "후기작성",
-      width: "auto",
+      width: "10%",
       render: (srvsts, _, index) => {
         return <>{info[4] && info[4][index] && <>{info[4][index].rvYn}</>}</>;
       },
@@ -152,7 +152,7 @@ const ProjectListApp = () => {
       title: "설문작성",
       dataIndex: "srvSts",
       key: "srvSts",
-      width: "auto",
+      width: "10%",
       render: (srvsts, record, index, prjId) => {
         if (record.prjSts !== "409") {
           /*  return "미종료";  */
@@ -231,8 +231,17 @@ const ProjectListApp = () => {
       )} */}
       {!answerMode && !writeMode && data && (
         <>
-          <div>{data.projectCount}개의 프로젝트</div>
+          <div
+            style={{
+              marginLeft: "10px",
+              marginBottom: "20px",
+              color: "var(--second-color)",
+            }}
+          >
+            총 {data.projectCount} 개의 프로젝트가 조회되었습니다.
+          </div>
           <Table
+            tableStyleClass="prj-table-style"
             columns={columns}
             dataSource={data.projectList}
             rowKey={(data) => data.id}
