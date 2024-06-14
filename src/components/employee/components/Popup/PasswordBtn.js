@@ -1,0 +1,59 @@
+import { Button } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
+import InputPopup from "./InputPopup";
+
+export default function PasswordBtn({
+  data,
+  options,
+  onOk,
+  btnText,
+  buttonProps,
+}) {
+  const [open, setOpen] = useState(false);
+  const [editData, setEditData] = useState({});
+
+  const handleShowPopup = useCallback(() => {
+    setEditData(data);
+    setOpen(true);
+  }, [data]);
+
+  const handleClosePopup = () => {
+    setOpen(false);
+  };
+
+  const handleChangeData = useCallback((val) => {
+    setEditData(val);
+  }, []);
+
+  const handleOk = useCallback(() => {
+    onOk(editData);
+    handleClosePopup();
+  }, [editData, onOk]);
+
+  useEffect(() => {
+    if (data) setEditData(data);
+  }, [data]);
+
+  return (
+    <>
+      <Button
+        style={{ borderColor: "#fff", float: "right" }}
+        onClick={handleShowPopup}
+        {...buttonProps}
+      >
+        {btnText || "비밀번호 변경"}
+      </Button>
+      {open && (
+        <InputPopup
+          onChange={handleChangeData}
+          onCancel={handleClosePopup}
+          onOk={handleOk}
+          open={open}
+          data={editData}
+          options={options}
+          modify
+        />
+      )}
+    </>
+  );
+}
