@@ -4,14 +4,17 @@ const url =
     ? "43.202.29.221"
     : "localhost:8080");
 
-export const loadRequirements = async (token) => {
+export const loadRequirements = async (token, prjIdValue) => {
   if (!token) {
     return undefined;
   }
-  const response = await fetch(`${url}/api/v1/requirement/search`, {
-    method: "GET",
-    headers: { Authorization: token },
-  });
+  const response = await fetch(
+    `${url}/api/v1/requirement/search/${prjIdValue}`,
+    {
+      method: "GET",
+      headers: { Authorization: token },
+    }
+  );
 
   const json = await response.json();
 

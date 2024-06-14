@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { loadRequirements } from "../../http/requirementHttp";
 import Table from "../../utils/Table";
 
@@ -11,6 +11,10 @@ export default function Requirement() {
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
 
+  // const query = new URLSearchParams(useLocation().search);
+  // const prjId = query.get("prjId");
+  const { prjIdValue } = useParams();
+
   const onRqmCreateHandler = () => {
     navigate("/requirement/write");
   };
@@ -18,14 +22,15 @@ export default function Requirement() {
   useEffect(() => {
     // 요구사항 리스트 불러오기
     const getRequirementList = async () => {
-      const json = await loadRequirements(token);
+      const json = await loadRequirements(token, prjIdValue);
       setRequirement(json);
     };
 
     getRequirementList();
-  }, [token]);
+  }, [token, prjIdValue]);
 
   const { count, body: data } = requirement || {};
+  console.log("count: ", count);
 
   if (!data) {
     return <div>Loading...</div>; // 데이터 로딩 중
@@ -97,8 +102,8 @@ export default function Requirement() {
 
   return (
     <>
-      {/* * 토큰이 있고, 게시글을 선택하지 않았을 때 */}
-      {data && (
+      {/** 데이터가 로딩되고, 필터링된 요구사항 데이터가 있을때 */}
+      {data && count > 0 ? (
         <>
           <div>총 {count}개의 요구사항이 검색되었습니다.</div>
           <table>
@@ -133,6 +138,8 @@ export default function Requirement() {
             </tbody>
           </table>
         </>
+      ) : (
+        <div>해당 프로젝트에 대한 요구사항이 없습니다.</div>
       )}
       {/* {token && (
         <>

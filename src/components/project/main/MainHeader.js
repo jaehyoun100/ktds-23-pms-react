@@ -31,10 +31,12 @@ export default function MainHeader({ project }) {
         >
           참여원관리
         </span>
-        <span onClick={() => navigate("/requirement")}>요구사항</span>
-        <span onClick={() => navigate("/issue")}>이슈관리</span>
+        <span onClick={() => navigate(`/requirement/${project.prjId}`)}>
+          요구사항
+        </span>
+        <span>이슈관리</span>
         <span>문답</span>
-        <span onClick={() => navigate("/output")}>산출물</span>
+        <span onClick={() => navigate(`/output/${project.prjId}`)}>산출물</span>
         <span>설문</span>
         <span>후기</span>
       </div>
