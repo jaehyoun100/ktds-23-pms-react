@@ -5,6 +5,7 @@ import { userDetailSliceStore } from "./slice/userDetailSlice";
 import { memoAddrSliceStore } from "./slice/memoAddrSlice";
 import { confirmModalSliceStore } from "./slice/confirmModalSlice";
 import { commuteSliceStore } from "./slice/commuteSlice";
+import { approvalSliceStore } from "./slice/approvalSlice";
 
 //redux store 생성
 const toolkitStore = configureStore({
@@ -14,6 +15,7 @@ const toolkitStore = configureStore({
     receiverList: memoAddrSliceStore.reducer,
     confirmModalInfo: confirmModalSliceStore.reducer,
     commuteInfo: commuteSliceStore.reducer,
+    approvalInfo: approvalSliceStore.reducer,
   },
 });
 

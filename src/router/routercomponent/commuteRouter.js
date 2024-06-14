@@ -1,7 +1,7 @@
 import CommuteApp from "../../components/commute/Commute";
 
 const commuteRouter = {
-  path: "commute",
+  path: "commute/",
   element: <CommuteApp />,
 };
 
