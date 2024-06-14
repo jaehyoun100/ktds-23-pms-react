@@ -4,7 +4,12 @@ import Search from "../../common/search/Search";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Table from "../../../utils/Table";
-import { getEmpPrjList, getReviewYN } from "../../../http/reviewHttp";
+import {
+  getEmpPrjList,
+  getReviewYN,
+  viewWriteReviewPage,
+  writeReview,
+} from "../../../http/reviewHttp";
 import SurveyAnswer from "../../survey/components/SurveyAnswer";
 import SurveyWrite from "../../survey/components/SurveyWriteApp";
 import { format, set } from "date-fns";
@@ -100,6 +105,15 @@ const ProjectListApp = () => {
     setSurveyResultMode(true);
   };
 
+  const reviewWritePageClickHandler = (record) => {
+    const writeReview = record;
+    console.log(record);
+
+    navigate("/review", { state: { writeReview } });
+  };
+
+  const viewReviewResultHandler = (record) => {};
+
   /*   useEffect(() => {
     if (data.projectList !== undefined) {
       Object.assign(data.projectList, reviewResult);
@@ -169,21 +183,41 @@ const ProjectListApp = () => {
     {
       title: "후기작성",
       width: "auto",
-      render: (srvsts, _, index) => {
-        return <>{info[4] && info[4][index] && <>{info[4][index].rvYn}</>}</>;
-      },
-    },
-    {
-      title: "진행상황",
-      dataIndex: ["prjStsCode", "cmcdName"],
-      key: "cmcdName",
-      width: "10%",
-    },
-    {
-      title: "후기작성",
-      width: "10%",
-      render: (srvsts, _, index) => {
-        return <>{info[4] && info[4][index] && <>{info[4][index].rvYn}</>}</>;
+      render: (rvYn, record, index) => {
+        console.log(record);
+        if (record.prjSts === "409") {
+          if (info[2].admnCode !== "301" && info[4][index].role !== "PM") {
+            if (info[4][index].rvYn === "Y") {
+              return (
+                <>
+                  <span>후기 작성완료</span>
+                </>
+              );
+            } else {
+              return (
+                <>
+                  <button onClick={() => reviewWritePageClickHandler(record)}>
+                    후기 작성하기
+                  </button>
+                </>
+              );
+            }
+          } else {
+            return (
+              <>
+                <button onClick={() => viewReviewResultHandler(record)}>
+                  후기 결과보기
+                </button>
+              </>
+            );
+          }
+        } else {
+          return (
+            <>
+              <span>프로젝트 진행 중</span>
+            </>
+          );
+        }
       },
     },
     {
@@ -289,6 +323,7 @@ const ProjectListApp = () => {
             btnOnClickHandler={onClickHandler}
             buttonName="프로젝트 생성"
             buttonClassName="prj-button-position"
+            info={info}
           />
 
           {/* {data.projectList?.map((item, idx) => (

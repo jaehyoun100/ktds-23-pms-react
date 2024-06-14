@@ -5,11 +5,12 @@
 }
 
 .cont1 {
+  border: 1px solid grey;
   border-radius: 10px;
   width: 45%;
   height: 700px;
   display: grid;
-  grid-template-rows: 187px 1fr 1.5fr 1.5fr;
+  grid-template-rows: 187px 1.5fr 1.5fr;
   gap: 10px;
   padding: 10px;
   margin-right: 10px;
@@ -17,14 +18,16 @@
 
 .cont1Content1 {
   display: grid;
-  grid-template-columns: 2fr;
+  grid-template-columns: 140px 2fr 2fr;
   gap: 10px;
   height: 187px;
 }
 
 .myInfoImg {
-  width: 60px;
-  height: 90px;
+  width: 139px;
+  height: 187px;
+
+  border-radius: 10px;
 }
 
 .memoRead {
@@ -103,8 +106,4 @@
 
 .font12px {
   font-size: 12px;
-}
-
-.myInfoContainer {
-  display: flex;
 }

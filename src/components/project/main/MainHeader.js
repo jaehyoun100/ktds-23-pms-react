@@ -3,6 +3,7 @@ import styles from "../project.module.css";
 import { BiSolidHome } from "react-icons/bi";
 export default function MainHeader({ project }) {
   const navigate = useNavigate();
+  const viewReviewResultHandler = (project) => {};
   return (
     <div className={styles.headerContainer}>
       <div className={styles.flex}>
@@ -38,7 +39,11 @@ export default function MainHeader({ project }) {
         <span>문답</span>
         <span onClick={() => navigate(`/output/${project.prjId}`)}>산출물</span>
         <span>설문</span>
-        <span>후기</span>
+        {project.pm.employeeVO.admnCode === "302" ||
+          project.pm.role ===
+            "PM"(
+              <span onClick={viewReviewResultHandler(project)}>후기 관리</span>
+            )}
       </div>
     </div>
   );
