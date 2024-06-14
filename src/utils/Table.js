@@ -3,6 +3,7 @@ import { Table as AntTable, Card, Input, Select } from "antd";
 import { produce } from "immer";
 import Selectbox from "../components/common/selectbox/Selectbox";
 import s from "./table.module.css";
+import Button from "../components/common/Button/Button";
 
 export default function Table({
   dataSource,
@@ -10,6 +11,9 @@ export default function Table({
   filterOptions,
   columns,
   pagination,
+  buttonName,
+  buttonClassName,
+  btnOnClickHandler,
   ...props
 }) {
   const [filterParam, setFilterParam] = useState({ type: "", keyword: "" });
@@ -62,6 +66,14 @@ export default function Table({
                 value={filterParam?.keyword}
                 onChange={handleInputChange("keyword")}
               />
+              {buttonName && (
+                <Button
+                  onClickHandler={btnOnClickHandler}
+                  styleClass={buttonClassName}
+                >
+                  {buttonName}
+                </Button>
+              )}
             </div>
           </div>
         </Card>

@@ -145,13 +145,7 @@ const ProjectListApp = () => {
       title: "후기작성",
       width: "auto",
       render: (srvsts, _, index) => {
-        return (
-          <>
-            {info[4] && info[4][index] && (
-              <>{info[4][index].rvYn}</>
-            )}
-          </>
-        );
+        return <>{info[4] && info[4][index] && <>{info[4][index].rvYn}</>}</>;
       },
     },
     {
@@ -161,13 +155,10 @@ const ProjectListApp = () => {
       width: "auto",
       render: (srvsts, record, index, prjId) => {
         if (record.prjSts !== "409") {
-         /*  return "미종료";  */
-          return (<>
-            {record.prjSts}
-            </>
-          );
+          /*  return "미종료";  */
+          return <>{record.prjSts}</>;
         }
-  
+
         if (srvsts === "N") {
           return info[2].admnCode === "301" && !info[3] ? (
             "미생성"
@@ -223,6 +214,10 @@ const ProjectListApp = () => {
     },
   ];
 
+  const onClickHandler = () => {
+    navigate("/project/create");
+  };
+
   const navigate = useNavigate();
   return (
     <div>
@@ -236,9 +231,6 @@ const ProjectListApp = () => {
       )} */}
       {!answerMode && !writeMode && data && (
         <>
-          <Button onClickHandler={() => navigate("/project/create")}>
-            생성
-          </Button>
           <div>{data.projectCount}개의 프로젝트</div>
           <Table
             columns={columns}
@@ -246,7 +238,11 @@ const ProjectListApp = () => {
             rowKey={(data) => data.id}
             filter
             filterOptions={filterOptions}
+            btnOnClickHandler={onClickHandler}
+            buttonName="프로젝트 생성"
+            buttonClassName="prj-button-position"
           />
+
           {/* {data.projectList?.map((item, idx) => (
             <div
               key={idx}

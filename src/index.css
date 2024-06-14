@@ -996,3 +996,8 @@ abbr[title] {
 .react-calendar__tile--now{
   background: var(--third-color) !important;
 }
+
+.prj-button-position{
+  position: absolute;
+  right: 2rem;
+}
