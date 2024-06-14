@@ -214,6 +214,10 @@ input[type="text"].wirteInput:focus {
   line-height: 18px;
 }
 
+.toggleSaveWrap {
+  color: var(--second-color);
+}
+
 .titleText {
   font-size: 18px;
   color: #333;
@@ -265,6 +269,12 @@ input[type="text"].wirteInput:focus {
   flex: 1 1 auto;
   display: flex;
   min-width: 0;
+  align-items: flex-start;
+}
+
+.receiverArea {
+  display: inline-block;
+  box-sizing: border-box;
 }
 
 .buttonUser {

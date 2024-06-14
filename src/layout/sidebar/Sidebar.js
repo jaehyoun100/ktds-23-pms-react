@@ -6,6 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getEmployee } from "../../http/userDetailHttp";
 
 export default function Sidebar({ menus = [] }) {
+  const url =
+    "http://" +
+    (window.location.host === "43.202.29.221"
+      ? "43.202.29.221"
+      : "localhost:8080");
+
   const [closeSideBar, setCloseSideBar] = useState(false);
   // console.log(closeSideBar);
 
@@ -40,7 +46,7 @@ export default function Sidebar({ menus = [] }) {
       return;
     }
     const userInfo = async () => {
-      const response = await fetch("http://localhost:8080/api/", {
+      const response = await fetch(`${url}/api/`, {
         method: "GET",
         headers: {
           Authorization: token,
@@ -82,7 +88,9 @@ export default function Sidebar({ menus = [] }) {
             {userInfo && (
               <>
                 <span className="info-name name-tag">{userInfo.empName}</span>
-                <span className="info-dept dept-tag">{userInfo.departmentVO.deptName}</span>
+                <span className="info-dept dept-tag">
+                  {userInfo.departmentVO.deptName}
+                </span>
                 <span className="dept-tag">{userInfo.teamVO.tmName}</span>
               </>
             )}

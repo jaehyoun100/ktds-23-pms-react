@@ -121,7 +121,7 @@ export default function ReceiveMemoView({
                   <span className={style.toggleSaveWrap}>
                     {receiveMemo.rcvSaveYn && (
                       <div
-                        id="grid-save"
+                        className={style.toggleSave}
                         onClick={onClickSaveReceiveMenoHandler}
                       >
                         {receiveMemo.rcvSaveYn === "Y" ? (
@@ -160,48 +160,72 @@ export default function ReceiveMemoView({
                   </div>
                   {!isFolded && receiveMemoVOList && (
                     <>
-                      rcvList && (
-                      <div className={style.memoOptionItem}>
-                        <div className={style.memotitleArea}>
-                          <strong className={style.optionTitle}>
-                            받는사람
-                          </strong>
-                        </div>
-                        {rcvList.map((receiver) => (
-                          <div
-                            className={style.optionArea}
-                            key={receiver.empId}
-                          >
-                            <button className={style.buttonUser}>
-                              {receiver.empName}
-                            </button>
+                      {rcvList && (
+                        <div className={style.memoOptionItem}>
+                          <div className={style.memotitleArea}>
+                            <strong className={style.optionTitle}>
+                              받는사람
+                            </strong>
                           </div>
-                        ))}
-                      </div>
-                      ){/* TODO 참조가 있을 때만 보여주기 */}
-                      <div className={style.memoOptionItem}>
-                        <div className={style.memotitleArea}>
-                          <strong className={style.optionTitle}>참조</strong>
+                          <div className={style.optionArea}>
+                            {rcvList.map((receiver) => (
+                              <div
+                                className={style.receiverArea}
+                                key={receiver.empId}
+                              >
+                                <button className={style.buttonUser}>
+                                  {receiver.departmentVO.deptName}{" "}
+                                  {receiver.employeeVO.empName} (
+                                  {receiver.employeeVO.email})
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                        <div className={style.optionArea}>
-                          <button className={style.buttonUser}>
-                            데이터넣어주기!
-                          </button>
+                      )}
+                      {/* TODO 참조가 있을 때만 보여주기 */}
+                      {rcvRefList && (
+                        <div className={style.memoOptionItem}>
+                          <div className={style.memotitleArea}>
+                            <strong className={style.optionTitle}>참조</strong>
+                          </div>
+                          <div className={style.optionArea}>
+                            {rcvRefList.map((receiver) => (
+                              <div
+                                className={style.receiverArea}
+                                key={receiver.empId}
+                              >
+                                <button className={style.buttonUser}>
+                                  {receiver.departmentVO.deptName}{" "}
+                                  {receiver.employeeVO.empName} (
+                                  {receiver.employeeVO.email})
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      {/* TODO 수신자가 숨은참조일 때만 보여주기 */}
-                      <div className={style.memoOptionItem}>
-                        <div className={style.memotitleArea}>
-                          <strong className={style.optionTitle}>
-                            숨은참조
-                          </strong>
+                      )}
+                      {/* TODO 수신자가 숨은참조일 때 본인 정보만 나오게 수정 */}
+                      {rcvSecretRefList && (
+                        <div className={style.memoOptionItem}>
+                          <div className={style.memotitleArea}>
+                            <strong className={style.optionTitle}>
+                              숨은참조
+                            </strong>
+                          </div>
+                          <div className={style.optionArea}>
+                            {rcvSecretRefList.map((receiver) => (
+                              <div className={style.receiverArea}>
+                                <button className={style.buttonUser}>
+                                  {receiver.departmentVO.deptName}{" "}
+                                  {receiver.employeeVO.empName} (
+                                  {receiver.employeeVO.email})
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                        <div className={style.optionArea}>
-                          <button className={style.buttonUser}>
-                            데이터넣어주기!
-                          </button>
-                        </div>
-                      </div>
+                      )}
                     </>
                   )}
                 </div>
