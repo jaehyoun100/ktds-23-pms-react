@@ -21,20 +21,12 @@ export default function MainInfo({ project }) {
 
   const memoizedPutClientData = useCallback(putClientData, []);
   const handleSave = async (newTitle, newContact, newContent) => {
-    memoizedPutClientData(
-      newTitle,
-      newContact,
-      newContent,
-      tokenInfo.token,
-      project
-    );
+    memoizedPutClientData(newTitle, newContact, newContent, tokenInfo.token, project);
   };
 
   return (
     <div>
-      <div
-        className={`${styles.displayFlex} ${styles.infoDisplay} ${styles.infoFirst}`}
-      >
+      <div className={`${styles.displayFlex} ${styles.infoDisplay} ${styles.infoFirst}`}>
         <div className={styles.infoTitle}>프로젝트 기간</div>
         <div>
           {project.strtDt} ~ {project.endDt}
@@ -45,10 +37,7 @@ export default function MainInfo({ project }) {
         <div className={styles.displayInfoFlex}>
           {" "}
           {project.clientVO.clntName}{" "}
-          <IoInformationCircleSharp
-            className={styles.info}
-            onClick={() => setModalVisible(true)}
-          />
+          <IoInformationCircleSharp className={styles.info} onClick={() => setModalVisible(true)} />
         </div>
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
@@ -73,10 +62,7 @@ export default function MainInfo({ project }) {
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
         <div className={styles.infoTitle}>진행정도</div>
-        <ProjectSubChart
-          totalTasks={project.totalRequireCnt}
-          completedTasks={project.requireCnt}
-        />
+        <ProjectSubChart totalTasks={project.chartData[0]} completedTasks={project.chartData[1]} />
       </div>
       <InfoModal
         show={modalVisible}

@@ -11,6 +11,8 @@ export default function ChartContainer({ chartData, totalEmpCnt }) {
   const inProgress2 = totalEmpCnt - completed2;
   const inProgress3 = totalEmpCnt - completed3;
 
+  console.log(completed1, inProgress1);
+
   // useEffect(() => {
   //   // 첫 번째 데이터 셋을 가져오는 API 호출
   //   const fetchData1 = async () => {
