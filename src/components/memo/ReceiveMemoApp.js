@@ -2,14 +2,19 @@ import { useCallback, useMemo, useState } from "react";
 import ReceiveMemoView from "./ReceiveMemoView";
 import {
   BsEnvelope,
+  BsEnvelopeFill,
   BsEnvelopeOpen,
   BsStar,
   BsFillStarFill,
 } from "react-icons/bs";
 import Table from "../../utils/Table";
-import { loadReceiveMemos } from "../../http/memoHttp";
 import { useFetch } from "../hook/useFetch";
 import style from "./Memo.module.css";
+import {
+  loadReceiveMemos,
+  readReceiveMemo,
+  saveReceiveMemo,
+} from "../../http/memoHttp";
 
 let pageNo = 0;
 
@@ -26,7 +31,7 @@ export default function ReceiveMemoApp() {
     return { token, needLoad };
   }, [token, needLoad]);
 
-  const { data, setData } = useFetch(
+  const { data, isLoading } = useFetch(
     undefined,
     fetchLoadReceiveMemos,
     fetchParam
@@ -35,57 +40,94 @@ export default function ReceiveMemoApp() {
   const { count, pages, next } = data || {};
   const { body: receiveMemos } = data || {};
 
-  const onRowClickHandler = async (rcvMemoId) => {
+  const onRowClickHandler = async (rcvMemoId, rcvDate) => {
+    console.log(rcvDate);
     setSelectRcvMemoId(rcvMemoId);
+    if (rcvDate === null || rcvDate === "") {
+      // 수신쪽지 읽음처리
+      const json = await readReceiveMemo(token, rcvMemoId);
+    }
+  };
+
+  // 쪽지 보관
+  const onClickSaveReceiveMenoHandler = async (rcvMemoId, rcvSaveYn) => {
+    const newSaveState = rcvSaveYn === "N" ? "Y" : "N";
+    const json = await saveReceiveMemo(token, rcvMemoId, newSaveState);
+    if (json.body) {
+      setNeedLoad(Math.random());
+    } else if (json.errors) {
+      alert(json.errors);
+    }
   };
 
   const columns = [
-    // {
-    //   title: "rcvMemoId",
-    //   dataIndex: "rcvMemoId",
-    //   key: "rcvMemoId",
-    //   width: "5%",
-    // },
     {
-      title: <BsStar />,
+      title: (
+        <span className={`${style.rowTitle}`}>
+          <BsStar />
+        </span>
+      ),
       dataIndex: "rcvSaveYn",
       key: "rcvSaveYn",
       width: "5%",
-      render: (text) => (text === "Y" ? <BsFillStarFill /> : <BsStar />),
+      render: (text, row) => (
+        <span
+          onClick={() => onClickSaveReceiveMenoHandler(row.rcvMemoId, text)}
+          className={`${style.cellSpan} ${
+            text === "Y" ? style.listIconActive : style.listIcon
+          }`}
+        >
+          {text === "Y" ? <BsFillStarFill /> : <BsStar />}
+        </span>
+      ),
     },
     {
-      title: <BsEnvelope />,
+      title: (
+        <span className={`${style.rowTitle}`}>
+          <BsEnvelope />
+        </span>
+      ),
       dataIndex: "rcvDate",
       key: "rcvDate",
       width: "5%",
-      render: (text) => (text !== null ? <BsEnvelopeOpen /> : <BsEnvelope />),
+      render: (text) => (
+        <span
+          className={`${style.cellSpan} ${
+            text !== null ? style.listIcon : style.listIconActive
+          }`}
+        >
+          {text !== null ? <BsEnvelopeOpen /> : <BsEnvelopeFill />}
+        </span>
+      ),
     },
     {
-      title: "제목",
+      title: <span className={`${style.rowTitleMemo}`}>제목</span>,
       dataIndex: ["sendMemoVO", "memoTtl"],
       key: "memoTtl",
       render: (receiveMemos, row) => (
         <span
           style={{ cursor: "pointer" }}
-          onClick={() => onRowClickHandler(row.rcvMemoId)}
+          onClick={() => onRowClickHandler(row.rcvMemoId, row.rcvDate)}
+          className={`${style.rowCellText} ${
+            row.rcvDate !== null ? "" : style.isNotChecked
+          }`}
         >
           {receiveMemos}
         </span>
       ),
     },
     {
-      title: "수신일",
+      title: <span className={`${style.rowTitle}`}>수신일</span>,
       dataIndex: ["sendMemoVO", "sendDate"],
       key: "sendDate",
       width: "15%",
+      render: (text) => (
+        <span className={`${style.isNotImportant}`}>{text}</span>
+      ),
     },
   ];
 
   const filterOptions = [
-    {
-      label: "사원명",
-      value: "empId",
-    },
     {
       label: "제목",
       value: "memoTtl",
@@ -130,6 +172,7 @@ export default function ReceiveMemoApp() {
                 ...rowSelection,
               }}
               columns={columns}
+              rowClassName={style.tableRow}
               dataSource={receiveMemos}
               rowKey={(dt) => dt.rcvMemoId}
               filter
@@ -141,6 +184,7 @@ export default function ReceiveMemoApp() {
       {token && isSelect && (
         <ReceiveMemoView
           token={token}
+          count={count}
           selectRcvMemoId={selectRcvMemoId}
           setSelectRcvMemoId={setSelectRcvMemoId}
           setNeedLoad={setNeedLoad}

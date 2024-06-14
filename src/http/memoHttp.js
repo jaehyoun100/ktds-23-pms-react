@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const url =
   "http://" +
   (window.location.host === "43.202.29.221"
@@ -130,6 +132,7 @@ export const loadReceiveMemos = async ({ token, pageNo = 0 }) => {
 
 // 수신 쪽지 상세 조회
 export const loadReceiveMemo = async ({ selectRcvMemoId, token }) => {
+  console.log("????");
   if (!token) {
     return;
   }
@@ -137,7 +140,25 @@ export const loadReceiveMemo = async ({ selectRcvMemoId, token }) => {
     method: "GET",
     headers: { Authorization: token },
   });
-  const json = await response.json();
+  const rcvJson = await response.json();
+  const sendMemoId = rcvJson.body.sendMemoId;
+  console.log("ooo ", rcvJson);
+
+  if (!sendMemoId) {
+    alert("데이터를 불러오지 못했습니다.");
+    return;
+  }
+
+  const sendResponse = await fetch(`${url}/api/memo/send/${sendMemoId}`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
+  const sendJson = await sendResponse.json();
+  console.log("ooo ", sendJson);
+
+  const json = { rcvJson, sendJson };
+  console.log("::::: ", json);
+
   return json;
 };
 
@@ -152,6 +173,22 @@ export const saveReceiveMemo = async (token, selectRcvMemoId, newSaveState) => {
       method: "PUT",
       headers: { Authorization: token, "Content-Type": "application/json" },
       body: JSON.stringify({ rcvSaveYn: newSaveState }),
+    }
+  );
+  const json = await response.json();
+  return json;
+};
+
+// 수신 쪽지 읽음
+export const readReceiveMemo = async (token, selectRcvMemoId) => {
+  if (!token) {
+    return;
+  }
+  const response = await fetch(
+    `${url}/api/memo/receive/read/${selectRcvMemoId}`,
+    {
+      method: "PUT",
+      headers: { Authorization: token, "Content-Type": "application/json" },
     }
   );
   const json = await response.json();

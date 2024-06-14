@@ -52,16 +52,12 @@ export const menus = [
         to: "/memo/writeMemo",
       },
       {
-        label: "쪽지수신함",
-        to: "/memo/receive",
-      },
-      {
         label: "쪽지발신함",
         to: "/memo/send",
       },
       {
         label: "쪽지보관함",
-        to: "/",
+        to: "/memo/save",
       },
     ],
   },
