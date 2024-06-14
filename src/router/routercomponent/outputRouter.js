@@ -7,8 +7,14 @@ const outputRouter = {
   element: <Outlet />,
   children: [
     // { index: true, element: <Output /> },
-    { path: ":prjIdValue", element: <Output /> },
-    { path: "write", element: <OutputWrite /> },
+    {
+      path: ":prjIdValue/",
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Output /> },
+        { path: "write", element: <OutputWrite /> },
+      ],
+    },
   ],
 };
 

@@ -8,9 +8,16 @@ const requirementRouter = {
   element: <Outlet />,
   children: [
     // { index: true, element: <Requirement /> },
-    { path: ":prjIdValue", element: <Requirement /> },
+    {
+      path: ":prjIdValue/",
+      element: <Outlet />,
+      children: [
+        { index: true, element: <Requirement /> },
+        { path: "write", element: <RequirementWrite /> },
+      ],
+    },
     { path: "view", element: <RequirementView /> },
-    { path: "write", element: <RequirementWrite /> },
+    // { path: "write", element: <RequirementWrite /> },
   ],
 };
 

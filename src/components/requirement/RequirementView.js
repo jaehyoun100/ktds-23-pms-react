@@ -39,7 +39,7 @@ export default function RequirementView() {
     if (check) {
       const json = await deleteRequirement(token, rqmId);
       if (json) {
-        navigate("/requirement");
+        navigate(`/requirement/${prjId}`);
       } else {
         alert("삭제할 권한이 없습니다.");
       }
@@ -47,7 +47,7 @@ export default function RequirementView() {
   };
 
   const onClickHandler = () => {
-    navigate("/requirement");
+    navigate(`/requirement/${prjId}`);
   };
 
   const onFileClickHandler = async (requirementId, fileName) => {
@@ -155,7 +155,7 @@ export default function RequirementView() {
         requirement,
         isPmAndPl,
       });
-      console.log("isPmAndPl: ", isPmAndPl);
+      // console.log("isPmAndPl: ", isPmAndPl);
     };
 
     getOneRequirement();
@@ -316,7 +316,9 @@ export default function RequirementView() {
             </>
           )}
 
-        <button onClick={onClickHandler}>목록으로 이동</button>
+        {!isModifyMode && (
+          <button onClick={onClickHandler}>목록으로 이동</button>
+        )}
       </div>
 
       {/* <div className="info-emp">

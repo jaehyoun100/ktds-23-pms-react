@@ -44,7 +44,7 @@ export default function Output() {
   };
 
   const onOutputCreateHandler = () => {
-    navigate(`/output/write`);
+    navigate(`/output/${prjIdValue}/write`);
   };
 
   const onFileClickHandler = async (outputId, fileName) => {

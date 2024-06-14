@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   loadForWriteRequirementData,
   loadNameByPrjName,
@@ -16,7 +17,7 @@ export default function RequirementWrite() {
     rqmSts: [], // 진행상태
   });
   const [empData, setEmpData] = useState();
-  const [editorData, setEditorData] = useState();
+  const [editorWriteData, setEditorWriteData] = useState();
   const [writeErrors, setWriteErrors] = useState({
     rqmTtl: [], // 제목
     prjId: [], // 프로젝트
@@ -51,8 +52,10 @@ export default function RequirementWrite() {
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
 
+  const { prjIdValue } = useParams();
+
   const onClickHandler = () => {
-    navigate("/requirement");
+    navigate(`/requirement/${prjIdValue}`);
   };
 
   const prjSelectHandler = () => {
@@ -120,7 +123,7 @@ export default function RequirementWrite() {
         fileRef.current.files[0] === undefined
           ? null
           : fileRef.current.files[0]; // 첨부파일
-      const rqmCntnt = editorData; // 요구사항 내용
+      const rqmCntnt = editorWriteData; // 요구사항 내용
       const scdSts = scdStsRef.current.value; // 일정상태
       const rqmSts = rqmStsRef.current.value; // 진행상태
 
@@ -193,6 +196,7 @@ export default function RequirementWrite() {
                 </option>
               ))}
           </select>
+          {/* <input type="text" id="prj-id" name="prjId" ref={prjIdRef} readOnly /> */}
           {writeErrors.prjId && writeErrors.prjId.length > 0 && (
             <div className={styles.errorMessage}>{writeErrors.prjId}</div>
           )}
@@ -297,7 +301,7 @@ export default function RequirementWrite() {
               }}
               onChange={(event, editor) => {
                 const data = editor.getData();
-                setEditorData(data);
+                setEditorWriteData(data);
               }}
               onBlur={(event, editor) => {}}
               onFocus={(event, editor) => {}}
