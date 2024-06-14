@@ -1,6 +1,6 @@
 import { updateKnowledge } from "../../http/KnowledgeHttp";
-import { useRef } from "react";
-import "./Knowledge.css";
+import { useRef, useState } from "react";
+import styles from "./Knowledge.module.css";
 
 export default function KnowUpate({
   knowledgeBody,
@@ -8,7 +8,6 @@ export default function KnowUpate({
   setIsUpdateMode,
   token,
 }) {
-  console.log("setIsUpdateMode;" + setIsUpdateMode);
   const subjectRef = useRef();
   const fileRef = useRef();
   const contentRef = useRef();
@@ -38,23 +37,23 @@ export default function KnowUpate({
       knowledgeBody.knlId,
       token
     );
-    console.log(json);
 
     if (json.errors) {
       json.errors.forEach((error) => {
         alert(error);
       });
     } else if (json.body) {
-      setIsUpdateMode(false);
-      setNeedReload(Math.random());
+      alert("등록이 완료되었습니다");
+      //페이지 새로고침
+      window.location.reload();
     }
   };
 
   return (
-    <div className="App">
-      <div className="knowledge-form">
-        <div className="knowledge-form-field">
-          <label className="knowledge-form-label">제목</label>
+    <div className={styles.App}>
+      <div className={styles.knowledgeform}>
+        <div className={styles.knowledgeformfield}>
+          <label className={styles.knowledgeformlabel}>제목</label>
           <input
             type="text"
             id="subject"
@@ -66,23 +65,23 @@ export default function KnowUpate({
           <label htmlFor="file">첨부파일: {knowledgeBody.fileName}</label>
           <input type="file" id="file" ref={fileRef} />
         </div>
-        <div className="knowledge-form-field">
-          <label className="knowledge-form-label">내용</label>
+        <div className={styles.knowledgeformfield}>
+          <label className={styles.knowledgeformlabel}>내용</label>
           <textarea
-            className="knowledge-form-textarea"
+            className={styles.knowledgeformtextarea}
             ref={contentRef}
             defaultValue={knowledgeBody.knlCntnt}
           ></textarea>
         </div>
-        <div className="knowledge-form-button-area">
+        <div className={styles.knowledgeformbuttonarea}>
           <button
-            className="knowledge-form-button"
+            className={styles.knowledgeformbutton}
             onClick={onSaveClickHandler}
           >
             등록
           </button>
           <button
-            className="knowledge-form-button"
+            className={styles.knowledgeformbutton}
             onClick={onCancelClickHandler}
           >
             취소

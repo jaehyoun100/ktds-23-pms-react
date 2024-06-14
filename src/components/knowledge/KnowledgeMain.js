@@ -23,6 +23,7 @@ export default function KnowledgeMain() {
   useEffect(() => {
     const fetchingData = async () => {
       const json = await memoizedLoadKnowLedgeList({ ...memoizedToken });
+
       setKnowledge(json.body);
       setNeedReload(false);
     };

@@ -13,7 +13,11 @@ import employeeRouter from "./routercomponent/employeeRouter";
 import rentalSupplyRouter from "./routercomponent/rentalSupplyRouter";
 import ContentMain from "../components/contents/ContentMain";
 import knowledgeRounter from "./routercomponent/knowledgeRouter";
+<<<<<<< HEAD
 import commuteRouter from "./routercomponent/commuteRouter";
+=======
+import issueRouter from "./routercomponent/issueRouter";
+>>>>>>> 지식-15-박승원
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -39,6 +43,8 @@ export default function RouterAppProvider() {
         surveyRouter,
         knowledgeRounter,
         commuteRouter,
+        issueRouter,
+
       ],
     },
   ]);

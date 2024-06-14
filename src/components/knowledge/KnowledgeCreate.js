@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { createNewBoard } from "../../http/KnowledgeHttp";
-import "./Knowledge.css";
+import styles from "./Knowledge.module.css";
 
 export default function KnowledgeCreate({
   setIsCreateMode,
@@ -48,50 +48,50 @@ export default function KnowledgeCreate({
   };
 
   return (
-    <div className="App">
-      <div className="knowledge-form">
-        <div className="knowledge-form-field">
-          <label htmlFor="subject" className="knowledge-form-label">
+    <div className={styles.App}>
+      <div className={styles.knowledgeform}>
+        <div className={styles.knowledgeformfield}>
+          <label htmlFor="subject" className={styles.knowledgeformlabel}>
             지식제목
           </label>
           <input
             type="text"
             id="subject"
             ref={subjectRef}
-            className="knowledge-form-input"
+            className={styles.knowledgeforminput}
           />
         </div>
-        <div className="knowledge-form-field">
-          <label htmlFor="file" className="knowledge-form-label">
+        <div className={styles.knowledgeformfield}>
+          <label htmlFor="file" className={styles.knowledgeformlabel}>
             첨부파일
           </label>
           <input
             type="file"
             id="file"
             ref={fileRef}
-            className="knowledge-form-input"
+            className={styles.knowledgeforminput}
           />
         </div>
-        <div className="knowledge-form-field">
-          <label htmlFor="content" className="knowledge-form-label">
+        <div className={styles.knowledgeformfield}>
+          <label htmlFor="content" className={styles.knowledgeformlabel}>
             지식 내용
           </label>
           <textarea
             id="content"
             ref={contentRef}
-            className="knowledge-form-textarea"
+            className={styles.knowledgeformtextarea}
           ></textarea>
         </div>
-        <div className="knowledge-form-button-area">
+        <div className={styles.knowledgeformbuttonarea}>
           <button
             onClick={onCancelClickHandler}
-            className="knowledge-form-button"
+            className={styles.knowledgeformbutton}
           >
             취소
           </button>
           <button
             onClick={onSaveClickHandler}
-            className="knowledge-form-button"
+            className={styles.knowledgeformbutton}
           >
             등록
           </button>
