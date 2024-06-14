@@ -4,7 +4,7 @@ import {
   loadOutputs,
   outputFileDownload,
 } from "../../http/outputHttp";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import OutputModify from "./OutputModify";
 import Table from "../../utils/Table";
 
@@ -21,6 +21,10 @@ export default function Output() {
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
+
+  // const query = new URLSearchParams(useLocation().search);
+  // const prjId = query.get("prjId");
+  const { prjIdValue } = useParams();
 
   const onOutputModifyHandler = (outputId) => {
     setSelectedOutputId(outputId);
@@ -40,7 +44,7 @@ export default function Output() {
   };
 
   const onOutputCreateHandler = () => {
-    navigate("/output/write");
+    navigate(`/output/write`);
   };
 
   const onFileClickHandler = async (outputId, fileName) => {
@@ -65,13 +69,13 @@ export default function Output() {
   };
 
   const fetchParams = useMemo(() => {
-    return { token, needReload };
-  }, [token, needReload]);
+    return { token, needReload, prjIdValue };
+  }, [token, needReload, prjIdValue]);
 
   // Component를 실행시키자마자 API 요청으로 데이터를 받아오는 부분
   const fetchLoadOutputs = useCallback(async (params) => {
-    const { token } = params;
-    return await loadOutputs(token);
+    const { token, prjIdValue } = params;
+    return await loadOutputs(token, prjIdValue);
   }, []);
 
   useEffect(() => {
@@ -185,7 +189,7 @@ export default function Output() {
   return (
     <>
       {/** 데이터가 불러와졌고, 수정모드가 아니면  */}
-      {data && !isModifyMode && (
+      {!isModifyMode && data && count > 0 ? (
         <>
           <div>총 {count}개의 산출물이 검색되었습니다.</div>
           <table>
@@ -264,6 +268,8 @@ export default function Output() {
             </tbody>
           </table>
         </>
+      ) : (
+        <div>해당 프로젝트에 대한 산출물이 없습니다.</div>
       )}
 
       {/* {token && (

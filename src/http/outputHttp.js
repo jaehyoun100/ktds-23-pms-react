@@ -4,11 +4,11 @@ const url =
     ? "43.202.29.221"
     : "localhost:8080");
 
-export const loadOutputs = async (token) => {
+export const loadOutputs = async (token, prjIdValue) => {
   if (!token) {
     return undefined;
   }
-  const response = await fetch(`${url}/api/v1/output/search`, {
+  const response = await fetch(`${url}/api/v1/output/search/${prjIdValue}`, {
     method: "GET",
     headers: { Authorization: token },
   });

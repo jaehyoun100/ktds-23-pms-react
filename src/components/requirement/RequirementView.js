@@ -305,9 +305,10 @@ export default function RequirementView() {
       <div className="button-area right-align">
         {!isModifyMode &&
           data &&
-          // 로그인한 유저가 작성자이거나 관리자일때
+          // 로그인한 유저가 작성자이거나 관리자일때, 일정상태가 종료가 아닐때 버튼 보여줌
           (userData.empName === data.crtrIdVO.empName ||
-            userData.admnCode === "301") && (
+            userData.admnCode === "301") &&
+          data.scdStsVO.cmcdName !== "종료" && (
             <>
               {/** 작성자이거나 관리자일때 수정, 삭제 버튼 보여줌 */}
               <button onClick={onRqmModifyHandler}>수정</button>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { loadForWriteOutputData, writeOutput } from "../../http/outputHttp";
 import styles from "./output.module.css";
 
@@ -18,6 +18,9 @@ export default function OutoutWrite() {
   });
 
   const token = localStorage.getItem("token");
+
+  // const query = new URLSearchParams(useLocation().search);
+  // const prjIdValue = query.get("prjId");
 
   // FormData 전송을 위한 Ref
   const outTtlRef = useRef(); // 산출물 제목
