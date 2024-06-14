@@ -56,9 +56,9 @@ export default function SurveyWrite({
     setReload(Math.random());
   };
 
-  const temporarySaveHandler = () => {
+  /* const temporarySaveHandler = () => {
     setWriteMode(false);
-  };
+  }; */
 
   const cancleHandler = () => {
     setWriteMode(false);
@@ -124,9 +124,9 @@ export default function SurveyWrite({
         <button onClick={registHandler} style={{ marginRight: "10px" }}>
           등록
         </button>
-        <button onClick={temporarySaveHandler} style={{ marginRight: "10px" }}>
+        {/* <button onClick={temporarySaveHandler} style={{ marginRight: "10px" }}>
           임시저장
-        </button>
+        </button> */}
         <button onClick={cancleHandler} style={{ marginRight: "10px" }}>
           취소
         </button>

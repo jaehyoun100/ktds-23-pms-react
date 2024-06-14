@@ -8,6 +8,7 @@ import { getEmpPrjList, getReviewYN } from "../../../http/reviewHttp";
 import SurveyAnswer from "../../survey/components/SurveyAnswer";
 import SurveyWrite from "../../survey/components/SurveyWriteApp";
 import { set } from "date-fns";
+import SurveyResult from "../../survey/components/SurveyResult";
 
 const ProjectListApp = () => {
   const [data, setData] = useState([]);
@@ -24,6 +25,8 @@ const ProjectListApp = () => {
   const [writeMode, setWriteMode] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [reload, setReload] = useState();
+  const [surveyResultMode, setSurveyResultMode] = useState(false);
+
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -92,6 +95,11 @@ const ProjectListApp = () => {
     setWriteMode(true);
   };
 
+  const surveyResultClickHandler = (projectId) => {
+    setSelectedProjectId(projectId);
+    setSurveyResultMode(true);
+  };
+
   /*   useEffect(() => {
     if (data.projectList !== undefined) {
       Object.assign(data.projectList, reviewResult);
@@ -145,13 +153,7 @@ const ProjectListApp = () => {
       title: "후기작성",
       width: "auto",
       render: (srvsts, _, index) => {
-        return (
-          <>
-            {info[4] && info[4][index] && (
-              <>{info[4][index].rvYn}</>
-            )}
-          </>
-        );
+        return <>{info[4] && info[4][index] && <>{info[4][index].rvYn}</>}</>;
       },
     },
     {
@@ -161,13 +163,13 @@ const ProjectListApp = () => {
       width: "auto",
       render: (srvsts, record, index, prjId) => {
         if (record.prjSts !== "409") {
-         /*  return "미종료";  */
-          return (<>
+          return "미종료";
+          /* return (<>
             {record.prjSts}
             </>
-          );
+          ); */
         }
-  
+
         if (srvsts === "N") {
           return info[2].admnCode === "301" && !info[3] ? (
             "미생성"
@@ -186,8 +188,7 @@ const ProjectListApp = () => {
           );
         } else {
           return info[2].admnCode === "301" && !info[3] ? (
-            <button /* onClick={() => surveyResultClickHandler(record.prjId)} */
-            >
+            <button onClick={() => surveyResultClickHandler(record.prjId)}>
               결과 보기
             </button>
           ) : (
@@ -211,8 +212,7 @@ const ProjectListApp = () => {
                   )}
                 </>
               ) : (
-                <button /* onClick={() => surveyResultClickHandler(record.prjId)} */
-                >
+                <button onClick={() => surveyResultClickHandler(record.prjId)}>
                   결과 보기
                 </button>
               )}
@@ -234,7 +234,7 @@ const ProjectListApp = () => {
           selectedData={selectCommonCode}
         />
       )} */}
-      {!answerMode && !writeMode && data && (
+      {!answerMode && !writeMode && !surveyResultMode && data && (
         <>
           <Button onClickHandler={() => navigate("/project/create")}>
             생성
@@ -276,6 +276,12 @@ const ProjectListApp = () => {
           selectedProjectId={selectedProjectId} // 선택된 프로젝트 ID 전달
           info={info}
           setReload={setReload}
+        />
+      )}
+      {surveyResultMode && (
+        <SurveyResult
+          setSurveyResultMode={setSurveyResultMode}
+          selectedProjectId={selectedProjectId}
         />
       )}
     </div>
