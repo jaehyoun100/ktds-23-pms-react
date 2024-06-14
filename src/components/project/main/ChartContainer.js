@@ -62,13 +62,13 @@ export default function ChartContainer() {
       }}
     >
       <MainChart completed={completed1} inProgress={inProgress1}>
-        요구사항
-      </MainChart>
-      <MainChart completed={completed2} inProgress={inProgress2}>
         이슈관리
       </MainChart>
+      <MainChart completed={completed2} inProgress={inProgress2}>
+        설문
+      </MainChart>
       <MainChart completed={completed3} inProgress={inProgress3}>
-        묻고답하기
+        후기
       </MainChart>
     </div>
   );

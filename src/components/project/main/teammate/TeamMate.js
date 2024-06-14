@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router";
 import Selectbox from "../../../common/selectbox/Selectbox";
 import s from "./TeamMate.module.css";
 import Button from "../../../common/Button/Button";
@@ -11,7 +12,7 @@ import { getEmp, getEmpData } from "../../../../http/projectHttp";
 
 export default function TeamMate() {
   const [teammateList, setTeammateList] = useState([]);
-  const [projectId, setprojectId] = useState([]);
+  const [project, setproject] = useState([]);
   const [pm, setPm] = useState(null);
   const [deptId, setDeptId] = useState();
   const [selectedData, setSelectedData] = useState([]);
@@ -22,7 +23,12 @@ export default function TeamMate() {
   const [temporaryList, setTemporaryList] = useState([]);
   const [lastModifyData, setLastModifyData] = useState([]);
   const [selectedEmpData, setSelectedEmpData] = useState();
+  const [willInsertData, setWillInsertData] = useState([]);
+  const [canAdd, setCanAdd] = useState(true);
+  const [isPossible, setIsPossible] = useState(false);
   const nameRef = useRef();
+
+  const navigate = useNavigate();
 
   const location = useLocation();
   const tokenInfo = useSelector((state) => ({
@@ -36,7 +42,7 @@ export default function TeamMate() {
 
   useMemo(() => {
     const item = location.state.key;
-    setprojectId(item.project);
+    setproject(item.project);
 
     const pmData = item.project.pm;
     const teamListWithoutPm = item.project.projectTeammateList.filter(
@@ -73,9 +79,51 @@ export default function TeamMate() {
     }
   };
 
-  const onSaveClickHandler = async () => {
-    alert("save를 클릭함.");
+  const onSaveClickHandler = () => {
+    console.log(selectedData, selectedRoleData);
+    if (selectedData.length === 0 || selectedRoleData.length === 0) {
+      alert("값을 선택해주세요");
+      return;
+    }
+    console.log(selectedData.length);
+
+    const newData = selectedData.map((data, index) => ({
+      prjId: project.prjId,
+      tmId: data,
+      role: selectedRoleData[index],
+    }));
+
+    setWillInsertData((prev) => [...prev, ...newData]);
+    setIsPossible(true);
   };
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      if (willInsertData.length > 0 && isPossible) {
+        console.log(willInsertData);
+        const res = await fetch(
+          `http://localhost:8080/api/project/teammate/${project.prjId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: tokenInfo.token,
+            },
+            body: JSON.stringify(willInsertData),
+          }
+        );
+        const json = await res.json();
+        if (json.status === 200) {
+          setIsEditing(false);
+          navigate("/project/view", { state: { key: project } });
+        }
+        setWillInsertData([]);
+        setIsPossible(false);
+      }
+    };
+
+    sendRequest();
+  }, [willInsertData, isPossible]);
 
   const onModifyClickHandler = () => {
     setIsEditing(true);
@@ -83,20 +131,36 @@ export default function TeamMate() {
     buttonHiddenRef.current.style.display = "none";
   };
 
-  const onChangeSelectHandler = (selectedOption, idx, type) => {
-    if (selectedOption) {
-      setTemporaryList((prevList) =>
-        prevList.map((item, index) =>
-          index === idx
-            ? {
-                ...item,
-                [type]: selectedOption.label,
-                empId: type === "empName" ? selectedOption.value : item.empId,
-              }
-            : item
-        )
-      );
+  const onChangeSelectHandler = async (selectedOption, idx, type) => {
+    for (let item of project.projectTeammateList) {
+      if (selectedOption?.value === item.tmId) {
+        alert("이미 존재하는 사원입니다.");
+        setCanAdd(false);
+        return;
+      }
+    }
+    for (let item of selectedData) {
+      if (selectedOption?.value === item) {
+        alert("이미 존재하는 사원입니다.");
+        setCanAdd(false);
+        return;
+      }
+    }
+    if (selectedOption && canAdd) {
+      canAdd &&
+        setTemporaryList((prevList) =>
+          prevList?.map((item, index) =>
+            index === idx
+              ? {
+                  ...item,
+                  [type]: selectedOption.label,
+                  empId: type === "empName" ? selectedOption.value : item.empId,
+                }
+              : item
+          )
+        );
       setLastModifiedIndex(idx);
+      return;
     }
   };
 
@@ -108,7 +172,6 @@ export default function TeamMate() {
     };
     data();
   }, [lastModifyData, tokenInfo.token, memoizedGetEmpData]);
-  console.log(selectedEmpData);
 
   useEffect(() => {
     if (lastModifiedIndex !== null) {
@@ -135,7 +198,7 @@ export default function TeamMate() {
 
   return (
     <div>
-      <MainHeader project={projectId} />
+      <MainHeader project={project} />
       <div className={s.teamMateContainer}>
         <div className={s.teamMateTableContainer}>
           <table className={s.teamMateTable}>
@@ -154,6 +217,16 @@ export default function TeamMate() {
                   {isEditing && <td></td>}
                 </tr>
               )}
+              {project.projectTeammateList &&
+                project.projectTeammateList
+                  .filter((item) => item.role !== "PM")
+                  .map((item, idx) => (
+                    <tr key={idx}>
+                      <td>{item.employeeVO.empName}</td>
+                      <td>{item.role}</td>
+                      {isEditing && <td></td>}
+                    </tr>
+                  ))}
               {isEditing &&
                 temporaryList.map((item, idx) => (
                   <tr key={item.key}>
