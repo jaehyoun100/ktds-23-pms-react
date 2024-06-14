@@ -15,6 +15,7 @@ import ContentMain from "../components/contents/ContentMain";
 import knowledgeRounter from "./routercomponent/knowledgeRouter";
 import commuteRouter from "./routercomponent/commuteRouter";
 import issueRouter from "./routercomponent/issueRouter";
+import approvalRouter from "./routercomponent/approvalRouter";
 
 export default function RouterAppProvider() {
   const routers = createBrowserRouter([
@@ -41,6 +42,7 @@ export default function RouterAppProvider() {
         knowledgeRounter,
         commuteRouter,
         issueRouter,
+        approvalRouter,
       ],
     },
   ]);

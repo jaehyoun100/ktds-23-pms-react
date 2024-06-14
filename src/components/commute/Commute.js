@@ -15,11 +15,6 @@ export default function CommuteApp() {
 
   const columns = [
     {
-      title: "연번",
-      dataIndex: ["employeeVO", "empName"],
-      key: "empName",
-    },
-    {
       title: "사원명",
       dataIndex: ["employeeVO", "empName"],
       key: "empName",

@@ -6,6 +6,7 @@ import { memoAddrSliceStore } from "./slice/memoAddrSlice";
 import { confirmModalSliceStore } from "./slice/confirmModalSlice";
 import { commuteSliceStore } from "./slice/commuteSlice";
 import { supplySliceStore } from "./slice/supplySlice";
+import { approvalSliceStore } from "./slice/approvalSlice";
 
 //redux store 생성
 const toolkitStore = configureStore({
@@ -16,6 +17,7 @@ const toolkitStore = configureStore({
     confirmModalInfo: confirmModalSliceStore.reducer,
     commuteInfo: commuteSliceStore.reducer,
     supply: supplySliceStore.reducer,
+    approvalInfo: approvalSliceStore.reducer,
   },
 });
 
