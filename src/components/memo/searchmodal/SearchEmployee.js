@@ -26,6 +26,7 @@ export default function SearchEmployee({ token, selectedDeptId, selectTmId }) {
     fetchDeptMemberParam
   );
   const { body: deptMemberList } = data || {};
+  console.log(",,,,,,", deptMemberList);
 
   // 선택 사원 배열
   const handleCheckboxChange = (emp) => {

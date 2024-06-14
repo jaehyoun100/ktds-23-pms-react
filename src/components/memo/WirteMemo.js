@@ -36,6 +36,10 @@ export default function WriteMemo() {
     setShowAddrModal(false);
   };
 
+  const onWriteCancel = () => {
+    navigate("/memo");
+  };
+
   // 쪽지 보내기
   const onWriteMemoClickHandler = async () => {
     if (rcvList.length < 1) {
@@ -94,7 +98,7 @@ export default function WriteMemo() {
           </div>
           <div className={style.memoToolBar}>
             <Button onClickHandler={onWriteMemoClickHandler}>보내기</Button>
-            <Button>취소</Button>
+            <Button onClickHandler={onWriteCancel}>취소</Button>
           </div>
           <div className={style.memoContenArea}>
             <div className={style.memoWrite}>

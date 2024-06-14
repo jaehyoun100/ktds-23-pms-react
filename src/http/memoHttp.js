@@ -6,6 +6,22 @@ const url =
     ? "43.202.29.221"
     : "localhost:8080");
 
+// 보관쪽지 전체 검색
+export const loadSaveMemos = async ({ token, pageNo = 0 }) => {
+  if (!token) {
+    return;
+  }
+  const response = await fetch(`${url}/api/memo/save?pageNo=${pageNo}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  });
+  const json = await response.json();
+  console.log(">>> ", json);
+  // return json;
+};
+
 // ================== Send Memo ==================
 // 발신 쪽지 목록 조회
 export const loadSendMemos = async ({ token, pageNo = 0 }) => {
@@ -210,8 +226,9 @@ export const deleteReceiveMemo = async (token, selectRcvMemoId) => {
 
 // ================== 주소록 ==================
 export const loadDepartmentMemberList = async ({ token, selectedDeptId }) => {
+  console.log(selectedDeptId, "!!!!!");
   if (!token) {
-    return undefined;
+    return;
   }
   const response = await fetch(`${url}/api/memo/member/${selectedDeptId}`, {
     method: "GET",

@@ -43,6 +43,7 @@ export default function SearchEmpMemo() {
   };
 
   const onOpenClickHandler = (deptId) => {
+    console.log("wow!!!", deptId);
     setSelectedDeptId(deptId);
     setOpenedDeptId(deptId === openedDeptId ? null : deptId);
     setSelectedTmId("");
