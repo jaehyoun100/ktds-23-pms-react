@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { LuMenu } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { getEmployee } from "../../http/userDetailHttp";
+import { tokenExpire } from "../../utils/loginUtil";
 
 export default function Sidebar({ menus = [] }) {
   const url =
@@ -11,7 +12,7 @@ export default function Sidebar({ menus = [] }) {
     (window.location.host === "43.202.29.221"
       ? "43.202.29.221"
       : "localhost:8080");
-
+  const dispatch = useDispatch();
   const [closeSideBar, setCloseSideBar] = useState(false);
   // console.log(closeSideBar);
 
@@ -53,6 +54,8 @@ export default function Sidebar({ menus = [] }) {
         },
       });
       const json = await response.json();
+
+      dispatch(tokenExpire(json));
       console.log(json.body);
       setUserInfo(json.body);
     };

@@ -20,7 +20,7 @@ export const tokenSliceStore = createSlice({
     },
     logout(state, action) {
       state.token = action.payload.token;
-      localStorage.setItem("token", action.payload.token);
+      localStorage.removeItem("token");
     },
   },
 });

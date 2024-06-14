@@ -3,6 +3,7 @@
  */
 
 import { commuteActions } from "../store/toolkit/slice/commuteSlice";
+import { tokenExpire } from "../utils/loginUtil";
 
 const url =
   "http://" +
@@ -29,6 +30,8 @@ export const getCommuteLog = (
       }
     );
     const json = await response.json();
+
+    dispatch(tokenExpire(json));
 
     dispatch(commuteActions.set(json));
   };
