@@ -73,7 +73,7 @@ export const getEmp = async (deptId, token, setMemberList) => {
       }
     );
     const json = await response.json();
-    const members = json.body.map((emp) => ({
+    const members = json.body?.map((emp) => ({
       label: emp.empName,
       value: emp.empId,
     }));
