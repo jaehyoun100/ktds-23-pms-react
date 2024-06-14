@@ -18,6 +18,8 @@ const ModifyProject = () => {
   const prjNameRef = useRef();
   const [originClientName, setOriginClientName] = useState();
   const [OriginDeptName, setOriginDeptName] = useState();
+  const [originStrtDt, setOriginStrtDt] = useState();
+  const [originEndDt, setOriginEndDt] = useState();
   const [originPm, setOriginPm] = useState();
   const [projectId, setProjectId] = useState();
   const [canSave, setCanSave] = useState(true);
@@ -28,12 +30,16 @@ const ModifyProject = () => {
   useEffect(() => {
     prjNameRef.current.value = projectName || "";
   }, [projectName]);
+
   useMemo(() => {
+    console.log(allData, "!!@#@!ASDASZX");
     const { prjName } = allData?.allData;
     const { clientVO } = allData?.allData;
     const { deptVO } = allData?.allData;
     const { pm } = allData?.allData;
     const { prjId } = allData?.allData;
+    const { strtDt } = allData?.allData;
+    const { endDt } = allData?.allData;
     if (prjName) {
       setProjectName(prjName);
     }
@@ -49,12 +55,15 @@ const ModifyProject = () => {
     if (prjId) {
       setProjectId(prjId);
     }
+    if (strtDt) {
+      setOriginStrtDt(strtDt);
+      // startDateRef.current = setOriginStrtDt;
+    }
+    if (endDt) {
+      setOriginEndDt(endDt);
+      // endDateRef.current = setOriginEndDt;
+    }
   }, [allData]);
-
-  // 고객사 추가 정보
-  const titleRef = useRef();
-  const cntctRef = useRef();
-  const memoRef = useRef();
 
   const [clientData, setClientData] = useState([]);
   const [clientSelectedData, setClientSelectedData] =
@@ -92,8 +101,6 @@ const ModifyProject = () => {
       const getProject = async () => {
         const run = await getPrjApi();
         setProject(run);
-
-        console.log(run, "!!!!!!!!!!");
       };
       getProject();
     }
@@ -166,7 +173,6 @@ const ModifyProject = () => {
     }
     setCanSave(true);
   };
-
   const navigate = useNavigate();
 
   // 프로젝트명 유효성 검사
@@ -186,6 +192,13 @@ const ModifyProject = () => {
       setCanSave(false);
       return;
     }
+    if (
+      startDateRef.current === undefined ||
+      endDateRef.current === undefined
+    ) {
+      setCanSave(false);
+      return;
+    }
 
     setCanSave(true);
   }, [prjNameRef.current?.value]);
@@ -201,7 +214,7 @@ const ModifyProject = () => {
     } else {
       setCanSave(true);
     }
-  }, [clientSelectedData, deptSelectedData, pmSelectedData]);
+  }, [clientSelectedData, deptSelectedData, pmSelectedData, dateInfo]);
 
   // 프로젝트 생성 버튼 클릭 핸들러
   const onClickCreateButtonHandler = async () => {
@@ -243,57 +256,12 @@ const ModifyProject = () => {
     console.log(json);
 
     if (json.status === 200) {
-      alert("프로젝트 생성에 성공했습니다.");
+      alert("프로젝트 수정에 성공했습니다.");
       navigate("/project");
     }
   };
 
-  // 고객사 추가 모달 관련 상태
-  const [showInfoModal, setShowInfoModal] = useState(false);
-
-  const handleOpenModal = () => {
-    setShowInfoModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowInfoModal(false);
-  };
-
   // 새로운 고객사 추가 핸들러
-  const onClickCreateNewClientHandler = async () => {
-    handleOpenModal();
-  };
-
-  // 모달 내에서 고객사 추가 확인 버튼 핸들러
-  const handleConfirm = async () => {
-    console.log(canSave);
-    if (!canSave) {
-      alert("형식에 맞춰 재입력 후 저장해주세요.");
-      return;
-    }
-    const response = await fetch("http://localhost:8080/api/project/client", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: tokenInfo.token,
-      },
-      body: JSON.stringify({
-        clntName: titleRef.current.value,
-        cntct: cntctRef.current.value,
-        info: memoRef.current.value,
-      }),
-    });
-    const json = await response.json();
-    if (json.status === 200) {
-      alert("고객사를 추가했습니다.");
-      setShowInfoModal(false);
-      titleRef.current.value = "";
-      cntctRef.current.value = "";
-      memoRef.current.value = "";
-    }
-
-    setIsAddClient(true);
-  };
 
   return (
     <div className={styles.createContainer}>
@@ -335,17 +303,7 @@ const ModifyProject = () => {
               selectedData={clientSelectedData}
               onChangeHandler={(e) => setCustomerInfo(e.target.value)}
             />
-            <Button onClickHandler={onClickCreateNewClientHandler}>
-              고객사 관리
-            </Button>
           </div>
-          {clientSelectedData === "고객사를 선택해주세요." ? (
-            <span className={styles.alertMessage}>
-              ※ 고객사는 필수 항목입니다.
-            </span>
-          ) : (
-            <></>
-          )}
         </div>
         <div>부서</div>
         <div>
@@ -355,13 +313,6 @@ const ModifyProject = () => {
             setSelectedData={setDeptSelectedData}
             selectedData={deptSelectedData}
           />
-          {deptSelectedData === "부서를 선택해주세요." ? (
-            <span className={styles.alertMessage}>
-              ※ 부서는 필수 항목입니다.
-            </span>
-          ) : (
-            <></>
-          )}
         </div>
         <div>Project Manage</div>
         <div>
@@ -371,11 +322,6 @@ const ModifyProject = () => {
             setSelectedData={setPmSelectedData}
             selectedData={pmSelectedData}
           />
-          {pmSelectedData === "PM을 선택해주세요" ? (
-            <span className={styles.alertMessage}>※ PM은 필수 항목입니다.</span>
-          ) : (
-            <></>
-          )}
         </div>
         <div>프로젝트 기간</div>
         <div>
@@ -390,6 +336,13 @@ const ModifyProject = () => {
           startDateRef.current > endDateRef.current ? (
             <span className={styles.alertMessage}>
               ※ 끝 날짜는 시작날짜보다 이전일 수 없습니다.
+            </span>
+          ) : (
+            <></>
+          )}
+          {originStrtDt === undefined || originEndDt === undefined ? (
+            <span className={styles.alertMessage}>
+              ※ 시작날짜와 끝날짜는 필수 입력 값입니다.
             </span>
           ) : (
             <></>

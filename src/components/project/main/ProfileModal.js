@@ -56,7 +56,7 @@ const ProfileModal = React.memo(
                 <div className={s.infoEmpInfoFlex}>
                   <div>직급 :</div>
                   <div>
-                    {selectedEmpData && selectedEmpData.employeeVO.cmcdName}
+                    {selectedEmpData && selectedEmpData.employeeVO.pstnName}
                   </div>
                 </div>
                 <div className={s.infoEmpInfoFlex}>
