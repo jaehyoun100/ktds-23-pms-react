@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { loadTeamDetail } from "../../../http/deptteamHttp";
+import { deleteTeam, loadTeamDetail } from "../../../http/deptteamHttp";
 import s from "./detail.module.css";
 import TeamUpdate from "./TeamUpdate";
+import ConfirmModal from "../../common/modal/ConfirmModal";
 
 export default function TeamDetail({
   selectTmId,
@@ -11,7 +12,7 @@ export default function TeamDetail({
   setModalContent,
 }) {
   const [data, setData] = useState();
-
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const memoizedloadTeamDetail = useCallback(loadTeamDetail, []);
   const memoizedParam = useMemo(() => {
     return { selectTmId, token };
@@ -36,6 +37,30 @@ export default function TeamDetail({
       />
     );
   };
+  const handleCloseConfirmModal = () => {
+    setShowConfirmModal(false);
+  };
+  const handleConfirm = async () => {
+    // 여기 안에 삭제 로직
+    const json = await deleteTeam(token, selectTmId);
+    console.log(json);
+    console.log(selectTmId);
+    if (json.body) {
+      // 삭제 성공
+      // 목록 컴포넌트를 노출.
+      setShowConfirmModal(false);
+    } else {
+      // 삭제 실패
+      // 실패한 사유를 알려줘야한다.
+      console.log(json);
+      alert(json.errors);
+      setShowConfirmModal(false);
+    }
+  };
+  const teamDeleteHandler = () => {
+    setShowConfirmModal(true);
+  };
+
   return (
     <>
       {data && (
@@ -57,9 +82,21 @@ export default function TeamDetail({
               <button type="button" onClick={teamDetailHandler}>
                 팀 정보 수정
               </button>
-              <button>팀 삭제</button>
+              <button type="button" onClick={teamDeleteHandler}>
+                팀 삭제
+              </button>
             </div>
           </div>
+          <ConfirmModal
+            show={showConfirmModal}
+            onClose={handleCloseConfirmModal}
+            content="팀을 정말 삭제하시겠습니까?"
+            cancelContent="아니오"
+            confirmContent="예"
+            onCloseHandler={handleCloseConfirmModal}
+            confirmOnClick={handleConfirm}
+            cancelOnclick={handleCloseConfirmModal}
+          />
         </div>
       )}
     </>

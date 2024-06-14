@@ -7,6 +7,7 @@ export default function TeamMemberCreate({
   token,
   setIsModalOpen,
   setModalContent,
+  selectTmId,
 }) {
   const [inputFields, setInputFields] = useState([
     {
@@ -59,6 +60,7 @@ export default function TeamMemberCreate({
         setNeedReload(Math.random());
       }
     }
+    setIsModalOpen(false);
   };
 
   return (
@@ -73,11 +75,12 @@ export default function TeamMemberCreate({
               id={`tmId-${index}`}
               name="tmId"
               value={inputField.tmId}
+              placeholder={selectTmId}
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
           <div>
-            <label htmlFor={`empId-${index}`}>팀원(팀원ID)</label>
+            <label htmlFor={`empId-${index}`}>팀원ID</label>
             <input
               type="text"
               id={`empId-${index}`}
@@ -85,6 +88,10 @@ export default function TeamMemberCreate({
               value={inputField.empId}
               onChange={(event) => handleInputChange(index, event)}
             />
+          </div>
+          <div>
+            <label htmlFor={`empName-${index}`}>팀원명</label>
+            <input type="text" id={`empName-${index}`} name="empName" />
           </div>
 
           <div>

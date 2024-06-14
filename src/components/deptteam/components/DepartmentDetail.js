@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { loadDepartmentDetail } from "../../../http/deptteamHttp";
+import {
+  deleteDepartment,
+  loadDepartmentDetail,
+} from "../../../http/deptteamHttp";
 import s from "./detail.module.css";
 import DepartmentUpdate from "./DepartmentUpdate";
-import DeleteDepartment from "./DeleteDepartment";
 import ConfirmModal from "../../common/modal/ConfirmModal";
 
 export default function DepartmentDetail({
@@ -43,9 +45,22 @@ export default function DepartmentDetail({
   const handleCloseConfirmModal = () => {
     setShowConfirmModal(false);
   };
-  const handleConfirm = () => {
-    setShowConfirmModal(false);
+  const handleConfirm = async () => {
+    // 여기 안에 삭제 로직
+    const json = await deleteDepartment(token, selectedDeptId);
+    if (json.body) {
+      // 삭제 성공
+      // 목록 컴포넌트를 노출.
+      setShowConfirmModal(false);
+    } else {
+      // 삭제 실패
+      // 실패한 사유를 알려줘야한다.
+      console.log(json);
+      alert(json.errors);
+      setShowConfirmModal(false);
+    }
   };
+
   const deptDeleteHandler = () => {
     setShowConfirmModal(true);
   };

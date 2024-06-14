@@ -101,10 +101,13 @@ export default function DepartmentList({ token }) {
         token={token}
         setIsModalOpen={setIsModalOpen}
         setModalContent={setModalContent}
+        selectedDeptId={selectedDeptId}
       />
     );
   };
+  // 팀원등록모달
   const onRegistrationTmMemberClickHandler = () => {
+    // console.log(selectTmId);
     openModal(
       <TeamMemberCreate
         setIsTeamMemberRegistrationMode={setIsTeamMemberRegistrationMode}
@@ -112,6 +115,7 @@ export default function DepartmentList({ token }) {
         token={token}
         setIsModalOpen={setIsModalOpen}
         setModalContent={setModalContent}
+        selectTmId={selectTmId}
       />
     );
   };

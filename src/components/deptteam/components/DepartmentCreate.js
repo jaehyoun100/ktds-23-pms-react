@@ -59,6 +59,7 @@ export default function DepartmentCreate({
         setNeedReload(Math.random());
       }
     }
+    setIsModalOpen(false);
   };
 
   return (
@@ -84,6 +85,17 @@ export default function DepartmentCreate({
               name="empId"
               value={inputField.empId}
               onChange={(event) => handleInputChange(index, event)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`empName-${index}`}>부서장 명</label>
+            <input
+              // 일단 표시만.. ㅎㅎ..
+              type="text"
+              id={`empName-${index}`}
+              name="empName"
+              // value={inputField.empName}
+              // onChange={(event) => handleInputChange(index, event)}
             />
           </div>
 

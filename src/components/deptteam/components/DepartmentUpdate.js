@@ -1,6 +1,9 @@
-import { useState } from "react";
-
-export default function DepartmentUpdate({ setIsModalOpen, setModalContent }) {
+export default function DepartmentUpdate({
+  setIsModalOpen,
+  setModalContent,
+  data,
+  token,
+}) {
   const onCancelClickHandler = () => {
     setIsModalOpen(false);
     setModalContent(null);

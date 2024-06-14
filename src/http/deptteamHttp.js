@@ -130,3 +130,43 @@ export const createTeamMember = async (token, tmId, deptId) => {
 
   return json;
 };
+
+export const deleteDepartment = async (token, selectedDeptId) => {
+  if (!token) {
+    return undefined;
+  }
+  const response = await fetch(
+    `${url}/api/v1/department/delete/${selectedDeptId}`,
+    {
+      method: "DELETE",
+      headers: { Authorization: token },
+    }
+  );
+  const json = await response.json();
+  return json;
+};
+
+export const deleteTeam = async (token, selectTmId) => {
+  if (!token) {
+    return undefined;
+  }
+  const response = await fetch(`${url}/api/v1/team/delete/${selectTmId}`, {
+    method: "DELETE",
+    headers: { Authorization: token },
+  });
+  const json = await response.json();
+  return json;
+};
+
+export const modifyDepartment = async (token, formData, selectedBoardId) => {
+  const response = await fetch(
+    `http://localhost:8080/api/v1/boards/${selectedBoardId}`,
+    {
+      method: "PUT",
+      headers: { Authorization: token },
+      body: formData,
+    }
+  );
+  const json = await response.json();
+  return json;
+};

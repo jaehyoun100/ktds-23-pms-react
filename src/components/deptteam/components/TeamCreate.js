@@ -7,12 +7,13 @@ export default function TeamCreate({
   token,
   setIsModalOpen,
   setModalContent,
+  selectedDeptId,
 }) {
   const [inputFields, setInputFields] = useState([
     {
       name: "",
       empId: "",
-      deptId: "",
+      deptId: selectedDeptId,
     },
   ]);
 
@@ -30,7 +31,7 @@ export default function TeamCreate({
       {
         name: "",
         empId: "",
-        deptId: "",
+        deptId: selectedDeptId,
       },
     ]);
   };
@@ -61,6 +62,7 @@ export default function TeamCreate({
         setNeedReload(Math.random());
       }
     }
+    setIsModalOpen(false);
   };
 
   return (
@@ -68,6 +70,17 @@ export default function TeamCreate({
       <h4>새로운 팀 등록</h4>
       {inputFields.map((inputField, index) => (
         <div key={index}>
+          <div>
+            <label htmlFor={`deptId-${index}`}>소속 부서 ID</label>
+            <input
+              type="text"
+              id={`deptId-${index}`}
+              name="deptId"
+              value={inputField.deptId}
+              placeholder={selectedDeptId}
+              onChange={(event) => handleInputChange(index, event)}
+            />
+          </div>
           <div>
             <label htmlFor={`name-${index}`}>팀명</label>
             <input
@@ -79,16 +92,6 @@ export default function TeamCreate({
             />
           </div>
           <div>
-            <label htmlFor={`deptId-${index}`}>소속 부서 ID</label>
-            <input
-              type="text"
-              id={`deptId-${index}`}
-              name="deptId"
-              value={inputField.deptId}
-              onChange={(event) => handleInputChange(index, event)}
-            />
-          </div>
-          <div>
             <label htmlFor={`empId-${index}`}>팀장 ID</label>
             <input
               type="text"
@@ -96,6 +99,17 @@ export default function TeamCreate({
               name="empId"
               value={inputField.empId}
               onChange={(event) => handleInputChange(index, event)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`empName-${index}`}>팀장 명</label>
+            <input
+              // 일단 보이는거만.. 처리.. ㅎㅎ..
+              type="text"
+              id={`empName-${index}`}
+              name="empName"
+              // value={inputField.empName}
+              // onChange={(event) => handleInputChange(index, event)}
             />
           </div>
 
