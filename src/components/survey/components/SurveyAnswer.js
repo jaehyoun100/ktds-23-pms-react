@@ -43,6 +43,13 @@ export default function SurveyAnswer({
                 question.srvId === srvId && question.seq === answers[srvId]
             )?.sqpCntnt
           : answers[srvId];
+      const crtrId =
+        surveyList.typeYn === "N"
+          ? surveyLists[2].find(
+              (question) =>
+                question.srvId === srvId && question.seq === answers[srvId]
+            )?.sqpId
+          : null;
       const response = await fetch(
         `http://localhost:8080/api/survey/reply/${srvId}`,
         {
@@ -51,7 +58,7 @@ export default function SurveyAnswer({
             "Content-Type": "application/json",
             Authorization: token,
           },
-          body: JSON.stringify({ srvId, srvRplCntnt }),
+          body: JSON.stringify({ srvId, srvRplCntnt, crtrId }),
         }
       );
 
