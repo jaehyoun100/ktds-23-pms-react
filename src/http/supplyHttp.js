@@ -4,12 +4,12 @@ const url =
     ? "43.202.29.221"
     : "localhost:8080");
 
-export const loadSupplyList = async ({ token, pageNo = 0 }) => {
+export const loadSupplyList = async ({ token }) => {
   if (!token) {
     return undefined;
   }
 
-  const response = await fetch(`${url}/api/v1/supply?pageNo=${pageNo}`, {
+  const response = await fetch(`${url}/api/v1/supply`, {
     method: "GET",
     headers: { Authorization: token },
   });
@@ -107,16 +107,16 @@ export const modifySupply = async (
   return json;
 };
 
-export const deleteSupply = async (splId, token) => {
-  const response = await fetch(`${url}/api/v1/supply/${splId}`, {
-    method: "DELETE",
-    headers: { Authorization: token },
-  });
+// export const deleteSupply = async (splId, token) => {
+//   const response = await fetch(`${url}/api/v1/supply/${splId}`, {
+//     method: "DELETE",
+//     headers: { Authorization: token },
+//   });
 
-  const json = await response.json();
+//   const json = await response.json();
 
-  return json;
-};
+//   return json;
+// };
 
 export const loadSupplyApprovalList = async ({ token, pageNo = 0 }) => {
   if (!token) {

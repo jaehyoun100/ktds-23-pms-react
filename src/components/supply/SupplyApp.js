@@ -1,29 +1,25 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupplyList } from "../../http/supplyHttp";
 import SupplyView from "./components/SupplyView";
-import SupplyRegist from "./components/SupplyRegist";
-import SupplyLogView from "./components/SupplyLogView";
 import Table from "../../utils/Table";
 import style from "./supply.module.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();
-  const [isRegistrationMode, setIsRegistrationMode] = useState(false);
-  const [isSupplyModificationMode, setIsSupplyModificationMode] =
-    useState(false);
-  const [isSupplyLogViewMode, setIsSupplyLogViewMode] = useState(false);
-  const [needReload, setNeedReload] = useState();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hideZeroInventory, setHideZeroInventory] = useState(false);
 
-  const token = localStorage.getItem("token");
+  const { token } = useSelector((state) => state.tokenInfo);
   const isSelect = selectedSplId !== undefined;
+  const navigate = useNavigate();
 
   const memoizedLoadSupplyList = useCallback(loadSupplyList, []);
   const memoizedToken = useMemo(() => {
-    return { token, needReload };
-  }, [token, needReload]);
+    return { token };
+  }, [token]);
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -86,11 +82,11 @@ export default function SupplyApp() {
   };
 
   const onRegistrationModeClickHandler = () => {
-    setIsRegistrationMode(true);
+    navigate("regist");
   };
 
   const onSupplyLogViewModeClickHandler = () => {
-    setIsSupplyLogViewMode(true);
+    navigate("log");
   };
 
   const handleCheckboxChange = (e) => {
@@ -102,85 +98,49 @@ export default function SupplyApp() {
     : data;
 
   return (
-    <>
-      <div className={style.supplyAppContainer}>
+    <div className={style.supplyAppContainer}>
+      <div
+        className={`${style.tableComponent} ${isSelect ? style.collapsed : ""}`}
+      >
+        {token && (
+          <>
+            <label>
+              <input
+                type="checkbox"
+                checked={hideZeroInventory}
+                onChange={handleCheckboxChange}
+              />
+              재고 없는 비품 감추기
+            </label>
+            <Table
+              columns={isSelect ? simplifiedColumns : columns}
+              dataSource={filteredData}
+              rowKey={(dt) => dt.splId}
+              filter
+              filterOptions={isSelect ? simplifiedFilterOptions : filterOptions}
+              onRow={(record) => {
+                return {
+                  onClick: () => {
+                    onRowClickHandler(record.splId);
+                  },
+                  className: style.pointerCursor,
+                };
+              }}
+            />
+          </>
+        )}
+        <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
+        <button onClick={onSupplyLogViewModeClickHandler}>신청 기록</button>
+      </div>
+      {isSelect && (
         <div
-          className={`${style.tableComponent} ${
-            isSelect ? style.collapsed : ""
+          className={`${style.supplyViewComponent} ${
+            isSelect ? "" : style.hidden
           }`}
         >
-          {token && !isRegistrationMode && !isSupplyLogViewMode && (
-            <>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={hideZeroInventory}
-                  onChange={handleCheckboxChange}
-                />
-                재고 없는 비품 감추기
-              </label>
-              <Table
-                columns={isSelect ? simplifiedColumns : columns}
-                dataSource={filteredData}
-                rowKey={(dt) => dt.splId}
-                filter
-                filterOptions={
-                  isSelect ? simplifiedFilterOptions : filterOptions
-                }
-                onRow={(record) => {
-                  return {
-                    onClick: () => {
-                      onRowClickHandler(record.splId);
-                    },
-                    className: style.pointerCursor,
-                  };
-                }}
-              />
-            </>
-          )}
-          {!isRegistrationMode && !isSupplyLogViewMode && (
-            <>
-              <button onClick={onRegistrationModeClickHandler}>
-                소모품 등록
-              </button>
-              <button onClick={onSupplyLogViewModeClickHandler}>
-                신청 기록
-              </button>
-            </>
-          )}
+          <SupplyView selectedSplId={selectedSplId} />
         </div>
-        {isSelect && !isRegistrationMode && !isSupplyLogViewMode && (
-          <div
-            className={`${style.supplyViewComponent} ${
-              isSelect ? "" : style.hidden
-            }`}
-          >
-            <SupplyView
-              selectedSplId={selectedSplId}
-              setSelectedSplId={setSelectedSplId}
-              isSupplyModificationMode={isSupplyModificationMode}
-              setIsSupplyModificationMode={setIsSupplyModificationMode}
-              needReload={needReload}
-              setNeedReload={setNeedReload}
-              token={token}
-            />
-          </div>
-        )}
-      </div>
-      {isRegistrationMode && !isSupplyLogViewMode && (
-        <SupplyRegist
-          setIsRegistrationMode={setIsRegistrationMode}
-          setNeedReload={setNeedReload}
-          token={token}
-        />
       )}
-      {!isRegistrationMode && isSupplyLogViewMode && (
-        <SupplyLogView
-          setIsSupplyLogViewMode={setIsSupplyLogViewMode}
-          needReload={needReload}
-          token={token}
-        />
-      )}
-    </>
+    </div>
   );
 }

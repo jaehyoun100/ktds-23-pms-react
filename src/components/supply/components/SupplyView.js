@@ -1,35 +1,31 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  deleteSupply,
+  // deleteSupply,
   loadSupply,
   loadSupplyImage,
 } from "../../../http/supplyHttp";
-import SupplyModification from "./SupplyModification";
 import style from "../supply.module.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-export default function SupplyView({
-  selectedSplId,
-  setSelectedSplId,
-  isSupplyModificationMode,
-  setIsSupplyModificationMode,
-  needReload,
-  setNeedReload,
-  token,
-}) {
+export default function SupplyView({ selectedSplId }) {
   const [data, setData] = useState();
   const [image, setImage] = useState(null);
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { token } = useSelector((state) => state.tokenInfo);
+  const navigate = useNavigate();
+
   const memoizedLoadSupply = useCallback(loadSupply, []);
   const memoizedParam = useMemo(() => {
-    return { selectedSplId, token, needReload };
-  }, [selectedSplId, token, needReload]);
+    return { selectedSplId, token };
+  }, [selectedSplId, token]);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      setImage(null); // Reset the image state
+      setImage(null);
       const json = await memoizedLoadSupply(memoizedParam);
       setData(json);
 
@@ -50,20 +46,20 @@ export default function SupplyView({
   const { body: supplyBody } = data || {};
 
   const onSupplyModificationModeClickHandler = () => {
-    setIsSupplyModificationMode(true);
+    navigate(`modify/${selectedSplId}`);
   };
 
-  const onDeleteClickHandler = async () => {
-    const json = await deleteSupply(supplyBody.splId, token);
+  // const onDeleteClickHandler = async () => {
+  //   const json = await deleteSupply(supplyBody.splId, token);
 
-    if (json.body) {
-      setSelectedSplId(undefined);
-      setNeedReload(Math.random());
-    } else {
-      console.log(json);
-      alert(json.errors);
-    }
-  };
+  //   if (json.body) {
+  //     setSelectedSplId(undefined);
+  //     setNeedReload(Math.random());
+  //   } else {
+  //     console.log(json);
+  //     alert(json.errors);
+  //   }
+  // };
 
   const toggleImageSize = () => {
     setIsImageEnlarged((prev) => !prev);
@@ -71,7 +67,7 @@ export default function SupplyView({
 
   return (
     <div className={style.supplyViewContainer}>
-      {supplyBody && !isSupplyModificationMode && (
+      {supplyBody && (
         <>
           <div className={style.supplyViewHeader}>
             <h3>{supplyBody.splName}</h3>
@@ -107,17 +103,9 @@ export default function SupplyView({
           </div>
           <div>
             <button onClick={onSupplyModificationModeClickHandler}>수정</button>
-            <button onClick={onDeleteClickHandler}>삭제</button>
+            {/* <button onClick={onDeleteClickHandler}>삭제</button> */}
           </div>
         </>
-      )}
-      {isSupplyModificationMode && (
-        <SupplyModification
-          setIsSupplyModificationMode={setIsSupplyModificationMode}
-          token={token}
-          supplyBody={supplyBody}
-          setNeedReload={setNeedReload}
-        />
       )}
     </div>
   );
