@@ -16,7 +16,7 @@ export default function Requirement() {
   const { prjIdValue } = useParams();
 
   const onRqmCreateHandler = () => {
-    navigate("/requirement/write");
+    navigate(`/requirement/${prjIdValue}/write`);
   };
 
   useEffect(() => {
@@ -30,7 +30,6 @@ export default function Requirement() {
   }, [token, prjIdValue]);
 
   const { count, body: data } = requirement || {};
-  console.log("count: ", count);
 
   if (!data) {
     return <div>Loading...</div>; // 데이터 로딩 중

@@ -20,7 +20,7 @@ export default function RequirementModify({
     rqmSts: [],
     teammateList: [],
   });
-  const [editorData, setEditorData] = useState();
+  const [editorModifyData, setEditorModifyData] = useState();
   const [modifyErrors, setModifyErrors] = useState({
     rqmTtl: [],
     prjId: [],
@@ -81,7 +81,10 @@ export default function RequirementModify({
         fileRef.current.files[0] === undefined
           ? null
           : fileRef.current.files[0]; // 첨부파일
-      const rqmCntnt = editorData; // 요구사항 내용
+      const rqmCntnt =
+        editorModifyData === undefined
+          ? requirement.rqmCntnt
+          : editorModifyData; // 요구사항 내용
       const scdSts = scdStsRef.current.value; // 일정상태
       const rqmSts = rqmStsRef.current.value; // 진행상태
 
@@ -321,7 +324,7 @@ export default function RequirementModify({
               }}
               onChange={(event, editor) => {
                 const data = editor.getData();
-                setEditorData(data);
+                setEditorModifyData(data);
               }}
               onBlur={(event, editor) => {}}
               onFocus={(event, editor) => {}}

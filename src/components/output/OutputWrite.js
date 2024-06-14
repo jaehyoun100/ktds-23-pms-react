@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { loadForWriteOutputData, writeOutput } from "../../http/outputHttp";
 import styles from "./output.module.css";
 
@@ -33,8 +33,10 @@ export default function OutoutWrite() {
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
 
+  const { prjIdValue } = useParams();
+
   const onClickHandler = () => {
-    navigate("/output");
+    navigate(`/output/${prjIdValue}`);
   };
 
   const onWriteClickHandler = async () => {
