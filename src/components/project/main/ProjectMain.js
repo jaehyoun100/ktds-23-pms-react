@@ -107,7 +107,10 @@ export default function ProjectMain() {
           <div style={{ backgroundColor: "#fff" }}>
             <div className={styles.gridComponent}>
               <MainInfo project={project} />
-              <ChartContainer />
+              <ChartContainer
+                chartData={project.chartData}
+                totalEmpCnt={project.projectTeammateList.length}
+              />
               <MainReadMe memo={memo} />
 
               <CalendarComponent

@@ -1,15 +1,15 @@
 import MainChart from "./MainChart";
 import styles from "../project.module.css";
 
-export default function ChartContainer() {
+export default function ChartContainer({ chartData, totalEmpCnt }) {
   // const [chartData1, setChartData1] = useState({ completed: 30, inProgress: 20 });
   // const [chartData2, setChartData2] = useState({ completed: 40, inProgress: 10 });
-  const completed1 = 30;
-  const completed2 = 40;
-  const completed3 = 10;
-  const inProgress1 = 30;
-  const inProgress2 = 10;
-  const inProgress3 = 40;
+  const completed1 = chartData[5];
+  const completed2 = chartData[2];
+  const completed3 = chartData[3];
+  const inProgress1 = chartData[4] - chartData[5];
+  const inProgress2 = totalEmpCnt - completed2;
+  const inProgress3 = totalEmpCnt - completed3;
 
   // useEffect(() => {
   //   // 첫 번째 데이터 셋을 가져오는 API 호출
