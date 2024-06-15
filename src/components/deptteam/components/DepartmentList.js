@@ -225,16 +225,18 @@ export default function DepartmentList({ token }) {
           !isDeptRegistrationMode &&
           !isTeamRegistrationMode && (
             <div className={s.buttonlist}>
-              <button>인사 발령 기록</button>
+              <button>결제신청기록</button>
               <button onClick={onRegistrationDeptClickHandler}>
-                부서 등록
+                부서 등록 신청
               </button>
               {selectedDeptId && (
-                <button onClick={onRegistrationTmClickHandler}>팀 등록</button>
+                <button onClick={onRegistrationTmClickHandler}>
+                  팀 등록 신청
+                </button>
               )}
               {selectTmId && (
                 <button onClick={onRegistrationTmMemberClickHandler}>
-                  팀원 등록
+                  팀원 등록 신청
                 </button>
               )}
             </div>

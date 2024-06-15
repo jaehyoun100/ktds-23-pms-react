@@ -80,10 +80,10 @@ export default function TeamDetail({
             />
             <div>
               <button type="button" onClick={teamDetailHandler}>
-                팀 정보 수정
+                팀 정보 수정 신청
               </button>
               <button type="button" onClick={teamDeleteHandler}>
-                팀 삭제
+                팀 삭제 신청
               </button>
             </div>
           </div>

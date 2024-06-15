@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createDepartment } from "../../../http/deptteamHttp";
+import s from "./detail.module.css";
 
 export default function DepartmentCreate({
   setIsDeptRegistrationMode,
@@ -8,6 +9,7 @@ export default function DepartmentCreate({
   setIsModalOpen,
   setModalContent,
 }) {
+  const nameRef = useRef();
   const [inputFields, setInputFields] = useState([
     {
       name: "",
@@ -74,9 +76,19 @@ export default function DepartmentCreate({
               id={`name-${index}`}
               name="name"
               value={inputField.name}
+              defaultValue=""
               onChange={(event) => handleInputChange(index, event)}
+              ref={nameRef}
             />
           </div>
+          {inputField.name === "" && (
+            <span className={s.alertMessage}>※ 부서명은 필수 값입니다.</span>
+          )}
+          {inputField.name.length > 10 && (
+            <span className={s.alertMessage}>
+              ※ 부서명은 10자를 초과할 수 없습니다.
+            </span>
+          )}
           <div>
             <label htmlFor={`empId-${index}`}>부서장 ID</label>
             <input
@@ -87,6 +99,9 @@ export default function DepartmentCreate({
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
+          {inputField.empId === "" && (
+            <span className={s.alertMessage}>※ 부서장 ID는 필수 값입니다.</span>
+          )}
           <div>
             <label htmlFor={`empName-${index}`}>부서장 명</label>
             <input
