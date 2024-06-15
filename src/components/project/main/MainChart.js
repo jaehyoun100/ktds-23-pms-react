@@ -33,7 +33,7 @@ export default function MainChart({ completed, inProgress, children }) {
       <div
         style={{
           textAlign: "center",
-          color: "var(--main-color)",
+          color: completed || inProgress ? "var(--main-color)" : "var(--third-color)",
           fontWeight: "bold",
           marginBottom: "5px",
         }}
@@ -42,7 +42,21 @@ export default function MainChart({ completed, inProgress, children }) {
         {children}
         {` ]`}
       </div>
-      <Pie data={data} options={options} />
+      {completed || inProgress ? (
+        <Pie data={data} options={options} />
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", textAlign: "center", alignItems: "center" }}>
+          <div
+            style={{
+              backgroundColor: "var(--third-color)",
+              width: "140px",
+              height: "140px",
+              borderRadius: "50%",
+            }}
+          ></div>
+          <div style={{ marginTop: "15px", fontSize: "12px", color: "var(--third-color)" }}>데이터 없음</div>
+        </div>
+      )}
     </div>
   );
 }

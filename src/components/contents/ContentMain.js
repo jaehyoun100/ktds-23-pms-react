@@ -1,16 +1,7 @@
 import w from "./ContentMain.module.css";
-import {
-  MainEmployee,
-  MainEmployeeImg,
-  MemuEmployee,
-} from "./maincomponents/Employee";
+import { MainEmployee, MainEmployeeImg, MemuEmployee } from "./maincomponents/Employee";
 import MainCommute from "./maincomponents/Commute";
-import {
-  MainCalendar,
-  MainProject,
-  MainScaduale,
-  MenuProject,
-} from "./maincomponents/Project";
+import { MainCalendar, MainProject, MainScaduale, MenuProject } from "./maincomponents/Project";
 import MainMemo from "./maincomponents/Memo";
 import MainIssue from "./maincomponents/Issue";
 import { MemuProduct } from "./maincomponents/Product";
@@ -34,7 +25,7 @@ export default function ContentMain() {
 
       <div className={w.cont2}>
         <MainCalendar />
-        <MainScaduale />
+        {/* <MainScaduale /> */}
 
         <MemuEmployee />
         <MenuProject />

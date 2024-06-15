@@ -6,14 +6,7 @@ import styles from "../Calendar.module.css";
 import Button from "../../common/Button/Button";
 import { format } from "date-fns";
 
-const CalendarComponent = ({
-  events,
-  saveMemo,
-  memoRef,
-  isNeedRender,
-  setNeedRender,
-  setIsHaveData,
-}) => {
+const CalendarComponent = ({ events, saveMemo, memoRef, isNeedRender, setNeedRender, setIsHaveData, main }) => {
   const [date, setDate] = useState(new Date());
   const [memo, setMemo] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
@@ -26,9 +19,7 @@ const CalendarComponent = ({
         memoHiddenRef.current.style.display = "block";
       }
       todoHiddenRef.current.style.display = "none";
-      const event = events.find(
-        (event) => event.date === format(selectedDate, "yyyy-MM-dd")
-      );
+      const event = events.find((event) => event.date === format(selectedDate, "yyyy-MM-dd"));
       setMemo(event ? event.memo : "");
     }
   }, [selectedDate, events]);
@@ -38,14 +29,12 @@ const CalendarComponent = ({
     setSelectedDate(date);
   };
 
-  const event =
-    selectedDate &&
-    events.find((event) => event.date === format(selectedDate, "yyyy-MM-dd"));
+  const event = selectedDate && events.find((event) => event.date === format(selectedDate, "yyyy-MM-dd"));
   useEffect(() => {
     if (event && event.memo !== "") {
-      setIsHaveData(true);
+      setIsHaveData && setIsHaveData(true);
     } else if (event === undefined) {
-      setIsHaveData(false);
+      setIsHaveData && setIsHaveData(false);
     }
     console.log(event !== undefined, "memo!!!!!");
   }, [event, setIsHaveData]);
@@ -65,10 +54,7 @@ const CalendarComponent = ({
   };
 
   const tileContent = ({ date, view }) => {
-    if (
-      view === "month" &&
-      events.find((x) => x.date === format(date, "yyyy-MM-dd"))
-    ) {
+    if (view === "month" && events?.find((x) => x.date === format(date, "yyyy-MM-dd"))) {
       return (
         <div className={styles.date}>
           {date.getDate()}
@@ -101,7 +87,7 @@ const CalendarComponent = ({
     <div>
       <div className={s.calendarContainer}>
         <Calendar
-          className={`${styles.reactCalendar} react-calendar`}
+          className={`${styles.reactCalendar} react-calendar ${main && styles.pointer}`}
           onChange={handleDateChange}
           value={date}
           locale={"ko-KR"}
@@ -111,11 +97,7 @@ const CalendarComponent = ({
           tileContent={tileContent}
         />
         {selectedDate && (
-          <div
-            className={s.calendarMemoContainer}
-            id="change-hidden-memo"
-            ref={memoHiddenRef}
-          >
+          <div className={s.calendarMemoContainer} id="change-hidden-memo" ref={memoHiddenRef}>
             <div className={s.calendarMemoDate}>
               날짜 :{" "}
               {selectedDate.toLocaleDateString("ko-KR", {
@@ -142,23 +124,16 @@ const CalendarComponent = ({
                 <Button onClickHandler={handleSaveMemo} children="메모 저장" />
               </div>
               <div style={{ textAlign: "right", marginTop: "10px" }}>
-                <Button
-                  onClickHandler={handleChangeMemo}
-                  children="할일 보기"
-                />
+                <Button onClickHandler={handleChangeMemo} children="할일 보기" />
               </div>
             </div>
           </div>
         )}
-        <div
-          className={s.calendarTodo}
-          id="change-hidden-todo"
-          ref={todoHiddenRef}
-        >
+        <div className={`${s.calendarTodo} ${main && s.mainCalender} `} id="change-hidden-todo" ref={todoHiddenRef}>
           <ul>
             <div className={s.todo}>프로젝트 일정 관리</div>
-            <div className={s.ulContainer}>
-              {events.map((event, idx) => (
+            <div className={`${s.ulContainer} ${main && s.mainUl} `}>
+              {events?.map((event, idx) => (
                 <li key={idx}>
                   <span className={s.eventDate}>{event.date}</span>
                   <span>{event.memo}</span>

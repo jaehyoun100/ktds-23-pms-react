@@ -1,6 +1,7 @@
 import w from "../ContentMain.module.css";
 import { IoCodeOutline } from "react-icons/io5";
 import { FaRegCalendarAlt, FaRegCalendarCheck } from "react-icons/fa";
+import CalendarComponent from "../../project/main/CalendarComponent";
 export function MainProject() {
   return (
     <>
@@ -16,10 +17,11 @@ export function MainProject() {
 export function MainCalendar() {
   return (
     <>
-      <div className={w.border}>
-        <div className={w.commonDashboardCont}>
-          <FaRegCalendarAlt FaRegCalendarCheck className={w.icons} /> 달력
-        </div>
+      <div style={{ gridColumn: "1/-1" }}>
+        {/* <div className={w.commonDashboardCont}> */}
+        {/* <FaRegCalendarAlt FaRegCalendarCheck className={w.icons} /> 달력 */}
+        <CalendarComponent main events={[]} />
+        {/* </div> */}
       </div>
     </>
   );
