@@ -69,3 +69,16 @@ export const writeIssue = async (token, fromData) => {
 
   return json;
 };
+
+export const deleteIssue = async (isId, token) => {
+  const response = await fetch(
+    `http://localhost:8080/api/v1/knowledge/delete/${isId}`,
+    {
+      method: "GET",
+      headers: { Authorization: token },
+    }
+  );
+
+  const json = await response.json();
+  return json;
+};
