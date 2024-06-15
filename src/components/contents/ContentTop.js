@@ -17,7 +17,7 @@ export default function ContentTop() {
     //     cancelContent: "로그아웃",
     //   })
     // );
-    dispatch(logout(token, false));
+    dispatch(logout(token, true));
   };
   return (
     <div className="main-content-top">
