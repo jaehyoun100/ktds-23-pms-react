@@ -2,6 +2,11 @@
  * Review(후기) 에 대한 메서드 집합
  */
 
+const url =
+    "http://" +
+    (window.location.host === "43.202.29.221"
+        ? "43.202.29.221"
+        : "localhost:8080");
 // view 메서드
 export const viewWriteReviewPage = async (token, selectedProjectId) => {
   const response = await fetch(
@@ -109,16 +114,15 @@ export const getEmpPrjList = async (token) => {
 };
 
 // 관리자 또는 PM 일 경우 프로젝트에 대한 모든 후기 가져오기
-export const getReviewResult = async (token, project) => {
-  const prjId = project.prjId;
-
+export const getReviewResultByprjId = async (token, prjId) => {
   const response = await fetch(
     `http://localhost:8080/api/review/writes/reviewResult/${prjId}`,
     {
-      method: "GET",
-      header: {
+      headers: {
         Authorization: token,
+          "Content-Type": "application/json",
       },
+        method: "GET",
     }
   );
   const json = await response.json();
