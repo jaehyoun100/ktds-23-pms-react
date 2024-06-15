@@ -39,7 +39,7 @@ export default function ContentMain() {
             {/* 메뉴구역 */}
             <div className={w.subgridTwo}>
               <div className={w.mainContentHolderLeft}>
-                <div className={w.contentGridTwo}>
+                <div>
                   <Card icon={<BsFillPeopleFill />} header={"달력"} body={<MainCalendar />} path={""} />
                   {/* <Card icon={<BsFillPeopleFill />} header={"일정"} body={<MainScaduale />} path={""} /> */}
                 </div>
