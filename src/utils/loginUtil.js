@@ -9,8 +9,8 @@ export const tokenExpire = (json) => {
   // http response 에 tokenExpire키가 있는경우
   return async (dispatch) => {
     if (json.tokenExpire) {
-      alert(json.tokenExpire);
       dispatch(tokenActions.logout({ token: "" }));
+      alert(json.tokenExpire);
     }
   };
 };

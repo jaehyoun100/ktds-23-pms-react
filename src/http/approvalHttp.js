@@ -21,3 +21,17 @@ export const getApprovalList = (token) => {
     dispatch(approvalActions.set(json));
   };
 };
+/**
+ * apprId 를 받아서 해당 apprId 가 가지고 있는 정보를 통해 실제 결제시 업데이트되는 정보를 반환해준다
+ * @param {*} apprId
+ * @returns
+ */
+export const getApprInfo = (apprId) => {
+  return async (dispatch) => {
+    const response = await fetch(url, {});
+
+    const json = response.json();
+
+    dispatch(approvalActions.getApprInfo(json));
+  };
+};
