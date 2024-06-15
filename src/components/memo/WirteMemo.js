@@ -52,15 +52,9 @@ export default function WriteMemo() {
     const memoTtl = memoTtlRef.current.value;
     const memoCntnt = memoCntntRef.current.value;
     const file = fileRef.current.files[0];
+    console.log("읭??? ", file);
 
-    const json = await sendMemo(
-      token,
-      // sendId,
-      memoTtl,
-      memoCntnt,
-      file,
-      receiveMemoVO
-    );
+    const json = await sendMemo(token, memoTtl, memoCntnt, file, receiveMemoVO);
 
     if (json.body) {
       alert("쪽지가 발송되었습니다.");
@@ -86,147 +80,149 @@ export default function WriteMemo() {
   }, [rcvList, rcvRefList, rcvSecretRefList]);
 
   return (
-    <div className={style.memoContainer}>
-      {!showAddrModal && (
-        <>
-          <div className={style.memoHeader}>
-            <div className={style.titleArea}>
-              <h2 className={style.memoboxTitle}>
-                <span>쪽지쓰기</span>
-              </h2>
+    <div className={style.bodyContainer}>
+      <div className={style.memoContainer}>
+        {!showAddrModal && (
+          <>
+            <div className={style.memoHeader}>
+              <div className={style.titleArea}>
+                <h2 className={style.memoboxTitle}>
+                  <span>쪽지쓰기</span>
+                </h2>
+              </div>
             </div>
-          </div>
-          <div className={style.memoToolBar}>
-            <Button onClickHandler={onWriteMemoClickHandler}>보내기</Button>
-            <Button onClickHandler={onWriteCancel}>취소</Button>
-          </div>
-          <div className={style.memoContenArea}>
-            <div className={style.memoWrite}>
-              <div className={style.memoWriteOption}>
-                <div className={style.memoWriteOptionItem}>
-                  <div className={style.memoWriteOptionItemInner}>
-                    <div className={style.writeTitleArea}>
-                      <label htmlFor="rcvList">받는사람</label>
+            <div className={style.memoToolBar}>
+              <Button onClickHandler={onWriteMemoClickHandler}>보내기</Button>
+              <Button onClickHandler={onWriteCancel}>취소</Button>
+            </div>
+            <div className={style.memoContenArea}>
+              <div className={style.memoWrite}>
+                <div className={style.memoWriteOption}>
+                  <div className={style.memoWriteOptionItem}>
+                    <div className={style.memoWriteOptionItemInner}>
+                      <div className={style.writeTitleArea}>
+                        <label htmlFor="rcvList">받는사람</label>
+                      </div>
+                      <div className={style.writeOptionArea}>
+                        <div
+                          className={`${style.writeUserInfo} ${style.receiverInput}`}
+                        >
+                          <input
+                            type="text"
+                            id="rcvList"
+                            className={`${style.writeUserInfoInput} ${style.wirteInput}`}
+                            defaultValue={rcvList.map(
+                              (emp) => `${emp.empName} (${emp.email})`
+                            )}
+                          />
+                        </div>
+                        <div className={style.writeButton}>
+                          <Button onClickHandler={onEmpListClickHandler}>
+                            주소록
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                    <div className={style.writeOptionArea}>
-                      <div
-                        className={`${style.writeUserInfo} ${style.receiverInput}`}
-                      >
+                  </div>
+
+                  <div className={style.memoWriteOptionItem}>
+                    <div className={style.memoWriteOptionItemInner}>
+                      <div className={style.writeTitleArea}>
+                        <label htmlFor="rcvMemoId">참조</label>
+                      </div>
+                      <div className={style.writeOptionArea}>
                         <input
                           type="text"
-                          id="rcvList"
+                          id="rcvMemoId"
                           className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                          defaultValue={rcvList.map(
+                          defaultValue={rcvRefList.map(
+                            (emp) => `${emp.empName} (${emp.email})`
+                          )}
+                        ></input>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={style.memoWriteOptionItem}>
+                    <div className={style.memoWriteOptionItemInner}>
+                      <div className={style.writeTitleArea}>
+                        <label htmlFor="rcvMemoId">숨은참조</label>
+                      </div>
+                      <div className={style.writeOptionArea}>
+                        <input
+                          type="text"
+                          style={{ disabled: true }}
+                          className={`${style.writeUserInfoInput} ${style.wirteInput}`}
+                          defaultValue={rcvSecretRefList.map(
                             (emp) => `${emp.empName} (${emp.email})`
                           )}
                         />
                       </div>
-                      <div className={style.writeButton}>
-                        <Button onClickHandler={onEmpListClickHandler}>
-                          주소록
-                        </Button>
+                    </div>
+                  </div>
+
+                  <div className={style.memoWriteOptionItem}>
+                    <div className={style.memoWriteOptionItemInner}>
+                      <div className={style.writeTitleArea}>
+                        <label htmlFor="memoTtl">제목</label>
+                      </div>
+                      <div className={style.writeOptionArea}>
+                        <input
+                          type="text"
+                          id="memoTtl"
+                          className={`${style.writeUserInfoInput} ${style.wirteInput}`}
+                          ref={memoTtlRef}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={style.memoWriteOptionItem}>
+                    <div className={style.memoWriteOptionItemInner}>
+                      <div className={style.writeTitleArea}>
+                        <label htmlFor="originFileName">첨부파일</label>
+                      </div>
+                      <div className={style.writeOptionBoxArea}>
+                        <input
+                          type="file"
+                          id="originFileName"
+                          className={`${style.writeUserInfoInput} ${style.wirteInput}`}
+                          ref={fileRef}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className={style.memoWriteOptionItem}>
-                  <div className={style.memoWriteOptionItemInner}>
-                    <div className={style.writeTitleArea}>
-                      <label htmlFor="rcvMemoId">참조</label>
-                    </div>
-                    <div className={style.writeOptionArea}>
-                      <input
-                        type="text"
-                        id="rcvMemoId"
-                        className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                        defaultValue={rcvRefList.map(
-                          (emp) => `${emp.empName} (${emp.email})`
-                        )}
-                      ></input>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={style.memoWriteOptionItem}>
-                  <div className={style.memoWriteOptionItemInner}>
-                    <div className={style.writeTitleArea}>
-                      <label htmlFor="rcvMemoId">숨은참조</label>
-                    </div>
-                    <div className={style.writeOptionArea}>
-                      <input
-                        type="text"
-                        style={{ disabled: true }}
-                        className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                        defaultValue={rcvSecretRefList.map(
-                          (emp) => `${emp.empName} (${emp.email})`
-                        )}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className={style.memoWriteOptionItem}>
-                  <div className={style.memoWriteOptionItemInner}>
-                    <div className={style.writeTitleArea}>
-                      <label htmlFor="memoTtl">제목</label>
-                    </div>
-                    <div className={style.writeOptionArea}>
-                      <input
-                        type="text"
-                        id="memoTtl"
-                        className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                        ref={memoTtlRef}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className={style.memoWriteOptionItem}>
-                  <div className={style.memoWriteOptionItemInner}>
-                    <div className={style.writeTitleArea}>
-                      <label htmlFor="originFileName">첨부파일</label>
-                    </div>
-                    <div className={style.writeOptionBoxArea}>
-                      <input
-                        type="file"
-                        id="originFileName"
-                        className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                        ref={fileRef}
-                      />
-                    </div>
+                <div className={style.memoWriteEditor}>
+                  <div className={style.memoWriteEditorInner}>
+                    {/* <label htmlFor="memoCntnt">내용</label> */}
+                    <textarea
+                      id="memoCntnt"
+                      className={`${style.writeMemoTextArea}`}
+                      ref={memoCntntRef}
+                    ></textarea>
                   </div>
                 </div>
               </div>
-
-              <div className={style.memoWriteEditor}>
-                <div className={style.memoWriteEditorInner}>
-                  {/* <label htmlFor="memoCntnt">내용</label> */}
-                  <textarea
-                    id="memoCntnt"
-                    className={`${style.writeMemoTextArea}`}
-                    ref={memoCntntRef}
-                  ></textarea>
-                </div>
+            </div>
+          </>
+        )}
+        {showAddrModal && (
+          <MemoModal
+            id={"memo-addr-modal"}
+            header={<>메일 주소록</>}
+            onClose={onClose}
+            body={<SearchEmpMemo />}
+            footer={
+              <div>
+                <Button onClickHandler={onClose}>취소</Button>
+                <Button onClickHandler={onSelectRcvHandler}>확인</Button>
               </div>
-            </div>
-          </div>
-        </>
-      )}
-      {showAddrModal && (
-        <MemoModal
-          id={"memo-addr-modal"}
-          header={<>메일 주소록</>}
-          onClose={onClose}
-          body={<SearchEmpMemo />}
-          footer={
-            <div>
-              <Button onClickHandler={onClose}>취소</Button>
-              <Button onClickHandler={onSelectRcvHandler}>확인</Button>
-            </div>
-          }
-        />
-      )}
+            }
+          />
+        )}
+      </div>
     </div>
   );
 }

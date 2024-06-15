@@ -1,14 +1,17 @@
 /* sidebar */
 .sidebar {
   transition: width 0.5s;
-  background-color: #ffffff;
+  background-color: #f4f5ff;
   width: 300px;
   height: 100%;
   padding: 36px 20px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.05) !important;
+  display: inline-block;
 }
 
 .sidebar.active {
   width: 72px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.05) !important;
 }
 
 .sidebar-toggler {
@@ -127,8 +130,9 @@
 }
 
 .menu-item:hover {
-  background-color: #ecf0f1;
-  color: #7c9ec0;
+  background-color: #fff;
+  color: var(--second-color);
+  border-radius: 5px;
 }
 
 .menu-item-icon {

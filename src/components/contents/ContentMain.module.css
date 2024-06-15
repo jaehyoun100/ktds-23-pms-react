@@ -95,9 +95,13 @@
   height: 18px;
 }
 
-.border {
+/* .border {
   border: 1px solid grey;
   border-radius: 10px;
+} */
+
+.heightFit {
+  height: fit-content;
 }
 
 .fontBold {
@@ -106,4 +110,130 @@
 
 .font12px {
   font-size: 12px;
+}
+
+/* ***** component ***** */
+.cardBodyContent {
+  /*  */
+}
+
+.imgCenter { 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ***** grid style ***** */
+.bodyContainer {
+  height: calc(100% - 50px - 50px);
+}
+
+.bodyContentContainer {
+  background-color: #ffffff;
+  padding: 15px;
+  height: 100%;
+}
+
+.mainContentHolder{
+  display: grid;
+  row-gap: 16px;
+}
+
+.mainContentHolderRight {
+  display: grid;
+  row-gap: 16px;
+  grid-template-rows: 1fr 1fr 1.5fr;
+}
+
+.mainContentHolderLeft {
+  display: grid;
+  row-gap: 16px;
+  grid-template-rows: 1.5fr 1fr 1fr;
+}
+
+.mainContentHolder{
+  display: grid;
+  row-gap: 16px;
+}
+
+.contentGridOne {
+  display: grid;
+  /* grid-template-columns: repeat(3, 1fr); */
+  grid-template-columns: 1fr 2fr 2fr;
+  column-gap: 16px;
+}
+
+.contentGridOneItem {
+  aspect-ratio: 1;
+}
+
+.contentGridTwo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 16px;
+}
+
+.subgridTwo {
+  display: grid;
+  row-gap: 16px;
+}
+
+.heightFull {
+  height: 100%;
+}
+
+
+@media screen and (max-width: 1200px) {
+  .contentGridone,
+  .contentGridTwo {
+    column-gap: 8px;
+  }
+  .mainContentHolder,
+  .subgridTwo {
+    row-gap: 8px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .contentGridOne {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 8px;
+  }
+  .contentGridTwo {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .contentGridTwo .gridTwoItem:nth-child(3) {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  .contentGridTwo .gridTwoItem:nth-child(3) .subgridTwo {
+    grid-template-columns: repeat(2, 1fr);
+    height: 220px;
+    column-gap: 8px;
+  }
+  .contentGridTwo {
+    row-gap: 8px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contentGridOne {
+    grid-template-columns: repeat(1, 1fr);
+    column-gap: 0;
+  }
+  .contentGridTwo {
+    grid-template-columns: repeat(1, 1fr);
+    column-gap: 0;
+  }
+  .contentGridTwo .gridTwo-Item:nth-child(1) {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  .contentGridTwo .gridTwoItem:nth-child(3) .subgridTwo {
+    grid-template-columns: repeat(1, 1fr);
+    height: auto;
+  }
+  .contentGridTwo .gridTwoItem:nth-child(3) .subgridTwo .subgridTwoItem {
+    height: 220px;
+  }
 }

@@ -147,49 +147,51 @@ export default function SendMemoApp() {
   };
 
   return (
-    <div className={style.memoContainer}>
-      {token && !isSelect && (
-        <>
-          <div className={style.memoHeader}>
-            <div className={style.titleArea}>
-              <h2 className={style.memoboxTitle}>
-                <span className={style.memoboxText}>보낸쪽지함</span>
-                <span className={style.memoboxText}>{count}</span>
-              </h2>
+    <div className={style.bodyContainer}>
+      <div className={style.memoContainer}>
+        {token && !isSelect && (
+          <>
+            <div className={style.memoHeader}>
+              <div className={style.titleArea}>
+                <h2 className={style.memoboxTitle}>
+                  <span className={style.memoboxText}>보낸쪽지함</span>
+                  <span className={style.memoboxText}>{count}</span>
+                </h2>
+              </div>
             </div>
-          </div>
-          <div className={style.memoListArea}>
-            <Table
-              rowSelection={{
-                type: "checkbox",
-                ...rowSelection,
-              }}
-              columns={columns}
-              dataSource={sendMemos}
-              rowClassName={style.tableRow}
-              rowKey={(dt) => dt.sendMemoId}
-              filter
-              filterOptions={filterOptions}
-              // onRow={(record) => {
-              //   return {
-              //     onClick: () => {
-              //       onRowClickHandler(record.sendMemoId);
-              //     },
-              //     style: { cursor: "pointer" },
-              //   };
-              // }}
-            />
-          </div>
-        </>
-      )}
-      {token && isSelect && (
-        <SendMemoView
-          token={token}
-          selectSendMemoId={selectSendMemoId}
-          setSelectSendMemoId={setSelectSendMemoId}
-          setNeedLoad={setNeedLoad}
-        />
-      )}
+            <div className={style.memoListArea}>
+              <Table
+                rowSelection={{
+                  type: "checkbox",
+                  ...rowSelection,
+                }}
+                columns={columns}
+                dataSource={sendMemos}
+                rowClassName={style.tableRow}
+                rowKey={(dt) => dt.sendMemoId}
+                filter
+                filterOptions={filterOptions}
+                // onRow={(record) => {
+                //   return {
+                //     onClick: () => {
+                //       onRowClickHandler(record.sendMemoId);
+                //     },
+                //     style: { cursor: "pointer" },
+                //   };
+                // }}
+              />
+            </div>
+          </>
+        )}
+        {token && isSelect && (
+          <SendMemoView
+            token={token}
+            selectSendMemoId={selectSendMemoId}
+            setSelectSendMemoId={setSelectSendMemoId}
+            setNeedLoad={setNeedLoad}
+          />
+        )}
+      </div>
     </div>
   );
 }
