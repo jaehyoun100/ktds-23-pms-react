@@ -43,7 +43,7 @@ export default function MainInfo({ project }) {
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
         <div className={styles.infoTitle}>참여원</div>
         {project.projectTeammateList.map((item, idx) => (
-          <div key={item.tmId}>
+          <div key={item.tmId} style={{ cursor: "pointer" }}>
             <Profile
               profileValue={project.projectTeammateList[idx]}
               profileFile={item.employeeVO.originPrflFileName}
