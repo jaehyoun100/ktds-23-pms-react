@@ -36,8 +36,10 @@ export default function MainHeader({ project }) {
         <span>문답</span>
         <span onClick={() => navigate(`/output/${project.prjId}`)}>산출물</span>
         <span>설문</span>
-        {project.pm.employeeVO.admnCode === "302" ||
-          project.pm.role === "PM"(<span onClick={viewReviewResultHandler(project)}>후기 관리</span>)}
+        {project.pm.employeeVO.admnCode === "302" ?
+            (<span onClick={() => viewReviewResultHandler(project)}>후기 관리</span>) :
+            (project.pm.role === "PM" ? (<span onClick={() => viewReviewResultHandler(project)}>후기 관리</span>) : <>null</>)
+        }
       </div>
     </div>
   );

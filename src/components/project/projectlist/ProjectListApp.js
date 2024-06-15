@@ -107,12 +107,13 @@ const ProjectListApp = () => {
 
   const reviewWritePageClickHandler = (record) => {
     const writeReview = record;
-    console.log(record);
-
-    navigate("/review", { state: { writeReview } });
+    navigate("/review/write", { state: { writeReview } });
   };
 
-  const viewReviewResultHandler = (record) => {};
+  const viewReviewResultHandler = (record) => {
+    const viewResult = record;
+    navigate("/review/result", {state: {viewResult}});
+  };
 
   /*   useEffect(() => {
     if (data.projectList !== undefined) {
@@ -184,7 +185,6 @@ const ProjectListApp = () => {
       title: "후기작성",
       width: "auto",
       render: (rvYn, record, index) => {
-        console.log(record);
         if (record.prjSts === "409") {
           if (info[2].admnCode !== "301" && info[4][index].role !== "PM") {
             if (info[4][index].rvYn === "Y") {
