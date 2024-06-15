@@ -12,6 +12,7 @@ export default function RequirementModify({
   requirementId,
   setIsModifyMode,
   setNeedReloadDetail,
+  prjName,
 }) {
   const [modifyRequirementData, setModifyRequirementData] = useState({
     requirement: [],
@@ -71,7 +72,8 @@ export default function RequirementModify({
         rqmSts: [],
       });
       const rqmTtl = rqmTtlRef.current.value; // 제목
-      const prjId = prjIdRef.current.value; // 프로젝트 ID
+      //   const prjId = prjIdRef.current.value; // 프로젝트 ID
+      const prjId = projectId; // 프로젝트 ID
       const dvlrp = dvlrpRef.current.value; // 담당 개발자
       const cfrmr = cfrmrRef.current.value; // 확인자
       const tstr = tstrRef.current.value; // 테스터
@@ -166,224 +168,241 @@ export default function RequirementModify({
 
   return (
     <>
-      <div className="writeAndModifyGrid">
-        <label htmlFor="rqm-ttl">요구사항 제목</label>
-        <div>
-          <input
-            type="text"
-            id="rqm-ttl"
-            name="rqmTtl"
-            ref={rqmTtlRef}
-            defaultValue={requirement.rqmTtl}
-          />
-          {modifyErrors.rqmTtl && modifyErrors.rqmTtl.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.rqmTtl}</div>
-          )}
-        </div>
+      {modifyRequirementData && (
+        <>
+          <div className="writeAndModifyGrid">
+            <label htmlFor="rqm-ttl">요구사항 제목</label>
+            <div>
+              <input
+                type="text"
+                id="rqm-ttl"
+                name="rqmTtl"
+                ref={rqmTtlRef}
+                defaultValue={requirement.rqmTtl}
+              />
+              {modifyErrors.rqmTtl && modifyErrors.rqmTtl.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.rqmTtl}</div>
+              )}
+            </div>
 
-        {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
-        <label htmlFor="prj-id">프로젝트</label>
-        <div>
-          <select
-            name="prjId"
-            id="prj-id"
-            ref={prjIdRef}
-            defaultValue={requirement.prjId}
-          >
-            <option value={requirement.prjId}>
-              {requirement.projectVO.prjName}
-            </option>
-            {projectList &&
-              projectList.map((item) => (
-                <option value={item.prjId} key={item.prjId}>
-                  {item.prjName}
+            {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
+            <label htmlFor="prj-id">프로젝트</label>
+            <div>
+              {/* <select
+                name="prjId"
+                id="prj-id"
+                ref={prjIdRef}
+                defaultValue={requirement.prjId}
+              >
+                <option value={requirement.prjId}>
+                  {requirement.projectVO.prjName}
                 </option>
-              ))}
-          </select>
-          {modifyErrors.prjId && modifyErrors.prjId.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.prjId}</div>
-          )}
-        </div>
+                {projectList &&
+                  projectList.map((item) => (
+                    <option value={item.prjId} key={item.prjId}>
+                      {item.prjName}
+                    </option>
+                  ))}
+              </select> */}
+              <input
+                type="text"
+                id="prj-id"
+                name="prjId"
+                ref={prjIdRef}
+                defaultValue={prjName}
+                readOnly
+              />
 
-        <label htmlFor="dvlrp">담당개발자</label>
-        <div>
-          <select
-            id="dvlrp-check"
-            name="dvlrp"
-            ref={dvlrpRef}
-            defaultValue={requirement.dvlrp}
-          >
-            <option value="" key={requirement.dvlrp}>
-              {requirement.dvlrpVO.empName}
-            </option>
-            {teammateList &&
-              teammateList.map((item) => (
-                <option value={item.empId} key={item.empId}>
-                  {item.empName}
+              {modifyErrors.prjId && modifyErrors.prjId.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.prjId}</div>
+              )}
+            </div>
+
+            <label htmlFor="dvlrp">담당개발자</label>
+            <div>
+              <select
+                id="dvlrp-check"
+                name="dvlrp"
+                ref={dvlrpRef}
+                defaultValue={requirement.dvlrp}
+              >
+                <option value="" key={requirement.dvlrp}>
+                  {requirement.dvlrpVO.empName}
                 </option>
-              ))}
-          </select>
-          {modifyErrors.dvlrp && modifyErrors.dvlrp.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.dvlrp}</div>
-          )}
-        </div>
+                {teammateList &&
+                  teammateList.map((item) => (
+                    <option value={item.empId} key={item.empId}>
+                      {item.empName}
+                    </option>
+                  ))}
+              </select>
+              {modifyErrors.dvlrp && modifyErrors.dvlrp.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.dvlrp}</div>
+              )}
+            </div>
 
-        <label htmlFor="cfrmr">확인자</label>
-        <div>
-          <select
-            id="cfrmr-check"
-            name="cfrmr"
-            ref={cfrmrRef}
-            defaultValue={requirement.cfrmr}
-          >
-            <option value="">{requirement.cfrmrVO.empName}</option>
-            {teammateList &&
-              teammateList.map((item) => (
-                <option value={item.empId} key={item.empId}>
-                  {item.empName}
-                </option>
-              ))}
-          </select>
-          {modifyErrors.cfrmr && modifyErrors.cfrmr.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.cfrmr}</div>
-          )}
-        </div>
+            <label htmlFor="cfrmr">확인자</label>
+            <div>
+              <select
+                id="cfrmr-check"
+                name="cfrmr"
+                ref={cfrmrRef}
+                defaultValue={requirement.cfrmr}
+              >
+                <option value="">{requirement.cfrmrVO.empName}</option>
+                {teammateList &&
+                  teammateList.map((item) => (
+                    <option value={item.empId} key={item.empId}>
+                      {item.empName}
+                    </option>
+                  ))}
+              </select>
+              {modifyErrors.cfrmr && modifyErrors.cfrmr.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.cfrmr}</div>
+              )}
+            </div>
 
-        <label htmlFor="tstr">테스터</label>
-        <div>
-          <select
-            id="tstr-check"
-            name="tstr"
-            ref={tstrRef}
-            defaultValue={requirement.tstr}
-          >
-            <option value="">{requirement.tstrVO.empName}</option>
-            {teammateList &&
-              teammateList.map((item) => (
-                <option value={item.empId} key={item.empId}>
-                  {item.empName}
-                </option>
-              ))}
-          </select>
-          {modifyErrors.tstr && modifyErrors.tstr.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.tstr}</div>
-          )}
-        </div>
+            <label htmlFor="tstr">테스터</label>
+            <div>
+              <select
+                id="tstr-check"
+                name="tstr"
+                ref={tstrRef}
+                defaultValue={requirement.tstr}
+              >
+                <option value="">{requirement.tstrVO.empName}</option>
+                {teammateList &&
+                  teammateList.map((item) => (
+                    <option value={item.empId} key={item.empId}>
+                      {item.empName}
+                    </option>
+                  ))}
+              </select>
+              {modifyErrors.tstr && modifyErrors.tstr.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.tstr}</div>
+              )}
+            </div>
 
-        {/** 날짜선택창 */}
-        <label htmlFor="start-date">시작일</label>
-        <div>
-          <input
-            type="date"
-            id="start-date"
-            name="strtDt"
-            ref={strtDtRef}
-            defaultValue={requirement.strtDt}
-            onChange={startDayHandler}
-          />
-          {modifyErrors.strtDt && modifyErrors.strtDt.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.strtDt}</div>
-          )}
-        </div>
-        {/** 날짜선택창 */}
-        <label htmlFor="end-date">종료예정일</label>
-        <div>
-          <input
-            type="date"
-            id="end-date"
-            name="endDt"
-            ref={endDtRef}
-            defaultValue={requirement.endDt}
-            onChange={endDayHandler}
-          />
-          {modifyErrors.endDt && modifyErrors.endDt.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.endDt}</div>
-          )}
-        </div>
-        <label htmlFor="file">첨부파일</label>
-        <div>
-          <input type="file" id="file" name="file" ref={fileRef} />
-          {requirement.rqmFile && <div>기존 파일명: {requirement.rqmFile}</div>}
-        </div>
+            {/** 날짜선택창 */}
+            <label htmlFor="start-date">시작일</label>
+            <div>
+              <input
+                type="date"
+                id="start-date"
+                name="strtDt"
+                ref={strtDtRef}
+                defaultValue={requirement.strtDt}
+                onChange={startDayHandler}
+              />
+              {modifyErrors.strtDt && modifyErrors.strtDt.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.strtDt}</div>
+              )}
+            </div>
+            {/** 날짜선택창 */}
+            <label htmlFor="end-date">종료예정일</label>
+            <div>
+              <input
+                type="date"
+                id="end-date"
+                name="endDt"
+                ref={endDtRef}
+                defaultValue={requirement.endDt}
+                onChange={endDayHandler}
+              />
+              {modifyErrors.endDt && modifyErrors.endDt.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.endDt}</div>
+              )}
+            </div>
+            <label htmlFor="file">첨부파일</label>
+            <div>
+              <input type="file" id="file" name="file" ref={fileRef} />
+              {requirement.rqmFile && (
+                <div>기존 파일명: {requirement.rqmFile}</div>
+              )}
+            </div>
 
-        {/** ckeditor를 이용한 내용넣기 */}
-        <label htmlFor="rqm-cntnt">요구사항 내용</label>
-        <div className="hereCkEditor5">
-          {/* * 여기가 editor 생성부 */}
-          <div className="editor" data-name="rqmCntnt" data-init-content="">
-            {/* <textarea
-              style={{ width: "600px", height: "300px" }}
-              defaultValue="CKEditor를 이용해서 내용 넣기"
-            ></textarea> */}
-            <CKEditor
-              editor={ClassicEditor}
-              data={requirement.rqmCntnt}
-              onReady={(editor) => {
-                // You can store the "editor" and use when it is needed.
-                console.log("Editor is ready to use!", editor);
-              }}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-                setEditorModifyData(data);
-              }}
-              onBlur={(event, editor) => {}}
-              onFocus={(event, editor) => {}}
-            />
+            {/** ckeditor를 이용한 내용넣기 */}
+            <label htmlFor="rqm-cntnt">요구사항 내용</label>
+            <div className="hereCkEditor5">
+              {/* * 여기가 editor 생성부 */}
+              <div className="editor" data-name="rqmCntnt" data-init-content="">
+                {/* <textarea
+                style={{ width: "600px", height: "300px" }}
+                defaultValue="CKEditor를 이용해서 내용 넣기"
+              ></textarea> */}
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={requirement.rqmCntnt}
+                  onReady={(editor) => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log("Editor is ready to use!", editor);
+                  }}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    setEditorModifyData(data);
+                  }}
+                  onBlur={(event, editor) => {}}
+                  onFocus={(event, editor) => {}}
+                />
+              </div>
+              {modifyErrors.rqmCntnt && modifyErrors.rqmCntnt.length > 0 && (
+                <div className={styles.errorMessage}>
+                  {modifyErrors.rqmCntnt}
+                </div>
+              )}
+            </div>
+
+            {/** 체크박스 일정상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
+            <label htmlFor="scd-sts">일정상태</label>
+            <div>
+              <select
+                name="scdSts"
+                id="scd-sts"
+                ref={scdStsRef}
+                defaultValue={requirement.scdSts}
+              >
+                <option value="">{requirement.scdStsVO.cmcdName}</option>
+                {scdSts &&
+                  scdSts.map((item) => (
+                    <option value={item.cmcdId} key={item.cmcdId}>
+                      {item.cmcdName}
+                    </option>
+                  ))}
+              </select>
+              {modifyErrors.scdSts && modifyErrors.scdSts.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.scdSts}</div>
+              )}
+            </div>
+
+            {/** 체크박스 진행상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
+            <label htmlFor="rqm-sts">진행상태</label>
+            <div>
+              <select
+                name="rqmSts"
+                id="rqm-sts"
+                ref={rqmStsRef}
+                defaultValue={requirement.rqmSts}
+              >
+                <option value="">{requirement.rqmStsVO.cmcdName}</option>
+                {rqmSts &&
+                  rqmSts.map((item) => (
+                    <option value={item.cmcdId} key={item.cmcdId}>
+                      {item.cmcdName}
+                    </option>
+                  ))}
+              </select>
+              {modifyErrors.rqmSts && modifyErrors.rqmSts.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.rqmSts}</div>
+              )}
+            </div>
+
+            <div className="button-area right-align">
+              <button onClick={onCancelClickHandler}>취소</button>
+              <button onClick={onModifyClickHandler}>수정</button>
+            </div>
           </div>
-          {modifyErrors.rqmCntnt && modifyErrors.rqmCntnt.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.rqmCntnt}</div>
-          )}
-        </div>
-
-        {/** 체크박스 일정상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
-        <label htmlFor="scd-sts">일정상태</label>
-        <div>
-          <select
-            name="scdSts"
-            id="scd-sts"
-            ref={scdStsRef}
-            defaultValue={requirement.scdSts}
-          >
-            <option value="">{requirement.scdStsVO.cmcdName}</option>
-            {scdSts &&
-              scdSts.map((item) => (
-                <option value={item.cmcdId} key={item.cmcdId}>
-                  {item.cmcdName}
-                </option>
-              ))}
-          </select>
-          {modifyErrors.scdSts && modifyErrors.scdSts.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.scdSts}</div>
-          )}
-        </div>
-
-        {/** 체크박스 진행상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
-        <label htmlFor="rqm-sts">진행상태</label>
-        <div>
-          <select
-            name="rqmSts"
-            id="rqm-sts"
-            ref={rqmStsRef}
-            defaultValue={requirement.rqmSts}
-          >
-            <option value="">{requirement.rqmStsVO.cmcdName}</option>
-            {rqmSts &&
-              rqmSts.map((item) => (
-                <option value={item.cmcdId} key={item.cmcdId}>
-                  {item.cmcdName}
-                </option>
-              ))}
-          </select>
-          {modifyErrors.rqmSts && modifyErrors.rqmSts.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.rqmSts}</div>
-          )}
-        </div>
-
-        <div className="button-area right-align">
-          <button onClick={onCancelClickHandler}>취소</button>
-          <button onClick={onModifyClickHandler}>수정</button>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 }

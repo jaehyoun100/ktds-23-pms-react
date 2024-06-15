@@ -30,6 +30,19 @@ export const loadForWriteOutputData = async (token) => {
   return json;
 };
 
+export const loadTeamListByPrjId = async (token, prjIdValue) => {
+  if (!token) {
+    return undefined;
+  }
+  const response = await fetch(`${url}/api/v1/output/teammate/${prjIdValue}`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
+  const json = await response.json();
+
+  return json;
+};
+
 export const writeOutput = async (token, formData) => {
   if (!token) {
     return undefined;

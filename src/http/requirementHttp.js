@@ -50,12 +50,12 @@ export const loadForWriteRequirementData = async (token) => {
   return json;
 };
 
-export const loadNameByPrjName = async ({ token, selectedPrjId }) => {
+export const loadTeamListByPrjId = async (token, prjIdValue) => {
   if (!token) {
     return undefined;
   }
   const response = await fetch(
-    `${url}/api/v1/requirement/write/${selectedPrjId}`,
+    `${url}/api/v1/requirement/teammate/${prjIdValue}`,
     {
       method: "GET",
       headers: { Authorization: token },
