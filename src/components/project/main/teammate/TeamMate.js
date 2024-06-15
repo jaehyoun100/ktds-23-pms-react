@@ -20,7 +20,10 @@ export default function TeamMate() {
   const [lastModifiedIndex, setLastModifiedIndex] = useState(null);
   const [memberList, setMemberList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const [temporaryList, setTemporaryList] = useState([]);
+  const [deleteItemList, setDeleteItemList] = useState([]);
+  const [selectDeleteData, setSelectDeleteData] = useState();
   const [lastModifyData, setLastModifyData] = useState([]);
   const [selectedEmpData, setSelectedEmpData] = useState();
   const [willInsertData, setWillInsertData] = useState([]);
@@ -63,10 +66,12 @@ export default function TeamMate() {
 
   const buttonGroupHiddenRef = useRef(null);
   const buttonHiddenRef = useRef(null);
+  const cancelButtonGroupHiddenRef = useRef(null);
 
   useEffect(() => {
     if (buttonGroupHiddenRef.current) {
       buttonGroupHiddenRef.current.style.display = "none";
+      cancelButtonGroupHiddenRef.current.style.display = "none";
     }
   }, []);
 
@@ -163,6 +168,13 @@ export default function TeamMate() {
       return;
     }
   };
+  const onCancelClickHandler = () => {
+    setIsEditing(false);
+    setIsDelete(false);
+    buttonGroupHiddenRef.current.style.display = "none";
+    buttonHiddenRef.current.style.display = "block";
+    cancelButtonGroupHiddenRef.current.style.display = "none";
+  };
 
   const memoizedGetEmpData = useCallback(getEmpData, []);
   useEffect(() => {
@@ -181,6 +193,22 @@ export default function TeamMate() {
       setLastModifyData(lastModifiedData.empName);
     }
   }, [lastModifiedIndex, selectedData]);
+
+  const onDeleteClickHandler = (item) => {
+    setIsDelete(true);
+    const deleteItemListData = project.projectTeammateList.filter(
+      (item) => item.role !== "PM"
+    );
+    setDeleteItemList(deleteItemListData);
+    buttonHiddenRef.current.style.display = "none";
+    cancelButtonGroupHiddenRef.current.style.display = "block";
+  };
+
+  const onTeammateDeleteHandler = (idx) => {
+    const updatedTeamTemporaryList = [...deleteItemList];
+    console.log(updatedTeamTemporaryList);
+    updatedTeamTemporaryList.splice(idx, 1);
+  };
 
   const onDeleteHandler = (idx) => {
     const updatedTemporaryList = [...temporaryList];
@@ -206,7 +234,7 @@ export default function TeamMate() {
               <tr>
                 <th>이름</th>
                 <th>역할</th>
-                {isEditing && <th>삭제</th>}
+                {(isEditing || isDelete) && <th>삭제</th>}
               </tr>
             </thead>
             <tbody>
@@ -225,6 +253,13 @@ export default function TeamMate() {
                       <td>{item.employeeVO.empName}</td>
                       <td>{item.role}</td>
                       {isEditing && <td></td>}
+                      {isDelete && (
+                        <td>
+                          <CiCircleMinus
+                            onClick={() => onTeammateDeleteHandler(item.empId)}
+                          />
+                        </td>
+                      )}
                     </tr>
                   ))}
               {isEditing &&
@@ -272,10 +307,16 @@ export default function TeamMate() {
         <div className={s.teamMateButtonArea}>
           <div ref={buttonHiddenRef}>
             <Button onClickHandler={onModifyClickHandler} children="수정" />
+            <Button onClickHandler={onDeleteClickHandler} children="삭제" />
           </div>
           <div ref={buttonGroupHiddenRef}>
             <Button onClickHandler={onPlusClickHandler} children="추가" />
             <Button onClickHandler={onSaveClickHandler} children="저장" />
+            <Button onClickHandler={onCancelClickHandler} children="취소" />
+          </div>
+          <div ref={cancelButtonGroupHiddenRef}>
+            <Button onClickHandler={onSaveClickHandler} children="저장" />
+            <Button onClickHandler={onCancelClickHandler} children="취소" />
           </div>
         </div>
         <div className={s.teamMateEmpArea}>
