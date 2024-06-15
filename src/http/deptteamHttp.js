@@ -158,15 +158,24 @@ export const deleteTeam = async (token, selectTmId) => {
   return json;
 };
 
-export const modifyDepartment = async (token, formData, selectedBoardId) => {
-  const response = await fetch(
-    `http://localhost:8080/api/v1/boards/${selectedBoardId}`,
-    {
-      method: "PUT",
-      headers: { Authorization: token },
-      body: formData,
-    }
-  );
+export const modifyDepartment = async (
+  token,
+  empId,
+  empName,
+  deptName,
+  deptId
+) => {
+  const data = new FormData();
+  data.append("deptLeadId", empId);
+  data.append("empName", empName);
+  data.append("deptName", deptName);
+  data.append("deptId", deptId);
+
+  const response = await fetch(`${url}/api/v1/department/modify`, {
+    method: "PUT",
+    headers: { Authorization: token },
+    body: data,
+  });
   const json = await response.json();
   return json;
 };

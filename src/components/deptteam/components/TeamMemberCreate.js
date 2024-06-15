@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createTeamMember } from "../../../http/deptteamHttp";
+import s from "./detail.module.css";
 
 export default function TeamMemberCreate({
   setIsTeamMemberRegistrationMode,
@@ -11,7 +12,7 @@ export default function TeamMemberCreate({
 }) {
   const [inputFields, setInputFields] = useState([
     {
-      tmId: "",
+      tmId: selectTmId,
       empId: "",
     },
   ]);
@@ -28,7 +29,7 @@ export default function TeamMemberCreate({
     setInputFields([
       ...inputFields,
       {
-        tmId: "",
+        tmId: selectTmId,
         empId: "",
       },
     ]);
@@ -75,10 +76,14 @@ export default function TeamMemberCreate({
               id={`tmId-${index}`}
               name="tmId"
               value={inputField.tmId}
-              placeholder={selectTmId}
+              // placeholder={selectTmId}
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
+          {inputField.tmId === "" && (
+            <span className={s.alertMessage}>※ 팀ID은 필수 값입니다.</span>
+          )}
+
           <div>
             <label htmlFor={`empId-${index}`}>팀원ID</label>
             <input
@@ -89,6 +94,14 @@ export default function TeamMemberCreate({
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
+          {inputField.empId === "" && (
+            <span className={s.alertMessage}>※ 팀원ID는 필수 값입니다.</span>
+          )}
+          {inputField.empId > 10 && (
+            <span className={s.alertMessage}>
+              ※ 팀원ID는 10자를 초과할 수 없습니다.
+            </span>
+          )}
           <div>
             <label htmlFor={`empName-${index}`}>팀원명</label>
             <input type="text" id={`empName-${index}`} name="empName" />

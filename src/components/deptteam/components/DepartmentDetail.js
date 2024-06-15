@@ -32,6 +32,7 @@ export default function DepartmentDetail({
   }, [memoizedloadDepartmentDetail, memoizedParam, setData]);
 
   const deptDetailHandler = () => {
+    console.log(data[0]);
     openModal(
       <DepartmentUpdate
         token={token}
@@ -84,17 +85,17 @@ export default function DepartmentDetail({
             />
             <div>
               <button type="button" onClick={deptDetailHandler}>
-                부서 정보 수정
+                부서 정보 수정 신청
               </button>
               <button type="button" onClick={deptDeleteHandler}>
-                부서 삭제
+                부서 삭제 신청
               </button>
             </div>
           </div>
           <ConfirmModal
             show={showConfirmModal}
             onClose={handleCloseConfirmModal}
-            content="정말 삭제하시겠습니까?"
+            content="정말 삭제 신청을 하시겠습니까?"
             cancelContent="아니오"
             confirmContent="예"
             onCloseHandler={handleCloseConfirmModal}

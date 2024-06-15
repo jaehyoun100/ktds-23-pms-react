@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createTeam } from "../../../http/deptteamHttp";
+import s from "./detail.module.css";
 
 export default function TeamCreate({
   setIsTeamRegistrationMode,
@@ -77,10 +78,13 @@ export default function TeamCreate({
               id={`deptId-${index}`}
               name="deptId"
               value={inputField.deptId}
-              placeholder={selectedDeptId}
+              // placeholder={selectedDeptId}
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
+          {inputField.deptId === "" && (
+            <span className={s.alertMessage}>※ 부서ID는 필수 값입니다.</span>
+          )}
           <div>
             <label htmlFor={`name-${index}`}>팀명</label>
             <input
@@ -91,6 +95,14 @@ export default function TeamCreate({
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
+          {inputField.name === "" && (
+            <span className={s.alertMessage}>※ 팀명은 필수 값입니다.</span>
+          )}
+          {inputField.name.length > 10 && (
+            <span className={s.alertMessage}>
+              ※ 팀명은 10자를 초과할 수 없습니다.
+            </span>
+          )}
           <div>
             <label htmlFor={`empId-${index}`}>팀장 ID</label>
             <input
@@ -101,6 +113,9 @@ export default function TeamCreate({
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
+          {inputField.empId === "" && (
+            <span className={s.alertMessage}>※ 팀장ID는 필수 값입니다.</span>
+          )}
           <div>
             <label htmlFor={`empName-${index}`}>팀장 명</label>
             <input
