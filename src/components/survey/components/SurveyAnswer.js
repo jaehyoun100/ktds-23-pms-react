@@ -43,7 +43,7 @@ export default function SurveyAnswer({
                 question.srvId === srvId && question.seq === answers[srvId]
             )?.sqpCntnt
           : answers[srvId];
-      const crtrId =
+      const sqpId =
         surveyList.typeYn === "N"
           ? surveyLists[2].find(
               (question) =>
@@ -58,7 +58,7 @@ export default function SurveyAnswer({
             "Content-Type": "application/json",
             Authorization: token,
           },
-          body: JSON.stringify({ srvId, srvRplCntnt, crtrId }),
+          body: JSON.stringify({ srvId, srvRplCntnt, sqpId }),
         }
       );
 
