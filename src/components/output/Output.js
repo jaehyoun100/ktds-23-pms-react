@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   deleteOutput,
   loadOutputs,
+  loadTeamListByPrjId,
   outputFileDownload,
 } from "../../http/outputHttp";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -9,13 +10,17 @@ import OutputModify from "./OutputModify";
 import Table from "../../utils/Table";
 
 export default function Output() {
-  const [output, setOutput] = useState();
+  const [output, setOutput] = useState({
+    outputList: [],
+    isPmAndPl: [],
+  });
   // 선택한 산출물의 ID
   const [selectedOutputId, setSelectedOutputId] = useState();
   const [isModifyMode, setIsModifyMode] = useState(false);
   const [needReload, setNeedReload] = useState();
   const token = localStorage.getItem("token");
 
+  const [teamList, setTeamList] = useState();
   const [userData, setUserData] = useState();
 
   // React Router의 Path를 이동시키는 Hook
@@ -43,8 +48,8 @@ export default function Output() {
     }
   };
 
-  const onOutputCreateHandler = () => {
-    navigate(`/output/${prjIdValue}/write`);
+  const onOutputCreateHandler = (prjName) => {
+    navigate(`/output/${prjIdValue}/write?prjName=${prjName}`);
   };
 
   const onFileClickHandler = async (outputId, fileName) => {
@@ -69,8 +74,8 @@ export default function Output() {
   };
 
   const fetchParams = useMemo(() => {
-    return { token, needReload, prjIdValue };
-  }, [token, needReload, prjIdValue]);
+    return { token, needReload };
+  }, [token, needReload]);
 
   // Component를 실행시키자마자 API 요청으로 데이터를 받아오는 부분
   const fetchLoadOutputs = useCallback(async (params) => {
@@ -81,12 +86,32 @@ export default function Output() {
   useEffect(() => {
     // 산출물 리스트 불러오기
     const getOutputs = async () => {
-      const json = await fetchLoadOutputs({ ...fetchParams });
-      setOutput(json);
+      const json = await fetchLoadOutputs({ ...fetchParams, prjIdValue });
+      console.log("Outputs loaded:", json);
+      const { outputList, isPmAndPl } = json.body;
+      setOutput({
+        outputList,
+        isPmAndPl,
+      });
     };
 
     getOutputs();
-  }, [fetchLoadOutputs, fetchParams, token]);
+  }, [fetchLoadOutputs, fetchParams, prjIdValue]);
+
+  useEffect(() => {
+    // 프로젝트 ID로 팀원들의 정보 가져와서 배열에 SET
+    const getTeammateList = async () => {
+      const json = await loadTeamListByPrjId(token, prjIdValue);
+      console.log("Teammate list loaded:", json);
+
+      const { body: teammateData } = json;
+
+      const list = teammateData.map((item) => item.employeeVO);
+      setTeamList(list);
+    };
+
+    getTeammateList();
+  }, [token, prjIdValue]);
 
   // 로그인 유저의 정보를 받아오는 API
   useEffect(() => {
@@ -101,12 +126,23 @@ export default function Output() {
         },
       });
       const json = await response.json();
+      console.log("User data loaded:", json);
       setUserData(json.body);
     };
     userInfo();
   }, [token]);
 
-  const { count, body: data } = output || {};
+  const { outputList: data, isPmAndPl } = output || {};
+
+  // 로그인한 사원이 프로젝트의 팀원에 속해 있으면 true, 아니면 false 반환.
+  const isUserInTeam =
+    userData &&
+    teamList &&
+    teamList.find((member) => member.empName === userData.empName) !== undefined
+      ? true
+      : false;
+
+  console.log("isUserInTeam: ", isUserInTeam);
 
   if (!data) {
     return <div>Loading...</div>; // 데이터 로딩 중
@@ -189,90 +225,97 @@ export default function Output() {
   return (
     <>
       {/** 데이터가 불러와졌고, 수정모드가 아니면  */}
-      {!isModifyMode && data && count > 0 ? (
+      {data && userData && (
         <>
-          <div>총 {count}개의 산출물이 검색되었습니다.</div>
-          <table>
-            <thead>
-              <tr>
-                <th>프로젝트</th>
-                <th>산출물 제목</th>
-                <th>산출물 종류</th>
-                <th>버전</th>
-                <th>파일명</th>
-                <th>작성자</th>
-                <th>등록일</th>
-                <th>수정</th>
-                <th>삭제</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data &&
-                data.map((item) => (
-                  <tr key={item.outId}>
-                    <td>{item.project.prjName}</td>
-                    <td>{item.outTtl}</td>
-                    <td>{item.outTypeVO.cmcdName}</td>
-                    <td>
-                      {item.outVerSts.cmcdName} Ver.{item.level}
-                    </td>
-                    <td>
-                      <div
-                        onClick={() =>
-                          onFileClickHandler(item.outId, item.outFile)
-                        }
-                      >
-                        {item.outFile}
-                      </div>
-                    </td>
-                    <td>{item.crtrIdVO.empName}</td>
-                    <td>{item.crtDt}</td>
-                    <td>
-                      {/** 로그인한 유저가 작성자이거나 관리자이면 버튼 활성화 */}
-                      {userData.empName === item.crtrIdVO.empName ||
-                      userData.admnCode === "301" ? (
-                        <button
-                          onClick={() => onOutputModifyHandler(item.outId)}
-                        >
-                          수정
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => onOutputModifyHandler(item.outId)}
-                          disabled
-                        >
-                          수정
-                        </button>
-                      )}
-                    </td>
-                    <td>
-                      {/** 로그인한 유저가 작성자이거나 관리자이면 버튼 활성화 */}
-                      {userData.empName === item.crtrIdVO.empName ||
-                      userData.admnCode === "301" ? (
-                        <button
-                          onClick={() => onOutputDeleteHandler(item.outId)}
-                        >
-                          삭제
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => onOutputDeleteHandler(item.outId)}
-                          disabled
-                        >
-                          삭제
-                        </button>
-                      )}
-                    </td>
+          {!isModifyMode && data.listCnt > 0 ? (
+            <>
+              <div>총 {data.listCnt}개의 산출물이 검색되었습니다.</div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>프로젝트</th>
+                    <th>산출물 제목</th>
+                    <th>산출물 종류</th>
+                    <th>버전</th>
+                    <th>파일명</th>
+                    <th>작성자</th>
+                    <th>등록일</th>
+                    <th>수정</th>
+                    <th>삭제</th>
                   </tr>
-                ))}
-            </tbody>
-          </table>
-        </>
-      ) : (
-        <div>해당 프로젝트에 대한 산출물이 없습니다.</div>
-      )}
+                </thead>
+                <tbody>
+                  {data &&
+                    data.outputList.map((item) => (
+                      <tr key={item.outId}>
+                        <td>{item.project.prjName}</td>
+                        <td>{item.outTtl}</td>
+                        <td>{item.outTypeVO.cmcdName}</td>
+                        <td>
+                          {item.outVerSts.cmcdName} Ver.{item.level}
+                        </td>
+                        <td>
+                          <div
+                            onClick={() =>
+                              onFileClickHandler(item.outId, item.outFile)
+                            }
+                          >
+                            {item.outFile}
+                          </div>
+                        </td>
+                        <td>{item.crtrIdVO.empName}</td>
+                        <td>{item.crtDt}</td>
+                        <td>
+                          {/** 로그인한 유저가 작성자이거나 관리자이면 버튼 활성화 */}
+                          {userData.empName === item.crtrIdVO.empName ||
+                          userData.admnCode === "301" ? (
+                            <button
+                              onClick={() => onOutputModifyHandler(item.outId)}
+                            >
+                              수정
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => onOutputModifyHandler(item.outId)}
+                              disabled
+                            >
+                              수정
+                            </button>
+                          )}
+                        </td>
+                        <td>
+                          {/** (로그인한 유저가 작성자이거나 관리자이거나 PM or PL 이거나
+                           * 팀원에 속해있을때) 버튼 활성화 */}
+                          {userData.empName === item.crtrIdVO.empName ||
+                          userData.admnCode === "301" ? (
+                            <button
+                              onClick={() => onOutputDeleteHandler(item.outId)}
+                            >
+                              삭제
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => onOutputDeleteHandler(item.outId)}
+                              disabled
+                            >
+                              삭제
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <>
+              {!isModifyMode && (
+                <div>해당 프로젝트에 대한 산출물이 없습니다.</div>
+              )}
+            </>
+          )}
 
-      {/* {token && (
+          {/* {token && (
         <>
           <div>총 {count}개의 요구사항이 검색되었습니다.</div>
           <Table
@@ -285,19 +328,37 @@ export default function Output() {
         </>
       )} */}
 
-      {data && isModifyMode && (
-        <OutputModify
-          setIsModifyMode={setIsModifyMode}
-          selectedOutputId={selectedOutputId}
-          setSelectedOutputId={setSelectedOutputId}
-          setNeedReload={setNeedReload}
-        />
-      )}
+          {isModifyMode && (
+            <OutputModify
+              setIsModifyMode={setIsModifyMode}
+              selectedOutputId={selectedOutputId}
+              setSelectedOutputId={setSelectedOutputId}
+              setNeedReload={setNeedReload}
+              prjName={data.outputList[0].project.prjName}
+            />
+          )}
 
-      {!isModifyMode && (
-        <div className="button-area right-align">
-          <button onClick={onOutputCreateHandler}>산출물 생성</button>
-        </div>
+          {/** 수정 모드가 아니고, 로그인 사용자 정보가 로드되고,
+           * 로그인한 사원이 관리자이거나 PM or PL 이거나 팀원일때 버튼 보여주기
+           */}
+          {!isModifyMode &&
+            data &&
+            userData &&
+            (userData.admnCode === "301" ||
+              isPmAndPl === true ||
+              isUserInTeam) && (
+              <div className="button-area right-align">
+                <button>삭제</button>
+                <button
+                  onClick={() =>
+                    onOutputCreateHandler(data.outputList[0].project.prjName)
+                  }
+                >
+                  산출물 생성
+                </button>
+              </div>
+            )}
+        </>
       )}
     </>
   );

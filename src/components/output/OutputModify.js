@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./output.module.css";
 import { loadForModifyOutputData, modifyOutput } from "../../http/outputHttp";
+import { useParams } from "react-router-dom";
 
 export default function OutputModify({
   setIsModifyMode,
   setSelectedOutputId,
   selectedOutputId,
   setNeedReload,
+  prjName,
 }) {
   const [modifyOutputData, setModifyOutputData] = useState({
     output: [],
@@ -24,6 +26,8 @@ export default function OutputModify({
 
   const token = localStorage.getItem("token");
 
+  const { prjIdValue } = useParams();
+
   // FormData 전송을 위한 Ref
   const outTtlRef = useRef(); // 산출물 제목
   const prjIdRef = useRef(); // 프로젝트 ID
@@ -39,7 +43,7 @@ export default function OutputModify({
     const check = window.confirm("수정하시겠습니까?");
     if (check) {
       const outTtl = outTtlRef.current.value; // 산출물 제목
-      const prjId = prjIdRef.current.value; // 프로젝트 ID
+      const prjId = prjIdValue; // 프로젝트 ID
       const outType = outTypeRef.current.value; // 산출물 종류
       const outVer = outVerRef.current.value; // 프로젝트 진행상태(산출물 버전)
       const file =
@@ -108,7 +112,7 @@ export default function OutputModify({
 
         <label htmlFor="prj-id">프로젝트</label>
         <div>
-          <select
+          {/* <select
             name="prjId"
             id="prj-id"
             ref={prjIdRef}
@@ -121,7 +125,16 @@ export default function OutputModify({
                   {item.prjName}
                 </option>
               ))}
-          </select>
+          </select> */}
+          <input
+            type="text"
+            id="prj-id"
+            name="prjId"
+            ref={prjIdRef}
+            defaultValue={prjName}
+            readOnly
+          />
+
           {modifyErrors.prjId && modifyErrors.prjId.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.prjId}</div>
           )}

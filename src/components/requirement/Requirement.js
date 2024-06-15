@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { loadRequirements } from "../../http/requirementHttp";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  loadRequirements,
+  loadTeamListByPrjId,
+} from "../../http/requirementHttp";
 import Table from "../../utils/Table";
 
 export default function Requirement() {
-  const [requirement, setRequirement] = useState();
+  const [requirement, setRequirement] = useState({
+    requirementList: [],
+    isPmAndPl: [],
+  });
+  const [teamList, setTeamList] = useState();
+  const [userData, setUserData] = useState();
+
   const token = localStorage.getItem("token");
 
   // React Router의 Path를 이동시키는 Hook
@@ -15,21 +24,72 @@ export default function Requirement() {
   // const prjId = query.get("prjId");
   const { prjIdValue } = useParams();
 
-  const onRqmCreateHandler = () => {
-    navigate(`/requirement/${prjIdValue}/write`);
+  const onRqmCreateHandler = (prjName) => {
+    navigate(`/requirement/${prjIdValue}/write?prjName=${prjName}`);
   };
+
+  const rqmTtlClickHandler = (prjId, rqmId) => {
+    navigate(`/requirement/view?prjId=${prjId}&rqmId=${rqmId}`);
+  };
+
+  // 로그인 유저의 정보를 받아오는 API
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+    const userInfo = async () => {
+      const response = await fetch("http://localhost:8080/api/", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+      const json = await response.json();
+      setUserData(json.body);
+    };
+    userInfo();
+  }, [token]);
 
   useEffect(() => {
     // 요구사항 리스트 불러오기
     const getRequirementList = async () => {
       const json = await loadRequirements(token, prjIdValue);
-      setRequirement(json);
+
+      const { requirementList, isPmAndPl } = json.body;
+      setRequirement({
+        requirementList,
+        isPmAndPl,
+      });
     };
 
     getRequirementList();
   }, [token, prjIdValue]);
 
-  const { count, body: data } = requirement || {};
+  useEffect(() => {
+    // 프로젝트 ID로 팀원들의 정보 가져와서 배열에 SET
+    const getTeammateList = async () => {
+      const json = await loadTeamListByPrjId(token, prjIdValue);
+
+      const { body: teammateData } = json;
+
+      const list = teammateData.map((item) => item.employeeVO);
+      setTeamList(list);
+    };
+
+    getTeammateList();
+  }, [token, prjIdValue]);
+
+  const { requirementList: data, isPmAndPl } = requirement || {};
+
+  console.log("data.requirementList: ", data.requirementList);
+
+  // 로그인한 사원이 프로젝트의 팀원에 속해 있으면 true, 아니면 false 반환.
+  const isUserInTeam =
+    userData &&
+    teamList &&
+    teamList.find((member) => member.empName === userData.empName) !== undefined
+      ? true
+      : false;
 
   if (!data) {
     return <div>Loading...</div>; // 데이터 로딩 중
@@ -102,45 +162,47 @@ export default function Requirement() {
   return (
     <>
       {/** 데이터가 로딩되고, 필터링된 요구사항 데이터가 있을때 */}
-      {data && count > 0 ? (
+      {data.requirementList && userData && (
         <>
-          <div>총 {count}개의 요구사항이 검색되었습니다.</div>
-          <table>
-            <thead>
-              <tr>
-                <th>프로젝트</th>
-                <th>제목</th>
-                <th>일정상태</th>
-                <th>진행상태</th>
-                <th>작성자</th>
-                <th>작성일</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data &&
-                data.map((item) => (
-                  <tr key={item.rqmId}>
-                    <td>{item.projectVO.prjName}</td>
-                    <td>
-                      <Link
-                        to={`/requirement/view?prjId=${item.projectVO.prjId}&rqmId=${item.rqmId}`}
-                      >
-                        {item.rqmTtl}
-                      </Link>
-                    </td>
-                    <td>{item.scdStsVO.cmcdName}</td>
-                    <td>{item.rqmStsVO.cmcdName}</td>
-                    <td>{item.crtrIdVO.empName}</td>
-                    <td>{item.crtDt}</td>
+          {userData && data.count > 0 ? (
+            <>
+              <div>총 {data.count}개의 요구사항이 검색되었습니다.</div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>프로젝트</th>
+                    <th>제목</th>
+                    <th>일정상태</th>
+                    <th>진행상태</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
                   </tr>
-                ))}
-            </tbody>
-          </table>
-        </>
-      ) : (
-        <div>해당 프로젝트에 대한 요구사항이 없습니다.</div>
-      )}
-      {/* {token && (
+                </thead>
+                <tbody>
+                  {data &&
+                    data.requirementList.map((item) => (
+                      <tr key={item.rqmId}>
+                        <td>{item.projectVO.prjName}</td>
+                        <td
+                          onClick={() =>
+                            rqmTtlClickHandler(item.projectVO.prjId, item.rqmId)
+                          }
+                        >
+                          {item.rqmTtl}
+                        </td>
+                        <td>{item.scdStsVO.cmcdName}</td>
+                        <td>{item.rqmStsVO.cmcdName}</td>
+                        <td>{item.crtrIdVO.empName}</td>
+                        <td>{item.crtDt}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <div>해당 프로젝트에 대한 요구사항이 없습니다.</div>
+          )}
+          {/* {token && (
         <>
           <div>총 {count}개의 요구사항이 검색되었습니다.</div>
           <Table
@@ -153,10 +215,28 @@ export default function Requirement() {
         </>
       )} */}
 
-      <div className="button-area right-align">
-        <button>삭제</button>
-        <button onClick={onRqmCreateHandler}>요구사항 생성</button>
-      </div>
+          {/** 산출물 정보가 로그되고, 로그인 사용자정보가 로드되고,
+           * 로그인한 사원이 관리자이거나 PM or PL 이거나 팀원일때 버튼 보여주기 */}
+          {data &&
+            userData &&
+            (userData.admnCode === "301" ||
+              isPmAndPl === true ||
+              isUserInTeam) && (
+              <div className="button-area right-align">
+                <button>삭제</button>
+                <button
+                  onClick={() =>
+                    onRqmCreateHandler(
+                      data.requirementList[0].projectVO.prjName
+                    )
+                  }
+                >
+                  요구사항 생성
+                </button>
+              </div>
+            )}
+        </>
+      )}
     </>
   );
 }

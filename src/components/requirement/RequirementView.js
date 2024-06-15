@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router";
 import styles from "./requirement.module.css";
 import {
   delayApprove,
   delayRequirement,
   deleteRequirement,
   loadOneRequirement,
+  loadTeamListByPrjId,
   requirementFileDownload,
   requirementTestResult,
 } from "../../http/requirementHttp";
@@ -25,6 +27,7 @@ export default function RequirementView() {
   const rqmId = query.get("rqmId");
 
   const [userData, setUserData] = useState();
+  const [teamList, setTeamList] = useState([]);
 
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
@@ -161,8 +164,29 @@ export default function RequirementView() {
     getOneRequirement();
   }, [fetchLoadOneRequirement, fetchParams, prjId, rqmId]);
 
+  useEffect(() => {
+    // 프로젝트 ID로 팀원들의 정보 가져오기
+    const getTeammateList = async () => {
+      const json = await loadTeamListByPrjId(token, prjId);
+
+      const { body: teammateData } = json;
+
+      const list = teammateData.map((item) => item.employeeVO);
+      setTeamList(list);
+    };
+
+    getTeammateList();
+  }, [token, prjId]);
+
   // 객체 분해해서 값 추출
   const { requirement: data, isPmAndPl } = content || {};
+
+  //   // 로그인한 사원이 프로젝트의 팀원에 속해 있으면 true, 아니면 false 반환.
+  //   const isUserInTeam =
+  //     teamList &&
+  //     teamList.find((member) => member.empName === userData.empName) !== undefined
+  //       ? true
+  //       : false;
 
   // const { body: data } = content || {};
 
@@ -172,167 +196,160 @@ export default function RequirementView() {
 
   return (
     <>
-      {/** 데이터가 불러와졌고, 수정모드가 아니면 */}
-      {data && !isModifyMode && (
+      {userData && data && (
         <>
-          <div className={styles.mainInfo}>
-            <div className={`${styles.grid} ${styles.infoBorder}`}>
-              <div className={styles.subItem}>{data.rqmTtl}</div>
-              <div className={styles.subItem}>프로젝트</div>
-              <div className={styles.subItem}>{data.projectVO.prjName}</div>
-              <div className={styles.subItem}>작성자</div>
-              <div className={styles.subItem}>{data.crtrIdVO.empName}</div>
-              <div className={styles.subItem}>기간</div>
-              <div className={styles.subItem}>
-                {data.strtDt} ~ {data.endDt}
+          {/** 데이터가 불러와졌고, 수정모드가 아니고, 로그인 사용자 정보가 로딩됐을시 */}
+          {!isModifyMode && (
+            <>
+              <div className={styles.mainInfo}>
+                <div className={`${styles.grid} ${styles.infoBorder}`}>
+                  <div className={styles.subItem}>{data.rqmTtl}</div>
+                  <div className={styles.subItem}>프로젝트</div>
+                  <div className={styles.subItem}>{data.projectVO.prjName}</div>
+                  <div className={styles.subItem}>작성자</div>
+                  <div className={styles.subItem}>{data.crtrIdVO.empName}</div>
+                  <div className={styles.subItem}>기간</div>
+                  <div className={styles.subItem}>
+                    {data.strtDt} ~ {data.endDt}
+                  </div>
+                  <div className={styles.subItem}>작성일</div>
+                  <div className={styles.subItem}>{data.crtDt}</div>
+                </div>
               </div>
-              <div className={styles.subItem}>작성일</div>
-              <div className={styles.subItem}>{data.crtDt}</div>
-            </div>
-          </div>
 
-          <div className={styles.subInfo}>
-            <div className={`${styles.grid} ${styles.infoBorder}`}>
-              <div className={styles.subItem}>일정상태</div>
-              <div className={styles.flexRow}>
-                <div className={styles.subItem}>{data.scdStsVO.cmcdName}</div>
-                {data.rqmStsVO.cmcdName !== "개발완료" && (
-                  <>
-                    {data.scdStsVO.cmcdName !== "연기필요" ? (
+              <div className={styles.subInfo}>
+                <div className={`${styles.grid} ${styles.infoBorder}`}>
+                  <div className={styles.subItem}>일정상태</div>
+                  <div className={styles.flexRow}>
+                    <div className={styles.subItem}>
+                      {data.scdStsVO.cmcdName}
+                    </div>
+                    {data.rqmStsVO.cmcdName !== "개발완료" && (
                       <>
-                        {/** 연기 버튼을 클릭 시 '연기필요' 상태로 바뀜 */}
-                        <button
-                          className={styles.subItem}
-                          onClick={() => delayCallHandler(data.rqmId)}
-                        >
-                          연기
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        {/** 관리자이거나 PM or PL일 경우 승인, 거절 버튼 보여주기 */}
-                        {(userData.admnCode === "301" ||
-                          isPmAndPl === true) && (
+                        {data.scdStsVO.cmcdName !== "연기필요" ? (
                           <>
+                            {/** 연기 버튼을 클릭 시 '연기필요' 상태로 바뀜 */}
                             <button
                               className={styles.subItem}
-                              onClick={() =>
-                                delayAccessHandler(data.rqmId, true)
-                              }
+                              onClick={() => delayCallHandler(data.rqmId)}
                             >
-                              승인
+                              연기
                             </button>
-                            <button
-                              className={styles.subItem}
-                              onClick={() =>
-                                delayAccessHandler(data.rqmId, false)
-                              }
-                            >
-                              거절
-                            </button>
+                          </>
+                        ) : (
+                          <>
+                            {/** 관리자이거나 PM or PL일 경우 승인, 거절 버튼 보여주기 */}
+                            {(userData.admnCode === "301" ||
+                              isPmAndPl === true) && (
+                              <>
+                                <button
+                                  className={styles.subItem}
+                                  onClick={() =>
+                                    delayAccessHandler(data.rqmId, true)
+                                  }
+                                >
+                                  승인
+                                </button>
+                                <button
+                                  className={styles.subItem}
+                                  onClick={() =>
+                                    delayAccessHandler(data.rqmId, false)
+                                  }
+                                >
+                                  거절
+                                </button>
+                              </>
+                            )}
                           </>
                         )}
                       </>
                     )}
-                  </>
-                )}
+                  </div>
+
+                  <div className={styles.subItem}>담당개발자</div>
+                  <div className={styles.subItem}>{data.dvlrpVO.empName}</div>
+
+                  <div className={styles.subItem}>진행상태</div>
+                  <div className={styles.subItem}>{data.rqmStsVO.cmcdName}</div>
+
+                  <div className={styles.subItem}>확인자</div>
+                  <div className={styles.subItem}>{data.cfrmrVO.empName}</div>
+
+                  <div className={styles.subItem}>파일</div>
+                  <div
+                    className={styles.subItem}
+                    onClick={() => onFileClickHandler(data.rqmId, data.rqmFile)}
+                  >
+                    {data.rqmFile}
+                  </div>
+
+                  <div className={styles.subItem}>테스터</div>
+                  <div className={styles.flexRow}>
+                    <div className={styles.subItem}>{data.tstrVO.empName}</div>
+                    {data.rqmSts === "604" && // 단위테스트 진행중이고
+                      (data.tstrVO.empName === userData.empName || // 로그인한 사용자 = 테스터이거나
+                        userData.admnCode === "301") && ( // 관리자일때
+                        <>
+                          <div
+                            className={styles.subItem}
+                            style={{ marginLeft: "20px" }}
+                          >
+                            테스트 결과:{" "}
+                          </div>
+                          <button
+                            className={styles.subItem}
+                            onClick={() => testResultHandler(data.rqmId, true)}
+                          >
+                            완료
+                          </button>
+                          <button
+                            className={styles.subItem}
+                            onClick={() => testResultHandler(data.rqmId, false)}
+                          >
+                            실패
+                          </button>
+                        </>
+                      )}
+                  </div>
+                </div>
               </div>
-
-              <div className={styles.subItem}>담당개발자</div>
-              <div className={styles.subItem}>{data.dvlrpVO.empName}</div>
-
-              <div className={styles.subItem}>진행상태</div>
-              <div className={styles.subItem}>{data.rqmStsVO.cmcdName}</div>
-
-              <div className={styles.subItem}>확인자</div>
-              <div className={styles.subItem}>{data.cfrmrVO.empName}</div>
-
-              <div className={styles.subItem}>파일</div>
-              <div
-                className={styles.subItem}
-                onClick={() => onFileClickHandler(data.rqmId, data.rqmFile)}
-              >
-                {data.rqmFile}
+              <div className={`${styles.contentInfo} ${styles.infoBorder}`}>
+                <div className={styles.contentBorder}>
+                  <div>{data.rqmCntnt}</div>
+                </div>
               </div>
-
-              <div className={styles.subItem}>테스터</div>
-              <div className={styles.flexRow}>
-                <div className={styles.subItem}>{data.tstrVO.empName}</div>
-                {data.rqmSts === "604" && // 단위테스트 진행중이고
-                  (data.tstrVO.empName === userData.empName || // 로그인한 사용자 = 테스터이거나
-                    userData.admnCode === "301") && ( // 관리자일때
-                    <>
-                      <div
-                        className={styles.subItem}
-                        style={{ marginLeft: "20px" }}
-                      >
-                        테스트 결과:{" "}
-                      </div>
-                      <button
-                        className={styles.subItem}
-                        onClick={() => testResultHandler(data.rqmId, true)}
-                      >
-                        완료
-                      </button>
-                      <button
-                        className={styles.subItem}
-                        onClick={() => testResultHandler(data.rqmId, false)}
-                      >
-                        실패
-                      </button>
-                    </>
-                  )}
-              </div>
-            </div>
-          </div>
-          <div className={`${styles.contentInfo} ${styles.infoBorder}`}>
-            <div className={styles.contentBorder}>
-              <div>{data.rqmCntnt}</div>
-            </div>
-          </div>
-        </>
-      )}
-
-      {isModifyMode && (
-        <RequirementModify
-          projectId={prjId}
-          requirementId={rqmId}
-          setIsModifyMode={setIsModifyMode}
-          setNeedReloadDetail={setNeedReloadDetail}
-        />
-      )}
-
-      <div className="button-area right-align">
-        {!isModifyMode &&
-          data &&
-          // 로그인한 유저가 작성자이거나 관리자일때, 일정상태가 종료가 아닐때 버튼 보여줌
-          (userData.empName === data.crtrIdVO.empName ||
-            userData.admnCode === "301") &&
-          data.scdStsVO.cmcdName !== "종료" && (
-            <>
-              {/** 작성자이거나 관리자일때 수정, 삭제 버튼 보여줌 */}
-              <button onClick={onRqmModifyHandler}>수정</button>
-              <button onClick={onRqmDeleteHandler}>삭제</button>
             </>
           )}
 
-        {!isModifyMode && (
-          <button onClick={onClickHandler}>목록으로 이동</button>
-        )}
-      </div>
+          {isModifyMode && (
+            <RequirementModify
+              projectId={prjId}
+              requirementId={rqmId}
+              setIsModifyMode={setIsModifyMode}
+              setNeedReloadDetail={setNeedReloadDetail}
+              prjName={data.projectVO.prjName}
+            />
+          )}
 
-      {/* <div className="info-emp">
-        {userData && (
-          <>
-            <div className="info-name name-tag">{userData.empName}</div>
-            <div className="info-dept dept-tag">
-              {userData.departmentVO.deptName}
-            </div>
-            <div className="dept-tag">{userData.teamVO.tmName}</div>
-            <div className="dept-tag">{userData.admnCode}</div>
-          </>
-        )}
-      </div> */}
+          <div className="button-area right-align">
+            {!isModifyMode &&
+              data &&
+              (userData.empName === data.crtrIdVO.empName ||
+                userData.admnCode === "301") &&
+              data.scdStsVO.cmcdName !== "종료" && (
+                <>
+                  {/** 작성자이거나 관리자일때 수정, 삭제 버튼 보여줌 */}
+                  <button onClick={onRqmModifyHandler}>수정</button>
+                  <button onClick={onRqmDeleteHandler}>삭제</button>
+                </>
+              )}
+
+            {!isModifyMode && (
+              <button onClick={onClickHandler}>목록으로 이동</button>
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 }
