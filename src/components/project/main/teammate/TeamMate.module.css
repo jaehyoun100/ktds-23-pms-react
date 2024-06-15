@@ -17,16 +17,22 @@
 }
 
 .teamMateContainer {
+  display: flex;
+  flex-direction: row;
   margin-top: 30px;
-  position: fixed;
-  left: 40%;
+  /* position: fixed; */
+  /* left: 40%; */
+}
+.leftContainer {
+  width: 50%;
 }
 .teamMateTableContainer {
   margin-top: 16px;
-  height: 400px;
-  max-height: 400px;
+  height: 600px;
+  max-height: 600px;
   overflow: auto;
   display: block;
+  /* width: 100%; */
 }
 .teamMateTable {
   border: 1px solid #ccc;
@@ -42,30 +48,38 @@
   background-color: #eaeaea;
 }
 .teamMateButtonArea {
-  margin-top: 15px;
+  margin-top: 50px;
   text-align: right;
 }
 .teamMateEmpArea {
-  margin-top: 30px;
-  border: 2px solid var(--main-color);
+  margin: 30px auto;
+  /* border: 2px solid var(--main-color); */
   border-radius: 10px;
-  position: relative;
-  left: 10%;
-  width: 500px;
+  /* position: relative; */
+  /* left: 10%; */
+  width: 43%;
   height: 300px;
   text-align: center;
   align-items: center;
   display: flex;
+  background-color: var(--box-bg);
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
+  color: #333;
+  padding: 10px;
 }
 .teamMateEmpPhoto {
+  margin-left: 10px;
   width: 150px;
   height: 150px;
+  background-size: contain;
+  border-radius: 50%;
+  background-repeat: no-repeat;
 }
 .teamMateEmpInfo {
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 }
 .teamMateEmpPhoto > svg {
   width: 80%;
@@ -76,11 +90,11 @@
 }
 .teamMateEmpInfoFlex {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: start;
 }
 .teamMateEmpInfoFlex > div {
-  width: 240px;
+  width: 300px;
   text-align: left;
 }
 
@@ -89,8 +103,14 @@
   font-weight: 700;
   color: var(--main-color);
   margin-right: 15px;
-  width: 70px;
+  width: 60px;
   text-align: right;
 
   justify-content: space-between; /* Flex 아이템 간의 간격을 균등하게 배치 */
+}
+.lastInfo {
+  height: 40px;
+}
+Button {
+  margin: 0 5px;
 }
