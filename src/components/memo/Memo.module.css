@@ -12,9 +12,14 @@ input[type="text"].wirteInput:focus {
   border: none;
 }
 
+.bodyContainer {
+  height: calc(100% - 50px - 50px);
+}
+
 .memoContainer {
   background-color: #ffffff;
   padding: 15px;
+  height: 100%;
   
 }
 
@@ -153,6 +158,11 @@ input[type="text"].wirteInput:focus {
   margin-left: 5px;
 }
 
+.rowCellText:hover {
+  font-weight: 600;
+  color: var(--second-color);
+}
+
 .listIcon { 
   color: #d3d6e5;
 }
@@ -216,10 +226,17 @@ input[type="text"].wirteInput:focus {
 
 .toggleSaveWrap {
   color: var(--second-color);
+  cursor: pointer;
 }
+
+.toggleSaveWrap:hover {
+  color: var(--main-color);
+}
+
 
 .titleText {
   font-size: 18px;
+  font-weight: 600;
   color: #333;
   line-height: 22px;
   letter-spacing: -0.53px;
@@ -240,6 +257,11 @@ input[type="text"].wirteInput:focus {
   line-height: 8px;
   vertical-align: top;
   position: absolute;
+  cursor: pointer;
+}
+
+.toggleViewReceiver:hover{
+  color: var(--second-color);
 }
 
 .memoOptionItem {
@@ -312,6 +334,93 @@ input[type="text"].wirteInput:focus {
 .memoViewBody {
   padding: 0 0 85px 25px;
 }
+
+.fileAttachments {
+  position: relative;
+  margin-right: 25px;
+  /* max-width: 800px; */
+}
+
+.isBorderBottom {
+  border-bottom: 1px solid var(--third-color);
+}
+
+.fileAttachmentsToolbar {
+  display: flex;
+  padding: 11px 10px 11px 10px;
+}
+
+.fileToggleButton {
+  margin: 0 6px 0 0;
+  padding: 5px 4px;
+  line-height: 10px;
+}
+
+.fileToolbarTitle {
+  display: inline-block;
+  margin-right: 4px;
+  font-size: 14px;
+}
+
+.fileAttachmentsInner {
+  display: block;
+  border: 1px solid var(--third-color);
+  margin: 0 0 0 35px;
+  padding-top: 0;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.fileList {
+  list-style: none;
+  padding: 9px 0;
+  margin: unset;
+}
+
+.fileItem {
+  position: relative;
+  display: flex;
+  padding: 5px 0 5px 19px;
+}
+
+.fileInfo {
+  flex: 0 1 auto;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 0;
+}
+
+.fileThumbnail {
+  -webkit-box-flex: 0;
+  font-size:  24px;
+  color: var(--second-color);
+  padding-bottom: 5px;
+}
+
+.fileInfoArea {
+  -webkit-box-flex: 1;
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 0;
+  margin-left: 10px;
+  letter-spacing: -0.3px;
+}
+
+.task {
+  padding-right: 19px;
+  -webkit-box-flex: 0;
+  flex: 0 0 auto;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-left: auto;
+}
+
+.buttonSaveFile{}
 
 .memoViewContent {
   padding: 20px 25px 0 34px;

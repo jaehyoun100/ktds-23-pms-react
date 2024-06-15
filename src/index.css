@@ -297,6 +297,65 @@ select {
   background-size: 16px 16px;
 }
 
+/* ***** react main page grid sytle ***** */
+.lg-value {
+  font-size: 24px;
+  font-weight: 600;
+}
+.grid-common {
+  background-color: var(--box-bg);
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 8px 24px;
+  color: #333;
+  padding: 10px;
+}
+.grid-c-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.grid-c-title-info {
+  display: flex;
+  align-items: center;
+}
+
+.grid-c-title-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--main-color);
+}
+
+.no-margin {
+  margin: unset;
+}
+
+.grid-c-title-icon {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.grid-c-title:hover, 
+.grid-c-title-text:hover {
+  cursor: pointer;
+}
+
+.grid-c-title-icon > svg {
+  width: 24px;
+  font-size: 20px;
+}
+
+@media screen and (max-width: 1400px) {
+  .grid-common {
+    padding: 16px 10px;
+  }
+  body {
+    font-size: 14px !important;
+  }
+}
+
 /* Header
 .header {
   background-color: var(--box-bg);

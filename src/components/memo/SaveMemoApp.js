@@ -13,8 +13,9 @@ export default function SaveMemoApp() {
   // 보관 쪽지 목록
 
   return (
-    <div className={style.memoContainer}>
-      {/* {token && !isSelect && (
+    <div className={style.bodyContainer}>
+      <div className={style.memoContainer}>
+        {/* {token && !isSelect && (
         <>
           <div className={style.memoHeader}>
             <div className={style.titleArea}>
@@ -50,6 +51,7 @@ export default function SaveMemoApp() {
           setNeedLoad={setNeedLoad}
         />
       )} */}
+      </div>
     </div>
   );
 }
