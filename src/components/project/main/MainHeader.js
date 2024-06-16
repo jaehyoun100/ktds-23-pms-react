@@ -32,12 +32,22 @@ export default function MainHeader({ project }) {
         >
           참여원관리
         </span>
-        <span onClick={() => navigate(`/requirement/${project.prjId}`)}>
+        <span
+          onClick={() =>
+            navigate(`/requirement/${project.prjId}?prjName=${project.prjName}`)
+          }
+        >
           요구사항
         </span>
         <span>이슈관리</span>
         <span>문답</span>
-        <span onClick={() => navigate(`/output/${project.prjId}`)}>산출물</span>
+        <span
+          onClick={() =>
+            navigate(`/output/${project.prjId}?prjName=${project.prjName}`)
+          }
+        >
+          산출물
+        </span>
         <span>설문</span>
         {project.pm.employeeVO.admnCode === "302" ? (
           <span onClick={() => viewReviewResultHandler(project)}>
