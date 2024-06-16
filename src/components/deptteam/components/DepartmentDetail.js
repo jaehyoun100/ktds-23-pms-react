@@ -6,6 +6,7 @@ import {
 import s from "./detail.module.css";
 import DepartmentUpdate from "./DepartmentUpdate";
 import ConfirmModal from "../../common/modal/ConfirmModal";
+import AlertModal from "../../common/modal/AlertModal";
 
 export default function DepartmentDetail({
   selectedDeptId,
@@ -16,6 +17,7 @@ export default function DepartmentDetail({
 }) {
   const [data, setData] = useState();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const memoizedloadDepartmentDetail = useCallback(loadDepartmentDetail, []);
   const memoizedParam = useMemo(() => {
@@ -39,6 +41,7 @@ export default function DepartmentDetail({
         setIsModalOpen={setIsModalOpen}
         setModalContent={setModalContent}
         data={data[0]}
+        setShowModal={setShowModal}
       />
     );
   };
@@ -53,6 +56,7 @@ export default function DepartmentDetail({
       // 삭제 성공
       // 목록 컴포넌트를 노출.
       setShowConfirmModal(false);
+      setShowModal(true);
     } else {
       // 삭제 실패
       // 실패한 사유를 알려줘야한다.
@@ -66,6 +70,9 @@ export default function DepartmentDetail({
     setShowConfirmModal(true);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   return (
     <>
       {data && (
@@ -102,6 +109,14 @@ export default function DepartmentDetail({
             confirmOnClick={handleConfirm}
             cancelOnclick={handleCloseConfirmModal}
           />
+          {showModal && (
+            <AlertModal
+              show={showModal}
+              onClose={handleCloseModal}
+              content="결제 신청이 완료되었습니다."
+              closeContent="확인"
+            />
+          )}
         </div>
       )}
     </>
