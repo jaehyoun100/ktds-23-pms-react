@@ -359,8 +359,10 @@ const ProjectListApp = () => {
       )}
       {surveyResultMode && (
         <SurveyResult
+          token={tokenInfo.token}
           setSurveyResultMode={setSurveyResultMode}
           selectedProjectId={selectedProjectId}
+          info={info}
         />
       )}
     </div>

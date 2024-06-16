@@ -33,6 +33,37 @@ export default function SurveyWrite({
   ]);
 
   const registHandler = async () => {
+    // 문항 번호 중복 체크
+    const questionNumbers = questions.map(
+      (question) => question.questionNumber
+    );
+    const hasDuplicates = questionNumbers.some(
+      (item, index) => questionNumbers.indexOf(item) !== index
+    );
+
+    // 질문 혹은 선택지 입력 여부 체크
+    for (const question of questions) {
+      if (!question.question.trim()) {
+        alert("질문을 입력해 주세요.");
+        return;
+      }
+      if (question.type === false) {
+        for (const option of question.optionsData) {
+          if (!option.sqpCntnt.trim()) {
+            alert("선택지를 입력해 주세요.");
+            return;
+          }
+        }
+      }
+    }
+    if (hasDuplicates) {
+      alert("설문 문항 번호가 중복됩니다!");
+      return;
+    }
+    if (!window.confirm("등록하시겠습니까?")) {
+      return;
+    }
+
     const requestData = questions.map((question) => ({
       prjId: selectedProjectId,
       srvQst: question.question,
@@ -61,6 +92,9 @@ export default function SurveyWrite({
   }; */
 
   const cancleHandler = () => {
+    if (!window.confirm("등록을 취소하시겠습니까?")) {
+      return;
+    }
     setWriteMode(false);
   };
 

@@ -90,14 +90,16 @@ export default function SurveyQuestion({
                     handleQuestionChange={handleQuestionChange}
                   />
                 ) : (
-                  <div>
-                    질문
-                    <input
-                      type="text"
-                      value={question.question}
-                      onChange={(e) => handleQuestionChange(e.target.value)}
-                      style={{ margin: "0 0 0 50px" }}
-                    />
+                  <div style={{display: "flex"}}>
+                    <div>질문</div>
+                    <div>
+                      <input
+                        type="text"
+                        value={question.question}
+                        onChange={(e) => handleQuestionChange(e.target.value)}
+                        style={{ margin: "0 0 0 50px", width: "250%" }}
+                      />
+                    </div>
                   </div>
                 )}
               </>

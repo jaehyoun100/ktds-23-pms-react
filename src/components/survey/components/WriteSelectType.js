@@ -14,34 +14,38 @@ export default function WriteSelectType({
 }) {
   return (
     <>
-      <div>
-        질문
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => handleQuestionChange(e.target.value)}
-          style={{ margin: "0 0 10px 50px" }}
-        />
-        <button
-          onClick={selectOptionAddClickHandler}
-          style={{
-            marginLeft: "10px",
-            width: "28px",
-            height: "28px",
-          }}
-        >
-          +
-        </button>
-        <button
-          onClick={selectOptionSubClickHandler}
-          style={{
-            marginLeft: "10px",
-            width: "28px",
-            height: "28px",
-          }}
-        >
-          -
-        </button>
+      <div style={{ display: "flex" }}>
+        <div>질문</div>
+        <div>
+          <input
+            type="text"
+            value={question}
+            onChange={(e) => handleQuestionChange(e.target.value)}
+            style={{ margin: "0 0 10px 50px", width: "250%" }}
+          />
+        </div>
+        <div>
+          <button
+            onClick={selectOptionAddClickHandler}
+            style={{
+              marginLeft: "400px",
+              width: "28px",
+              height: "28px",
+            }}
+          >
+            +
+          </button>
+          <button
+            onClick={selectOptionSubClickHandler}
+            style={{
+              marginLeft: "10px",
+              width: "28px",
+              height: "28px",
+            }}
+          >
+            -
+          </button>
+        </div>
       </div>
       {Array.from({ length: selectOptionCount }).map((_, idx) => (
         <div key={idx} style={{ display: "flex" }}>
@@ -51,8 +55,9 @@ export default function WriteSelectType({
             value={optionsData[idx]?.sqpCntnt || ""}
             onChange={(e) =>
               handleOptionChange(idx, "sqpCntnt", e.target.value)
+              
             }
-            style={{ margin: "0 0 10px 23px" }}
+            style={{ margin: "0 0 10px 25px", width: "77%" }}
           />
           {isLinked && (
             <div style={{ marginLeft: "10px" }}>
