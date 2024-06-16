@@ -395,6 +395,7 @@ h1 {
   margin-top: 4px;
   margin-right: 20px;
   color: var(--dark-color);
+  white-space: nowrap;
 }
 .ulContainer {
   width: 390px;
@@ -505,4 +506,10 @@ h1 {
   margin-top: 10px;
   text-align: right;
   padding-right: 5px;
+}
+.eventMemo {
+  /* width: 80%; */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -143,7 +143,7 @@ const CalendarComponent = ({ events, saveMemo, memoRef, isNeedRender, setNeedRen
               {events?.map((event, idx) => (
                 <li key={idx}>
                   <span className={s.eventDate}>{event.date}</span>
-                  <span>{event.memo}</span>
+                  <span className={s.eventMemo}>{event.memo}</span>
                 </li>
               ))}
             </div>
