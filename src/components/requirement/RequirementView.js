@@ -201,25 +201,25 @@ export default function RequirementView() {
           {/** 데이터가 불러와졌고, 수정모드가 아니고, 로그인 사용자 정보가 로딩됐을시 */}
           {!isModifyMode && (
             <>
+              <div style={{ marginBottom: "20px" }}>{data.rqmTtl}</div>
               <div className={styles.mainInfo}>
-                <div className={`${styles.grid} ${styles.infoBorder}`}>
-                  <div className={styles.subItem}>{data.rqmTtl}</div>
-                  <div className={styles.subItem}>프로젝트</div>
+                <div className={styles.grid}>
+                  <div className={styles.mainItem}>프로젝트</div>
                   <div className={styles.subItem}>{data.projectVO.prjName}</div>
-                  <div className={styles.subItem}>작성자</div>
+                  <div className={styles.mainItem}>작성자</div>
                   <div className={styles.subItem}>{data.crtrIdVO.empName}</div>
-                  <div className={styles.subItem}>기간</div>
+                  <div className={styles.mainItem}>기간</div>
                   <div className={styles.subItem}>
                     {data.strtDt} ~ {data.endDt}
                   </div>
-                  <div className={styles.subItem}>작성일</div>
+                  <div className={styles.mainItem}>작성일</div>
                   <div className={styles.subItem}>{data.crtDt}</div>
                 </div>
               </div>
 
               <div className={styles.subInfo}>
-                <div className={`${styles.grid} ${styles.infoBorder}`}>
-                  <div className={styles.subItem}>일정상태</div>
+                <div className={`${styles.grid}`}>
+                  <div className={styles.mainItem}>일정상태</div>
                   <div className={styles.flexRow}>
                     <div className={styles.subItem}>
                       {data.scdStsVO.cmcdName}
@@ -230,7 +230,6 @@ export default function RequirementView() {
                           <>
                             {/** 연기 버튼을 클릭 시 '연기필요' 상태로 바뀜 */}
                             <button
-                              className={styles.subItem}
                               onClick={() => delayCallHandler(data.rqmId)}
                             >
                               연기
@@ -243,7 +242,6 @@ export default function RequirementView() {
                               isPmAndPl === true) && (
                               <>
                                 <button
-                                  className={styles.subItem}
                                   onClick={() =>
                                     delayAccessHandler(data.rqmId, true)
                                   }
@@ -251,7 +249,6 @@ export default function RequirementView() {
                                   승인
                                 </button>
                                 <button
-                                  className={styles.subItem}
                                   onClick={() =>
                                     delayAccessHandler(data.rqmId, false)
                                   }
@@ -266,16 +263,16 @@ export default function RequirementView() {
                     )}
                   </div>
 
-                  <div className={styles.subItem}>담당개발자</div>
+                  <div className={styles.mainItem}>담당개발자</div>
                   <div className={styles.subItem}>{data.dvlrpVO.empName}</div>
 
-                  <div className={styles.subItem}>진행상태</div>
+                  <div className={styles.mainItem}>진행상태</div>
                   <div className={styles.subItem}>{data.rqmStsVO.cmcdName}</div>
 
-                  <div className={styles.subItem}>확인자</div>
+                  <div className={styles.mainItem}>확인자</div>
                   <div className={styles.subItem}>{data.cfrmrVO.empName}</div>
 
-                  <div className={styles.subItem}>파일</div>
+                  <div className={styles.mainItem}>파일</div>
                   <div
                     className={styles.subItem}
                     onClick={() => onFileClickHandler(data.rqmId, data.rqmFile)}
@@ -283,7 +280,7 @@ export default function RequirementView() {
                     {data.rqmFile}
                   </div>
 
-                  <div className={styles.subItem}>테스터</div>
+                  <div className={styles.mainItem}>테스터</div>
                   <div className={styles.flexRow}>
                     <div className={styles.subItem}>{data.tstrVO.empName}</div>
                     {data.rqmSts === "604" && // 단위테스트 진행중이고

@@ -105,7 +105,7 @@ export default function Requirement() {
       width: "30%",
     },
     {
-      title: "제목",
+      title: "요구사항명",
       dataIndex: "rqmTtl",
       key: "rqmTtl",
       width: "20%",
@@ -216,7 +216,22 @@ export default function Requirement() {
               )}
             </>
           ) : (
-            <div>해당 프로젝트에 대한 요구사항이 없습니다.</div>
+            <>
+              {token && (
+                <>
+                  <div style={{ marginBottom: "20px" }}>
+                    해당 프로젝트에 대한 요구사항이 없습니다.
+                  </div>
+                  <Table
+                    columns={columns}
+                    dataSource={data.requirementList}
+                    rowKey={(dt) => dt.rqmId}
+                    filter
+                    filterOptions={filterOptions}
+                  />
+                </>
+              )}
+            </>
           )}
 
           {/** 산출물 정보가 로그되고, 로그인 사용자정보가 로드되고,
