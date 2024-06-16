@@ -1,10 +1,11 @@
 import w from "../ContentMain.module.css";
 import p from "./project.module.css";
 import CalendarComponent from "../../project/main/CalendarComponent";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProjectSubChart from "../../project/main/ProjectSubChart";
 import { format } from "date-fns";
+import { getMyEvent, getPrjList } from "../../../http/projectHttp";
 
 export function MainProject() {
   const [myProject, setMyProject] = useState();
@@ -15,14 +16,11 @@ export function MainProject() {
     };
   });
 
+  const memoizeGetPrjList = useCallback(getPrjList, []);
   useEffect(() => {
     const getList = async () => {
-      const response = await fetch("http://localhost:8080/api/project/search", {
-        headers: { Authorization: tokenInfo.token },
-        method: "GET",
-      });
-      const json = await response.json();
-      const dataOfMyProject = json.body[1].projectList;
+      const json = await memoizeGetPrjList(tokenInfo.token);
+      const dataOfMyProject = json[1].projectList;
 
       setMyProject(dataOfMyProject);
       return dataOfMyProject;
@@ -60,16 +58,8 @@ export function MainProject() {
                     <td>
                       {item.chartData && (
                         <ProjectSubChart
-                          totalTasks={
-                            item.chartData[0] && item.chartData[0] != null
-                              ? item.chartData[0]
-                              : 0
-                          }
-                          completedTasks={
-                            item.chartData[1] && item.chartData[1] != null
-                              ? item.chartData[1]
-                              : 0
-                          }
+                          totalTasks={item.chartData[0] && item.chartData[0] != null ? item.chartData[0] : 0}
+                          completedTasks={item.chartData[1] && item.chartData[1] != null ? item.chartData[1] : 0}
                           plusStyles={{ width: "300px" }}
                         />
                       )}
@@ -99,16 +89,10 @@ export function MainCalendar() {
     setSortedList(prjList.sort((a, b) => new Date(a.date) - new Date(b.date)));
   }, [prjList]);
 
+  const memoizeGetMyEvent = useCallback(getMyEvent, []);
   useEffect(() => {
     const getList = async () => {
-      const res = await fetch(
-        "http://localhost:8080/api/project/upcoming/event",
-        {
-          headers: { Authorization: tokenInfo.token },
-          method: "GET",
-        }
-      );
-      const json = await res.json();
+      const json = await memoizeGetMyEvent(tokenInfo.token);
       setPrjList([]);
       for (let item of json.body) {
         new Date(item.strtDt) >= new Date() &&

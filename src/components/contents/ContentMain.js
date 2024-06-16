@@ -35,7 +35,12 @@ export default function ContentMain() {
                 </div>
                 {/* 프로젝트 */}
                 {/* <div className={w.contentGridTwo}> */}
-                <Card icon={<AiOutlineFundProjectionScreen />} header={"프로젝트"} body={<MainProject />} path={""} />
+                <Card
+                  icon={<AiOutlineFundProjectionScreen />}
+                  header={"프로젝트"}
+                  body={<MainProject />}
+                  path={"/project"}
+                />
                 {/* <Card icon={<BsFillPeopleFill />} header={"이슈"} body={<MainIssue />} path={""} /> */}
                 {/* </div> */}
               </div>

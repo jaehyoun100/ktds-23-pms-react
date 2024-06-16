@@ -1,26 +1,21 @@
-import React, { Children, useEffect, useState } from "react";
+import React, { Children, useCallback, useEffect, useState } from "react";
 import Button from "../../common/Button/Button";
 import Search from "../../common/search/Search";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Table from "../../../utils/Table";
-import {
-  getEmpPrjList,
-  getReviewYN,
-  viewWriteReviewPage,
-  writeReview,
-} from "../../../http/reviewHttp";
+import { getEmpPrjList, getReviewYN, viewWriteReviewPage, writeReview } from "../../../http/reviewHttp";
 import SurveyAnswer from "../../survey/components/SurveyAnswer";
 import SurveyWrite from "../../survey/components/SurveyWriteApp";
 import { format, set } from "date-fns";
 import SurveyResult from "../../survey/components/SurveyResult";
+import { getPrjList } from "../../../http/projectHttp";
 
 const ProjectListApp = () => {
   const [data, setData] = useState([]);
   const [searchDataCommonCode, setSearchDataCommonCode] = useState();
   const [filterOptions, setFilterOptions] = useState([]);
-  const [selectCommonCode, setSelectCommonCode] =
-    useState("옵션 선택해주세요.");
+  const [selectCommonCode, setSelectCommonCode] = useState("옵션 선택해주세요.");
   const [currencyList, setCurrencyList] = useState([]);
   // 후기
   const [prjIdList, setPrjIdList] = useState([]);
@@ -39,18 +34,10 @@ const ProjectListApp = () => {
     };
   });
 
+  const memoizeGetPrjList = useCallback(getPrjList, []);
   useEffect(() => {
-    const getList = async () => {
-      const response = await fetch("http://localhost:8080/api/project/search", {
-        headers: { Authorization: tokenInfo.token },
-        method: "GET",
-      });
-      const json = await response.json();
-      //console.log("getList : ", json);
-      return json.body;
-    };
     const getProject = async () => {
-      const run = await getList();
+      const run = await memoizeGetPrjList(tokenInfo.token);
       setData(run[1]);
 
       let optionList = [];
@@ -112,7 +99,7 @@ const ProjectListApp = () => {
 
   const viewReviewResultHandler = (record) => {
     const viewResult = record;
-    navigate("/review/result", {state: {viewResult}});
+    navigate("/review/result", { state: { viewResult } });
   };
 
   /*   useEffect(() => {
@@ -196,18 +183,14 @@ const ProjectListApp = () => {
             } else {
               return (
                 <>
-                  <button onClick={() => reviewWritePageClickHandler(record)}>
-                    후기 작성하기
-                  </button>
+                  <button onClick={() => reviewWritePageClickHandler(record)}>후기 작성하기</button>
                 </>
               );
             }
           } else {
             return (
               <>
-                <button onClick={() => viewReviewResultHandler(record)}>
-                  후기 결과보기
-                </button>
+                <button onClick={() => viewReviewResultHandler(record)}>후기 결과보기</button>
               </>
             );
           }
@@ -242,19 +225,13 @@ const ProjectListApp = () => {
               {!info[3] ? (
                 "미생성"
               ) : (
-                <button
-                  onClick={() => surveyWriteQuestionClickHandler(record.prjId)}
-                >
-                  설문 작성
-                </button>
+                <button onClick={() => surveyWriteQuestionClickHandler(record.prjId)}>설문 작성</button>
               )}
             </>
           );
         } else {
           return info[2].admnCode === "301" && !info[3] ? (
-            <button onClick={() => surveyResultClickHandler(record.prjId)}>
-              결과 보기
-            </button>
+            <button onClick={() => surveyResultClickHandler(record.prjId)}>결과 보기</button>
           ) : (
             <>
               {!info[3] ? (
@@ -262,13 +239,7 @@ const ProjectListApp = () => {
                   {info[4] && info[4][index] && (
                     <>
                       {info[4][index].srvYn === "N" ? (
-                        <button
-                          onClick={() =>
-                            surveyWriteAnswerClickHandler(record.prjId)
-                          }
-                        >
-                          설문 답변
-                        </button>
+                        <button onClick={() => surveyWriteAnswerClickHandler(record.prjId)}>설문 답변</button>
                       ) : (
                         "설문 완료"
                       )}
@@ -276,9 +247,7 @@ const ProjectListApp = () => {
                   )}
                 </>
               ) : (
-                <button onClick={() => surveyResultClickHandler(record.prjId)}>
-                  결과 보기
-                </button>
+                <button onClick={() => surveyResultClickHandler(record.prjId)}>결과 보기</button>
               )}
             </>
           );
@@ -358,10 +327,7 @@ const ProjectListApp = () => {
         />
       )}
       {surveyResultMode && (
-        <SurveyResult
-          setSurveyResultMode={setSurveyResultMode}
-          selectedProjectId={selectedProjectId}
-        />
+        <SurveyResult setSurveyResultMode={setSurveyResultMode} selectedProjectId={selectedProjectId} />
       )}
     </div>
   );
