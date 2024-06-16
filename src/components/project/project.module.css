@@ -407,7 +407,7 @@ h1 {
   overflow-y: auto;
 }
 .mainUl {
-  width: 60%;
+  width: 100%;
 }
 .alertMessage {
   margin-left: 20px;
