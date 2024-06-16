@@ -6,8 +6,13 @@
 
 .writeAndModifyGrid {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: repeat(8, 40px) 1fr 40px 40px 40px;
+  grid-template-columns: 120px 1fr;
+  grid-template-rows: repeat(8, 40px) 1fr 40px 40px;
+  gap: 5px;
+  align-items: center;
+}
+.writeAndModifyGrid > label {
+  margin: 0;
 }
 
 .error {
@@ -28,22 +33,8 @@
 .mainInfo > .grid {
   display: grid;
   grid-template-columns: 100px 1fr 100px 1fr;
-  grid-template-rows: 40px 40px;
-  border-top: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  border-left: 1px solid #ccc;
-}
-.mainInfo > .grid > .subItem:first-child {
-  grid-column: 1/-1;
-}
-
-.subInfo > .grid {
-  display: grid;
-  grid-template-columns: 100px 1fr 100px 1fr;
-  grid-template-rows: 40px 40px 40px;
-  border-bottom: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  border-left: 1px solid #ccc;
+  grid-template-rows: repeat(5, 40px);
+  border: 1px solid #ccc;
 }
 
 .flexRow {
@@ -58,7 +49,7 @@
 }
 .subItem {
   align-content: center;
-  margin-left: 10px;
+  padding: 10px;
   background-color: #fafafb;
 }
 .contentBorder {
@@ -78,4 +69,12 @@ button[class="subItem"] {
 
 .borderBottom {
   border-bottom: 1px solid #ccc;
+}
+
+.editor {
+  width: 650px;
+}
+
+.buttonArea {
+  text-align: right;
 }

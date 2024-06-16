@@ -173,32 +173,9 @@ export default function RequirementWrite() {
     <>
       {writeRequirementData && (
         <>
-          <div className="writeAndModifyGrid">
-            <label htmlFor="rqm-ttl">요구사항 제목</label>
-            <div>
-              <input type="text" id="rqm-ttl" name="rqmTtl" ref={rqmTtlRef} />
-              {writeErrors.rqmTtl && writeErrors.rqmTtl.length > 0 && (
-                <div className={styles.errorMessage}>{writeErrors.rqmTtl}</div>
-              )}
-            </div>
-
-            {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
+          <div className={styles.writeAndModifyGrid}>
             <label htmlFor="prj-id">프로젝트</label>
             <div>
-              {/* <select
-                name="prjId"
-                id="prj-id"
-                onChange={prjSelectHandler}
-                ref={prjIdRef}
-              >
-                <option value="">프로젝트를 선택해주세요</option>
-                {projectList &&
-                  projectList.map((item) => (
-                    <option value={item.prjId} key={item.prjId}>
-                      {item.prjName}
-                    </option>
-                  ))}
-              </select> */}
               <input
                 type="text"
                 id="prj-id"
@@ -212,10 +189,18 @@ export default function RequirementWrite() {
               )}
             </div>
 
+            <label htmlFor="rqm-ttl">요구사항 제목</label>
+            <div>
+              <input type="text" id="rqm-ttl" name="rqmTtl" ref={rqmTtlRef} />
+              {writeErrors.rqmTtl && writeErrors.rqmTtl.length > 0 && (
+                <div className={styles.errorMessage}>{writeErrors.rqmTtl}</div>
+              )}
+            </div>
+
             <label htmlFor="dvlrp">담당개발자</label>
             <div>
               <select id="dvlrp-check" name="dvlrp" ref={dvlrpRef}>
-                <option value="">프로젝트를 선택해주세요</option>
+                <option value="">선택해주세요</option>
                 {empData &&
                   empData.map((item) => (
                     <option value={item.empId} key={item.empId}>
@@ -231,7 +216,7 @@ export default function RequirementWrite() {
             <label htmlFor="cfrmr">확인자</label>
             <div>
               <select id="cfrmr-check" name="cfrmr" ref={cfrmrRef}>
-                <option value="">프로젝트를 선택해주세요</option>
+                <option value="">선택해주세요</option>
                 {empData &&
                   empData.map((item) => (
                     <option value={item.empId} key={item.empId}>
@@ -247,7 +232,7 @@ export default function RequirementWrite() {
             <label htmlFor="tstr">테스터</label>
             <div>
               <select id="tstr-check" name="tstr" ref={tstrRef}>
-                <option value="">프로젝트를 선택해주세요</option>
+                <option value="">선택해주세요</option>
                 {empData &&
                   empData.map((item) => (
                     <option value={item.empId} key={item.empId}>
@@ -303,6 +288,7 @@ export default function RequirementWrite() {
               defaultValue="CKEditor를 이용해서 내용 넣기"
             ></textarea> */}
                 <CKEditor
+                  className="editor"
                   editor={ClassicEditor}
                   data=""
                   onReady={(editor) => {
@@ -357,12 +343,10 @@ export default function RequirementWrite() {
                 <div className={styles.errorMessage}>{writeErrors.rqmSts}</div>
               )}
             </div>
+          </div>
 
-            <button
-              type="button"
-              data-type="write"
-              onClick={onWriteClickHandler}
-            >
+          <div className={styles.buttonArea}>
+            <button type="button" onClick={onWriteClickHandler}>
               등록
             </button>
             <button onClick={onClickHandler}>목록으로 이동</button>
