@@ -58,19 +58,21 @@ export function MainProject() {
                         : "마감"}
                     </td>
                     <td>
-                      <ProjectSubChart
-                        totalTasks={
-                          item.chartData[0] && item.chartData[0] != null
-                            ? item.chartData[0]
-                            : 0
-                        }
-                        completedTasks={
-                          item.chartData[1] && item.chartData[1] != null
-                            ? item.chartData[1]
-                            : 0
-                        }
-                        plusStyles={{ width: "300px" }}
-                      />
+                      {item.chartData && (
+                        <ProjectSubChart
+                          totalTasks={
+                            item.chartData[0] && item.chartData[0] != null
+                              ? item.chartData[0]
+                              : 0
+                          }
+                          completedTasks={
+                            item.chartData[1] && item.chartData[1] != null
+                              ? item.chartData[1]
+                              : 0
+                          }
+                          plusStyles={{ width: "300px" }}
+                        />
+                      )}
                     </td>
                   </tr>
                 ))}
