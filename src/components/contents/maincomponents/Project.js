@@ -59,8 +59,10 @@ export function MainProject() {
                     </td>
                     <td>
                       <ProjectSubChart
-                        totalTasks={item.chartData[0]}
-                        completedTasks={item.chartData[1]}
+                        totalTasks={item.chartData[0] ? item.chartData[0] : 0}
+                        completedTasks={
+                          item.chartData[1] ? item.chartData[1] : 0
+                        }
                         plusStyles={{ width: "300px" }}
                       />
                     </td>
