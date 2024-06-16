@@ -3,7 +3,7 @@
  *
  */
 import {useEffect, useRef, useState} from "react";
-import styles from "../reviewCss/write.module.css";
+import w from "../reviewCss/write.module.css";
 import { viewWriteReviewPage, writeReview } from "../../../http/reviewHttp";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import ProjectListApp from "../../project/projectlist/ProjectListApp";
@@ -31,11 +31,13 @@ export default function WriteReview() {
   console.log(projectInfo);
   console.log(projectInfo.writeReview.prjName);
   console.log(projectInfo.writeReview.prjId);
+  console.log(selectedRating);
 
   const onSaveClickHandler = async () => {
     const rvCntnt = rvCntntRef.current.value;
     const prjId = projectInfo.writeReview.prjId;
-    const json = await writeReview(token, rvCntnt, prjId);
+    const starRating = selectedRating;
+    const json = await writeReview(token, rvCntnt, prjId, starRating);
 
     if (json.errors) {
       json.errors.forEach((error) => {
@@ -54,36 +56,41 @@ export default function WriteReview() {
 
   return (
     <>
-      <div className={styles.gridContainer}>
-        <div className={styles.prjSubContainer}>
-          <div className={styles.prjSub}>{projectInfo.writeReview.prjName}</div>
+      <div className={w.gridContainer}>
+        <div className={w.prjSubContainer}>
+          <div></div>
+          <span className={w.projectReview}>프로젝트 후기 제출지</span>
+          <div></div>
+          <span className={w.projectSub}>프로젝트 : {projectInfo.writeReview.prjName}</span>
+          <div></div>
+          <span className={w.projectSub}>PM : {projectInfo.writeReview.pm.employeeVO.empName}</span>
         </div>
         <br></br>
         <br></br>
-        <div className={styles.writeReviewContainer}>
+        <div className={w.writeReviewContainer}>
           <div></div>
-          <span className={styles.writeReviewSpan}>후기를 작성해주세요.</span>
+          <span className={w.writeReviewSpan}>후기를 작성해주세요.</span>
           <div></div>
           <textarea
-            className={styles.writeReviewText}
+            className={w.writeReviewText}
             ref={rvCntntRef}
           ></textarea>
           <div></div>
-          <div className={styles.svgContainer}>
+          <div className={w.svgContainer}>
             <div>
-              <span className={styles.writeReviewSpan}>별점을 남겨주세요.</span>
-              <WriteReviewStarRating onChange={handleRatingChange}/>
-              <p>선택된 별점: {selectedRating}</p>
+              <span className={w.writeReviewStar}>별점을 남겨주세요.</span>
+              <WriteReviewStarRating onChange={handleRatingChange} />
+              <p className={w.writeReviewPtag}>선택된 별점: {selectedRating}</p>
             </div>
           </div>
         </div>
-        <div className={styles.submitBtnContainer}>
-          <button className={styles.submitBtn} onClick={onSaveClickHandler}>
+        <div className={w.submitBtnContainer}>
+          <button className={w.submitBtn} onClick={onSaveClickHandler}>
             제출
           </button>
         </div>
-        <div className={styles.footer}>
-          <span className={styles.PMSreview}>PMS 후기 작성지</span>
+        <div className={w.footer}>
+          <span className={w.PMSreview}>PMS 후기 작성지</span>
         </div>
       </div>
     </>
