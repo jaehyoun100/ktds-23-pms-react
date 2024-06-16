@@ -52,12 +52,12 @@
   text-align: right;
 }
 .teamMateEmpArea {
-  margin: 30px auto;
+  margin: 15px auto;
   /* border: 2px solid var(--main-color); */
   border-radius: 10px;
   /* position: relative; */
   /* left: 10%; */
-  width: 43%;
+  width: 40%;
   height: 300px;
   text-align: center;
   align-items: center;
@@ -69,8 +69,8 @@
 }
 .teamMateEmpPhoto {
   margin-left: 10px;
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 130px;
   background-size: contain;
   border-radius: 50%;
   background-repeat: no-repeat;
@@ -86,7 +86,7 @@
   height: 80%;
 }
 .teamMateEmpInfo > div {
-  font-size: 15px;
+  font-size: 14px;
 }
 .teamMateEmpInfoFlex {
   display: flex;
@@ -99,11 +99,11 @@
 }
 
 .teamMateEmpInfoFlex :first-child {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--main-color);
   margin-right: 15px;
-  width: 60px;
+  width: 70px;
   text-align: right;
 
   justify-content: space-between; /* Flex 아이템 간의 간격을 균등하게 배치 */

@@ -49,7 +49,9 @@ export default function TeamMate() {
     setproject(item.project);
 
     const pmData = item.project.pm;
-    const teamListWithoutPm = item.project.projectTeammateList.filter((member) => member.empId !== pmData.empId);
+    const teamListWithoutPm = item.project.projectTeammateList.filter(
+      (member) => member.empId !== pmData.empId
+    );
 
     setTeammateList(teamListWithoutPm);
     setPm(pmData);
@@ -76,7 +78,10 @@ export default function TeamMate() {
 
   const onPlusClickHandler = () => {
     if (isEditing) {
-      setTemporaryList((prev) => [...prev, { empName: "", empId: "", role: "", key: Date.now() }]);
+      setTemporaryList((prev) => [
+        ...prev,
+        { empName: "", empId: "", role: "", key: Date.now() },
+      ]);
     }
   };
 
@@ -102,14 +107,17 @@ export default function TeamMate() {
     const sendRequest = async () => {
       if (willInsertData.length > 0 && isPossible) {
         console.log(willInsertData);
-        const res = await fetch(`http://localhost:8080/api/project/teammate/${project.prjId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: tokenInfo.token,
-          },
-          body: JSON.stringify(willInsertData),
-        });
+        const res = await fetch(
+          `http://localhost:8080/api/project/teammate/${project.prjId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: tokenInfo.token,
+            },
+            body: JSON.stringify(willInsertData),
+          }
+        );
         const json = await res.json();
         if (json.status === 200) {
           setIsEditing(false);
@@ -192,16 +200,31 @@ export default function TeamMate() {
 
   const onDeleteClickHandler = (item) => {
     setIsDelete(true);
-    const deleteItemListData = project.projectTeammateList.filter((item) => item.role !== "PM");
+    const deleteItemListData = project.projectTeammateList.filter(
+      (item) => item.role !== "PM"
+    );
     setDeleteItemList(deleteItemListData);
     buttonHiddenRef.current.style.display = "none";
     cancelButtonGroupHiddenRef.current.style.display = "block";
   };
 
-  const onTeammateDeleteHandler = (idx) => {
-    const updatedTeamTemporaryList = [...deleteItemList];
-    console.log(updatedTeamTemporaryList);
-    updatedTeamTemporaryList.splice(idx, 1);
+  const onTeammateDeleteHandler = async (item) => {
+    const res = await fetch("http://localhost:8080/api/project/teammate", {
+      method: "DELETE",
+      headers: {
+        Authorization: tokenInfo.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prjId: project.prjId,
+        tmId: item.tmId,
+      }),
+    });
+    const json = await res.json();
+    console.log(json.status);
+    if (json.status) {
+      navigate("/project/view", { state: { key: project } });
+    }
   };
 
   const onDeleteHandler = (idx) => {
@@ -249,8 +272,10 @@ export default function TeamMate() {
                         <td>{item.role}</td>
                         {isEditing && <td></td>}
                         {isDelete && (
-                          <td>
-                            <CiCircleMinus onClick={() => onTeammateDeleteHandler(item.empId)} />
+                          <td className={s.svgTeammateContainer}>
+                            <CiCircleMinus
+                              onClick={() => onTeammateDeleteHandler(item)}
+                            />
                           </td>
                         )}
                       </tr>
@@ -265,7 +290,13 @@ export default function TeamMate() {
                           setSelectedData={setSelectedData}
                           idx={idx}
                           style={{ width: "100%" }}
-                          onChangeFn={(selectedOption) => onChangeSelectHandler(selectedOption, idx, "empName")}
+                          onChangeFn={(selectedOption) =>
+                            onChangeSelectHandler(
+                              selectedOption,
+                              idx,
+                              "empName"
+                            )
+                          }
                           initial="추가할 직원을 선택해주세요"
                         />
                       </td>
@@ -280,7 +311,9 @@ export default function TeamMate() {
                             selectedData={selectedRoleData}
                             setSelectedData={setSelectedRoleData}
                             style={{ width: "100%" }}
-                            onChangeFn={(selectedOption) => onChangeSelectHandler(selectedOption, idx, "role")}
+                            onChangeFn={(selectedOption) =>
+                              onChangeSelectHandler(selectedOption, idx, "role")
+                            }
                             initial="직책을 선택해주세요"
                           />
                         </div>
@@ -295,8 +328,14 @@ export default function TeamMate() {
           </div>
           <div className={s.teamMateButtonArea}>
             <div ref={buttonHiddenRef}>
-              <Button onClickHandler={onModifyClickHandler} children="참여원 추가" />
-              <Button onClickHandler={onDeleteClickHandler} children="참여원 삭제" />
+              <Button
+                onClickHandler={onModifyClickHandler}
+                children="참여원 추가"
+              />
+              <Button
+                onClickHandler={onDeleteClickHandler}
+                children="참여원 삭제"
+              />
             </div>
             <div ref={buttonGroupHiddenRef}>
               <Button onClickHandler={onPlusClickHandler} children="줄 추가" />
@@ -304,7 +343,6 @@ export default function TeamMate() {
               <Button onClickHandler={onCancelClickHandler} children="취소" />
             </div>
             <div ref={cancelButtonGroupHiddenRef}>
-              <Button onClickHandler={onSaveClickHandler} children="저장" />
               <Button onClickHandler={onCancelClickHandler} children="취소" />
             </div>
           </div>
