@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import Table from "../../utils/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { getCommuteLog } from "../../http/commuteHttp";
-import CommuteSelectBox from "./CommuteSearchBox";
 
 export default function CommuteApp() {
   const dispatch = useDispatch();
@@ -36,16 +35,29 @@ export default function CommuteApp() {
     },
   ];
 
+  const filterOptions = [
+    {
+      label: "사번",
+      value: "empId",
+    },
+    {
+      label: "사원명",
+      value: "empName",
+    },
+  ];
+
   return (
     <>
       {body.commuteList && (
         <>
           <h4> 출퇴근 기록</h4>
-          <CommuteSelectBox />
+          {/* <CommuteSelectBox /> */}
           <Table
             columns={columns}
             dataSource={body.commuteList}
             rowKey={(commuteList) => commuteList.cmmtId}
+            filter
+            filterOptions={filterOptions}
           />
         </>
       )}
