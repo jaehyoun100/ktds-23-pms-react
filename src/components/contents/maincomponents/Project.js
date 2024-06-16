@@ -1,17 +1,13 @@
 import w from "../ContentMain.module.css";
 import p from "./project.module.css";
-import { IoCodeOutline } from "react-icons/io5";
-import { FaRegCalendarAlt, FaRegCalendarCheck } from "react-icons/fa";
 import CalendarComponent from "../../project/main/CalendarComponent";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProjectSubChart from "../../project/main/ProjectSubChart";
 import { format } from "date-fns";
-import Table from "../../../utils/Table";
 
 export function MainProject() {
   const [myProject, setMyProject] = useState();
-
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -26,38 +22,13 @@ export function MainProject() {
         method: "GET",
       });
       const json = await response.json();
-      console.log(json);
       const dataOfMyProject = json.body[1].projectList;
 
-      //console.log("getList : ", json);
-      console.log(dataOfMyProject, "!!@@#!!@ASDADSASDSZDA");
       setMyProject(dataOfMyProject);
       return dataOfMyProject;
     };
-    // const getProject = async () => {
-    //   const run = await getList();
-    //   setData(run[1]);
-
-    //   let optionList = [];
-    //   let filterOptionArray = [];
-    //   for (let i = 0; i < run[0].length; i++) {
-    //     optionList[i] = { value: run[0][i].cmcdId, name: run[0][i].cmcdName };
-
-    //     filterOptionArray[i] = {
-    //       value: run[0][i].cmcdId,
-    //       label: run[0][i].cmcdName,
-    //     };
-    //   }
-
-    //   const newFilterOption = [{ label: "프로젝트명", value: "prjName" }];
-
-    //   setSearchDataCommonCode(newFilterOption);
-    //   setFilterOptions(newFilterOption);
-    //   setInfo(run);
-    // };
 
     getList();
-    // getProject();
   }, [tokenInfo.token]);
   return (
     <>
@@ -104,6 +75,52 @@ export function MainProject() {
 }
 
 export function MainCalendar() {
+  const [prjList, setPrjList] = useState([]);
+  const [sortedList, setSortedList] = useState([]);
+  const tokenInfo = useSelector((state) => {
+    return {
+      token: state.tokenInfo.token,
+      credentialsExpired: state.tokenInfo.credentialsExpired,
+    };
+  });
+
+  useEffect(() => {
+    setSortedList([]);
+    setSortedList(prjList.sort((a, b) => new Date(a.date) - new Date(b.date)));
+  }, [prjList]);
+
+  useEffect(() => {
+    const getList = async () => {
+      const res = await fetch(
+        "http://localhost:8080/api/project/upcoming/event",
+        {
+          headers: { Authorization: tokenInfo.token },
+          method: "GET",
+        }
+      );
+      const json = await res.json();
+      setPrjList([]);
+      for (let item of json.body) {
+        new Date(item.strtDt) >= new Date() &&
+          setPrjList((prev) => [
+            ...prev,
+            {
+              date: item.strtDt,
+              memo: item.prjName + " 시작일",
+            },
+          ]);
+        new Date(item.endDt) >= new Date() &&
+          setPrjList((prev) => [
+            ...prev,
+            {
+              date: item.endDt,
+              memo: item.prjName + " 마감일",
+            },
+          ]);
+      }
+    };
+    getList();
+  }, [tokenInfo.token]);
   return (
     <>
       <div className={w.cardBodyContent}></div>
@@ -111,7 +128,7 @@ export function MainCalendar() {
       <div style={{ gridColumn: "1/-1" }}>
         {/* <div className={w.commonDashboardCont}> */}
         {/* <FaRegCalendarAlt FaRegCalendarCheck className={w.icons} /> 달력 */}
-        <CalendarComponent main events={[]} />
+        <CalendarComponent main events={sortedList} />
         {/* </div> */}
       </div>
     </>
