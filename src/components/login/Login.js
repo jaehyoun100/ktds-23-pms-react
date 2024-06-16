@@ -12,8 +12,10 @@ export default function LoginPage() {
   const tokenDispatch = useDispatch();
 
   const onLoginBtnClickHandler = async () => {
-    const empId = empIdRef.current.value;
-    const password = passwordRef.current.value;
+    const empId = empIdRef.current.input.value;
+    const password = passwordRef.current.input.value;
+
+    console.log(empId + "........." + password);
     /**
      * 들어온 email과 password의 값이 올바른지 확인한다
      */
@@ -37,7 +39,9 @@ export default function LoginPage() {
   return (
     <>
       <div className={s.container}>
-        <div className={s.header}></div>
+        <div className={s.header}>
+          <img className={s.logo} src="/images/logo.png" alt="" />
+        </div>
         <div className={s.item}></div>
         <div className={s.item}>
           <div className={s.loginForm}>
