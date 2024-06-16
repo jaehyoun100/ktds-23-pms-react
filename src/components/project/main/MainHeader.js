@@ -1,9 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../project.module.css";
 import { BiSolidHome } from "react-icons/bi";
+import {jwtDecode} from "jwt-decode";
 export default function MainHeader({ project }) {
   const navigate = useNavigate();
-  const viewReviewResultHandler = (project) => {};
+  const viewReviewResultHandler = (project) => {
+      const viewResult = project;
+      navigate("/review/result", {state : {viewResult}});
+  };
+const token = localStorage.getItem("token");
+const userInfo = jwtDecode(token);
+
   return (
     <div className={styles.headerContainer}>
       <div className={styles.flex}>
@@ -36,9 +43,9 @@ export default function MainHeader({ project }) {
         <span>문답</span>
         <span onClick={() => navigate(`/output/${project.prjId}`)}>산출물</span>
         <span>설문</span>
-        {project.pm.employeeVO.admnCode === "302" ?
+        {userInfo.user.admnCode === "301" ?
             (<span onClick={() => viewReviewResultHandler(project)}>후기 관리</span>) :
-            (project.pm.role === "PM" ? (<span onClick={() => viewReviewResultHandler(project)}>후기 관리</span>) : <>null</>)
+            (project.pm.employeeVO.empId ===  userInfo.user.empId ? (<span onClick={() => viewReviewResultHandler(project)}>후기 보기</span>) : <div></div>)
         }
       </div>
     </div>

@@ -3,8 +3,9 @@
  */
 import { getReviewResultByprjId } from "../../../http/reviewHttp";
 import w from "../reviewCss/write.module.css";
-import {json, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
+import Table from "../../../utils/Table";
 
 export default function ViewReview() {
   const token = localStorage.getItem("token");
@@ -14,25 +15,36 @@ export default function ViewReview() {
 
   useEffect(() => {
   const loadData = async () => {
-    console.log(getReviewResult.viewResult.prjId);
-    console.log(token);
     const prjId = getReviewResult.viewResult.prjId;
     const json = await getReviewResultByprjId(token, prjId);
     setReviewResult(json);
   };
 loadData();
-  }, []);
+  }, [setReviewResult]);
 
+  const columns = [
+    {
+      title: "후기 내용",
+      dataIndex: "rvCntnt",
+      key: "rvCntnt",
+      width: "auto",
+    }
+  ]
   return (
     <>
       {reviewResult.body !== undefined && (
-          <div>
-      <div>작성된 후기 개수 : {reviewResult.body.reviewCnt}</div>
+          <div className={w.reviewResultContainer}>
+            <div className={w.reviewResultProjectContainer}>
       <div>프로젝트 이름 : {reviewResult.body.reviewList[0].projectVO.prjName}</div>
-      <div>후기 내용 : {reviewResult.body.reviewList[0].rvCntnt}</div>
+      <div onClick={() => console.log(reviewResult.body)}>작성된 후기 개수 : {reviewResult.body.reviewCnt}</div>
+              </div>
+            {reviewResult.body.reviewList.map(index => (
+      <div key={index.rvCntnt}>후기 내용 : {index.rvCntnt}</div>
+            ))}
             </div>
+
+
       )}
-      <div>123</div>
     </>
   );
 }
