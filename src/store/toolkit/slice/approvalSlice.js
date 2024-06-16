@@ -13,7 +13,7 @@ export const approvalSliceStore = createSlice({
       state.apprList = action.payload.body.apprList;
     },
     getApprInfo(state, action) {
-      state.apprInfo = action.payload.apprInfo;
+      state.apprInfo = action.payload.body;
     },
   },
 });

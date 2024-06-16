@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getApprInfo,
-  getApprovalListByApprover,
+  getApprovalListByRequester,
 } from "../../http/approvalHttp";
 import Table from "../../utils/Table";
 import ApprovalModal from "./ApprovalModal";
 
-export default function ApprovalApp() {
+export default function ApprovalRequestApp() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.tokenInfo);
   const { apprCnt, apprList } = useSelector((state) => state.approvalInfo);
@@ -24,7 +24,7 @@ export default function ApprovalApp() {
   };
 
   useEffect(() => {
-    dispatch(getApprovalListByApprover(token));
+    dispatch(getApprovalListByRequester(token));
   }, [token, dispatch, open]);
 
   const columns = [
@@ -95,7 +95,7 @@ export default function ApprovalApp() {
 
   return (
     <>
-      <h4>결제 승인 요청</h4>
+      <h4>결제 요청</h4>
       <div>{apprCnt}개가 있어요 </div>
       {apprList && (
         <>
@@ -104,12 +104,7 @@ export default function ApprovalApp() {
             dataSource={apprList}
             rowKey={(apprList) => apprList.apprId}
           />
-          <ApprovalModal
-            open={open}
-            setOpen={setOpen}
-            apprId={selectApprId}
-            footer
-          />
+          <ApprovalModal open={open} setOpen={setOpen} apprId={selectApprId} />
         </>
       )}
     </>
