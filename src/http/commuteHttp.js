@@ -30,9 +30,7 @@ export const getCommuteLog = (
       }
     );
     const json = await response.json();
-
     dispatch(tokenExpire(json));
-
     dispatch(commuteActions.set(json));
   };
 };
