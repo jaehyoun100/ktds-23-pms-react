@@ -248,6 +248,15 @@ input[type="text"] {
   outline: none;
   background-color: var(--border-color);
 }
+input[type="password"] {
+  width: 16rem;
+  height: 2rem;
+  border: 0;
+  border-radius: var(--box-border-radius);
+  padding-left: 10px;
+  outline: none;
+  background-color: var(--border-color);
+}
 
 .code-info input[type="text"] {
   width: 100%;
@@ -337,7 +346,7 @@ select {
   margin-right: 10px;
 }
 
-.grid-c-title:hover, 
+.grid-c-title:hover,
 .grid-c-title-text:hover {
   cursor: pointer;
 }
