@@ -89,6 +89,10 @@ export default function SupplyApp() {
     navigate("log");
   };
 
+  const onApplyModeClickHandler = () => {
+    navigate("get");
+  };
+
   const handleCheckboxChange = (e) => {
     setHideZeroInventory(e.target.checked);
   };
@@ -130,6 +134,7 @@ export default function SupplyApp() {
           </>
         )}
         <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
+        <button onClick={onApplyModeClickHandler}>소모품 신청</button>
         <button onClick={onSupplyLogViewModeClickHandler}>신청 기록</button>
       </div>
       {isSelect && (

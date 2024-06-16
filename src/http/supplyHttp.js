@@ -107,17 +107,6 @@ export const modifySupply = async (
   return json;
 };
 
-// export const deleteSupply = async (splId, token) => {
-//   const response = await fetch(`${url}/api/v1/supply/${splId}`, {
-//     method: "DELETE",
-//     headers: { Authorization: token },
-//   });
-
-//   const json = await response.json();
-
-//   return json;
-// };
-
 export const loadSupplyApprovalList = async ({ token, pageNo = 0 }) => {
   if (!token) {
     return undefined;
@@ -126,6 +115,21 @@ export const loadSupplyApprovalList = async ({ token, pageNo = 0 }) => {
   const response = await fetch(`${url}/api/v1/supply/log?pageNo=${pageNo}`, {
     method: "GET",
     headers: { Authorization: token },
+  });
+
+  const json = await response.json();
+
+  return json;
+};
+
+export const applyForMultipleSupplies = async (token, supplies) => {
+  const response = await fetch(`${url}/api/v1/supply/apply`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(supplies),
   });
 
   const json = await response.json();
