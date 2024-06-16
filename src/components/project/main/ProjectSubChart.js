@@ -1,14 +1,14 @@
 import React from "react";
 import styles from "../project.module.css";
 
-const ProjectSubChart = ({ totalTasks, completedTasks }) => {
+const ProjectSubChart = ({ totalTasks, completedTasks, plusStyles }) => {
   let completionRatio = 100;
-  if (totalTasks !== 0) {
+  if (totalTasks && totalTasks !== 0) {
     completionRatio = (completedTasks / totalTasks) * 100;
   }
 
   return (
-    <div className={styles.barContainer}>
+    <div style={plusStyles} className={styles.barContainer}>
       <div
         className={styles.bar}
         style={{

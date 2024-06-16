@@ -1,0 +1,13 @@
+.proTable {
+  text-align: center;
+}
+.overflowProTable {
+  overflow-y: auto;
+  height: 280px;
+}
+.proTable > thead {
+  position: sticky;
+  top: 0;
+  background-color: var(--light-color);
+  z-index: 2;
+}
