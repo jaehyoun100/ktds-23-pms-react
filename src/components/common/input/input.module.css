@@ -18,6 +18,18 @@ textarea {
   background-color: var(--light-color);
   color: var(--main-color);
 }
+
+input[type="password"],
+textarea {
+  width: 16rem;
+  border: 0;
+  border-radius: var(--box-border-radius);
+  padding-left: 10px;
+  outline: none;
+  height: 30px;
+  background-color: var(--light-color);
+  color: var(--main-color);
+}
 input[type="text"]:focus,
 textarea:focus {
   outline: none; /* 포커스 효과 제거 */

@@ -1,6 +1,8 @@
+import s from "../login/login.module.css";
+
 export default function LoginFooter() {
   return (
-    <div className="footer">
+    <div className={s.footer}>
       <div>
         PMS 는 회사 임직원 관리, 비품 관리 및 예정 프로젝트를 관리하는
         프로그램입니다.
