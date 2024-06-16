@@ -10,6 +10,7 @@ export default function TeamDetail({
   openModal,
   setIsModalOpen,
   setModalContent,
+  setShowModal,
 }) {
   const [data, setData] = useState();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -34,6 +35,7 @@ export default function TeamDetail({
         setIsModalOpen={setIsModalOpen}
         setModalContent={setModalContent}
         data={data}
+        setShowModal={setShowModal}
       />
     );
   };
@@ -49,6 +51,7 @@ export default function TeamDetail({
       // 삭제 성공
       // 목록 컴포넌트를 노출.
       setShowConfirmModal(false);
+      setShowModal(true);
     } else {
       // 삭제 실패
       // 실패한 사유를 알려줘야한다.

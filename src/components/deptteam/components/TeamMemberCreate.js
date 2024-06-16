@@ -9,6 +9,7 @@ export default function TeamMemberCreate({
   setIsModalOpen,
   setModalContent,
   selectTmId,
+  setShowModal,
 }) {
   const [inputFields, setInputFields] = useState([
     {
@@ -59,6 +60,7 @@ export default function TeamMemberCreate({
       } else if (json.body) {
         setIsTeamMemberRegistrationMode(false);
         setNeedReload(Math.random());
+        setShowModal(true);
       }
     }
     setIsModalOpen(false);

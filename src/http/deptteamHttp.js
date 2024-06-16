@@ -179,3 +179,18 @@ export const modifyDepartment = async (
   const json = await response.json();
   return json;
 };
+
+export const modifyTeam = async (token, tmLeadId, tmId, tmName) => {
+  const data = new FormData();
+  data.append("tmLeadId", tmLeadId);
+  data.append("tmId", tmId);
+  data.append("tmName", tmName);
+
+  const response = await fetch(`${url}/api/v1/team/modify`, {
+    method: "PUT",
+    headers: { Authorization: token },
+    body: data,
+  });
+  const json = await response.json();
+  return json;
+};

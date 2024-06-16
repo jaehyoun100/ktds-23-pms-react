@@ -8,6 +8,7 @@ export default function DepartmentCreate({
   token,
   setIsModalOpen,
   setModalContent,
+  setShowModal,
 }) {
   const nameRef = useRef();
   const [inputFields, setInputFields] = useState([
@@ -58,6 +59,7 @@ export default function DepartmentCreate({
         });
       } else if (json.body) {
         setIsDeptRegistrationMode(false);
+        setShowModal(true);
         setNeedReload(Math.random());
       }
     }

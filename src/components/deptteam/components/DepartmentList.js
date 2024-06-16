@@ -9,6 +9,7 @@ import TeamMemberCreate from "./TeamMemberCreate.js";
 import DepartmentDetail from "./DepartmentDetail.js";
 import TeamDetail from "./TeamDetail.js";
 import Modal from "./DeptTeamModal.js"; // 모달 컴포넌트를 import 합니다.
+import AlertModal from "../../common/modal/AlertModal.js";
 
 export default function DepartmentList({ token }) {
   const [isDeptRegistrationMode, setIsDeptRegistrationMode] = useState(false);
@@ -21,6 +22,7 @@ export default function DepartmentList({ token }) {
   const [needReload, setNeedReload] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // departmentList;
   const memoizedLoaddepartmentList = useCallback(loadDepartmentList, []);
@@ -90,6 +92,7 @@ export default function DepartmentList({ token }) {
         token={token}
         setIsModalOpen={setIsModalOpen}
         setModalContent={setModalContent}
+        setShowModal={setShowModal}
       />
     );
   };
@@ -102,6 +105,7 @@ export default function DepartmentList({ token }) {
         setIsModalOpen={setIsModalOpen}
         setModalContent={setModalContent}
         selectedDeptId={selectedDeptId}
+        setShowModal={setShowModal}
       />
     );
   };
@@ -116,10 +120,14 @@ export default function DepartmentList({ token }) {
         setIsModalOpen={setIsModalOpen}
         setModalContent={setModalContent}
         selectTmId={selectTmId}
+        setShowModal={setShowModal}
       />
     );
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   return (
     <>
       {!isTeamMemberRegistrationMode &&
@@ -217,6 +225,7 @@ export default function DepartmentList({ token }) {
                   setIsModalOpen={setIsModalOpen}
                   setModalContent={setModalContent}
                   openModal={openModal}
+                  setShowModal={setShowModal}
                 />
               </div>
             )}
@@ -245,6 +254,14 @@ export default function DepartmentList({ token }) {
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {modalContent}
       </Modal>
+      {showModal && (
+        <AlertModal
+          show={showModal}
+          onClose={handleCloseModal}
+          content="결제 신청이 완료되었습니다."
+          closeContent="확인"
+        />
+      )}
     </>
   );
 }

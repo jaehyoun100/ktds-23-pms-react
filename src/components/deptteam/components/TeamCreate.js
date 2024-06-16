@@ -9,6 +9,7 @@ export default function TeamCreate({
   setIsModalOpen,
   setModalContent,
   selectedDeptId,
+  setShowModal,
 }) {
   const [inputFields, setInputFields] = useState([
     {
@@ -61,6 +62,7 @@ export default function TeamCreate({
       } else if (json.body) {
         setIsTeamRegistrationMode(false);
         setNeedReload(Math.random());
+        setShowModal(true);
       }
     }
     setIsModalOpen(false);
