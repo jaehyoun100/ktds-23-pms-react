@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { loadSupplyApprovalList } from "../../../http/supplyHttp";
+import { loadRentalSupplyApprovalList } from "../../../http/rentalSupplyHttp";
 import Table from "../../../utils/Table";
-import style from "../supply.module.css";
+import style from "../rentalSupply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default function SupplyLogView() {
+export default function RentalSupplyLogView() {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   const { token } = useSelector((state) => state.tokenInfo);
   const navigate = useNavigate();
 
-  const memoizedLoadSupplyApprovalList = useCallback(
-    loadSupplyApprovalList,
+  const memoizedLoadRentalSupplyApprovalList = useCallback(
+    loadRentalSupplyApprovalList,
     []
   );
   const memoizedToken = useMemo(() => {
@@ -22,7 +22,9 @@ export default function SupplyLogView() {
 
   useEffect(() => {
     const fetchingData = async () => {
-      const json = await memoizedLoadSupplyApprovalList({ ...memoizedToken });
+      const json = await memoizedLoadRentalSupplyApprovalList({
+        ...memoizedToken,
+      });
 
       const flattenedData = json.body.map((item) => ({
         ...item,
@@ -35,7 +37,7 @@ export default function SupplyLogView() {
     };
 
     fetchingData();
-  }, [memoizedLoadSupplyApprovalList, memoizedToken]);
+  }, [memoizedLoadRentalSupplyApprovalList, memoizedToken]);
 
   const columns = [
     {
@@ -45,18 +47,18 @@ export default function SupplyLogView() {
     },
     {
       title: "신청 유형",
-      dataIndex: "splRqstType",
-      key: "splRqstType",
+      dataIndex: "rsplRqstType",
+      key: "rsplRqstType",
     },
     {
       title: "카테고리",
-      dataIndex: "splCtgr",
-      key: "splCtgr",
+      dataIndex: "rsplCtgr",
+      key: "rsplCtgr",
     },
     {
       title: "제품 명",
-      dataIndex: "splName",
-      key: "splName",
+      dataIndex: "rsplName",
+      key: "rsplName",
     },
     {
       title: "신청 갯수",
@@ -70,19 +72,19 @@ export default function SupplyLogView() {
     },
     {
       title: "승인 여부",
-      dataIndex: "splApprYn",
-      key: "splApprYn",
+      dataIndex: "rsplApprYn",
+      key: "rsplApprYn",
     },
   ];
 
   const filterOptions = [
     {
       label: "카테고리",
-      value: "splCtgr",
+      value: "rsplCtgr",
     },
     {
       label: "제품 명",
-      value: "splName",
+      value: "rsplName",
     },
     {
       label: "신청인",
@@ -96,12 +98,12 @@ export default function SupplyLogView() {
 
   return (
     <>
-      <div className={style.supplyAppContainer}>
-        <div className={style.supplyLogTableComponent}>
+      <div className={style.rentalSupplyAppContainer}>
+        <div className={style.rentalSupplyLogTableComponent}>
           <Table
             columns={columns}
             dataSource={data}
-            rowKey={(dt) => dt.splLogId}
+            rowKey={(dt) => dt.rsplLogId}
             filter
             filterOptions={filterOptions}
           />

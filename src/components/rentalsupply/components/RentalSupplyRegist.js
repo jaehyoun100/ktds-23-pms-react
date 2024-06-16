@@ -1,15 +1,19 @@
-import { useState } from "react";
-import { registerRentalSupply } from "../../../http/rentalSupplyHttp";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  loadRentalSupplyCategory,
+  registerRentalSupply,
+} from "../../../http/rentalSupplyHttp";
+import style from "../rentalSupply.module.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-export default function RentalSupplyRegist({
-  setIsRegistrationMode,
-  setNeedReload,
-  token,
-}) {
+export default function RentalSupplyRegist() {
+  const [categoryList, setCategoryList] = useState([]);
   const [inputFields, setInputFields] = useState([
     {
       name: "",
       category: "",
+      customCategory: "",
       price: "",
       stock: "",
       image: null,
@@ -18,50 +22,60 @@ export default function RentalSupplyRegist({
     },
   ]);
 
+  const { token } = useSelector((state) => state.tokenInfo);
+  const navigate = useNavigate();
+
+  const memoizedLoadRentalSupplyCategory = useCallback(
+    loadRentalSupplyCategory,
+    []
+  );
+  const memoizedToken = useMemo(() => {
+    return { token };
+  }, [token]);
+
+  useEffect(() => {
+    const fetchingData = async () => {
+      const json = await memoizedLoadRentalSupplyCategory({ ...memoizedToken });
+      const categories = json.supplyList.map((item) => item.rsplCtgr);
+      setCategoryList(categories);
+    };
+
+    fetchingData();
+  }, [memoizedLoadRentalSupplyCategory, memoizedToken]);
+
   const handleInputChange = (index, event) => {
+    const { name, value } = event.target;
     const values = [...inputFields];
-    if (event.target.name === "image") {
+
+    if (name === "image") {
       const file = event.target.files[0];
-      values[index][event.target.name] = file;
+      values[index][name] = file;
       values[index].imagePreview = URL.createObjectURL(file);
     } else {
-      values[index][event.target.name] = event.target.value;
+      if ((name === "price" || name === "stock") && value.includes("-")) {
+        alert("음수는 입력할 수 없습니다.");
+        values[index][name] = "";
+      } else {
+        values[index][name] = value;
+      }
     }
     setInputFields(values);
   };
 
-  const handleAddFields = () => {
-    setInputFields([
-      ...inputFields,
-      {
-        name: "",
-        category: "",
-        price: "",
-        stock: "",
-        image: null,
-        imagePreview: null,
-        detail: "",
-      },
-    ]);
-  };
-
-  const handleRemoveFields = (index) => {
-    const values = [...inputFields];
-    values.splice(index, 1);
-    setInputFields(values);
-  };
-
   const onCancelClickHandler = () => {
-    setIsRegistrationMode(false);
+    navigate(-1);
   };
 
   const onRegisterClickHandler = async () => {
     for (const field of inputFields) {
-      const { name, category, price, stock, image, detail } = field;
+      const { name, category, customCategory, price, stock, image, detail } =
+        field;
+      const finalCategory =
+        category === "직접 입력" ? customCategory : category;
       const json = await registerRentalSupply(
         token,
         name,
-        category,
+        finalCategory,
         price,
         stock,
         image,
@@ -73,27 +87,46 @@ export default function RentalSupplyRegist({
           alert(error);
         });
       } else if (json.body) {
-        setIsRegistrationMode(false);
-        setNeedReload(Math.random());
+        navigate(-1);
       }
     }
   };
 
   return (
-    <>
+    <div className={style.rentalSupplyRegistContainer}>
+      <div className={style.rentalSupplyRegistHeader}>
+        <h3>대여품 등록</h3>
+      </div>
       {inputFields.map((inputField, index) => (
-        <div key={index}>
-          <div>
+        <div key={index} className={style.rentalForm}>
+          <div className={style.formGroup}>
             <label htmlFor={`category-${index}`}>카테고리</label>
-            <input
-              type="text"
+            <select
               id={`category-${index}`}
               name="category"
               value={inputField.category}
               onChange={(event) => handleInputChange(index, event)}
-            />
+            >
+              <option value="">카테고리를 선택하세요</option>
+              {categoryList.map((category, i) => (
+                <option key={i} value={category}>
+                  {category}
+                </option>
+              ))}
+              <option value="직접 입력">직접 입력</option>
+            </select>
+            {inputField.category === "직접 입력" && (
+              <input
+                type="text"
+                name="customCategory"
+                value={inputField.customCategory}
+                onChange={(event) => handleInputChange(index, event)}
+                placeholder="카테고리를 입력하세요"
+                className={style.customCategoryInput}
+              />
+            )}
           </div>
-          <div>
+          <div className={style.formGroup}>
             <label htmlFor={`name-${index}`}>제품 명</label>
             <input
               type="text"
@@ -103,27 +136,30 @@ export default function RentalSupplyRegist({
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>
-          <div>
-            <label htmlFor={`price-${index}`}>제품 가격</label>
-            <input
-              type="number"
-              id={`price-${index}`}
-              name="price"
-              value={inputField.price}
-              onChange={(event) => handleInputChange(index, event)}
-            />
+          <div className={`${style.formGroup} ${style.inlineGroup}`}>
+            <div>
+              <label htmlFor={`price-${index}`}>제품 가격</label>
+              <input
+                type="number"
+                id={`price-${index}`}
+                name="price"
+                value={inputField.price}
+                onChange={(event) => handleInputChange(index, event)}
+              />
+            </div>
+            <div>
+              <label htmlFor={`stock-${index}`}>재고</label>
+              <input
+                type="number"
+                id={`stock-${index}`}
+                name="stock"
+                value={inputField.stock}
+                onChange={(event) => handleInputChange(index, event)}
+              />
+            </div>
           </div>
-          <div>
-            <label htmlFor={`stock-${index}`}>재고</label>
-            <input
-              type="number"
-              id={`stock-${index}`}
-              name="stock"
-              value={inputField.stock}
-              onChange={(event) => handleInputChange(index, event)}
-            />
-          </div>
-          <div>
+
+          <div className={style.formGroup}>
             <label htmlFor={`image-${index}`}>이미지</label>
             <input
               type="file"
@@ -137,29 +173,20 @@ export default function RentalSupplyRegist({
                 <img
                   src={inputField.imagePreview}
                   alt={`미리보기-${index}`}
-                  style={{ width: "100px", height: "100px", marginTop: "10px" }}
+                  className={style.formGroup.img}
                 />
               </div>
             )}
           </div>
-          <div>
+          <div className={style.formGroup}>
             <label htmlFor={`detail-${index}`}>제품 설명</label>
             <textarea
               id={`detail-${index}`}
               name="detail"
               value={inputField.detail}
               onChange={(event) => handleInputChange(index, event)}
+              className={style.detailTextarea}
             ></textarea>
-          </div>
-          <div>
-            <button type="button" onClick={handleAddFields}>
-              +
-            </button>
-            {inputFields.length > 1 && (
-              <button type="button" onClick={() => handleRemoveFields(index)}>
-                -
-              </button>
-            )}
           </div>
         </div>
       ))}
@@ -167,6 +194,6 @@ export default function RentalSupplyRegist({
         <button onClick={onRegisterClickHandler}>등록</button>
         <button onClick={onCancelClickHandler}>취소</button>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,28 +1,25 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadRentalSupplyList } from "../../http/rentalSupplyHttp";
+import RentalSupplyView from "./components/RentalSupplyView";
 import Table from "../../utils/Table";
 import style from "./rentalSupply.module.css";
-import RentalSupplyView from "./components/RentalSupplyView";
-import RentalSupplyRegist from "./components/RentalSupplyRegist";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function RentalSupplyApp() {
   const [selectedRsplId, setSelectedRsplId] = useState();
-  const [isRegistrationMode, setIsRegistrationMode] = useState(false);
-  const [isRentalSupplyModificationMode, setIsRentalSupplyModificationMode] =
-    useState(false);
-  const [isRentalSupplyLogViewMode, setIsRentalSupplyLogViewMode] =
-    useState(false);
-  const [needReload, setNeedReload] = useState();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hideZeroInventory, setHideZeroInventory] = useState(false);
 
-  const token = localStorage.getItem("token");
+  const { token } = useSelector((state) => state.tokenInfo);
   const isSelect = selectedRsplId !== undefined;
+  const navigate = useNavigate();
 
   const memoizedLoadRentalSupplyList = useCallback(loadRentalSupplyList, []);
   const memoizedToken = useMemo(() => {
-    return { token, needReload };
-  }, [token, needReload]);
+    return { token };
+  }, [token]);
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -39,7 +36,7 @@ export default function RentalSupplyApp() {
       title: "카테고리",
       dataIndex: "rsplCtgr",
       key: "rsplCtgr",
-      // width: "20%"
+      width: "20%",
     },
     {
       title: "제품 명",
@@ -50,6 +47,7 @@ export default function RentalSupplyApp() {
       title: "재고",
       dataIndex: "invQty",
       key: "invQty",
+      width: "10%",
     },
   ];
 
@@ -84,21 +82,43 @@ export default function RentalSupplyApp() {
   };
 
   const onRegistrationModeClickHandler = () => {
-    setIsRegistrationMode(true);
+    navigate("regist");
   };
 
   const onRentalSupplyLogViewModeClickHandler = () => {
-    setIsRentalSupplyLogViewMode(true);
+    navigate("log");
   };
 
+  const onApplyModeClickHandler = () => {
+    navigate("get");
+  };
+
+  const handleCheckboxChange = (e) => {
+    setHideZeroInventory(e.target.checked);
+  };
+
+  const filteredData = hideZeroInventory
+    ? data.filter((item) => item.invQty > 0)
+    : data;
+
   return (
-    <>
-      <div className={style.rentalSupplyAppContainer}>
-        <div className={style.tableComponent}>
-          {token && !isRegistrationMode && !isRentalSupplyLogViewMode && (
+    <div className={style.rentalSupplyAppContainer}>
+      <div
+        className={`${style.tableComponent} ${isSelect ? style.collapsed : ""}`}
+      >
+        {token && (
+          <>
+            <label>
+              <input
+                type="checkbox"
+                checked={hideZeroInventory}
+                onChange={handleCheckboxChange}
+              />
+              재고 없는 대여품 감추기
+            </label>
             <Table
               columns={isSelect ? simplifiedColumns : columns}
-              dataSource={data}
+              dataSource={filteredData}
               rowKey={(dt) => dt.rsplId}
               filter
               filterOptions={isSelect ? simplifiedFilterOptions : filterOptions}
@@ -107,52 +127,27 @@ export default function RentalSupplyApp() {
                   onClick: () => {
                     onRowClickHandler(record.rsplId);
                   },
-                  style: { cursor: "pointer" },
+                  className: style.pointerCursor,
                 };
               }}
             />
-          )}
-          {!isRegistrationMode && !isRentalSupplyLogViewMode && (
-            <>
-              <button onClick={onRegistrationModeClickHandler}>
-                대여품 등록
-              </button>
-              <button onClick={onRentalSupplyLogViewModeClickHandler}>
-                신청 기록
-              </button>
-            </>
-          )}
-        </div>
-        {isSelect && !isRegistrationMode && !isRentalSupplyLogViewMode && (
-          <div className={style.rentalSupplyViewComponent}>
-            <RentalSupplyView
-              selectedRsplId={selectedRsplId}
-              setSelectedRsplId={setSelectedRsplId}
-              isRentalSupplyModificationMode={isRentalSupplyModificationMode}
-              setIsRentalSupplyModificationMode={
-                setIsRentalSupplyModificationMode
-              }
-              needReload={needReload}
-              setNeedReload={setNeedReload}
-              token={token}
-            />
-          </div>
+          </>
         )}
+        <button onClick={onRegistrationModeClickHandler}>대여품 등록</button>
+        <button onClick={onApplyModeClickHandler}>대여품 신청</button>
+        <button onClick={onRentalSupplyLogViewModeClickHandler}>
+          신청 기록
+        </button>
       </div>
-      {isRegistrationMode && !isRentalSupplyLogViewMode && (
-        <RentalSupplyRegist
-          setIsRegistrationMode={setIsRegistrationMode}
-          setNeedReload={setNeedReload}
-          token={token}
-        />
+      {isSelect && (
+        <div
+          className={`${style.rentalSupplyViewComponent} ${
+            isSelect ? "" : style.hidden
+          }`}
+        >
+          <RentalSupplyView selectedRsplId={selectedRsplId} />
+        </div>
       )}
-      {/* {!isRegistrationMode && isRentalSupplyLogViewMode && (
-        <SupplyLogView
-          setIsSupplyLogViewMode={setIsSupplyLogViewMode}
-          needReload={needReload}
-          token={token}
-        />
-      )} */}
-    </>
+    </div>
   );
 }

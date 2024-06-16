@@ -1,18 +1,194 @@
+/* RentalSupplyApp 컴포넌트를 위한 css */
 .rentalSupplyAppContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
 }
 
 .tableComponent {
-  flex: 1;
+  flex: 0.5;
+  transition: all 0.3s ease-in-out;
+}
+
+.tableComponent.collapsed {
+  flex: 0.32;
 }
 
 .rentalSupplyViewComponent {
-  flex: 1;
+  flex: 0.3;
   margin-left: 20px;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-.rentalSupplyRequestReason {
+.rentalSupplyViewComponent.hidden {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.pointerCursor {
+  cursor: pointer;
+}
+
+/* RentalSupplyView 컴포넌트를 위한 css */
+.rentalSupplyViewContainer {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rentalSupplyViewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.rentalSupplyViewHeader h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.rentalDetails {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.detailItemInline {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.detailItem label {
+  font-weight: bold;
+  color: #333;
+}
+
+.detailItem span {
+  color: #555;
+}
+
+.rentalImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  margin-bottom: 20px;
+  background-color: #eaeaea;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.rentalImageContainer img {
+  max-height: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.rentalImageContainer.enlargedImage {
+  height: 400px;
+}
+
+.loadingText {
+  font-size: 1rem;
+  color: #999;
+}
+
+/* RentalSupplyRegist 컴포넌트를 위한 css */
+.rentalSupplyRegistContainer {
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.rentalSupplyRegistHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.rentalSupplyRegistHeader h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.rentalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.formGroup label {
+  font-weight: bold;
+  color: #333;
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.formGroup select {
+  height: 40px;
+}
+
+.formGroup img {
+  max-width: 100px;
+  max-height: 100px;
+  margin-top: 10px;
+}
+
+.formGroup.inlineGroup {
+  display: flex;
+  gap: 20px;
+}
+
+.formGroup.inlineGroup div {
   flex: 1;
-  margin-left: 20px;
+}
+
+.formGroup.inlineGroup input {
+  width: 100%;
+}
+
+.detailTextarea {
+  height: 200px;
+}
+
+/* RentalSupplyLogView 컴포넌트를 위한 css */
+.rentalSupplyLogTableComponent {
+  flex: 1;
+  transition: all 0.3s ease-in-out;
 }

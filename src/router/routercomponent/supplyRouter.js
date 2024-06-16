@@ -1,4 +1,5 @@
 import SupplyApp from "../../components/supply/SupplyApp";
+import SupplyGet from "../../components/supply/components/SupplyGet";
 import SupplyLogView from "../../components/supply/components/SupplyLogView";
 import SupplyModification from "../../components/supply/components/SupplyModification";
 import SupplyRegist from "../../components/supply/components/SupplyRegist";
@@ -12,6 +13,7 @@ const supplyRouter = {
     { path: "regist", element: <SupplyRegist /> },
     { path: "modify/:splId", element: <SupplyModification /> },
     { path: "log", element: <SupplyLogView /> },
+    { path: "get", element: <SupplyGet /> },
   ],
 };
 
