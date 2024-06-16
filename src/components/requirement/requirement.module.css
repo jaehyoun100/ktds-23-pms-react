@@ -28,7 +28,10 @@
 .mainInfo > .grid {
   display: grid;
   grid-template-columns: 100px 1fr 100px 1fr;
-  grid-template-rows: 40px 40px 40px;
+  grid-template-rows: 40px 40px;
+  border-top: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
 }
 .mainInfo > .grid > .subItem:first-child {
   grid-column: 1/-1;
@@ -38,15 +41,25 @@
   display: grid;
   grid-template-columns: 100px 1fr 100px 1fr;
   grid-template-rows: 40px 40px 40px;
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
 }
 
 .flexRow {
   display: flex;
   flex-direction: row;
 }
+
+.mainItem {
+  text-align: center;
+  align-content: center;
+  background-color: #e4e6e7;
+}
 .subItem {
-  align-self: center;
-  margin-left: 5px;
+  align-content: center;
+  margin-left: 10px;
+  background-color: #fafafb;
 }
 .contentBorder {
   margin: 10px;
@@ -57,4 +70,12 @@ button[class="subItem"] {
 }
 .errorMessage {
   color: #f03939;
+}
+
+.contentInfo {
+  margin-top: 20px;
+}
+
+.borderBottom {
+  border-bottom: 1px solid #ccc;
 }

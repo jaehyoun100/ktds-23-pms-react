@@ -397,6 +397,25 @@ export default function Output() {
             </>
           )}
 
+          {!isModifyMode && data.listCnt < 1 && (
+            <>
+              {token && (
+                <>
+                  <div style={{ marginBottom: "20px" }}>
+                    해당 프로젝트에 대한 산출물이 없습니다.
+                  </div>
+                  <Table
+                    columns={columns}
+                    dataSource={data.requirementList}
+                    rowKey={(dt) => dt.rqmId}
+                    filter
+                    filterOptions={filterOptions}
+                  />
+                </>
+              )}
+            </>
+          )}
+
           {isModifyMode && (
             <OutputModify
               setIsModifyMode={setIsModifyMode}
