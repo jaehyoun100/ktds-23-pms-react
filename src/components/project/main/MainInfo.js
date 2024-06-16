@@ -6,35 +6,24 @@ import InfoModal from "./InfoModal";
 import { useSelector } from "react-redux";
 import Profile from "./Profile";
 import { putClientData } from "../../../http/projectHttp";
+import { jwtDecode } from "jwt-decode";
 
 export default function MainInfo({ project }) {
-  const tokenInfo = useSelector((state) => ({
-    token: state.tokenInfo.token,
-    credentialsExpired: state.tokenInfo.credentialsExpired,
-  }));
-  // const prjId = "PRJ_240502_000243";
+  const token = localStorage.getItem("token");
+  const userInfo = jwtDecode(token).user;
 
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [clientData, setClientData] = useState(project.clientVO);
-  console.log(clientData, "client!!!!");
 
   const memoizedPutClientData = useCallback(putClientData, []);
   const handleSave = async (newTitle, newContact, newContent) => {
-    memoizedPutClientData(
-      newTitle,
-      newContact,
-      newContent,
-      tokenInfo.token,
-      project
-    );
+    memoizedPutClientData(newTitle, newContact, newContent, token, project);
   };
 
   return (
     <div>
-      <div
-        className={`${styles.displayFlex} ${styles.infoDisplay} ${styles.infoFirst}`}
-      >
+      <div className={`${styles.displayFlex} ${styles.infoDisplay} ${styles.infoFirst}`}>
         <div className={styles.infoTitle}>프로젝트 기간</div>
         <div>
           {project.strtDt} ~ {project.endDt}
@@ -45,10 +34,7 @@ export default function MainInfo({ project }) {
         <div className={styles.displayInfoFlex}>
           {" "}
           {project.clientVO.clntName}{" "}
-          <IoInformationCircleSharp
-            className={styles.info}
-            onClick={() => setModalVisible(true)}
-          />
+          <IoInformationCircleSharp className={styles.info} onClick={() => setModalVisible(true)} />
         </div>
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
@@ -79,6 +65,7 @@ export default function MainInfo({ project }) {
         />
       </div>
       <InfoModal
+        canManage={userInfo.admnCode === "301" || userInfo.empId === project.pm.tmId ? true : false}
         show={modalVisible}
         onClose={() => setModalVisible(false)}
         clientData={clientData}

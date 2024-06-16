@@ -8,12 +8,8 @@ import { useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CalendarComponent from "./CalendarComponent";
-import {
-  getCalendarApi,
-  getPrjApi,
-  postMemo,
-  putMemo,
-} from "../../../http/projectHttp";
+import { jwtDecode } from "jwt-decode";
+import { getCalendarApi, getPrjApi, postMemo, putMemo } from "../../../http/projectHttp";
 export default function ProjectMain() {
   const [memo, setMemo] = useState();
   const [project, setProject] = useState();
@@ -23,12 +19,10 @@ export default function ProjectMain() {
   const [isNeedRender, setNeedRender] = useState(false);
   const [isHaveData, setIsHaveData] = useState(false);
   const [allData, setAllData] = useState();
-  const tokenInfo = useSelector((state) => {
-    return {
-      token: state.tokenInfo.token,
-      credentialsExpired: state.tokenInfo.credentialsExpired,
-    };
-  });
+
+  const token = localStorage.getItem("token");
+  const userData = jwtDecode(token).user;
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -38,7 +32,6 @@ export default function ProjectMain() {
 
   useMemo(() => {
     const item = location.state.key;
-    console.log(item);
     setProjectId(item.prjId);
   }, [location.state.key]);
 
@@ -47,7 +40,7 @@ export default function ProjectMain() {
   useEffect(() => {
     if (projectId) {
       const getProject = async () => {
-        const run = await memoizedgetPrjApi(tokenInfo.token, projectId);
+        const run = await memoizedgetPrjApi(token, projectId);
         setProject(run);
         setAllData(run);
         if (run.prjMemo !== null) {
@@ -56,32 +49,26 @@ export default function ProjectMain() {
       };
       getProject();
     }
-  }, [projectId, tokenInfo.token, memoizedgetPrjApi]);
+  }, [projectId, token, memoizedgetPrjApi]);
 
   const memoizedgetCalendarApi = useCallback(getCalendarApi, []);
   useEffect(() => {
     if (projectId) {
       const getCalendar = async () => {
-        const data = await memoizedgetCalendarApi(tokenInfo.token, projectId);
-        // console.log(data);
+        const data = await memoizedgetCalendarApi(token, projectId);
         setCalData(data);
       };
       getCalendar();
     }
-  }, [projectId, tokenInfo.token, isNeedRender, memoizedgetCalendarApi]);
+  }, [projectId, token, isNeedRender, memoizedgetCalendarApi]);
 
   useEffect(() => {
     setEvents([]);
     if (calData) {
-      const sortedData = calData.sort(
-        (a, b) => new Date(a.clndDate) - new Date(b.clndDate)
-      );
-      console.log(calData);
+      const sortedData = calData.sort((a, b) => new Date(a.clndDate) - new Date(b.clndDate));
+
       for (let i of sortedData) {
-        setEvents((prev) => [
-          ...prev,
-          { date: i.clndDate.split(" ")[0], memo: i.clndContent },
-        ]);
+        setEvents((prev) => [...prev, { date: i.clndDate.split(" ")[0], memo: i.clndContent }]);
       }
       setNeedRender(false);
     }
@@ -92,9 +79,9 @@ export default function ProjectMain() {
 
   const saveMemo = async (date, memo) => {
     if (isHaveData) {
-      memoizedPutMemo(date, memo, projectId, tokenInfo.token);
+      memoizedPutMemo(date, memo, projectId, token);
     } else {
-      memoizedPostMemo(date, memo, projectId, tokenInfo.token);
+      memoizedPostMemo(date, memo, projectId, token);
     }
     setNeedRender(true);
   };
@@ -107,10 +94,7 @@ export default function ProjectMain() {
           <div style={{ backgroundColor: "#fff" }}>
             <div className={styles.gridComponent}>
               <MainInfo project={project} />
-              <ChartContainer
-                chartData={project.chartData}
-                totalEmpCnt={project.projectTeammateList.length}
-              />
+              <ChartContainer chartData={project.chartData} totalEmpCnt={project.projectTeammateList.length} />
               <MainReadMe memo={memo} />
 
               <CalendarComponent
@@ -119,11 +103,14 @@ export default function ProjectMain() {
                 isNeedRender={isNeedRender}
                 setNeedRender={setNeedRender}
                 setIsHaveData={setIsHaveData}
+                pm={project.pm.tmId}
               />
             </div>
-            <div className={styles.modifyButtonArea}>
-              <button onClick={handleModifyClick}>프로젝트 수정</button>
-            </div>
+            {userData && (userData.admnCode === "301" || userData.empId === project.pm.tmId) && (
+              <div className={styles.modifyButtonArea}>
+                <button onClick={handleModifyClick}>프로젝트 수정</button>
+              </div>
+            )}
           </div>
         </>
       )}
