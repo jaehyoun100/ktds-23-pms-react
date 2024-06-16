@@ -7,8 +7,8 @@ export const confirmModalSliceStore = createSlice({
     content: "내용을 입력해주세요",
     confirmContent: "확인버튼",
     cancelContent: "취소버튼",
-    confirmOnClick: () => {},
-    cancelOnClick: () => {},
+    confirmOnClick: "",
+    cancelOnClick: "",
   },
   reducers: {
     /**
