@@ -7,6 +7,8 @@ import { faStar as solidStar, faStarHalfAlt as halfStar } from '@fortawesome/fre
 // npm install --save @fortawesome/react-fontawesome
 // npm install --save @fortawesome/free-solid-svg-icons
 
+// WriteReview 컴퍼넌트에서 호출함.
+// 별점을 기록하는 컴퍼넌트
 const StarRating = ({ onChange }) => {
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);

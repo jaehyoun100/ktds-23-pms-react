@@ -5,7 +5,6 @@ export default function ReviewApp() {
   return (
       <>
         <WriteReview />
-        <WriteReviewStarRating />
       </>
   );
 }

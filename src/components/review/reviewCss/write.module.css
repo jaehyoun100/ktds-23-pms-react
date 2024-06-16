@@ -9,29 +9,63 @@
 }
 
 .prjSubContainer {
+  display: grid;
+  grid-template-rows: 0.1fr 0.06fr 0.06fr;
+  grid-template-columns: 0.1fr 1fr;
   background-color: white;
   border-radius: 7px;
   border-top: 10px solid #3a7ded;
   width: 600px;
-  height: 400px;
+  height: 300px;
 }
+
 
 .writeReviewContainer {
   display: grid;
-  grid-template-rows: 0.06fr 0.5fr 1;
+  grid-template-rows: 0.06fr 0.5fr ;
   grid-template-columns: 0.1fr 1fr;
   background-color: white;
   border-radius: 7px;
   width: 600px;
-  height: 500px;
+  height: 450px;
+}
+
+.projectReview {
+  display: grid;
+  align-items: center;
+  font-size: 27px;
+  font-weight: 300;
+  height: 120px;
+}
+
+.projectSub {
+  color: #999999;
+  font-size: 16px;
+  height: 30px;
 }
 
 .writeReviewSpan {
   display: grid;
   align-items: center;
-  height: 70px;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 400;
+  margin-top: 5px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.writeReviewStar {
+  display: grid;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 400;
+  margin-top: 5px;
+  padding-top: 25px;
+  padding-bottom: 5px;
+}
+
+.writeReviewPtag {
+  padding-top: 10px;
 }
 
 .writeReviewText {
@@ -65,12 +99,7 @@
 .PMSreview {
   font-size: 30px;
   color: #d1d1d1;
-  margin-top: 150px;
-}
-
-.svgContainer > svg {
-  width: 30px;
-  height: 30px;
+  margin-top: 100px;
 }
 
 /* ViewReview 에 적용할 CSS */
@@ -90,12 +119,13 @@
 .star {
   cursor: pointer;
   position: relative;
-  font-size: 2rem; /* 별 크기 조정 */
+  font-size: 2rem;
 }
 
 .starIcon {
-  color: #d3d3d3; /* 기본 회색 */
+  color: #d3d3d3;
   transition: color 0.2s;
+
 }
 
 .starIcon.gold {

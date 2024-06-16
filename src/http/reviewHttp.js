@@ -10,7 +10,7 @@ const url =
 // view 메서드
 export const viewWriteReviewPage = async (token, selectedProjectId) => {
   const response = await fetch(
-    `http://localhost:8080/api/review/writes/${selectedProjectId}`,
+    `${url}/api/review/writes/${selectedProjectId}`,
     {
       method: "GET",
       headers: {
@@ -23,14 +23,15 @@ export const viewWriteReviewPage = async (token, selectedProjectId) => {
 };
 
 // 후기 작성 메서드
-export const writeReview = async (token, rvCntnt, prjId) => {
+export const writeReview = async (token, rvCntnt, prjId, starRating) => {
   const formData = new FormData();
   formData.append("rvCntnt", rvCntnt);
   formData.append("prjId", prjId);
+  formData.append("starRating", starRating);
 
   console.log(rvCntnt);
 
-  const response = await fetch("http://localhost:8080/api/review/writes", {
+  const response = await fetch(`${url}/api/review/writes`, {
     method: "POST",
     headers: {
       Authorization: token,
@@ -49,7 +50,7 @@ export const deleteReview = async (token) => {
   const selectedProjectId = 3;
 
   const response = await fetch(
-    `http://localhost:8080/api/review/writes${selectedProjectId}`,
+    `${url}/api/review/writes${selectedProjectId}`,
     {
       method: "PUT",
       headers: {
@@ -68,7 +69,7 @@ export const modifyReview = async (token) => {
   const selectedProjectId = 3;
 
   const response = await fetch(
-    `http://localhost:8080/api/review/writes${selectedProjectId}`,
+    `${url}/api/review/writes${selectedProjectId}`,
     {
       method: "PUT",
       headers: {
@@ -84,7 +85,7 @@ export const modifyReview = async (token) => {
 // 후기 작성 가능 여부 메서드
 export const getReviewYN = async (token, prjIdList) => {
   const response = await fetch(
-    "http://localhost:8080/api/review/writes/reviewyn",
+    `${url}/api/review/writes/reviewyn`,
     {
       method: "POST",
       headers: {
@@ -101,7 +102,7 @@ export const getReviewYN = async (token, prjIdList) => {
 // 사원이 속한 프로젝트 List 가져오기
 export const getEmpPrjList = async (token) => {
   const response = await fetch(
-    "http://localhost:8080/api/review/writes/prjList",
+    `${url}/api/review/writes/prjList`,
     {
       method: "GET",
       headers: {
@@ -116,7 +117,7 @@ export const getEmpPrjList = async (token) => {
 // 관리자 또는 PM 일 경우 프로젝트에 대한 모든 후기 가져오기
 export const getReviewResultByprjId = async (token, prjId) => {
   const response = await fetch(
-    `http://localhost:8080/api/review/writes/reviewResult/${prjId}`,
+    `${url}/api/review/writes/reviewResult/${prjId}`,
     {
       headers: {
         Authorization: token,
