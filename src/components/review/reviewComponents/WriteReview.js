@@ -2,17 +2,23 @@
  * 프로젝트에 참여한 인원이 후기를 작성하는 Component
  *
  */
-import { useEffect, useRef } from "react";
+import {useEffect, useRef, useState} from "react";
 import styles from "../reviewCss/write.module.css";
 import { viewWriteReviewPage, writeReview } from "../../../http/reviewHttp";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import ProjectListApp from "../../project/projectlist/ProjectListApp";
+import WriteReviewStarRating from "./WriteReviewStarRating"
 
 export default function WriteReview() {
   const token = localStorage.getItem("token");
   const location = useLocation();
   const projectInfo = location.state || {};
   const navigate = useNavigate();
+  const [selectedRating, setSelectedRating] = useState(0);
+
+  const handleRatingChange = (value) => {
+    setSelectedRating(value);
+  };
 
   useEffect(() => {
     viewWriteReviewPage(token);
@@ -63,17 +69,18 @@ export default function WriteReview() {
             ref={rvCntntRef}
           ></textarea>
           <div></div>
+          <div className={styles.svgContainer}>
+            <div>
+              <span className={styles.writeReviewSpan}>별점을 남겨주세요.</span>
+              <WriteReviewStarRating onChange={handleRatingChange}/>
+              <p>선택된 별점: {selectedRating}</p>
+            </div>
+          </div>
         </div>
         <div className={styles.submitBtnContainer}>
           <button className={styles.submitBtn} onClick={onSaveClickHandler}>
             제출
           </button>
-        </div>
-
-        <div className={styles.svgContainer}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-            <path d="M288 0c-12.2 .1-23.3 7-28.6 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3L288 439.8V0zM429.9 512c1.1 .1 2.1 .1 3.2 0h-3.2z" />
-          </svg>
         </div>
         <div className={styles.footer}>
           <span className={styles.PMSreview}>PMS 후기 작성지</span>

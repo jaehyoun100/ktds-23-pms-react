@@ -2,6 +2,7 @@
   background-color: #dfebfb;
 } */
 
+/* WriteReview 에 적용할 CSS */
 .gridContainer {
   display: grid;
   justify-content: center;
@@ -22,7 +23,7 @@
   background-color: white;
   border-radius: 7px;
   width: 600px;
-  height: 350px;
+  height: 500px;
 }
 
 .writeReviewSpan {
@@ -70,4 +71,58 @@
 .svgContainer > svg {
   width: 30px;
   height: 30px;
+}
+
+/* ViewReview 에 적용할 CSS */
+.reviewResultContainer {
+
+}
+
+.reviewResultProjectContainer {
+  background-color: lightgray;
+}
+
+.starRating {
+  display: flex;
+  direction: ltr;
+}
+
+.star {
+  cursor: pointer;
+  position: relative;
+  font-size: 2rem; /* 별 크기 조정 */
+}
+
+.starIcon {
+  color: #d3d3d3; /* 기본 회색 */
+  transition: color 0.2s;
+}
+
+.starIcon.gold {
+  color: gold;
+}
+
+.half {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+  cursor: pointer;
+}
+
+.leftHalf {
+  left: 0;
+}
+
+.rightHalf {
+  right: 0;
+}
+
+.fullStar {
+  color: gold;
+}
+
+.halfStar {
+  color: gold;
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
 }
