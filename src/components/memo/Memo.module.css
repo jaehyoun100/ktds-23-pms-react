@@ -12,6 +12,47 @@ input[type="text"].wirteInput:focus {
   border: none;
 }
 
+.input[type="text"].searchInput {
+  width: 100% !important;
+}
+
+input[type="file"].customFile {
+  position: relative;
+}
+
+input[type="file"].customFile::file-selector-button {
+  width: 100px;
+  color: transparent;
+  background-color: var(--second-color);
+}
+
+input[type="file"].customFile::after {
+  position: absolute;
+  pointer-events: none;
+  top: 11px;
+  left: 20px;
+  color: var(--main-color);
+  content: "파일 선택";
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* file upload button */
+input[type="file"].customFile::file-selector-button {
+  border-radius: 5px;
+  padding: 0 16px;
+  height: 40px;
+  cursor: pointer;
+  background-color: var(--light-color);
+  border: none;
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+  margin-right: 16px;
+  transition: background-color 200ms;
+}
+
+
+/*********************************** Compoenet ***********************************/
+
 .bodyContainer {
   height: calc(100% - 50px - 50px);
 }
@@ -23,14 +64,9 @@ input[type="text"].wirteInput:focus {
   
 }
 
-.treeItem {
-  cursor: pointer;
-  padding: 5px;
-}
-
-.treeSubItem {
-  cursor: pointer;
-  padding-left: 40px;
+.flexDirectCol { 
+  display: flex;
+  flex-direction: column;
 }
 
 .subMenuShrunk {
@@ -151,7 +187,7 @@ input[type="text"].wirteInput:focus {
 }
 
 .cellSpan > svg:hover {
-  color: var(--second-color);
+  color: var(--main-color);
 }
 
 .rowCellText {
@@ -170,6 +206,11 @@ input[type="text"].wirteInput:focus {
 .listIconActive { 
   color: var(--second-color);
   border-color: var(--second-color);
+}
+
+.dispalyDate { 
+  display: flex;
+  justify-content: flex-end;
 }
 
 .isNotChecked {
@@ -260,7 +301,9 @@ input[type="text"].wirteInput:focus {
   cursor: pointer;
 }
 
-.toggleViewReceiver:hover{
+.toggleViewReceiver:hover, 
+.fileToggleButton:hover, 
+.buttonSaveFile {
   color: var(--second-color);
 }
 
@@ -316,6 +359,30 @@ input[type="text"].wirteInput:focus {
   word-wrap: normal;
 }
 
+.buttonUserWrite {
+  font-size: 14px;
+  line-height: 18px;
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 0;
+  margin: 4px 0 4px 4px;
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+.buttonUserWrite:hover {
+  color: #fff;
+  background-color: var(--main-color);
+  cursor: pointer;
+  text-decoration: line-through;
+}
+
 .memoViewInfoArea{
   padding: 0 0 0 24px;
   display: flex;
@@ -354,12 +421,14 @@ input[type="text"].wirteInput:focus {
   margin: 0 6px 0 0;
   padding: 5px 4px;
   line-height: 10px;
+  cursor: pointer;
 }
 
 .fileToolbarTitle {
   display: inline-block;
   margin-right: 4px;
   font-size: 14px;
+  font-weight: 600;
 }
 
 .fileAttachmentsInner {
@@ -420,7 +489,9 @@ input[type="text"].wirteInput:focus {
   margin-left: auto;
 }
 
-.buttonSaveFile{}
+.buttonSaveFile{
+  cursor: pointer;
+}
 
 .memoViewContent {
   padding: 20px 25px 0 34px;
@@ -454,6 +525,10 @@ input[type="text"].wirteInput:focus {
   display: flex;
   -webkit-box-flex: 1;
   background-color: #fff;
+}
+
+.flexValue {
+  flex: 1;
 }
 
 .memoWrite {
@@ -519,7 +594,7 @@ input[type="text"].wirteInput:focus {
   align-items: flex-start;
   min-width: 0;
   padding: 5px 11px 6px 0;
-  margin: 10px 0;
+  margin: 5px 0;
   /* border: 1px solid var(--third-color); */
   border-radius: 5px;
 }
@@ -535,6 +610,7 @@ input[type="text"].wirteInput:focus {
   padding: 0;
   background-color: none;
   width: 100% !important;
+  min-height: 30px;
 }
 
 .writeButton {
@@ -550,6 +626,8 @@ input[type="text"].wirteInput:focus {
   margin: 0 30px;
   padding: 10px;
   border-top: 2px solid var(--third-color);
+  height: 100%;
+  background-color: var(--body-bg);
   /* border-radius: 5px; */
 }
 
@@ -589,6 +667,7 @@ input[type="text"].wirteInput:focus {
   margin: auto;
   padding: 0;
   width: 80%;
+  max-width: 1200px;
   animation-name: animateModal;
   animation-duration: 0.5s;
   box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.1);
@@ -596,34 +675,232 @@ input[type="text"].wirteInput:focus {
 
 .closeModalIcon {
   cursor: pointer;
-  font-size: 40px;
+  font-size: 28px;
   float: right;
   font-weight: bold;
+  color: var(--main-color);
+}
+
+.closeModalIcon:hover {
+  color: var(--second-color);
 }
 
 .modalHeader {
-  padding: 20px 20px;
+  margin: 20px 20px;
+  padding: 15px 20px;
   background-color: #ffffff;
   color: var(--main-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 2px solid var(--third-color);
 }
 
 .modalHeader > h5,
 .modalHeader > span {
   margin: 0px;
+  font-weight: 600;
 }
 
 .modalBody {
+  margin: 0 20px;
   padding: 2px 20px;
-  /* height: 200px; */
+  height: 500px;
 }
 
 .modalFooter {
+  margin: 20px 20px;
   padding: 20px 20px;
   background-color: #ffffff;
   color: #fff;
+  border-top: 2px solid var(--third-color);
+}
+
+.footerBtn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footerBtn > Button {
+  margin-left: 10px;
+}
+
+/* SearchEmpMemo */
+.modalBodyContainer {
+  height: 100%;
+  align-items: stretch;
+}
+
+.contentGridTwo {
+  display: grid;
+  row-gap: 15px;
+  height: 100%;
+  width: 100%;
+  grid-template-rows: 0.2fr 0.8fr;
+}
+
+.modalBodyListSearch {
+  padding: 15px 0;
+  border-top: 1px solid var(--third-color);
+}
+
+.contentGridOne {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 16px;
+}
+
+.contentGridOneRows {
+  display: grid;
+  height: calc(100% - 20px - 10px);
+  width: 100%;
+  grid-template-rows: repeat(3, 1fr);
+  row-gap: 10px;
+  padding-bottom: 10px;
+}
+
+.searchBar {
+  width: 100%;
+  display: flex;
+}
+
+.saerchbox {
+  flex: 1;
+  margin-right: 8px;
+}
+
+.searchListContent {
+  padding: 10px 5px 10px 10px;
+  height: 440px;
+  border-radius: 5px;
+  border-bottom: 1px solid var(--third-color);
+}
+
+.oneSearchList {
+  height: 100%;
+  overflow: hidden;
+}
+
+.searchListTitle {
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--third-color);
+}
+
+.searchListItemsWraps {
+  height: 100%;
+  overflow: auto;
+}
+
+.searchListItemsWrapsEmp {
+  height: 93%;
+}
+
+.searchListItemsWrapsRcv {
+  height: 97%;
+  overflow: auto;
+}
+
+.searchListItems {
+  padding-left: 5px;
+}
+
+.searchListItemsBtn {
+  padding-left: 5px;
+  height: calc(100% - 35px - 10px);
+}
+
+.tree {
+  height: 100%;
+}
+
+.treeItem {
+  display: flex;
+  cursor: pointer;
+  padding: 5px;
+  margin: 0 5px 5px 0;
+  height: 30px;
+  align-items: center;
+}
+
+.treeItemSmall {
+  display: flex;
+  cursor: pointer;
+  /* padding: 8px; */
+  margin: 0 5px 5px 0;
+  height: 20px;
+  align-items: center;
+}
+
+.treeItem:hover, 
+.treeSubItem:hover {
+  padding-right: 10px;
+  background-color: #f4f5ff;
+  border-radius: 5px;
+  font-weight: 600;
+  color: var(--second-color);
+}
+
+.treeItemToggle {
+  margin-right: 5px;
+}
+
+.treeCheckbox {
+  height: 15px;
+  width: 15px;
+}
+
+.allCheck {
+  display: inline-block;
+}
+
+.treeItemMinus {
+  margin-right: 5px;
+  color: var(--third-color);
+}
+
+.treeItemMinus:hover {
+  color: var(--second-color);
+}
+
+.treebtnArea {
+  padding-top: 5px;
+  display: flex;
+  justify-content: flex-end;
+  /* border-top: 1px solid var(--third-color); */
+}
+
+.treebtnArea > Button {
+  margin-left: 10px;
+}
+
+.treeOverflow {
+  overflow: hidden;
+}
+
+.treeOverflowScroll {
+  overflow: auto;
+}
+
+.treeItemOverflow {
+  overflow: auto;
+}
+
+.treeSubItem {
+  display: flex;
+  cursor: pointer;
+  height: 30px;
+  align-items: center;
+  padding: 5px 5px 5px 15px;
+  margin: 0 5px 5px 0;
+}
+
+.miniTitle {
+  padding-bottom: 5px;
 }
 
 .modalEmployeeArea {
@@ -633,8 +910,8 @@ input[type="text"].wirteInput:focus {
   height: 100%;
 }
 
-.modalEmpInfo {
-  /* margin-bottom: 20px; */
+.heightFull {
+  height: 100%;
 }
 
 .modalBtnArea {
@@ -644,14 +921,6 @@ input[type="text"].wirteInput:focus {
 
 .modalBtnArea > Button {
   margin: 0 10px;
-}
-
-.receiveBox {
-  /* font-weight: 800; */
-}
-
-.rcvBox {
-  
 }
 
 

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { BsFolder, BsFolder2Open } from "react-icons/bs";
+import { BsChevronRight, BsChevronDown } from "react-icons/bs";
 import { loadDepartmentList } from "../../../http/deptteamHttp";
 import { useFetch } from "../../hook/useFetch";
 import SearchTeam from "./SearchTeam";
@@ -7,23 +7,18 @@ import style from "../Memo.module.css";
 import SearchEmployee from "./SearchEmployee";
 import SearchAddReceiver from "./SearchAddReceiver";
 import Search from "antd/es/input/Search";
+import SearchBox from "./SearchBox";
 
 export default function SearchEmpMemo() {
   const token = localStorage.getItem("token");
   const [needDeptLoad, setNeedDeptLoad] = useState();
-  const [selectedData, setSelectedData] = useState("Select Option");
-  const optionList = [
-    { label: "부서", value: "deptId" },
-    { label: "팀", value: "tmId" },
-    { label: "사원명", value: "empId" },
-    { label: "이메일", value: "email" },
-  ];
 
   const textRef = useRef(null);
 
   const [openedDeptId, setOpenedDeptId] = useState(null);
   const [selectedDeptId, setSelectedDeptId] = useState();
   const [selectTmId, setSelectedTmId] = useState();
+  const [isAllCheckedEmp, setIsAllCheckedEmp] = useState(false);
 
   // 부서목록
   const fetchLoadDeptList = useCallback(loadDepartmentList, []);
@@ -43,7 +38,6 @@ export default function SearchEmpMemo() {
   };
 
   const onOpenClickHandler = (deptId) => {
-    console.log("wow!!!", deptId);
     setSelectedDeptId(deptId);
     setOpenedDeptId(deptId === openedDeptId ? null : deptId);
     setSelectedTmId("");
@@ -54,68 +48,108 @@ export default function SearchEmpMemo() {
     setSelectedTmId(teamId);
   };
 
+  const handleCheckboxChange = () => {
+    setIsAllCheckedEmp(!isAllCheckedEmp);
+  };
+
   return (
-    <div>
-      <div className="searchBar">
-        <Search
-          optionList={optionList}
-          selectedData={selectedData}
-          setSelectedData={setSelectedData}
-          textRef={textRef}
-          onClickHandler={onClickHandler}
-        />
-      </div>
-      <div className={style.flex}>
-        <div className="col-1-3">
-          <div className="searchTitle">부서/팀</div>
-          <div>
-            <div className={style.tree}>
-              {deptList &&
-                deptList.map((dept) => (
-                  <>
-                    <div
-                      key={dept.deptId}
-                      className={style.treeItem}
-                      onClick={() => onOpenClickHandler(dept.deptId)}
-                    >
-                      {dept &&
-                        (openedDeptId === dept.deptId ? (
+    <div className={style.modalBodyContainer}>
+      <div className={`${style.contentGridTwo} ${style.heightFull}`}>
+        <div className={style.searchBar}>
+          <SearchBox />
+          {/* <Search
+            optionList={optionList}
+            selectedData={selectedData}
+            setSelectedData={setSelectedData}
+            textRef={textRef}
+            onClickHandler={onClickHandler}
+          /> */}
+        </div>
+        <div className={style.modalBodyListSearch}>
+          <div className={style.contentGridOne}>
+            <div className={style.searchListContent}>
+              <div className={`${style.oneSearchList}`}>
+                <div className={style.searchListTitle}>부서/팀</div>
+                <div className={style.searchListItemsWraps}>
+                  <div className={style.searchListItems}>
+                    <div className={style.tree}>
+                      {deptList &&
+                        deptList.map((dept) => (
                           <>
-                            <BsFolder2Open />
+                            <div
+                              key={dept.deptId}
+                              className={style.treeItem}
+                              onClick={() => onOpenClickHandler(dept.deptId)}
+                            >
+                              <div className={style.treeItemToggle}>
+                                {dept &&
+                                  (openedDeptId === dept.deptId ? (
+                                    <BsChevronDown />
+                                  ) : (
+                                    <BsChevronRight />
+                                  ))}
+                              </div>
+                              <div className={style.treeItemInfo}>
+                                {dept.deptName}
+                              </div>
+                            </div>
+                            <div>
+                              {dept && openedDeptId === dept.deptId && (
+                                <>
+                                  <SearchTeam
+                                    token={token}
+                                    selectedDeptId={selectedDeptId}
+                                    onTeamClick={onTeamClick}
+                                    setSelectedTmId={setSelectedTmId}
+                                  />
+                                </>
+                              )}
+                            </div>
                           </>
-                        ) : (
-                          <BsFolder />
                         ))}
-                      {dept.deptName}
                     </div>
-                    <div>
-                      {dept && openedDeptId === dept.deptId && (
-                        <>
-                          <SearchTeam
-                            token={token}
-                            selectedDeptId={selectedDeptId}
-                            onTeamClick={onTeamClick}
-                            setSelectedTmId={setSelectedTmId}
-                          />
-                        </>
-                      )}
-                    </div>
-                  </>
-                ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={style.searchListContent}>
+              <div className={`${style.oneSearchList}`}>
+                <div className={style.searchListTitle}>
+                  <div className={style.allCheck}>
+                    <input
+                      type="checkBox"
+                      className={`${style.treeItemToggle} ${style.treeCheckbox}`}
+                      checked={isAllCheckedEmp}
+                      onChange={() => handleCheckboxChange()}
+                    />
+                  </div>
+                  사원
+                </div>
+                <div className={style.searchListItemsWrapsEmp}>
+                  <SearchEmployee
+                    token={token}
+                    selectedDeptId={selectedDeptId}
+                    setSelectedDeptId={setSelectedDeptId}
+                    selectTmId={selectTmId}
+                    isAllCheckedEmp={isAllCheckedEmp}
+                    setIsAllCheckedEmp={setIsAllCheckedEmp}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className={style.searchListContent}>
+              <div className={`${style.oneSearchList}`}>
+                <div className={style.searchListTitle}>수신</div>
+                <div className={style.searchListItemsWrapsRcv}>
+                  <div
+                    className={`${style.searchListItems} ${style.heightFull}`}
+                  >
+                    <SearchAddReceiver />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-1-3">
-          <div className="searchTitle">사원</div>
-          <SearchEmployee
-            token={token}
-            selectedDeptId={selectedDeptId}
-            selectTmId={selectTmId}
-          />
-        </div>
-        <div className="col-1-3">
-          <div className="searchTitle">수신</div>
-          <SearchAddReceiver />
         </div>
       </div>
     </div>

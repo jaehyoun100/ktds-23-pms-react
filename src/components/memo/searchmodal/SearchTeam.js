@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import style from "../Memo.module.css";
 import { loadTeamList } from "../../../http/deptteamHttp";
 import { useFetch } from "../../hook/useFetch";
+import { BsDot } from "react-icons/bs";
 
 export default function SearchTeam({
   token,
@@ -31,8 +32,8 @@ export default function SearchTeam({
   };
 
   return (
-    <div>
-      <div>
+    <div className={style.searchListItems}>
+      <div className={style.tree}>
         {teamList &&
           teamList.map((team) => (
             <div
@@ -40,7 +41,10 @@ export default function SearchTeam({
               className={style.treeSubItem}
               onClick={() => onClickHandler(team.tmId)}
             >
-              {team.tmName}
+              <div className={style.treeItemToggle}>
+                <BsDot />
+              </div>
+              <div className={style.treeItemInfo}>{team.tmName}</div>
             </div>
           ))}
       </div>

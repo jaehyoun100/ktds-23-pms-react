@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { BsDashSquare } from "react-icons/bs";
+import { BsDashSquare, BsDashSquareFill } from "react-icons/bs";
 import style from "../Memo.module.css";
 import { memoAddrAction } from "../../../store/toolkit/slice/memoAddrSlice";
 
@@ -33,46 +33,56 @@ export default function SearchAddReceiver() {
   };
 
   return (
-    <div>
-      <div className={style.receiveBox}>
-        <div>수신</div>
+    <div className={style.contentGridOneRows}>
+      <div className={style.heightFull}>
+        <div className={style.miniTitle}>수신</div>
         {rcvList && (
-          <div className={style.rcvBox}>
+          <div className={`${style.tree} ${style.treeItemOverflow}`}>
             {rcvList &&
               rcvList.map((emp) => (
-                <div key={emp.empId}>
-                  <BsDashSquare
-                    onClick={() => onDeleteRcvListHandler(emp.empId)}
-                  />
+                <div key={emp.empId} className={style.treeItemSmall}>
+                  <div className={style.treeItemMinus}>
+                    <BsDashSquareFill
+                      onClick={() => onDeleteRcvListHandler(emp.empId)}
+                    />
+                  </div>
                   {emp.empName} ({emp.email})
                 </div>
               ))}
           </div>
         )}
       </div>
-      <div className={style.receiveBox}>
-        <div>참조</div>
-        {rcvRefList &&
-          rcvRefList.map((emp) => (
-            <div>
-              <BsDashSquare
-                onClick={() => onDeleteRcvRefListHandler(emp.empId)}
-              />
-              {emp.empName} ({emp.email})
-            </div>
-          ))}
+      <div className={style.heightFull}>
+        <div className={style.miniTitle}>참조</div>
+        <div className={`${style.tree} ${style.treeItemOverflow}`}>
+          {rcvRefList &&
+            rcvRefList.map((emp) => (
+              <div key={emp.empId} className={style.treeItemSmall}>
+                <div className={style.treeItemMinus}>
+                  <BsDashSquareFill
+                    onClick={() => onDeleteRcvRefListHandler(emp.empId)}
+                  />
+                </div>
+                {emp.empName} ({emp.email})
+              </div>
+            ))}
+        </div>
       </div>
-      <div className={style.receiveBox}>
-        <div>비밀참조</div>
-        {rcvSecretRefList &&
-          rcvSecretRefList.map((emp) => (
-            <div>
-              <BsDashSquare
-                onClick={() => onDeleteRcvSecretRefListHandler(emp.empId)}
-              />
-              {emp.empName} ({emp.email})
-            </div>
-          ))}
+      <div className={style.heightFull}>
+        <div className={style.miniTitle}>비밀참조</div>
+        <div className={`${style.tree} ${style.treeItemOverflow}`}>
+          {rcvSecretRefList &&
+            rcvSecretRefList.map((emp) => (
+              <div key={emp.empId} className={style.treeItemSmall}>
+                <div className={style.treeItemMinus}>
+                  <BsDashSquareFill
+                    onClick={() => onDeleteRcvSecretRefListHandler(emp.empId)}
+                  />
+                </div>
+                {emp.empName} ({emp.email})
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

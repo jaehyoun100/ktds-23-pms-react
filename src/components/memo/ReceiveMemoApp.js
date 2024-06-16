@@ -18,8 +18,7 @@ import {
 
 let pageNo = 0;
 
-export default function ReceiveMemoApp() {
-  const token = localStorage.getItem("token");
+export default function ReceiveMemoApp({ token, myInfo }) {
   const [needLoad, setNeedLoad] = useState();
   const [selectRcvMemoId, setSelectRcvMemoId] = useState();
 
@@ -41,7 +40,6 @@ export default function ReceiveMemoApp() {
   const { body: receiveMemos } = data || {};
 
   const onRowClickHandler = async (rcvMemoId, rcvDate) => {
-    console.log(rcvDate);
     setSelectRcvMemoId(rcvMemoId);
     if (rcvDate === null || rcvDate === "") {
       // 수신쪽지 읽음처리
@@ -122,7 +120,9 @@ export default function ReceiveMemoApp() {
       key: "sendDate",
       width: "15%",
       render: (text) => (
-        <span className={`${style.isNotImportant}`}>{text}</span>
+        <span className={`${style.isNotImportant} ${style.dispalyDate}`}>
+          {text}
+        </span>
       ),
     },
   ];
@@ -185,6 +185,7 @@ export default function ReceiveMemoApp() {
         {token && isSelect && (
           <ReceiveMemoView
             token={token}
+            myInfo={myInfo}
             count={count}
             selectRcvMemoId={selectRcvMemoId}
             setSelectRcvMemoId={setSelectRcvMemoId}

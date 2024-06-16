@@ -9,6 +9,7 @@ import {
   BsEnvelopeCheck,
   BsEnvelopeX,
   BsEnvelopeArrowUp,
+  BsEnvelopeFill,
 } from "react-icons/bs";
 import Table from "../../utils/Table";
 import SendMemoView from "./SendMemoView";
@@ -37,11 +38,6 @@ export default function SendMemoApp() {
     setSelectSendMemoId(sendMemoId);
   };
 
-  // const onRowClickHandler = async (rowId) => {
-  //   console.log(rowId);
-  //   setSelectSendMemoId((prevId) => (prevId === rowId ? undefined : rowId));
-  // };
-
   // 쪽지 보관
   const onClickSaveSendMenoHandler = async (sendMemoId, sendSaveYn) => {
     const newSaveState = sendSaveYn === "N" ? "Y" : "N";
@@ -55,41 +51,46 @@ export default function SendMemoApp() {
 
   const columns = [
     {
-      title: <BsStar />,
+      title: (
+        <span className={`${style.rowTitle}`}>
+          <BsStar />
+        </span>
+      ),
       dataIndex: "sendSaveYn",
       key: "sendSaveYn",
       width: "5%",
-      // render: (text) => (text === "Y" ? <BsFillStarFill /> : <BsStar />),
       render: (text, row) => (
         <span
           onClick={() => onClickSaveSendMenoHandler(row.sendMemoId, text)}
           className={`${style.cellSpan} ${
             text === "Y" ? style.listIconActive : style.listIcon
           }`}
-          // style={{
-          //   cursor: "pointer",
-          //   // color: text === "Y" ? "gold" : "gray",
-          //   display: "inline-flex",
-          //   alignItems: "center",
-          //   justifyContent: "center",
-          //   width: "100%",
-          //   height: "100%",
-          //   lineHeight: "1", // 아이콘의 수직 정렬을 맞추기 위해
-          // }}
         >
           {text === "Y" ? <BsFillStarFill /> : <BsStar />}
         </span>
       ),
     },
     {
-      title: <BsEnvelope />,
+      title: (
+        <span className={`${style.rowTitle}`}>
+          <BsEnvelope />
+        </span>
+      ),
       dataIndex: "sendDate",
       key: "sendDate",
       width: "5%",
-      render: (text) => (text !== null ? <BsEnvelopeOpen /> : <BsEnvelope />),
+      render: (text) => (
+        <span
+          className={`${style.cellSpan} ${
+            text !== null ? style.listIcon : style.listIconActive
+          }`}
+        >
+          {text !== null ? <BsEnvelopeOpen /> : <BsEnvelopeFill />}
+        </span>
+      ),
     },
     {
-      title: "제목",
+      title: <span className={`${style.rowTitleMemo}`}>제목</span>,
       dataIndex: "memoTtl",
       key: "memoTtl",
       render: (sendMemos, row) => (
@@ -102,15 +103,26 @@ export default function SendMemoApp() {
       ),
     },
     {
-      title: <BsEnvelopeArrowUp />,
+      title: (
+        <span className={`${style.rowTitle}`}>
+          <BsEnvelopeArrowUp />
+        </span>
+      ),
       dataIndex: "sendStsCode",
       key: "sendStsCode",
-      width: "10%",
-      render: (text) =>
-        text === "1502" ? <BsEnvelopeX /> : <BsEnvelopeCheck />,
+      width: "5%",
+      render: (text) => (
+        <span
+          className={`${style.cellSpan} ${
+            text === "1502" ? style.listIcon : style.listIconActive
+          }`}
+        >
+          {text === "1502" ? <BsEnvelopeX /> : <BsEnvelopeCheck />}
+        </span>
+      ),
     },
     {
-      title: "발신일",
+      title: <span className={`${style.rowTitle}`}>발신일</span>,
       dataIndex: "sendDate",
       key: "sendDate",
       width: "10%",
@@ -118,10 +130,6 @@ export default function SendMemoApp() {
   ];
 
   const filterOptions = [
-    {
-      label: "사원명",
-      value: "empId",
-    },
     {
       label: "제목",
       value: "memoTtl",
@@ -171,14 +179,6 @@ export default function SendMemoApp() {
                 rowKey={(dt) => dt.sendMemoId}
                 filter
                 filterOptions={filterOptions}
-                // onRow={(record) => {
-                //   return {
-                //     onClick: () => {
-                //       onRowClickHandler(record.sendMemoId);
-                //     },
-                //     style: { cursor: "pointer" },
-                //   };
-                // }}
               />
             </div>
           </>
@@ -186,6 +186,7 @@ export default function SendMemoApp() {
         {token && isSelect && (
           <SendMemoView
             token={token}
+            count={count}
             selectSendMemoId={selectSendMemoId}
             setSelectSendMemoId={setSelectSendMemoId}
             setNeedLoad={setNeedLoad}

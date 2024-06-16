@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../common/Button/Button";
 import style from "./Memo.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { sendMemo } from "../../http/memoHttp";
 import { useNavigate } from "react-router-dom";
 import SearchEmpMemo from "./searchmodal/SearchEmpMemo";
 import MemoModal from "./searchmodal/MemoModal";
+import { BsXCircle } from "react-icons/bs";
+import { memoAddrAction } from "../../store/toolkit/slice/memoAddrSlice";
 
 export default function WriteMemo() {
   const navigate = useNavigate();
+  const memoDispatch = useDispatch();
   const token = localStorage.getItem("token");
 
   const fileRef = useRef();
@@ -48,11 +51,9 @@ export default function WriteMemo() {
     }
 
     // 데이터 생성
-    // const sendId = "0112003";
     const memoTtl = memoTtlRef.current.value;
     const memoCntnt = memoCntntRef.current.value;
     const file = fileRef.current.files[0];
-    console.log("읭??? ", file);
 
     const json = await sendMemo(token, memoTtl, memoCntnt, file, receiveMemoVO);
 
@@ -79,9 +80,33 @@ export default function WriteMemo() {
     }
   }, [rcvList, rcvRefList, rcvSecretRefList]);
 
+  // 선택 취소
+  const deleteSelectRcv = (empId) => {
+    const updateRcvList = rcvList.filter((emp) => emp.empId !== empId);
+    memoDispatch(memoAddrAction.deleteRcvList({ rcvList: updateRcvList }));
+  };
+
+  const deleteSelectRefRcv = (empId) => {
+    const updateRcvRefList = rcvRefList.filter((emp) => emp.empId !== empId);
+    memoDispatch(
+      memoAddrAction.deleteRcvRefList({ rcvRefList: updateRcvRefList })
+    );
+  };
+
+  const deleteSelectSecretRefRcv = (empId) => {
+    const updateRcvSecretRefList = rcvSecretRefList.filter(
+      (emp) => emp.empId !== empId
+    );
+    memoDispatch(
+      memoAddrAction.deleteRcvSecretRefList({
+        rcvSecretRefList: updateRcvSecretRefList,
+      })
+    );
+  };
+
   return (
     <div className={style.bodyContainer}>
-      <div className={style.memoContainer}>
+      <div className={`${style.memoContainer} ${style.flexDirectCol}`}>
         {!showAddrModal && (
           <>
             <div className={style.memoHeader}>
@@ -95,8 +120,8 @@ export default function WriteMemo() {
               <Button onClickHandler={onWriteMemoClickHandler}>보내기</Button>
               <Button onClickHandler={onWriteCancel}>취소</Button>
             </div>
-            <div className={style.memoContenArea}>
-              <div className={style.memoWrite}>
+            <div className={`${style.memoContenArea} ${style.flexValue}`}>
+              <div className={`${style.memoWrite} ${style.flexDirectCol}`}>
                 <div className={style.memoWriteOption}>
                   <div className={style.memoWriteOptionItem}>
                     <div className={style.memoWriteOptionItemInner}>
@@ -107,14 +132,17 @@ export default function WriteMemo() {
                         <div
                           className={`${style.writeUserInfo} ${style.receiverInput}`}
                         >
-                          <input
-                            type="text"
-                            id="rcvList"
-                            className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                            defaultValue={rcvList.map(
-                              (emp) => `${emp.empName} (${emp.email})`
-                            )}
-                          />
+                          {rcvList &&
+                            rcvList.map((emp) => (
+                              <input
+                                type="button"
+                                id="rcvList"
+                                readOnly={true}
+                                className={style.buttonUserWrite}
+                                defaultValue={`${emp.empName} (${emp.email})`}
+                                onClick={() => deleteSelectRcv(emp.empId)}
+                              />
+                            ))}
                         </div>
                         <div className={style.writeButton}>
                           <Button onClickHandler={onEmpListClickHandler}>
@@ -131,14 +159,23 @@ export default function WriteMemo() {
                         <label htmlFor="rcvMemoId">참조</label>
                       </div>
                       <div className={style.writeOptionArea}>
-                        <input
-                          type="text"
-                          id="rcvMemoId"
+                        <div
                           className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                          defaultValue={rcvRefList.map(
-                            (emp) => `${emp.empName} (${emp.email})`
-                          )}
-                        ></input>
+                        >
+                          {rcvRefList &&
+                            rcvRefList.map((emp) => (
+                              <>
+                                <input
+                                  type="button"
+                                  id="rcvList"
+                                  readOnly={true}
+                                  className={style.buttonUserWrite}
+                                  defaultValue={`${emp.empName} (${emp.email})`}
+                                  onClick={() => deleteSelectRefRcv(emp.empId)}
+                                />
+                              </>
+                            ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -149,14 +186,23 @@ export default function WriteMemo() {
                         <label htmlFor="rcvMemoId">숨은참조</label>
                       </div>
                       <div className={style.writeOptionArea}>
-                        <input
-                          type="text"
-                          style={{ disabled: true }}
+                        <div
                           className={`${style.writeUserInfoInput} ${style.wirteInput}`}
-                          defaultValue={rcvSecretRefList.map(
-                            (emp) => `${emp.empName} (${emp.email})`
-                          )}
-                        />
+                        >
+                          {rcvSecretRefList &&
+                            rcvSecretRefList.map((emp) => (
+                              <input
+                                type="button"
+                                id="rcvList"
+                                readOnly={true}
+                                className={style.buttonUserWrite}
+                                defaultValue={`${emp.empName} (${emp.email})`}
+                                onClick={() =>
+                                  deleteSelectSecretRefRcv(emp.empId)
+                                }
+                              />
+                            ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -186,7 +232,7 @@ export default function WriteMemo() {
                         <input
                           type="file"
                           id="originFileName"
-                          className={`${style.writeUserInfoInput} ${style.wirteInput}`}
+                          className={`${style.writeUserInfoInput} ${style.wirteInput} ${style.customFile}`}
                           ref={fileRef}
                         />
                       </div>
@@ -194,7 +240,7 @@ export default function WriteMemo() {
                   </div>
                 </div>
 
-                <div className={style.memoWriteEditor}>
+                <div className={`${style.memoWriteEditor} ${style.flexValue}`}>
                   <div className={style.memoWriteEditorInner}>
                     {/* <label htmlFor="memoCntnt">내용</label> */}
                     <textarea
@@ -215,9 +261,9 @@ export default function WriteMemo() {
             onClose={onClose}
             body={<SearchEmpMemo />}
             footer={
-              <div>
+              <div className={style.footerBtn}>
                 <Button onClickHandler={onClose}>취소</Button>
-                <Button onClickHandler={onSelectRcvHandler}>확인</Button>
+                <Button onClickHandler={onSelectRcvHandler}>수신 등록</Button>
               </div>
             }
           />
