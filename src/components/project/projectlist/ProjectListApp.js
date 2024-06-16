@@ -10,8 +10,11 @@ import SurveyWrite from "../../survey/components/SurveyWriteApp";
 import { format, set } from "date-fns";
 import SurveyResult from "../../survey/components/SurveyResult";
 import { getPrjList } from "../../../http/projectHttp";
+import { jwtDecode } from "jwt-decode";
 
 const ProjectListApp = () => {
+  const token = localStorage.getItem("token");
+  const userInfo = jwtDecode(token).user;
   const [data, setData] = useState([]);
   const [searchDataCommonCode, setSearchDataCommonCode] = useState();
   const [filterOptions, setFilterOptions] = useState([]);
@@ -27,17 +30,10 @@ const ProjectListApp = () => {
   const [reload, setReload] = useState();
   const [surveyResultMode, setSurveyResultMode] = useState(false);
 
-  const tokenInfo = useSelector((state) => {
-    return {
-      token: state.tokenInfo.token,
-      credentialsExpired: state.tokenInfo.credentialsExpired,
-    };
-  });
-
   const memoizeGetPrjList = useCallback(getPrjList, []);
   useEffect(() => {
     const getProject = async () => {
-      const run = await memoizeGetPrjList(tokenInfo.token);
+      const run = await memoizeGetPrjList(token);
       setData(run[1]);
 
       let optionList = [];
@@ -58,7 +54,7 @@ const ProjectListApp = () => {
       setInfo(run);
     };
     getProject();
-  }, [tokenInfo.token]);
+  }, [token]);
   console.log(info);
 
   useEffect(() => {
@@ -290,7 +286,7 @@ const ProjectListApp = () => {
             filter
             filterOptions={filterOptions}
             btnOnClickHandler={onClickHandler}
-            buttonName="프로젝트 생성"
+            buttonName={userInfo.admnCode === "301" ? "프로젝트 생성" : false}
             buttonClassName="prj-button-position"
             info={info}
           />
@@ -309,7 +305,7 @@ const ProjectListApp = () => {
       )}
       {answerMode && (
         <SurveyAnswer
-          token={tokenInfo.token}
+          token={token}
           selectedProjectId={selectedProjectId}
           setAnswerMode={setAnswerMode}
           info={info}
@@ -318,7 +314,7 @@ const ProjectListApp = () => {
       )}
       {writeMode && (
         <SurveyWrite
-          token={tokenInfo.token}
+          token={token}
           setWriteMode={setWriteMode}
           surveys={data} // 설문 데이터를 SurveyWrite 컴포넌트로 전달
           selectedProjectId={selectedProjectId} // 선택된 프로젝트 ID 전달

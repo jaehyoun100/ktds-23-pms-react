@@ -5,13 +5,17 @@ import s from "../project.module.css";
 import styles from "../Calendar.module.css";
 import Button from "../../common/Button/Button";
 import { format } from "date-fns";
+import { jwtDecode } from "jwt-decode";
 
-const CalendarComponent = ({ events, saveMemo, memoRef, isNeedRender, setNeedRender, setIsHaveData, main }) => {
+const CalendarComponent = ({ events, saveMemo, memoRef, isNeedRender, setNeedRender, setIsHaveData, main, pm }) => {
   const [date, setDate] = useState(new Date());
   const [memo, setMemo] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const memoHiddenRef = useRef(null);
   const todoHiddenRef = useRef(null);
+
+  const token = localStorage.getItem("token");
+  const userData = jwtDecode(token).user;
 
   useEffect(() => {
     if (selectedDate && memoHiddenRef.current) {
@@ -112,6 +116,7 @@ const CalendarComponent = ({ events, saveMemo, memoRef, isNeedRender, setNeedRen
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
               placeholder="메모 작성하기"
+              readOnly={userData?.admnCode === "301" || pm === userData?.empId ? false : true}
             />
             <div style={{ display: "flex", justifyContent: "right" }}>
               <div
@@ -121,7 +126,9 @@ const CalendarComponent = ({ events, saveMemo, memoRef, isNeedRender, setNeedRen
                   marginRight: "10px",
                 }}
               >
-                <Button onClickHandler={handleSaveMemo} children="메모 저장" />
+                {userData && (userData.admnCode === "301" || pm === userData.empId) && (
+                  <Button onClickHandler={handleSaveMemo} children="메모 저장" />
+                )}
               </div>
               <div style={{ textAlign: "right", marginTop: "10px" }}>
                 <Button onClickHandler={handleChangeMemo} children="할일 보기" />

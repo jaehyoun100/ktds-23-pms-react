@@ -10,6 +10,7 @@ import { IoPersonCircleSharp } from "react-icons/io5";
 import MainHeader from "../MainHeader";
 import { addTmmate, deleteTmmate, getEmp, getEmpData } from "../../../../http/projectHttp";
 import TeammateEmpInfo from "./TeammateEmpInfo";
+import { jwtDecode } from "jwt-decode";
 
 export default function TeamMate() {
   const [teammateList, setTeammateList] = useState([]);
@@ -34,11 +35,10 @@ export default function TeamMate() {
 
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+  const userInfo = jwtDecode(token).user;
+
   const location = useLocation();
-  const tokenInfo = useSelector((state) => ({
-    token: state.tokenInfo.token,
-    credentialsExpired: state.tokenInfo.credentialsExpired,
-  }));
 
   useEffect(() => {
     console.log(selectedData, selectedRoleData);
@@ -60,8 +60,8 @@ export default function TeamMate() {
   const memoizedGetEmp = useCallback(getEmp, []);
 
   useEffect(() => {
-    memoizedGetEmp(deptId, tokenInfo.token, setMemberList);
-  }, [deptId, tokenInfo.token, memoizedGetEmp]);
+    memoizedGetEmp(deptId, token, setMemberList);
+  }, [deptId, token, memoizedGetEmp]);
 
   const buttonGroupHiddenRef = useRef(null);
   const buttonHiddenRef = useRef(null);
@@ -102,7 +102,7 @@ export default function TeamMate() {
   useEffect(() => {
     const sendRequest = async () => {
       if (willInsertData.length > 0 && isPossible) {
-        const json = await memoizeAddTmmate(tokenInfo.token, project, willInsertData);
+        const json = await memoizeAddTmmate(token, project, willInsertData);
         if (json.status === 200) {
           setIsEditing(false);
           navigate("/project/view", { state: { key: project } });
@@ -167,11 +167,11 @@ export default function TeamMate() {
   const memoizedGetEmpData = useCallback(getEmpData, []);
   useEffect(() => {
     const data = async () => {
-      const getdata = await memoizedGetEmpData(lastModifyData, tokenInfo.token);
+      const getdata = await memoizedGetEmpData(lastModifyData, token);
       await setSelectedEmpData(getdata.body);
     };
     data();
-  }, [lastModifyData, tokenInfo.token, memoizedGetEmpData]);
+  }, [lastModifyData, token, memoizedGetEmpData]);
 
   useEffect(() => {
     if (lastModifiedIndex !== null) {
@@ -192,20 +192,7 @@ export default function TeamMate() {
 
   const memoizeDeleteTmmate = useCallback(deleteTmmate, []);
   const onTeammateDeleteHandler = async (item) => {
-    // const res = await fetch("http://localhost:8080/api/project/teammate", {
-    //   method: "DELETE",
-    //   headers: {
-    //     Authorization: tokenInfo.token,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     prjId: project.prjId,
-    //     tmId: item.tmId,
-    //   }),
-    // });
-    // const json = await res.json();
-    const json = await memoizeDeleteTmmate(tokenInfo.token, project, item);
-    console.log(json.status);
+    const json = await memoizeDeleteTmmate(token, project, item);
     if (json.status) {
       navigate("/project/view", { state: { key: project } });
     }
@@ -300,40 +287,44 @@ export default function TeamMate() {
               </tbody>
             </table>
           </div>
-          <div className={s.teamMateButtonArea}>
-            <div ref={buttonHiddenRef}>
-              <Button onClickHandler={onModifyClickHandler} children="참여원 추가" />
-              <Button onClickHandler={onDeleteClickHandler} children="참여원 삭제" />
+          {userInfo && (userInfo.admnCode === "301" || userInfo.empId === pm) && (
+            <div className={s.teamMateButtonArea}>
+              <div ref={buttonHiddenRef}>
+                <Button onClickHandler={onModifyClickHandler} children="참여원 추가" />
+                <Button onClickHandler={onDeleteClickHandler} children="참여원 삭제" />
+              </div>
+              <div ref={buttonGroupHiddenRef}>
+                <Button onClickHandler={onPlusClickHandler} children="줄 추가" />
+                <Button onClickHandler={onSaveClickHandler} children="저장" />
+                <Button onClickHandler={onCancelClickHandler} children="취소" />
+              </div>
+              <div ref={cancelButtonGroupHiddenRef}>
+                <Button onClickHandler={onCancelClickHandler} children="취소" />
+              </div>
             </div>
-            <div ref={buttonGroupHiddenRef}>
-              <Button onClickHandler={onPlusClickHandler} children="줄 추가" />
-              <Button onClickHandler={onSaveClickHandler} children="저장" />
-              <Button onClickHandler={onCancelClickHandler} children="취소" />
-            </div>
-            <div ref={cancelButtonGroupHiddenRef}>
-              <Button onClickHandler={onCancelClickHandler} children="취소" />
-            </div>
-          </div>
+          )}
         </div>
-        <div className={s.teamMateEmpArea}>
-          <div
-            className={s.teamMateEmpPhoto}
-            style={{
-              backgroundImage: `url(${
-                selectedEmpData?.originPrflFileName
-                  ? selectedEmpData.originPrflFileName
-                  : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
-              })`,
-            }}
-          >
-            {/* {selectedEmpData && selectedEmpData.originPrflFileName !== null ? (
+        {userInfo && (userInfo.admnCode === "301" || userInfo.empId === pm) && (
+          <div className={s.teamMateEmpArea}>
+            <div
+              className={s.teamMateEmpPhoto}
+              style={{
+                backgroundImage: `url(${
+                  selectedEmpData?.originPrflFileName
+                    ? selectedEmpData.originPrflFileName
+                    : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
+                })`,
+              }}
+            >
+              {/* {selectedEmpData && selectedEmpData.originPrflFileName !== null ? (
               selectedEmpData.originPrflFileName
             ) : (
               <IoPersonCircleSharp />
             )} */}
+            </div>
+            <TeammateEmpInfo empData={selectedEmpData && selectedEmpData} />
           </div>
-          <TeammateEmpInfo empData={selectedEmpData && selectedEmpData} />
-        </div>
+        )}
       </div>
     </div>
   );
