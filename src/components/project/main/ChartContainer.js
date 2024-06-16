@@ -4,10 +4,10 @@ import styles from "../project.module.css";
 export default function ChartContainer({ chartData, totalEmpCnt }) {
   // const [chartData1, setChartData1] = useState({ completed: 30, inProgress: 20 });
   // const [chartData2, setChartData2] = useState({ completed: 40, inProgress: 10 });
-  const completed1 = chartData[5];
-  const completed2 = chartData[2];
-  const completed3 = chartData[3];
-  const inProgress1 = chartData[4] - chartData[5];
+  const completed1 = chartData && chartData[5];
+  const completed2 = chartData && chartData[2];
+  const completed3 = chartData && chartData[3];
+  const inProgress1 = chartData && chartData[4] - chartData[5];
   const inProgress2 = totalEmpCnt - completed2;
   const inProgress3 = totalEmpCnt - completed3;
 
