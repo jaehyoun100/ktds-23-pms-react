@@ -22,9 +22,6 @@ export default function OutoutWrite() {
 
   const token = localStorage.getItem("token");
 
-  // const query = new URLSearchParams(useLocation().search);
-  // const prjIdValue = query.get("prjId");
-
   // FormData 전송을 위한 Ref
   const outTtlRef = useRef(); // 산출물 제목
   const prjIdRef = useRef(); // 프로젝트 ID

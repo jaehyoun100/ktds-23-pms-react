@@ -27,8 +27,9 @@ export default function Output() {
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
 
-  // const query = new URLSearchParams(useLocation().search);
-  // const prjId = query.get("prjId");
+  const query = new URLSearchParams(useLocation().search);
+  const prjNameValue = query.get("prjName");
+
   const { prjIdValue } = useParams();
 
   const onOutputModifyHandler = (outputId) => {
@@ -48,8 +49,8 @@ export default function Output() {
     }
   };
 
-  const onOutputCreateHandler = (prjName) => {
-    navigate(`/output/${prjIdValue}/write?prjName=${prjName}`);
+  const onOutputCreateHandler = () => {
+    navigate(`/output/${prjIdValue}/write?prjName=${prjNameValue}`);
   };
 
   const onFileClickHandler = async (outputId, fileName) => {
@@ -152,7 +153,7 @@ export default function Output() {
   const columns = [
     {
       title: "프로젝트",
-      dataIndex: ["projectVO", "prjName"],
+      dataIndex: ["project", "prjName"],
       key: "prjName",
       width: "10%",
     },
@@ -170,15 +171,29 @@ export default function Output() {
     },
     {
       title: "버전",
+      // {item.outVerSts.cmcdName} Ver.{item.level}
       dataIndex: ["outVerSts", "cmcdName"],
       key: "cmcdName",
       width: "10%",
+      render: (data, row) => (
+        <span>
+          {data} Ver.{row.level}
+        </span>
+      ),
     },
     {
       title: "파일명",
       dataIndex: "outFile",
       key: "outFile",
       width: "10%",
+      render: (data, row) => (
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={() => onFileClickHandler(row.outId, row.outFile)}
+        >
+          {data}
+        </span>
+      ),
     },
     {
       title: "작성자",
@@ -194,139 +209,193 @@ export default function Output() {
     },
     {
       title: "수정",
-      dataIndex: "",
-      key: "",
       width: "10%",
+
+      // {userData.empName === item.crtrIdVO.empName ||
+      //   userData.admnCode === "301" ? (
+      //     <button
+      //       onClick={() => onOutputModifyHandler(item.outId)}
+      //     >
+      //       수정
+      //     </button>
+      //   ) : (
+      //     <button
+      //       onClick={() => onOutputModifyHandler(item.outId)}
+      //       disabled
+      //     >
+      //       수정
+      //     </button>
+      //   )}
+
+      render: (data, row) => {
+        // <span
+        //   style={{ cursor: "pointer" }}
+        //   onClick={() => onOutputModifyHandler(row.outId)}
+        // >
+        //   {data}
+        // </span>
+
+        if (
+          userData.empName === row.crtrIdVO.empName ||
+          userData.admnCode === "301"
+        ) {
+          return (
+            <button onClick={() => onOutputModifyHandler(row.outId)}>
+              수정
+            </button>
+          );
+        } else {
+          return (
+            <button onClick={() => onOutputModifyHandler(row.outId)} disabled>
+              수정
+            </button>
+          );
+        }
+      },
     },
     {
       title: "삭제",
-      dataIndex: "",
-      key: "",
       width: "10%",
+      render: (data, row) => {
+        if (
+          userData.empName === row.crtrIdVO.empName ||
+          userData.admnCode === "301"
+        ) {
+          return (
+            <button onClick={() => onOutputDeleteHandler(row.outId)}>
+              삭제
+            </button>
+          );
+        } else {
+          return (
+            <button onClick={() => onOutputDeleteHandler(row.outId)} disabled>
+              삭제
+            </button>
+          );
+        }
+      },
     },
   ];
 
   // 검색 필터
   const filterOptions = [
     {
-      label: "프로젝트",
-      value: "prjName",
-    },
-    {
       label: "제목",
       value: "outTtl",
-    },
-    {
-      label: "작성자",
-      value: "empName",
     },
   ];
 
   return (
     <>
       {/** 데이터가 불러와졌고, 수정모드가 아니면  */}
-      {data && userData && (
+      {data.outputList && userData && (
         <>
-          {!isModifyMode && data.listCnt > 0 ? (
+          {!isModifyMode && data.listCnt > 0 && (
+            // (
+            //   <>
+            //     <div>총 {data.listCnt}개의 산출물이 검색되었습니다.</div>
+            //     <table>
+            //       <thead>
+            //         <tr>
+            //           <th>프로젝트</th>
+            //           <th>산출물 제목</th>
+            //           <th>산출물 종류</th>
+            //           <th>버전</th>
+            //           <th>파일명</th>
+            //           <th>작성자</th>
+            //           <th>등록일</th>
+            //           <th>수정</th>
+            //           <th>삭제</th>
+            //         </tr>
+            //       </thead>
+            //       <tbody>
+            //         {data &&
+            //           data.outputList.map((item) => (
+            //             <tr key={item.outId}>
+            //               <td>{item.project.prjName}</td>
+            //               <td>{item.outTtl}</td>
+            //               <td>{item.outTypeVO.cmcdName}</td>
+            //               <td>
+            //                 {item.outVerSts.cmcdName} Ver.{item.level}
+            //               </td>
+            //               <td>
+            //                 <div
+            //                   onClick={() =>
+            //                     onFileClickHandler(item.outId, item.outFile)
+            //                   }
+            //                 >
+            //                   {item.outFile}
+            //                 </div>
+            //               </td>
+            //               <td>{item.crtrIdVO.empName}</td>
+            //               <td>{item.crtDt}</td>
+            //               <td>
+            //                 {/** 로그인한 유저가 작성자이거나 관리자이면 버튼 활성화 */}
+            //                 {userData.empName === item.crtrIdVO.empName ||
+            //                 userData.admnCode === "301" ? (
+            //                   <button
+            //                     onClick={() => onOutputModifyHandler(item.outId)}
+            //                   >
+            //                     수정
+            //                   </button>
+            //                 ) : (
+            //                   <button
+            //                     onClick={() => onOutputModifyHandler(item.outId)}
+            //                     disabled
+            //                   >
+            //                     수정
+            //                   </button>
+            //                 )}
+            //               </td>
+            //               <td>
+            //                 {/** (로그인한 유저가 작성자이거나 관리자이거나 PM or PL 이거나
+            //                  * 팀원에 속해있을때) 버튼 활성화 */}
+            //                 {userData.empName === item.crtrIdVO.empName ||
+            //                 userData.admnCode === "301" ? (
+            //                   <button
+            //                     onClick={() => onOutputDeleteHandler(item.outId)}
+            //                   >
+            //                     삭제
+            //                   </button>
+            //                 ) : (
+            //                   <button
+            //                     onClick={() => onOutputDeleteHandler(item.outId)}
+            //                     disabled
+            //                   >
+            //                     삭제
+            //                   </button>
+            //                 )}
+            //               </td>
+            //             </tr>
+            //           ))}
+            //       </tbody>
+            //     </table>
+            //   </>
+            // ) : (
+            //   <>
+            //     {!isModifyMode && (
+            //       <div>해당 프로젝트에 대한 산출물이 없습니다.</div>
+            //     )}
+            //   </>
+            // )}
+
             <>
-              <div>총 {data.listCnt}개의 산출물이 검색되었습니다.</div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>프로젝트</th>
-                    <th>산출물 제목</th>
-                    <th>산출물 종류</th>
-                    <th>버전</th>
-                    <th>파일명</th>
-                    <th>작성자</th>
-                    <th>등록일</th>
-                    <th>수정</th>
-                    <th>삭제</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data &&
-                    data.outputList.map((item) => (
-                      <tr key={item.outId}>
-                        <td>{item.project.prjName}</td>
-                        <td>{item.outTtl}</td>
-                        <td>{item.outTypeVO.cmcdName}</td>
-                        <td>
-                          {item.outVerSts.cmcdName} Ver.{item.level}
-                        </td>
-                        <td>
-                          <div
-                            onClick={() =>
-                              onFileClickHandler(item.outId, item.outFile)
-                            }
-                          >
-                            {item.outFile}
-                          </div>
-                        </td>
-                        <td>{item.crtrIdVO.empName}</td>
-                        <td>{item.crtDt}</td>
-                        <td>
-                          {/** 로그인한 유저가 작성자이거나 관리자이면 버튼 활성화 */}
-                          {userData.empName === item.crtrIdVO.empName ||
-                          userData.admnCode === "301" ? (
-                            <button
-                              onClick={() => onOutputModifyHandler(item.outId)}
-                            >
-                              수정
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => onOutputModifyHandler(item.outId)}
-                              disabled
-                            >
-                              수정
-                            </button>
-                          )}
-                        </td>
-                        <td>
-                          {/** (로그인한 유저가 작성자이거나 관리자이거나 PM or PL 이거나
-                           * 팀원에 속해있을때) 버튼 활성화 */}
-                          {userData.empName === item.crtrIdVO.empName ||
-                          userData.admnCode === "301" ? (
-                            <button
-                              onClick={() => onOutputDeleteHandler(item.outId)}
-                            >
-                              삭제
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => onOutputDeleteHandler(item.outId)}
-                              disabled
-                            >
-                              삭제
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </>
-          ) : (
-            <>
-              {!isModifyMode && (
-                <div>해당 프로젝트에 대한 산출물이 없습니다.</div>
+              {token && (
+                <>
+                  <div style={{ marginBottom: "20px" }}>
+                    총 {data.listCnt}개의 산출물이 검색되었습니다.
+                  </div>
+                  <Table
+                    columns={columns}
+                    dataSource={data.outputList}
+                    rowKey={(dt) => dt.rqmId}
+                    filter
+                    filterOptions={filterOptions}
+                  />
+                </>
               )}
             </>
           )}
-
-          {/* {token && (
-        <>
-          <div>총 {count}개의 요구사항이 검색되었습니다.</div>
-          <Table
-            columns={columns}
-            dataSource={data}
-            rowKey={(dt) => dt.rqmId}
-            filter
-            filterOptions={filterOptions}
-          />
-        </>
-      )} */}
 
           {isModifyMode && (
             <OutputModify
@@ -348,14 +417,7 @@ export default function Output() {
               isPmAndPl === true ||
               isUserInTeam) && (
               <div className="button-area right-align">
-                <button>삭제</button>
-                <button
-                  onClick={() =>
-                    onOutputCreateHandler(data.outputList[0].project.prjName)
-                  }
-                >
-                  산출물 생성
-                </button>
+                <button onClick={onOutputCreateHandler}>산출물 생성</button>
               </div>
             )}
         </>

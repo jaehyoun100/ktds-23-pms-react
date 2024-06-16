@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   loadRequirements,
   loadTeamListByPrjId,
@@ -16,6 +16,9 @@ export default function Requirement() {
 
   const token = localStorage.getItem("token");
 
+  const query = new URLSearchParams(useLocation().search);
+  const prjNameValue = query.get("prjName");
+
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
@@ -24,8 +27,8 @@ export default function Requirement() {
   // const prjId = query.get("prjId");
   const { prjIdValue } = useParams();
 
-  const onRqmCreateHandler = (prjName) => {
-    navigate(`/requirement/${prjIdValue}/write?prjName=${prjName}`);
+  const onRqmCreateHandler = () => {
+    navigate(`/requirement/${prjIdValue}/write?prjName=${prjNameValue}`);
   };
 
   const rqmTtlClickHandler = (prjId, rqmId) => {
@@ -81,8 +84,6 @@ export default function Requirement() {
 
   const { requirementList: data, isPmAndPl } = requirement || {};
 
-  console.log("data.requirementList: ", data.requirementList);
-
   // 로그인한 사원이 프로젝트의 팀원에 속해 있으면 true, 아니면 false 반환.
   const isUserInTeam =
     userData &&
@@ -111,7 +112,10 @@ export default function Requirement() {
       render: (data, row) => (
         <span
           style={{ cursor: "pointer" }}
-          onClick={() => navigate(`/employee/view/${row.empId}`)}
+          // onClick={() => navigate(`/employee/view/${row.empId}`)}
+          onClick={() =>
+            navigate(`/requirement/view?prjId=${row.prjId}&rqmId=${row.rqmId}`)
+          }
         >
           {data}
         </span>
@@ -146,16 +150,8 @@ export default function Requirement() {
   // 검색 필터
   const filterOptions = [
     {
-      label: "프로젝트",
-      value: "prjName",
-    },
-    {
       label: "제목",
       value: "rqmTtl",
-    },
-    {
-      label: "작성자",
-      value: "empName",
     },
   ];
 
@@ -165,55 +161,63 @@ export default function Requirement() {
       {data.requirementList && userData && (
         <>
           {userData && data.count > 0 ? (
+            // (
+            //   <>
+            //     <div>총 {data.count}개의 요구사항이 검색되었습니다.</div>
+            //     <table>
+            //       <thead>
+            //         <tr>
+            //           <th>프로젝트</th>
+            //           <th>제목</th>
+            //           <th>일정상태</th>
+            //           <th>진행상태</th>
+            //           <th>작성자</th>
+            //           <th>작성일</th>
+            //         </tr>
+            //       </thead>
+            //       <tbody>
+            //         {data &&
+            //           data.requirementList.map((item) => (
+            //             <tr key={item.rqmId}>
+            //               <td>{item.projectVO.prjName}</td>
+            //               <td
+            //                 onClick={() =>
+            //                   rqmTtlClickHandler(item.projectVO.prjId, item.rqmId)
+            //                 }
+            //               >
+            //                 {item.rqmTtl}
+            //               </td>
+            //               <td>{item.scdStsVO.cmcdName}</td>
+            //               <td>{item.rqmStsVO.cmcdName}</td>
+            //               <td>{item.crtrIdVO.empName}</td>
+            //               <td>{item.crtDt}</td>
+            //             </tr>
+            //           ))}
+            //       </tbody>
+            //     </table>
+            //   </>
+            // ) : (
+            //   <div>해당 프로젝트에 대한 요구사항이 없습니다.</div>
+            // )}
             <>
-              <div>총 {data.count}개의 요구사항이 검색되었습니다.</div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>프로젝트</th>
-                    <th>제목</th>
-                    <th>일정상태</th>
-                    <th>진행상태</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data &&
-                    data.requirementList.map((item) => (
-                      <tr key={item.rqmId}>
-                        <td>{item.projectVO.prjName}</td>
-                        <td
-                          onClick={() =>
-                            rqmTtlClickHandler(item.projectVO.prjId, item.rqmId)
-                          }
-                        >
-                          {item.rqmTtl}
-                        </td>
-                        <td>{item.scdStsVO.cmcdName}</td>
-                        <td>{item.rqmStsVO.cmcdName}</td>
-                        <td>{item.crtrIdVO.empName}</td>
-                        <td>{item.crtDt}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+              {token && (
+                <>
+                  <div style={{ marginBottom: "20px" }}>
+                    총 {data.count}개의 요구사항이 검색되었습니다.
+                  </div>
+                  <Table
+                    columns={columns}
+                    dataSource={data.requirementList}
+                    rowKey={(dt) => dt.rqmId}
+                    filter
+                    filterOptions={filterOptions}
+                  />
+                </>
+              )}
             </>
           ) : (
             <div>해당 프로젝트에 대한 요구사항이 없습니다.</div>
           )}
-          {/* {token && (
-        <>
-          <div>총 {count}개의 요구사항이 검색되었습니다.</div>
-          <Table
-            columns={columns}
-            dataSource={data}
-            rowKey={(dt) => dt.rqmId}
-            filter
-            filterOptions={filterOptions}
-          />
-        </>
-      )} */}
 
           {/** 산출물 정보가 로그되고, 로그인 사용자정보가 로드되고,
            * 로그인한 사원이 관리자이거나 PM or PL 이거나 팀원일때 버튼 보여주기 */}
@@ -223,16 +227,8 @@ export default function Requirement() {
               isPmAndPl === true ||
               isUserInTeam) && (
               <div className="button-area right-align">
-                <button>삭제</button>
-                <button
-                  onClick={() =>
-                    onRqmCreateHandler(
-                      data.requirementList[0].projectVO.prjName
-                    )
-                  }
-                >
-                  요구사항 생성
-                </button>
+                {/* <button>삭제</button> */}
+                <button onClick={onRqmCreateHandler}>요구사항 생성</button>
               </div>
             )}
         </>
