@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -160,7 +154,7 @@ export default function InputPopup({
           return (
             <Radio.Group
               value={editData[dataIndex]}
-              defaultValue={option[0].value}
+              initialValues={option[0].value}
               onChange={handleInputChange(dataIndex)}
               options={option}
               disabled={readOnly}
@@ -254,30 +248,28 @@ export default function InputPopup({
             colon={false}
             onFinishFailed={handleScrollToField}
           >
-            {options.map(
-              ({ type, dataIndex, title, option, required, readOnly }) => (
-                <Form.Item
-                  label={title}
-                  name={dataIndex}
-                  key={dataIndex}
-                  rules={[
-                    {
-                      required,
-                      message: `${title}을(를) 입력해주세요.`,
-                    },
-                  ]}
-                >
-                  {renderInput({
-                    type,
-                    dataIndex,
-                    title,
-                    option,
+            {options.map(({ type, dataIndex, title, option, required, readOnly }) => (
+              <Form.Item
+                label={title}
+                name={dataIndex}
+                key={dataIndex}
+                rules={[
+                  {
                     required,
-                    readOnly,
-                  })}
-                </Form.Item>
-              )
-            )}
+                    message: `${title}을(를) 입력해주세요.`,
+                  },
+                ]}
+              >
+                {renderInput({
+                  type,
+                  dataIndex,
+                  title,
+                  option,
+                  required,
+                  readOnly,
+                })}
+              </Form.Item>
+            ))}
           </Form>
         </div>
         {/* </Scrollbar> */}

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import RegBtn from "./components/Popup/RegBtn";
 import { handleRegistEmployee, loadData } from "../../http/employeeHttp";
 import dayjs from "dayjs";
+import axios from "axios";
 
 const defaultValues = {
   empName: "",
@@ -42,9 +43,10 @@ export default function EmployeeApp() {
     depart: [],
     team: [],
     job: [],
-    grade: [],
+    position: [],
     workSts: [],
   });
+  const [userInfo, setUserInfo] = useState({});
 
   // const [error, setError] = useState();
   const { token } = useSelector((state) => state.tokenInfo); // Redux에서 토큰 정보 가져오기
@@ -56,21 +58,47 @@ export default function EmployeeApp() {
     }
   }, [token]);
 
+  const loadEmployeeList = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/v1/employeeList", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setData(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
+
   const url =
-    "http://" +
-    (window.location.host === "43.202.29.221"
-      ? "43.202.29.221"
-      : "localhost:8080");
+    "http://" + (window.location.host === "43.202.29.221" ? "43.202.29.221" : "localhost:8080");
 
   const loadDataLists = useCallback(async () => {
-    const response = await fetch(`${url}/api/v1/employee/data`, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const json = await response.json();
-    setDataList(json.body);
+    try {
+      const res = await axios.get(`${url}/api/v1/employee/data`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setDataList(res.data);
+    } catch (error) {
+      console.error(error);
+    }
   }, [token, url]);
+
+  const loadUserInfo = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setUserInfo(res.data.body);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [token]);
 
   const inputOptions = useMemo(
     () => [
@@ -128,7 +156,7 @@ export default function EmployeeApp() {
         title: "직급",
         type: "select",
         dataIndex: "pstnId",
-        option: dataList.grade.map(({ dataId, dataName }) => ({
+        option: dataList.position.map(({ dataId, dataName }) => ({
           label: dataName,
           value: dataId,
         })),
@@ -184,24 +212,21 @@ export default function EmployeeApp() {
       // ),
       // 위와같이, dataIndex를 지정하지 않는 경우에는 첫번째 인자로 row를 받을 수 있다.
       render: (data, row) => (
-        <span
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate(`/employee/${row.empId}`)}
-        >
+        <span style={{ cursor: "pointer" }} onClick={() => navigate(`/employee/${row.empId}`)}>
           {data}
         </span>
       ),
     },
     {
       title: "부서",
-      dataIndex: ["departmentVO", "deptName"],
+      dataIndex: "deptName",
       key: "deptName",
       width: "20%",
       // 데이터의 구조가, 하위뎁스로 내려가는 경우 데이터 인덱스는, 위와같이 배열로 입력한다.
     },
     {
       title: "팀",
-      dataIndex: ["teamVO", "tmName"],
+      dataIndex: "tmName",
       key: "tmName",
       width: "20%",
     },
@@ -245,19 +270,22 @@ export default function EmployeeApp() {
   const handleAddEmployee = useCallback(
     async (data) => {
       await handleRegistEmployee({ data, token });
-      await fetchData(); // 데이터 다시 불러오기
+      // await fetchData(); // 데이터 다시 불러오기
+      loadEmployeeList();
     },
-    [token, fetchData]
+    [token]
   );
 
   useEffect(() => {
     loadDataLists();
-    fetchData();
+    // fetchData();
+    loadUserInfo();
+    loadEmployeeList();
   }, [loadDataLists, fetchData]);
 
   return (
     <>
-      <div>총 {data.length}명이 조회되었습니다.</div>
+      <div>총 {data?.length}명이 조회되었습니다.</div>
       <br />
       <Table
         columns={columns}
@@ -266,17 +294,15 @@ export default function EmployeeApp() {
         filter
         filterOptions={filterOptions}
       />
-      {/* {
-        userInfo.deptId === "DEPT_230101_000010" &&
-      <Button style={{ borderColor: "#fff", float: "right" }}>{btnText || "사원등록"}</Button>
-      } */}
-      <RegBtn
-        data={registData}
-        defaultValues={defaultValues}
-        options={inputOptions}
-        btnText="사원등록"
-        onOk={handleAddEmployee}
-      />
+      {userInfo?.mngrYn === "Y" && (
+        <RegBtn
+          data={registData}
+          defaultValues={defaultValues}
+          options={inputOptions}
+          btnText="사원등록"
+          onOk={handleAddEmployee}
+        />
+      )}
     </>
   );
 }
