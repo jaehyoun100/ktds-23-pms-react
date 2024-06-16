@@ -94,38 +94,9 @@ export default function OutputModify({
 
   return (
     <>
-      <div className="writeAndModifyGrid">
-        {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
-        <label htmlFor="out-ttl">산출물 제목</label>
-        <div className="ttlInput">
-          <input
-            type="text"
-            name="outTtl"
-            id="out-ttl"
-            ref={outTtlRef}
-            defaultValue={output.outTtl}
-          />
-          {modifyErrors.outTtl && modifyErrors.outTtl.length > 0 && (
-            <div className={styles.errorMessage}>{modifyErrors.outTtl}</div>
-          )}
-        </div>
-
+      <div className={styles.writeAndModifyGrid}>
         <label htmlFor="prj-id">프로젝트</label>
         <div>
-          {/* <select
-            name="prjId"
-            id="prj-id"
-            ref={prjIdRef}
-            defaultValue={output.prjId}
-          >
-            <option value="">프로젝트를 선택해주세요</option>
-            {projectList &&
-              projectList.map((item) => (
-                <option value={item.prjId} key={item.prjId}>
-                  {item.prjName}
-                </option>
-              ))}
-          </select> */}
           <input
             type="text"
             id="prj-id"
@@ -137,6 +108,20 @@ export default function OutputModify({
 
           {modifyErrors.prjId && modifyErrors.prjId.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.prjId}</div>
+          )}
+        </div>
+
+        <label htmlFor="out-ttl">산출물 제목</label>
+        <div className="ttlInput">
+          <input
+            type="text"
+            name="outTtl"
+            id="out-ttl"
+            ref={outTtlRef}
+            defaultValue={output.outTtl}
+          />
+          {modifyErrors.outTtl && modifyErrors.outTtl.length > 0 && (
+            <div className={styles.errorMessage}>{modifyErrors.outTtl}</div>
           )}
         </div>
 
@@ -183,18 +168,22 @@ export default function OutputModify({
         </div>
 
         <label htmlFor="file">산출물 첨부파일</label>
-        <div>
+        <div className={styles.flexRow}>
           <input type="file" id="outFile" name="outFile" ref={fileRef} />
           {modifyErrors.outFile && modifyErrors.outFile.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.outFile}</div>
           )}
-          {output.outFile && <div>기존 파일명: {output.outFile}</div>}
+          {output.outFile && (
+            <div style={{ alignSelf: "center" }}>
+              기존 파일명: {output.outFile}
+            </div>
+          )}
         </div>
+      </div>
 
-        <div className="button-area right-align">
-          <button onClick={onCancelClickHandler}>취소</button>
-          <button onClick={onModifyClickHandler}>수정</button>
-        </div>
+      <div className={styles.buttonArea}>
+        <button onClick={onCancelClickHandler}>취소</button>
+        <button onClick={onModifyClickHandler}>수정</button>
       </div>
     </>
   );

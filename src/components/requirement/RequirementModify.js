@@ -170,40 +170,9 @@ export default function RequirementModify({
     <>
       {modifyRequirementData && (
         <>
-          <div className="writeAndModifyGrid">
-            <label htmlFor="rqm-ttl">요구사항 제목</label>
-            <div>
-              <input
-                type="text"
-                id="rqm-ttl"
-                name="rqmTtl"
-                ref={rqmTtlRef}
-                defaultValue={requirement.rqmTtl}
-              />
-              {modifyErrors.rqmTtl && modifyErrors.rqmTtl.length > 0 && (
-                <div className={styles.errorMessage}>{modifyErrors.rqmTtl}</div>
-              )}
-            </div>
-
-            {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
+          <div className={styles.writeAndModifyGrid}>
             <label htmlFor="prj-id">프로젝트</label>
             <div>
-              {/* <select
-                name="prjId"
-                id="prj-id"
-                ref={prjIdRef}
-                defaultValue={requirement.prjId}
-              >
-                <option value={requirement.prjId}>
-                  {requirement.projectVO.prjName}
-                </option>
-                {projectList &&
-                  projectList.map((item) => (
-                    <option value={item.prjId} key={item.prjId}>
-                      {item.prjName}
-                    </option>
-                  ))}
-              </select> */}
               <input
                 type="text"
                 id="prj-id"
@@ -215,6 +184,20 @@ export default function RequirementModify({
 
               {modifyErrors.prjId && modifyErrors.prjId.length > 0 && (
                 <div className={styles.errorMessage}>{modifyErrors.prjId}</div>
+              )}
+            </div>
+
+            <label htmlFor="rqm-ttl">요구사항 제목</label>
+            <div>
+              <input
+                type="text"
+                id="rqm-ttl"
+                name="rqmTtl"
+                ref={rqmTtlRef}
+                defaultValue={requirement.rqmTtl}
+              />
+              {modifyErrors.rqmTtl && modifyErrors.rqmTtl.length > 0 && (
+                <div className={styles.errorMessage}>{modifyErrors.rqmTtl}</div>
               )}
             </div>
 
@@ -317,7 +300,9 @@ export default function RequirementModify({
             <div>
               <input type="file" id="file" name="file" ref={fileRef} />
               {requirement.rqmFile && (
-                <div>기존 파일명: {requirement.rqmFile}</div>
+                <div style={{ alignSelf: "center" }}>
+                  기존 파일명: {requirement.rqmFile}
+                </div>
               )}
             </div>
 
@@ -395,11 +380,11 @@ export default function RequirementModify({
                 <div className={styles.errorMessage}>{modifyErrors.rqmSts}</div>
               )}
             </div>
+          </div>
 
-            <div className="button-area right-align">
-              <button onClick={onCancelClickHandler}>취소</button>
-              <button onClick={onModifyClickHandler}>수정</button>
-            </div>
+          <div className={styles.buttonArea}>
+            <button onClick={onCancelClickHandler}>취소</button>
+            <button onClick={onModifyClickHandler}>수정</button>
           </div>
         </>
       )}

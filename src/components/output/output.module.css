@@ -1,8 +1,22 @@
 .writeAndModifyGrid {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: repeat(6 40px);
+  grid-template-columns: 120px 1fr;
+  grid-template-rows: repeat(5, 40px);
+  gap: 5px;
+  align-items: center;
+}
+.writeAndModifyGrid > label {
+  margin: 0;
 }
 .errorMessage {
   color: #f03939;
+}
+
+.buttonArea {
+  text-align: right;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
 }

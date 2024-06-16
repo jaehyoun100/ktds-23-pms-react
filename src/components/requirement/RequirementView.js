@@ -214,11 +214,7 @@ export default function RequirementView() {
                   </div>
                   <div className={styles.mainItem}>작성일</div>
                   <div className={styles.subItem}>{data.crtDt}</div>
-                </div>
-              </div>
 
-              <div className={styles.subInfo}>
-                <div className={`${styles.grid}`}>
                   <div className={styles.mainItem}>일정상태</div>
                   <div className={styles.flexRow}>
                     <div className={styles.subItem}>
