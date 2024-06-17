@@ -30,6 +30,13 @@
   cursor: pointer;
 }
 
+/* RentalSupplyApp 버튼을 위한 스타일 */
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 /* RentalSupplyView 컴포넌트를 위한 css */
 .rentalSupplyViewContainer {
   background-color: #f9f9f9;
@@ -107,6 +114,13 @@
 .loadingText {
   font-size: 1rem;
   color: #999;
+}
+
+/* RentalSupplyView 버튼을 위한 스타일 */
+.rentalViewButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 /* RentalSupplyRegist 컴포넌트를 위한 css */

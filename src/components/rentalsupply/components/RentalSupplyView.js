@@ -108,7 +108,7 @@ export default function RentalSupplyView({ selectedRsplId }) {
             <span>{rentalSupplyBody.rsplDtl}</span>
           </div>
           {deptId === "DEPT_230101_000010" && (
-            <div>
+            <div className={style.rentalViewButtonContainer}>
               <button onClick={onRentalSupplyModificationModeClickHandler}>
                 수정
               </button>

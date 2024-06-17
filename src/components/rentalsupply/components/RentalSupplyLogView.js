@@ -62,41 +62,49 @@ export default function RentalSupplyLogView() {
       title: "신청인",
       dataIndex: "empName",
       key: "empName",
+      width: "16%",
     },
     {
       title: "신청 유형",
       dataIndex: "rsplRqstType",
       key: "rsplRqstType",
+      width: "12%",
     },
     {
       title: "카테고리",
       dataIndex: "rsplCtgr",
       key: "rsplCtgr",
+      width: "12%",
     },
     {
       title: "제품 명",
       dataIndex: "rsplName",
       key: "rsplName",
+      width: "12%",
     },
     {
       title: "신청 갯수",
       dataIndex: "rsplRqstQty",
       key: "rsplRqstQty",
+      width: "12%",
     },
     {
       title: "신청일",
       dataIndex: "reqDt",
       key: "reqDt",
+      width: "12%",
     },
     {
       title: "승인 여부",
       dataIndex: "rsplApprYn",
       key: "rsplApprYn",
+      width: "12%",
     },
     {
       title: "반납 여부",
       dataIndex: "rtrnYn",
       key: "rtrnYn",
+      width: "12%",
       render: (text, record) =>
         text && record.rsplApprYn !== "N" ? (
           <span>
@@ -140,7 +148,7 @@ export default function RentalSupplyLogView() {
 
   return (
     <>
-      <div className={style.rentalSupplyAppContainer}>
+      <div>
         <div className={style.rentalSupplyLogTableComponent}>
           <Table
             columns={columns}
@@ -151,7 +159,9 @@ export default function RentalSupplyLogView() {
           />
         </div>
       </div>
-      <button onClick={backToListButtonHandler}>목록으로</button>
+      <div className={style.buttonContainer}>
+        <button onClick={backToListButtonHandler}>목록으로</button>
+      </div>
     </>
   );
 }
