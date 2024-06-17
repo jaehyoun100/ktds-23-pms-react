@@ -25,13 +25,13 @@ export default function ContentTop() {
         <img className="logo-img" src={logoImg} alt="logo" />
       </div>
       <div className="content-top-right">
-        <SessionTimer />
+        {/* <SessionTimer /> */}
         <button type="button" className="admin-btn content-top-btn button-icon">
           <BsPersonLock className="top-icon" />
         </button>
-        <button className="notification-btn content-top-btn button-icon">
+        {/* <button className="notification-btn content-top-btn button-icon">
           <BsBell className="top-icon" />
-        </button>
+        </button> */}
         <button
           className="logout-btn content-top-btn button-icon"
           onClick={onLogoutBtnClickHandler}
