@@ -37,6 +37,8 @@ export default function RequirementWrite() {
 
   const location = useLocation();
   const projectValue = location.state || {};
+  console.log(">>>>>>>>>>", projectValue.project);
+  console.log(">>>>>>>>>>", projectValue.project.prjName);
 
   const token = localStorage.getItem("token");
 
@@ -62,7 +64,9 @@ export default function RequirementWrite() {
   const { prjIdValue } = useParams();
 
   const onClickHandler = () => {
-    navigate(`/requirement/${prjIdValue}`);
+    navigate(`/requirement/${prjIdValue}`, {
+      state: { project: projectValue.project },
+    });
   };
 
   useEffect(() => {
@@ -146,7 +150,9 @@ export default function RequirementWrite() {
 
       const json = await writeRequirement(token, formData);
       if (json.body === true) {
-        navigate(`/requirement/${prjIdValue}`);
+        navigate(`/requirement/${prjIdValue}`, {
+          state: { project: projectValue.project },
+        });
       }
       if (json.body !== (true || false)) {
         setWriteErrors(json.body);

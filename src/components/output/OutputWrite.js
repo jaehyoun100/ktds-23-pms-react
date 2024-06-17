@@ -39,7 +39,9 @@ export default function OutoutWrite() {
   const { prjIdValue } = useParams();
 
   const onClickHandler = () => {
-    navigate(`/output/${prjIdValue}`);
+    navigate(`/output/${prjIdValue}`, {
+      state: { project: projectValue.project },
+    });
   };
 
   const onWriteClickHandler = async () => {
@@ -75,7 +77,9 @@ export default function OutoutWrite() {
 
       const json = await writeOutput(token, formData);
       if (json.body === true) {
-        navigate(`/output/${prjIdValue}`);
+        navigate(`/output/${prjIdValue}`, {
+          state: { project: projectValue.project },
+        });
       }
       if (json.body !== (true || false)) {
         setWriteErrors(json.body);
