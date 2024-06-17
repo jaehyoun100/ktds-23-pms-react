@@ -162,10 +162,14 @@ const ProjectListApp = () => {
       width: "auto",
 
       render: (date) => {
+        const dataDate = new Date(date);
+        const sysdate = new Date();
+        let diff = Math.abs(dataDate.getTime() - sysdate.getTime());
+        diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
         return (
           <>
             {new Date(date) > new Date() ? (
-              "D - " + format(new Date(date) - new Date(), "d")
+              "D - " + diff
             ) : (
               <>{new Date(date) === new Date() ? "D - DAY" : "마감"}</>
             )}
