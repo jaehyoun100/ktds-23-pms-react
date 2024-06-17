@@ -15,6 +15,7 @@ export default function DepartmentCreate({
     {
       name: "",
       empId: "",
+      reason: "",
     },
   ]);
 
@@ -32,6 +33,7 @@ export default function DepartmentCreate({
       {
         name: "",
         empId: "",
+        reason: "",
       },
     ]);
   };
@@ -50,8 +52,8 @@ export default function DepartmentCreate({
 
   const onRegisterClickHandler = async () => {
     for (const field of inputFields) {
-      const { name, empId } = field;
-      const json = await createDepartment(token, name, empId);
+      const { name, empId, reason } = field;
+      const json = await createDepartment(token, name, empId, reason);
 
       if (json.errors) {
         json.errors.forEach((error) => {
@@ -113,6 +115,17 @@ export default function DepartmentCreate({
               name="empName"
               // value={inputField.empName}
               // onChange={(event) => handleInputChange(index, event)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`reason-${index}`}>부서 신청 사유</label>
+            <input
+              type="text"
+              id={`reason-${index}`}
+              name="reason"
+              value={inputField.reason}
+              defaultValue=""
+              onChange={(event) => handleInputChange(index, event)}
             />
           </div>
 
