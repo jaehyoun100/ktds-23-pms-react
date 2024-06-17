@@ -2,7 +2,7 @@ import { updateKnowledge } from "../../http/KnowledgeHttp";
 import { useRef, useState } from "react";
 import styles from "./Knowledge.module.css";
 
-export default function KnowUpate({
+export default function KnowledgeUpdate({
   knowledgeBody,
   setNeedReload,
   setIsUpdateMode,
@@ -44,8 +44,8 @@ export default function KnowUpate({
       });
     } else if (json.body) {
       alert("등록이 완료되었습니다");
-      //페이지 새로고침
-      window.location.reload();
+      setIsUpdateMode(false);
+      setNeedReload(Math.random());
     }
   };
 
@@ -74,16 +74,10 @@ export default function KnowUpate({
           ></textarea>
         </div>
         <div className={styles.knowledgeformbuttonarea}>
-          <button
-            className={styles.knowledgeformbutton}
-            onClick={onSaveClickHandler}
-          >
+          <button type="button" onClick={onSaveClickHandler}>
             등록
           </button>
-          <button
-            className={styles.knowledgeformbutton}
-            onClick={onCancelClickHandler}
-          >
+          <button type="button" onClick={onCancelClickHandler}>
             취소
           </button>
         </div>
