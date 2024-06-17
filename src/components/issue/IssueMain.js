@@ -1,47 +1,112 @@
-import { useCallback, useMemo, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { loadIssueList } from "../../http/issueHttp";
-import ViewIssue from "./ViewIssue";
-import WriteIssue from "./WriteIssue";
+import { useState, useEffect } from "react";
+import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
+import { loadIssue, loadTeamListByPrjId } from "../../http/issueHttp";
 import Table from "../../utils/Table";
 
-let pageNo = 0;
 export default function IssueMain() {
-  const [selectedSplId, setSelectedSplId] = useState();
-  const [issuelist, setIssue] = useState([]);
-  const [isCreateMode, setIsCreateMode] = useState(false);
-  const [needReload, setNeedReload] = useState();
-
-  //토큰 정보를 받는다
+  const [issue, setIssue] = useState({
+    issueList: [],
+    isPmAndPl: [],
+  });
+  const [teamList, setTeamList] = useState();
+  const [userData, setUserData] = useState();
   const token = localStorage.getItem("token");
 
-  const isSelect = selectedSplId !== undefined;
-  const memoizedLoadKnowLedgeList = useCallback(loadIssueList, []);
-  const memoizedToken = useMemo(() => {
-    return { token, needReload };
-  }, [token, needReload]);
+  const query = new URLSearchParams(useLocation().search);
+  const prjNameValue = query.get("prjName");
+
+  // React Router의 Path를 이동시키는 Hook
+  // Spring의 redirect와 유사.
+  const navigate = useNavigate();
+
+  // const query = new URLSearchParams(useLocation().search);
+  // const prjId = query.get("prjId");
+  const { prjIdValue } = useParams();
+
+  const onIsCreateHandler = () => {
+    navigate(`/issue/${prjIdValue}/write?prjName=${prjNameValue}`);
+  };
+
+  const isTtlClickHandler = (prjId, isId) => {
+    navigate(`/issue/view?prjId=${prjIdValue}&isId=${isId}`);
+  };
 
   useEffect(() => {
-    const fetchingData = async () => {
-      const json = await memoizedLoadKnowLedgeList({ ...memoizedToken });
+    if (!token) {
+      return;
+    }
+    const userInfo = async () => {
+      const response = await fetch("http://localhost:8080/api/", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+      const json = await response.json();
+      setUserData(json.body);
+    };
+    userInfo();
+  }, [token]);
 
-      setIssue(json.body);
-      setNeedReload(false);
+  useEffect(() => {
+    // 이슈 리스트 불러오기
+    const getIssueList = async () => {
+      const json = await loadIssue(token, prjIdValue);
+      const { issueList, isPmAndPl } = json.body;
+      setIssue({
+        issueList,
+        isPmAndPl,
+      });
     };
 
-    fetchingData();
-  }, [memoizedLoadKnowLedgeList, memoizedToken]);
+    getIssueList();
+  }, [token, prjIdValue]);
+
+  useEffect(() => {
+    const getTeammateList = async () => {
+      const json = await loadTeamListByPrjId(token, prjIdValue);
+
+      const { body: teammateData } = json;
+      const list = teammateData.map((item) => item.employeeVO);
+      setTeamList(list);
+    };
+
+    getTeammateList();
+  }, [token, prjIdValue]);
+
+  const { issueList: data, isPmAndPl } = issue || {};
+
+  const isTeammate =
+    userData &&
+    teamList &&
+    teamList.find((member) => member.empName === userData.empName) !== undefined
+      ? true
+      : false;
+
+  if (!data) {
+    return <div>Loading...</div>; // 데이터 로딩 중
+  }
 
   const columns = [
     {
       title: "제목",
       dataIndex: "isTtl",
       key: "isTtl",
+      render: (data, row) => (
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={() =>
+            navigate(`/issue/view?prjId=${row.prjId}&isId=${row.empId}`)
+          }
+        >
+          {data}
+        </span>
+      ),
     },
     {
-      title: "이슈",
-      dataIndex: "isId",
-      key: "isId",
+      title: "요구사항",
+      dataIndex: "rqmTtl",
+      key: "rqmTtl",
     },
     {
       title: "작성자",
@@ -94,22 +159,100 @@ export default function IssueMain() {
     },
   ];
 
-  // 상세보기 페이지
-  const onRowClickHandler = (rowId) => {
-    setSelectedSplId(rowId);
-  };
+  return (
+    <>
+      {data.issueList && userData && (
+        <>
+          {userData && data.count > 0 ? (
+            <>
+              {token && (
+                <>
+                  <div>총 {data.count}개의 요구사항이 검색되었습니다.</div>
+                  <Table
+                    columns={columns}
+                    dataSource={data.issueList}
+                    rowKey={(dt) => dt.isId}
+                    filter
+                    filterOptions={filterOptions}
+                  />
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <div>해당 요구사항에 대한 이슈가 없습니다.</div>
+              <Table
+                columns={columns}
+                dataSource={data.issueList}
+                rowkey={(dt) => dt.issueList}
+                filter
+                filterOptions={filterOptions}
+              />
+            </>
+          )}
+        </>
+      )}
 
-  const onCreateModeClickHandler = () => {
-    setIsCreateMode(true);
-  };
+      {data &&
+        userData &&
+        (userData.admnCode === "301" || isPmAndPl === true || isTeammate) && (
+          <div className="button-area right-allign">
+            <button onClick={onIsCreateHandler}>이슈 생성</button>
+          </div>
+        )}
+    </>
+  );
+}
+//     <div>{count}개의 이슈가 발견되었습니다.</div>
+//     <table>
+//       <thead>
+//         <tr>
+//           <th>이슈</th>
+//           <th>제목</th>
+//           <th>작성자</th>
+//           <th>난이도</th>
+//           <th>작성일</th>
+//         </tr>
+//       </thead>
+//       <tbody>
+//         {data &&
+//           data.map((item) => (
+//             <tr key={item.isId}>
+//               <td>{item.projectVO.prjName}</td>
+//               <td>
+//                 <Link
+//                   to={`/issue/view?prjId=${item.projectVO.prjId}&isId=${item.isId}`}
+//                 >
+//                   {item.isTtl}
+//                 </Link>
+//               </td>
+//               <td>{item.cmcdName}</td>
+//               <td>{item.crtrId}</td>
+//               <td>{item.crtDt}</td>
+//             </tr>
+//           ))}
+//       </tbody>
+//     </table>
+//   </>
+// ) : (
+//   <div>요구사항에 대한 이슈가 없습니다.</div>
+// )}
+//       <div className="button-area right-align">
+//         <button>삭제</button>
+//         <button onClick={onIsCreateHandler}>이슈 생성</button>
+//       </div>
+//     </>
+//   );
+// }
 
+/* 
   return (
     <>
       {token && !isSelect && !isCreateMode && (
         <>
           <Table
             columns={columns}
-            dataSource={issuelist}
+            dataSource={issueList}
             rowKey={(dt) => dt.isId}
             filter
             filterOptions={filterOptions}
@@ -122,7 +265,7 @@ export default function IssueMain() {
               };
             }}
           />
-          <button onClick={onCreateModeClickHandler}>이슈 등록</button>
+          <button onClick={onCreateModeClickHandler}>신규등록</button>
         </>
       )}
 
@@ -145,3 +288,4 @@ export default function IssueMain() {
     </>
   );
 }
+*/
