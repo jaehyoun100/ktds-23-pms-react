@@ -130,7 +130,7 @@
 }
 
 .menu-item:hover {
-  background-color: #fff;
+  background-color: var(--body-bg);
   color: var(--second-color);
   border-radius: 5px;
 }
