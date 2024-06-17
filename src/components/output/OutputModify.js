@@ -105,7 +105,6 @@ export default function OutputModify({
             defaultValue={prjName}
             readOnly
           />
-
           {modifyErrors.prjId && modifyErrors.prjId.length > 0 && (
             <div className={styles.errorMessage}>{modifyErrors.prjId}</div>
           )}

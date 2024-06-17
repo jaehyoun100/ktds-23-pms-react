@@ -15,7 +15,8 @@ export default function MainHeader({ project }) {
     <div className={styles.headerContainer}>
       <div className={styles.flex}>
         <h4>
-          <span>{project.prjName}</span> / <span style={{ fontSize: "20px" }}>{project.deptVO.deptName}</span>
+          <span>{project.prjName}</span> /{" "}
+          <span style={{ fontSize: "20px" }}>{project.deptVO.deptName}</span>
         </h4>
         <h6>PM : {project.pm.employeeVO.empName}</h6>
       </div>
@@ -39,19 +40,37 @@ export default function MainHeader({ project }) {
           참여원관리
         </span>
 
-        <span onClick={() => navigate(`/requirement/${project.prjId}?prjName=${project.prjName}`)}>요구사항</span>
+        <span
+          onClick={() =>
+            navigate(`/requirement/${project.prjId}`, { state: { project } })
+          }
+        >
+          요구사항
+        </span>
         <span>이슈관리</span>
         <span>문답</span>
-        <span onClick={() => navigate(`/output/${project.prjId}?prjName=${project.prjName}`)}>산출물</span>
+        <span
+          onClick={() =>
+            navigate(`/output/${project.prjId}`, {
+              state: { project },
+            })
+          }
+        >
+          산출물
+        </span>
         {userInfo.user.admnCode === "301" ? (
           <>
             <span>설문</span>
-            <span onClick={() => viewReviewResultHandler(project)}>후기 관리</span>
+            <span onClick={() => viewReviewResultHandler(project)}>
+              후기 관리
+            </span>
           </>
         ) : project.pm.tmId === userInfo.user.empId ? (
           <>
             <span>설문</span>
-            <span onClick={() => viewReviewResultHandler(project)}>후기 보기</span>
+            <span onClick={() => viewReviewResultHandler(project)}>
+              후기 보기
+            </span>
           </>
         ) : (
           <>

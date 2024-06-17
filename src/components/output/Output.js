@@ -5,9 +5,10 @@ import {
   loadTeamListByPrjId,
   outputFileDownload,
 } from "../../http/outputHttp";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import OutputModify from "./OutputModify";
 import Table from "../../utils/Table";
+import MainHeader from "../project/main/MainHeader";
 
 export default function Output() {
   const [output, setOutput] = useState({
@@ -22,13 +23,20 @@ export default function Output() {
 
   const [teamList, setTeamList] = useState();
   const [userData, setUserData] = useState();
+  const [project, setProject] = useState();
 
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
 
-  const query = new URLSearchParams(useLocation().search);
-  const prjNameValue = query.get("prjName");
+  const location = useLocation();
+  useMemo(() => {
+    const projectState = location.state || {};
+    setProject(projectState.project);
+  }, [location.state]);
+
+  // const query = new URLSearchParams(useLocation().search);
+  // const prjNameValue = query.get("prjName");
 
   const { prjIdValue } = useParams();
 
@@ -50,7 +58,7 @@ export default function Output() {
   };
 
   const onOutputCreateHandler = () => {
-    navigate(`/output/${prjIdValue}/write?prjName=${prjNameValue}`);
+    navigate(`/output/${prjIdValue}/write`, { state: { project } });
   };
 
   const onFileClickHandler = async (outputId, fileName) => {
@@ -155,13 +163,13 @@ export default function Output() {
       title: "프로젝트",
       dataIndex: ["project", "prjName"],
       key: "prjName",
-      width: "10%",
+      width: "25%",
     },
     {
       title: "산출물 제목",
       dataIndex: "outTtl",
       key: "outTtl",
-      width: "10%",
+      width: "auto",
     },
     {
       title: "산출물 종류",
@@ -205,11 +213,11 @@ export default function Output() {
       title: "등록일",
       dataIndex: "crtDt",
       key: "crtDt",
-      width: "10%",
+      width: "auto",
     },
     {
       title: "수정",
-      width: "10%",
+      width: "7%",
 
       // {userData.empName === item.crtrIdVO.empName ||
       //   userData.admnCode === "301" ? (
@@ -255,7 +263,7 @@ export default function Output() {
     },
     {
       title: "삭제",
-      width: "10%",
+      width: "7%",
       render: (data, row) => {
         if (
           userData.empName === row.crtrIdVO.empName ||
@@ -291,97 +299,10 @@ export default function Output() {
       {data.outputList && userData && (
         <>
           {!isModifyMode && data.listCnt > 0 && (
-            // (
-            //   <>
-            //     <div>총 {data.listCnt}개의 산출물이 검색되었습니다.</div>
-            //     <table>
-            //       <thead>
-            //         <tr>
-            //           <th>프로젝트</th>
-            //           <th>산출물 제목</th>
-            //           <th>산출물 종류</th>
-            //           <th>버전</th>
-            //           <th>파일명</th>
-            //           <th>작성자</th>
-            //           <th>등록일</th>
-            //           <th>수정</th>
-            //           <th>삭제</th>
-            //         </tr>
-            //       </thead>
-            //       <tbody>
-            //         {data &&
-            //           data.outputList.map((item) => (
-            //             <tr key={item.outId}>
-            //               <td>{item.project.prjName}</td>
-            //               <td>{item.outTtl}</td>
-            //               <td>{item.outTypeVO.cmcdName}</td>
-            //               <td>
-            //                 {item.outVerSts.cmcdName} Ver.{item.level}
-            //               </td>
-            //               <td>
-            //                 <div
-            //                   onClick={() =>
-            //                     onFileClickHandler(item.outId, item.outFile)
-            //                   }
-            //                 >
-            //                   {item.outFile}
-            //                 </div>
-            //               </td>
-            //               <td>{item.crtrIdVO.empName}</td>
-            //               <td>{item.crtDt}</td>
-            //               <td>
-            //                 {/** 로그인한 유저가 작성자이거나 관리자이면 버튼 활성화 */}
-            //                 {userData.empName === item.crtrIdVO.empName ||
-            //                 userData.admnCode === "301" ? (
-            //                   <button
-            //                     onClick={() => onOutputModifyHandler(item.outId)}
-            //                   >
-            //                     수정
-            //                   </button>
-            //                 ) : (
-            //                   <button
-            //                     onClick={() => onOutputModifyHandler(item.outId)}
-            //                     disabled
-            //                   >
-            //                     수정
-            //                   </button>
-            //                 )}
-            //               </td>
-            //               <td>
-            //                 {/** (로그인한 유저가 작성자이거나 관리자이거나 PM or PL 이거나
-            //                  * 팀원에 속해있을때) 버튼 활성화 */}
-            //                 {userData.empName === item.crtrIdVO.empName ||
-            //                 userData.admnCode === "301" ? (
-            //                   <button
-            //                     onClick={() => onOutputDeleteHandler(item.outId)}
-            //                   >
-            //                     삭제
-            //                   </button>
-            //                 ) : (
-            //                   <button
-            //                     onClick={() => onOutputDeleteHandler(item.outId)}
-            //                     disabled
-            //                   >
-            //                     삭제
-            //                   </button>
-            //                 )}
-            //               </td>
-            //             </tr>
-            //           ))}
-            //       </tbody>
-            //     </table>
-            //   </>
-            // ) : (
-            //   <>
-            //     {!isModifyMode && (
-            //       <div>해당 프로젝트에 대한 산출물이 없습니다.</div>
-            //     )}
-            //   </>
-            // )}
-
             <>
-              {token && (
+              {token && project && (
                 <>
+                  <MainHeader project={project} />
                   <div style={{ marginBottom: "20px" }}>
                     총 {data.listCnt}개의 산출물이 검색되었습니다.
                   </div>
@@ -401,6 +322,7 @@ export default function Output() {
             <>
               {token && (
                 <>
+                  <MainHeader project={project} />
                   <div style={{ marginBottom: "20px" }}>
                     해당 프로젝트에 대한 산출물이 없습니다.
                   </div>

@@ -17,8 +17,11 @@ export default function OutoutWrite() {
     outFile: [], // 산출물 파일
   });
 
-  const query = new URLSearchParams(useLocation().search);
-  const prjNameValue = query.get("prjName");
+  // const query = new URLSearchParams(useLocation().search);
+  // const prjNameValue = query.get("prjName");
+
+  const location = useLocation();
+  const projectValue = location.state || {};
 
   const token = localStorage.getItem("token");
 
@@ -105,37 +108,27 @@ export default function OutoutWrite() {
     <>
       {writeOutputData && (
         <>
-          <div className="writeAndModifyGrid">
-            {/** 프로젝트명 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
-            <label htmlFor="out-ttl">산출물 제목</label>
-            <div className="ttlInput">
-              <input type="text" name="outTtl" id="out-ttl" ref={outTtlRef} />
-              {writeErrors.outTtl && writeErrors.outTtl.length > 0 && (
-                <div className={styles.errorMessage}>{writeErrors.outTtl}</div>
-              )}
-            </div>
-
+          <div className={styles.writeAndModifyGrid}>
             <label htmlFor="prj-id">프로젝트</label>
             <div>
-              {/* <select name="prjId" id="prj-id" ref={prjIdRef}>
-                <option value="">프로젝트를 선택해주세요</option>
-                {projectList &&
-                  projectList.map((item) => (
-                    <option value={item.prjId} key={item.prjId}>
-                      {item.prjName}
-                    </option>
-                  ))}
-              </select> */}
               <input
                 type="text"
                 id="prj-id"
                 name="prjId"
                 ref={prjIdRef}
-                defaultValue={prjNameValue}
+                defaultValue={projectValue.project.prjName}
                 readOnly
               />
               {writeErrors.prjId && writeErrors.prjId.length > 0 && (
                 <div className={styles.errorMessage}>{writeErrors.prjId}</div>
+              )}
+            </div>
+
+            <label htmlFor="out-ttl">산출물 제목</label>
+            <div className="ttlInput">
+              <input type="text" name="outTtl" id="out-ttl" ref={outTtlRef} />
+              {writeErrors.outTtl && writeErrors.outTtl.length > 0 && (
+                <div className={styles.errorMessage}>{writeErrors.outTtl}</div>
               )}
             </div>
 
@@ -178,7 +171,9 @@ export default function OutoutWrite() {
                 <div className={styles.errorMessage}>{writeErrors.outFile}</div>
               )}
             </div>
+          </div>
 
+          <div className={styles.buttonArea}>
             <button data-id="wirte" type="button" onClick={onWriteClickHandler}>
               등록
             </button>

@@ -236,8 +236,9 @@ export default function RequirementView() {
                             {/** 관리자이거나 PM or PL일 경우 승인, 거절 버튼 보여주기 */}
                             {(userData.admnCode === "301" ||
                               isPmAndPl === true) && (
-                              <>
+                              <div style={{ alignSelf: "center" }}>
                                 <button
+                                  style={{ height: "29px" }}
                                   onClick={() =>
                                     delayAccessHandler(data.rqmId, true)
                                   }
@@ -245,13 +246,14 @@ export default function RequirementView() {
                                   승인
                                 </button>
                                 <button
+                                  style={{ height: "29px" }}
                                   onClick={() =>
                                     delayAccessHandler(data.rqmId, false)
                                   }
                                 >
                                   거절
                                 </button>
-                              </>
+                              </div>
                             )}
                           </>
                         )}
@@ -283,24 +285,25 @@ export default function RequirementView() {
                       (data.tstrVO.empName === userData.empName || // 로그인한 사용자 = 테스터이거나
                         userData.admnCode === "301") && ( // 관리자일때
                         <>
-                          <div
-                            className={styles.subItem}
-                            style={{ marginLeft: "20px" }}
-                          >
-                            테스트 결과:{" "}
+                          <div className={styles.subItem}>테스트 결과: </div>
+                          <div style={{ alignSelf: "center" }}>
+                            <button
+                              style={{ height: "29px" }}
+                              onClick={() =>
+                                testResultHandler(data.rqmId, true)
+                              }
+                            >
+                              완료
+                            </button>
+                            <button
+                              style={{ height: "29px" }}
+                              onClick={() =>
+                                testResultHandler(data.rqmId, false)
+                              }
+                            >
+                              실패
+                            </button>
                           </div>
-                          <button
-                            className={styles.subItem}
-                            onClick={() => testResultHandler(data.rqmId, true)}
-                          >
-                            완료
-                          </button>
-                          <button
-                            className={styles.subItem}
-                            onClick={() => testResultHandler(data.rqmId, false)}
-                          >
-                            실패
-                          </button>
                         </>
                       )}
                   </div>
@@ -324,7 +327,7 @@ export default function RequirementView() {
             />
           )}
 
-          <div className="button-area right-align">
+          <div className={styles.buttonArea}>
             {!isModifyMode &&
               data &&
               (userData.empName === data.crtrIdVO.empName ||
