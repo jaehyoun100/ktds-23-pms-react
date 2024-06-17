@@ -12,22 +12,25 @@ export default function KnowledgeUpdate({
   const fileRef = useRef();
   const contentRef = useRef();
 
-  const fileName = knowledgeBody.fileName;
-  // 취소
+  const fileName = knowledgeBody.fileName || ""; // Use existing filename or empty string
+
+  // Cancel button click handler
   const onCancelClickHandler = () => {
     setIsUpdateMode(false);
   };
 
-  // 등록
+  // Save button click handler
   const onSaveClickHandler = async () => {
     const subject = subjectRef.current.value;
     const content = contentRef.current.value;
 
+    let selectedFile = fileRef.current?.files?.[0]; // Optional chaining
     let fileName;
-    if (fileRef.current && fileRef.current.files[0]) {
-      fileName = fileRef.current.files[0].name; // 파일 이름만 추출
+
+    if (selectedFile) {
+      fileName = selectedFile.name;
     } else {
-      fileName = knowledgeBody.name; // 기존 파일 이름 사용
+      fileName = knowledgeBody.fileName || ""; // Use existing filename or empty string
     }
 
     const json = await updateKnowledge(
@@ -43,7 +46,7 @@ export default function KnowledgeUpdate({
         alert(error);
       });
     } else if (json.body) {
-      alert("등록이 완료되었습니다");
+      alert("수정이 완료되었습니다");
       setIsUpdateMode(false);
       setNeedReload(Math.random());
     }
@@ -62,7 +65,7 @@ export default function KnowledgeUpdate({
           />
         </div>
         <div>
-          <label htmlFor="file">첨부파일: {knowledgeBody.fileName}</label>
+          <label htmlFor="file">첨부파일: {fileName}</label>
           <input type="file" id="file" ref={fileRef} />
         </div>
         <div className={styles.knowledgeformfield}>

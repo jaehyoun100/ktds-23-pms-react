@@ -1,10 +1,11 @@
 /* 기본적인 페이지 스타일 */
 .viewpage {
-  width: 80%; /* 페이지 너비 (원하는 대로 조정 가능) */
-  margin: 0 auto; /* 가운데 정렬 */
+  width: 80%; /* Page width (adjust as needed) */
+  margin: 0 auto; /* Center horizontally */
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: white;
 }
 
 .commentauthor {
@@ -13,7 +14,7 @@
 }
 
 .commentcontent {
-  word-break: break-word; /* 긴 댓글 자동 줄바꿈 */
+  word-break: break-word; /* Automatically break long comments to multiple lines */
 }
 
 .knowledgeform {
@@ -27,12 +28,12 @@
 }
 
 .viewpage .column {
-  flex: 1 0 25%; /* 컬럼 너비 (25%) */
-  padding: 10px; /* 컬럼 간 여백 */
-  box-sizing: border-box; /* 패딩 포함 너비 계산 */
+  flex: 1 0 25%; /* Set column width to 25% */
+  padding: 10px; /* Add spacing between columns */
+  box-sizing: border-box; /* Include padding in width calculations */
 }
 
-/* 댓글 작성 폼 */
+/* Comment Form */
 .commentform {
   margin-top: 20px;
   height: 100px;
@@ -45,28 +46,25 @@
 
 .commentform input,
 .commentform textarea {
-  width: 100%;
+  width: 100%; /* Make input and textarea span the full width */
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 .commentform textarea {
-  height: 100px; /* 높이 조정 가능 */
-  resize: vertical; /* 필요에 따라 리사이즈 기능 추가 */
-}
-.commentcontent {
-  word-break: break-word; /* 긴 댓글 자동 줄바꿈 */
+  height: 60px; /* Adjust textarea height as needed */
+  resize: vertical; /* Allow users to resize the textarea vertically */
 }
 
-/* 댓글 목록 */
+/* Comment List */
 .commentlist {
   margin-top: 20px;
 }
 
 .comment {
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd; /* Changed border color to #ddd */
   border-radius: 5px;
   margin-bottom: 10px;
 }
@@ -74,22 +72,6 @@
 .commentauthor {
   font-weight: bold;
   margin-bottom: 5px;
-}
-
-.commentcontent {
-  word-break: break-word; /* 긴 댓글 자동 줄바꿈 */
-}
-
-/* 댓글 버튼 */
-.commentbuttons {
-  margin-top: 10px;
-  text-align: right; /* 버튼들을 오른쪽으로 정렬 */
-  margin: 5px;
-}
-
-.commentbutton {
-  padding: 5px 10px;
-  border: 1px solid #ccc;
 }
 
 .commentbuttons .commentbutton {
@@ -117,6 +99,7 @@
 .knowledgeinfo .knowledgecontent {
   margin-bottom: 20px;
   padding: 10px;
+  -webkit-line-clamp: 2;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -139,33 +122,6 @@
   background-color: #0056b3;
 }
 
-/* 테이블 스타일 */
-.knowledgetable {
-  margin-bottom: 20px;
-  border-collapse: collapse; /* 테이블 셀 테두리 병합 */
-  width: 100%; /* 테이블 너비 100% */
-}
-
-.knowledgetable th,
-.knowledgetable td {
-  padding: 10px; /* 셀 패딩 */
-  border: 1px solid #ccc; /* 셀 테두리 */
-  text-align: left; /* 텍스트 정렬 */
-}
-
-.knowledgetable th {
-  background-color: #f2f2f2; /* 제목 배경색 */
-  font-weight: bold; /* 제목 글꼴 두께 */
-}
-
-.knowledgetable tr:nth-child(odd) {
-  background-color: #fff; /* 홀수 행 배경색 */
-}
-
-.knowledgetable tr:nth-child(even) {
-  background-color: #f5f5f5; /* 짝수 행 배경색 */
-}
-
 .knowledgeinfo .button-group {
   justify-content: flex-end; /* 버튼들을 오른쪽 끝으로 정렬 */
 }
@@ -173,6 +129,21 @@
 .knowledgeinfo .button-group {
   display: flex; /* 버튼들을 가로로 나열 */
   flex-wrap: wrap; /* 행이 가득 찬 후 다음 행으로 넘어감 */
+}
+
+.knowledgeinfo .buttongroup {
+  display: flex; /* Arrange buttons horizontally */
+  justify-content: flex-end; /* Align buttons to the right */
+  margin-bottom: 20px; /* Add spacing below the button group */
+}
+
+.knowledgeinfo .button:hover {
+  background-color: #2860bf; /* Darken background color on hover */
+}
+
+.knowledgeinfo .button:first-child {
+  /* Style the first button */
+  margin-left: 0; /* Remove left margin for the first button */
 }
 
 .registration-form {
@@ -206,4 +177,64 @@
 
 .inputbox {
   display: none;
+}
+
+.commentcontent {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 두 줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+
+.commentinputareas {
+  margin: 20px 0;
+  -webkit-line-clamp: 2;
+}
+
+.commentlist {
+  margin-bottom: 10px;
+}
+
+.comment {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.subcomment {
+  margin-left: 20px; /* Added left margin for indentation */
+  padding-left: 10px; /* Added left padding for indentation */
+  border-left: 1px solid #ddd; /* Added left border for indentation */
+}
+
+.commentauthor {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.commentcontent {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Set max lines to 2 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+.commentbuttons {
+  display: flex;
+  gap: 10px;
+}
+
+.commentform textarea {
+  width: 100%;
+  height: 90px;
+  margin-bottom: 10px;
+}
+
+.commentform .button {
+  margin-right: 10px;
 }

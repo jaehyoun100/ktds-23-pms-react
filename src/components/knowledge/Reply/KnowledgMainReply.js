@@ -16,32 +16,26 @@ export default function KnowledgeMainReply(
 ) {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [replies, setReplies] = useState([]); // 댓글 데이터 상태 변수
-  const [selectedReplies, setSelectedReplies] = useState([]); // State to store selected reply IDs
-  const [isEditing, setIsEditing] = useState({}); // Object to store edit state for each comment
+  const [replies, setReplies] = useState([]);
+  const [isEditing, setIsEditing] = useState({});
   const [isReplying, setIsReplying] = useState({});
   const [subReplies, setSubReplies] = useState({});
-  const [isViewingReplies, setIsViewingReplies] = useState({});
   const [isEditingSubReply, setIsEditingSubReply] = useState({});
   const [isShowAnswer, setIsShowAnswer] = useState(true);
   const [isRecommanded, setIsRecommanded] = useState({});
-  const [isPageReloadNeeded, setIsPageReloadNeeded] = useState(false);
   const contentref = useRef();
   const rplIdRef = useRef();
   const subReplyRef = useRef();
   const subReplyEditRef = useRef();
 
-  //취소
   const cancelsave = () => {
     setIsEditing({});
   };
 
-  // 답변 작성글 취소
   const reReplycancelsave = () => {
     setIsReplying({});
   };
 
-  // 답변 취소
   const cancelsaveSubReply = () => {
     setIsEditingSubReply({});
   };
@@ -62,23 +56,13 @@ export default function KnowledgeMainReply(
     }
   };
 
-  //댓글 추천
   const RecommandReply = async (replyItem) => {
     const str = replyItem.rplId;
     try {
       const json = await replyRecommand(str, token);
-      if (json.body === false) {
+      if (json.body == false) {
         alert(" 이미 추천되었습니다");
-        return;
       }
-
-      if (json.body === true) {
-        alert(" 추천에 성공 하였습니다");
-        setSelectedSplId(undefined);
-        setNeedReload(Math.random());
-      }
-
-      // 추천 여부 업데이트
       setIsRecommanded({
         ...isRecommanded,
         [replyItem.rplId]: true,
@@ -97,7 +81,7 @@ export default function KnowledgeMainReply(
     const json = await updateKnowledgeReply(content, str, token);
 
     if (json.errors) {
-      alert("수정에 실패해습니다");
+      alert("수정에 실패했습니다");
       return;
     } else if (json.body) {
       alert("수정이 완료되었습니다");
@@ -116,18 +100,10 @@ export default function KnowledgeMainReply(
     }
   };
 
-  // 대답 화면 뛰우기
   const handleReplyClick = (replyItem) => {
     setIsReplying({ ...isReplying, [replyItem.rplId]: true });
   };
 
-  const handleClick = (replyItem) => {
-    console.log(replyItem.rplId);
-    setIsViewingReplies({ ...isViewingReplies, [replyItem.rplId]: true });
-    fetchSubreReplies(replyItem.rplId);
-  };
-
-  // 답변 추가
   const handleAddSubReply = async (e, replyItem) => {
     e.preventDefault();
     const replyContent = subReplyRef.current.value;
@@ -147,7 +123,6 @@ export default function KnowledgeMainReply(
     }
   };
 
-  // 답변삭제
   const deleteReply = async (subReply) => {
     const json = await deleteKnowledgeReply(subReply.rplId, token);
 
@@ -163,7 +138,6 @@ export default function KnowledgeMainReply(
     }
   };
 
-  // 답변 보기 닫기 버튼
   const handlCancelClick = () => {
     if (isShowAnswer === true) {
       setIsShowAnswer(isShowAnswer);
@@ -171,7 +145,6 @@ export default function KnowledgeMainReply(
     }
   };
 
-  // 답변 수정
   const handleEditSubReply = async (e, subReply) => {
     e.preventDefault();
     const content = subReplyEditRef.current.value;
@@ -201,6 +174,16 @@ export default function KnowledgeMainReply(
     fetchData();
   }, [pPostId, token]);
 
+  useEffect(() => {
+    if (data && data.body) {
+      data.body.forEach((replyItem) => {
+        if (replyItem.rplPid === null) {
+          fetchSubreReplies(replyItem.rplId);
+        }
+      });
+    }
+  }, [data]);
+
   const { body: knowledgeReplyBody } = data || {};
 
   return (
@@ -218,7 +201,7 @@ export default function KnowledgeMainReply(
               knowledgeReplyBody.map(
                 (replyItem) =>
                   replyItem.rplPid === null && (
-                    <div class={styles.commentlist}>
+                    <div className={styles.commentlist} key={replyItem.rplId}>
                       <input
                         type="number"
                         className={styles.inputbox}
@@ -226,18 +209,16 @@ export default function KnowledgeMainReply(
                         defaultValue={replyItem.rplId}
                         ref={rplIdRef}
                       />
-                      <div class={styles.comment}>
-                        <div class={styles.commentauthor}>
+                      <div className={styles.comment}>
+                        <div className={styles.commentauthor}>
                           {replyItem.crtrId} {replyItem.crtDt}
                         </div>
-                        <div class={styles.commentcontent}>
-                          조회수: {replyItem.rplcnt}
-                        </div>
-                        <div class={styles.commentcontent}>
+
+                        <div className={styles.commentcontent}>
                           {replyItem.rplCntnt}
                         </div>
 
-                        <div class={styles.commentbuttons}>
+                        <div className={styles.commentbuttons}>
                           <button
                             type="button"
                             onClick={() =>
@@ -257,33 +238,12 @@ export default function KnowledgeMainReply(
                           >
                             삭제
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => RecommandReply(replyItem)}
-                            className={
-                              isRecommanded[replyItem.rplId]
-                                ? styles.recommandedButton
-                                : styles.defaultButton
-                            }
-                          >
-                            추천
-                          </button>
+
                           <button onClick={() => handleReplyClick(replyItem)}>
                             답변
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => handleClick(replyItem)}
-                          >
-                            답변 보기
-                          </button>
                         </div>
                       </div>
-                      {isShowAnswer && (
-                        <button type="button" onClick={handlCancelClick}>
-                          답변 숨기기
-                        </button>
-                      )}
 
                       {isEditing[replyItem.rplId] && (
                         <td>
@@ -306,7 +266,6 @@ export default function KnowledgeMainReply(
                             >
                               취소
                             </button>
-                            <div></div>
                           </form>
                         </td>
                       )}
@@ -332,10 +291,13 @@ export default function KnowledgeMainReply(
                           </form>
                         </div>
                       )}
-                      {subReplies &&
-                        Array.isArray(subReplies[replyItem.rplId]) &&
+
+                      {subReplies[replyItem.rplId] &&
                         subReplies[replyItem.rplId].map((subReply) => (
-                          <div class={styles.commentlist}>
+                          <div
+                            className={styles.subcomment}
+                            key={subReply.rplId}
+                          >
                             <input
                               type="number"
                               className={styles.inputbox}
@@ -343,44 +305,14 @@ export default function KnowledgeMainReply(
                               defaultValue={replyItem.rplId}
                               ref={rplIdRef}
                             />
-                            <div class={styles.comment}>
-                              <div class={styles.commentauthor}>
+                            <div className={styles.comment}>
+                              <div className={styles.commentauthor}>
                                 {subReply.crtrId} {subReply.crtDt}
                               </div>
-                              <div class={styles.commentcontent}>
+                              <div className={styles.commentcontent}>
                                 {subReply.rplCntnt}
                               </div>
-                              <div className={styles.commentcontent}>
-                                {isEditingSubReply[subReply.rplId] ? (
-                                  <form
-                                    onSubmit={(e) =>
-                                      handleEditSubReply(e, subReply)
-                                    }
-                                  >
-                                    <textarea
-                                      name="subReplyContent"
-                                      defaultValue={subReply.rplCntnt}
-                                      ref={subReplyEditRef}
-                                    />
-                                    <button
-                                      type="submit"
-                                      className={styles.button}
-                                    >
-                                      저장
-                                    </button>
-                                    <button
-                                      onClick={cancelsaveSubReply}
-                                      type="button"
-                                    >
-                                      취소
-                                    </button>
-                                  </form>
-                                ) : (
-                                  <div></div>
-                                )}
-                              </div>
-
-                              <div class={styles.commentbuttons}>
+                              <div className={styles.commentbuttons}>
                                 <button
                                   type="button"
                                   onClick={() =>
@@ -392,7 +324,6 @@ export default function KnowledgeMainReply(
                                 >
                                   수정
                                 </button>
-
                                 <button
                                   type="button"
                                   onClick={() => deleteReply(subReply)}
@@ -400,17 +331,34 @@ export default function KnowledgeMainReply(
                                   삭제
                                 </button>
                               </div>
+                              {isEditingSubReply[subReply.rplId] ? (
+                                <form
+                                  onSubmit={(e) =>
+                                    handleEditSubReply(e, subReply)
+                                  }
+                                >
+                                  <textarea
+                                    name="subReplyContent"
+                                    defaultValue={subReply.rplCntnt}
+                                    ref={subReplyEditRef}
+                                  />
+                                  <button
+                                    type="submit"
+                                    className={styles.button}
+                                  >
+                                    저장
+                                  </button>
+                                  <button
+                                    onClick={cancelsaveSubReply}
+                                    type="button"
+                                  >
+                                    취소
+                                  </button>
+                                </form>
+                              ) : (
+                                <div></div>
+                              )}
                             </div>
-
-                            {isViewingReplies[replyItem.rplId] &&
-                              subReplies[replyItem.rplId] &&
-                              Array.isArray(subReplies[replyItem.rplId]) &&
-                              subReplies[replyItem.rplId].map((subReply) => (
-                                <div
-                                  className={styles.commentlist}
-                                  key={subReply.rplId}
-                                ></div>
-                              ))}
                           </div>
                         ))}
                     </div>
