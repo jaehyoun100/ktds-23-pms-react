@@ -31,7 +31,7 @@ export default function ViewReview() {
         var temp = parseFloat(json.body.reviewList[i].starRating);
         addStar += temp;
       }
-      setAvgStarRating(addStar / json.body.reviewList.length);
+      setAvgStarRating((addStar / json.body.reviewList.length).toFixed(2));
     };
     loadData();
   }, [setReviewResult]);
