@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Checkbox } from "antd";
-import SupplyRegistModal from "./components/modal/supplyRegistModal";
-import SupplyRequestModal from "./components/modal/supplyRequestModal";
+import SupplyRegistModal from "./components/modal/SupplyRegistModal";
+import SupplyRequestModal from "./components/modal/SupplyRequestModal";
 
 export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();

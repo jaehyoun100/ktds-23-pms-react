@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupply, loadSupplyImage } from "../../../http/supplyHttp";
 import style from "../supply.module.css";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Button } from "antd";
+import SupplyModificationModal from "./modal/SupplyModificationModal";
 import axios from "axios";
 
 export default function SupplyView({ selectedSplId }) {
@@ -11,9 +12,9 @@ export default function SupplyView({ selectedSplId }) {
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userInfo, setUserInfo] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { token } = useSelector((state) => state.tokenInfo);
-  const navigate = useNavigate();
 
   const memoizedLoadSupply = useCallback(loadSupply, []);
   const memoizedParam = useMemo(() => {
@@ -61,20 +62,18 @@ export default function SupplyView({ selectedSplId }) {
   const { body: supplyBody } = data || {};
 
   const onSupplyModificationModeClickHandler = () => {
-    navigate(`modify/${selectedSplId}`);
+    setIsModalVisible(true);
   };
 
-  // const onDeleteClickHandler = async () => {
-  //   const json = await deleteSupply(supplyBody.splId, token);
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
 
-  //   if (json.body) {
-  //     setSelectedSplId(undefined);
-  //     setNeedReload(Math.random());
-  //   } else {
-  //     console.log(json);
-  //     alert(json.errors);
-  //   }
-  // };
+  const handleModifySuccess = () => {
+    setIsModalVisible(false);
+    // Refresh the supply data
+    memoizedLoadSupply(memoizedParam).then((json) => setData(json));
+  };
 
   const toggleImageSize = () => {
     setIsImageEnlarged((prev) => !prev);
@@ -118,14 +117,23 @@ export default function SupplyView({ selectedSplId }) {
           </div>
           {deptId === "DEPT_230101_000010" && (
             <div className={style.supplyViewButtonContainer}>
-              <button onClick={onSupplyModificationModeClickHandler}>
+              <Button
+                type="primary"
+                onClick={onSupplyModificationModeClickHandler}
+              >
                 수정
-              </button>
+              </Button>
               {/* <button onClick={onDeleteClickHandler}>삭제</button> */}
             </div>
           )}
         </>
       )}
+      <SupplyModificationModal
+        visible={isModalVisible}
+        onClose={handleCloseModal}
+        selectedSplId={selectedSplId}
+        onModify={handleModifySuccess}
+      />
     </div>
   );
 }
