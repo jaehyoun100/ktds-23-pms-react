@@ -45,10 +45,8 @@ export const writeReview = async (token, rvCntnt, prjId, starRating) => {
 };
 
 // 후기 삭제 메서드
-export const deleteReview = async (token) => {
-  // 임시 프로젝트 번호
-  const selectedProjectId = 1;
-  const response = await fetch(`${url}/api/review/writes${selectedProjectId}`, {
+export const deleteReview = async (token, rvId) => {
+  const response = await fetch(`${url}/api/review/writes/${rvId}`, {
     method: "PUT",
     headers: {
       Authorization: token,

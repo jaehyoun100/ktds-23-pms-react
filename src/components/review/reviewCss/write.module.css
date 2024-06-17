@@ -194,8 +194,10 @@
 .reviewResultContainer {
   display: grid;
   grid-template-columns: 0.05fr 1fr;
-  border: solid 1px black;
-  gap: 5px;
+  border-bottom: solid 1px #ccc;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .reviewResultContent {
@@ -207,4 +209,10 @@
   position: relative;
   left: 10px;
   font-weight: 600;
+}
+
+.buttonStyle {
+  width: 65px;
+  margin: 0;
+  margin-bottom: 10px;
 }
