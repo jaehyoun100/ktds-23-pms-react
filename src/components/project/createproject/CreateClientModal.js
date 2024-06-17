@@ -69,7 +69,6 @@ const CreateClientModal = React.memo(
         className={styles.clientModalWindow}
         role="alertdialog"
         aria-modal="true"
-        style={{ zIndex: 2 }}
       >
         <div className={styles.gridModal}>
           <div
