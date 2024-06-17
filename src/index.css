@@ -317,6 +317,7 @@ select {
   box-shadow: rgba(0, 0, 0, 0.05) 0px 8px 24px;
   color: #333;
   padding: 10px;
+  height: 270px;
 }
 .grid-c-title {
   display: flex;

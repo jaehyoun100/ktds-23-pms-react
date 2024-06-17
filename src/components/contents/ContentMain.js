@@ -29,7 +29,7 @@ export default function ContentMain() {
     <>
       <div className={w.bodyContainer}>
         <div className={w.bodyContentContainer}>
-          <div className={`${w.contentGridTwo} ${w.heightFull}`}>
+          <div className={`${w.contentGridTwo}`}>
             <div className={w.subgridTwo}>
               {/* 사원구역 */}
               <div className={w.mainContentHolderRight}>
@@ -57,55 +57,54 @@ export default function ContentMain() {
                     path={""}
                   />
                 </div>
-                {/* 프로젝트 */}
-                {/* <div className={w.contentGridTwo}> */}
-                <Card
-                  icon={<AiOutlineFundProjectionScreen />}
-                  header={"프로젝트"}
-                  body={<MainProject />}
-                  path={"/project"}
-                />
-                {/* <Card icon={<BsFillPeopleFill />} header={"이슈"} body={<MainIssue />} path={""} /> */}
-                {/* </div> */}
-              </div>
-            </div>
-            {/* 메뉴구역 */}
-            <div className={w.subgridTwo}>
-              <div className={w.mainContentHolderLeft}>
-                <div>
-                  <Card
-                    icon={<FaCalendarCheck />}
-                    header={"달력"}
-                    body={<MainCalendar />}
-                    path={""}
-                    notNavigate
-                  />
-                  {/* <Card icon={<BsFillPeopleFill />} header={"일정"} body={<MainScaduale />} path={""} /> */}
-                </div>
-                {/* 메뉴 navigation >>> component 구성 끝나면 card의 header 없애줄것 */}
                 <div className={w.contentGridTwo}>
                   <Card
                     icon={<BsFillPeopleFill />}
-                    header={"인사"}
+                    header={"비품"}
                     body={<MemuEmployee />}
                   />
                   <Card
                     icon={<AiOutlineFundProjectionScreen />}
-                    header={"프로젝트"}
-                    body={<MemberLogin />}
+                    header={"결재"}
+                    body={<MenuProject />}
                   />
                 </div>
-                <div className={w.contentGridTwo}>
-                  <Card
-                    icon={<HiMiniArchiveBox />}
-                    header={"비품"}
-                    body={<MemuProduct />}
-                  />
-                  <Card
-                    icon={<MdEditDocument />}
-                    header={"결제"}
-                    body={<MemuApproval />}
-                  />
+              </div>
+            </div>
+            {/* 메뉴구역 */}
+            <div className={w.subgridTwo}>
+              <div className={w.mainContentHolderRight}>
+                <div className={w.gridItem}>
+                  <div className={`${w.gridTwoItem}`}>
+                    <Card
+                      icon={<BsFilePersonFill />}
+                      header={"부서 접속 현황"}
+                      body={""}
+                      path={""}
+                    />
+                  </div>
+                </div>
+                {/* 쪽지 */}
+                <div className={w.gridItem}>
+                  <div className={`${w.gridTwoItem}`}>
+                    <Card
+                      icon={<FaCalendarCheck />}
+                      header={"달력"}
+                      body={<MainCalendar />}
+                      path={""}
+                      notNavigate
+                    />
+                  </div>
+                </div>
+                <div className={w.gridItem}>
+                  <div className={`${w.gridTwoItem}`}>
+                    <Card
+                      icon={<AiOutlineFundProjectionScreen />}
+                      header={"프로젝트"}
+                      body={<MainProject />}
+                      path={"/project"}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
