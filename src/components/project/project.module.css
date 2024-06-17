@@ -219,7 +219,12 @@ h1 {
 .infoTitle {
   width: 120px;
 }
-
+.infoTmmateBox {
+  display: flex;
+  gap: 13px;
+  width: 400px;
+  overflow: auto;
+}
 /* Modal Window */
 
 .modalWindow {

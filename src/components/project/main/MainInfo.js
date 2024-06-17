@@ -39,23 +39,25 @@ export default function MainInfo({ project }) {
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
         <div className={styles.infoTitle}>참여원</div>
-        {project.projectTeammateList.map((item, idx) => (
-          <div key={item.tmId} style={{ cursor: "pointer" }}>
-            <Profile
-              profileValue={project.projectTeammateList[idx]}
-              profileFile={item.employeeVO.originPrflFileName}
-            ></Profile>
-            <div
-              style={{
-                fontSize: "12px",
-                textAlign: "center",
-                marginTop: "3px",
-              }}
-            >
-              {item.employeeVO.empName}
+        <div className={styles.infoTmmateBox}>
+          {project.projectTeammateList.map((item, idx) => (
+            <div key={item.tmId} style={{ cursor: "pointer" }}>
+              <Profile
+                profileValue={project.projectTeammateList[idx]}
+                profileFile={item.employeeVO.originPrflFileName}
+              ></Profile>
+              <div
+                style={{
+                  fontSize: "12px",
+                  textAlign: "center",
+                  marginTop: "3px",
+                }}
+              >
+                {item.employeeVO.empName}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
         <div className={styles.infoTitle}>진행정도</div>
