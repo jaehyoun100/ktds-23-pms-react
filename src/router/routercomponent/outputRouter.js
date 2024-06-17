@@ -6,7 +6,6 @@ const outputRouter = {
   path: "output/",
   element: <Outlet />,
   children: [
-    // { index: true, element: <Output /> },
     {
       path: ":prjIdValue/",
       element: <Outlet />,

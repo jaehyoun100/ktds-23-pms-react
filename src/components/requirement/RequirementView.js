@@ -188,18 +188,24 @@ export default function RequirementView() {
   // 객체 분해해서 값 추출
   const { requirement: data, isPmAndPl } = content || {};
 
-  //   // 로그인한 사원이 프로젝트의 팀원에 속해 있으면 true, 아니면 false 반환.
-  //   const isUserInTeam =
-  //     teamList &&
-  //     teamList.find((member) => member.empName === userData.empName) !== undefined
-  //       ? true
-  //       : false;
-
-  // const { body: data } = content || {};
-
   if (!data || !data.projectVO) {
     return <div>Loading...</div>; // 데이터 로딩 중
   }
+
+  const leftRightBottom = {
+    borderBottom: "1px solid #ccc",
+    borderLeft: "1px solid #ccc",
+    borderRight: "1px solid #ccc",
+  };
+
+  const rightBottom = {
+    borderRight: "1px solid #ccc",
+    borderBottom: "1px solid #ccc",
+  };
+
+  const underLine = {
+    borderBottom: "1px solid #ccc",
+  };
 
   return (
     <>
@@ -211,33 +217,50 @@ export default function RequirementView() {
               <div style={{ marginBottom: "20px" }}>{data.rqmTtl}</div>
               <div className={styles.mainInfo}>
                 <div className={styles.grid}>
-                  <div className={styles.mainItem}>프로젝트</div>
-                  <div className={styles.subItem}>{data.projectVO.prjName}</div>
-                  <div className={styles.mainItem}>작성자</div>
-                  <div className={styles.subItem}>{data.crtrIdVO.empName}</div>
-                  <div className={styles.mainItem}>기간</div>
-                  <div className={styles.subItem}>
+                  <div className={styles.mainItem} style={rightBottom}>
+                    프로젝트
+                  </div>
+                  <div className={styles.subItem} style={underLine}>
+                    {data.projectVO.prjName}
+                  </div>
+                  <div className={styles.mainItem} style={leftRightBottom}>
+                    작성자
+                  </div>
+                  <div className={styles.subItem} style={underLine}>
+                    {data.crtrIdVO.empName}
+                  </div>
+                  <div className={styles.mainItem} style={rightBottom}>
+                    기간
+                  </div>
+                  <div className={styles.subItem} style={underLine}>
                     {data.strtDt} ~ {data.endDt}
                   </div>
-                  <div className={styles.mainItem}>작성일</div>
-                  <div className={styles.subItem}>{data.crtDt}</div>
+                  <div className={styles.mainItem} style={leftRightBottom}>
+                    작성일
+                  </div>
+                  <div className={styles.subItem} style={underLine}>
+                    {data.crtDt}
+                  </div>
 
-                  <div className={styles.mainItem}>일정상태</div>
-                  <div className={styles.flexRow}>
+                  <div className={styles.mainItem} style={rightBottom}>
+                    일정상태
+                  </div>
+                  <div className={styles.flexRow} style={underLine}>
                     <div className={styles.subItem}>
                       {data.scdStsVO.cmcdName}
                     </div>
                     {data.rqmStsVO.cmcdName !== "개발완료" && (
                       <>
                         {data.scdStsVO.cmcdName !== "연기필요" ? (
-                          <>
+                          <div style={{ alignSelf: "center" }}>
                             {/** 연기 버튼을 클릭 시 '연기필요' 상태로 바뀜 */}
                             <button
+                              style={{ height: "29px" }}
                               onClick={() => delayCallHandler(data.rqmId)}
                             >
                               연기
                             </button>
-                          </>
+                          </div>
                         ) : (
                           <>
                             {/** 관리자이거나 PM or PL일 경우 승인, 거절 버튼 보여주기 */}
@@ -268,16 +291,33 @@ export default function RequirementView() {
                     )}
                   </div>
 
-                  <div className={styles.mainItem}>담당개발자</div>
-                  <div className={styles.subItem}>{data.dvlrpVO.empName}</div>
+                  <div className={styles.mainItem} style={leftRightBottom}>
+                    담당개발자
+                  </div>
+                  <div className={styles.subItem} style={underLine}>
+                    {data.dvlrpVO.empName}
+                  </div>
 
-                  <div className={styles.mainItem}>진행상태</div>
-                  <div className={styles.subItem}>{data.rqmStsVO.cmcdName}</div>
+                  <div className={styles.mainItem} style={rightBottom}>
+                    진행상태
+                  </div>
+                  <div className={styles.subItem} style={underLine}>
+                    {data.rqmStsVO.cmcdName}
+                  </div>
 
-                  <div className={styles.mainItem}>확인자</div>
-                  <div className={styles.subItem}>{data.cfrmrVO.empName}</div>
+                  <div className={styles.mainItem} style={leftRightBottom}>
+                    확인자
+                  </div>
+                  <div className={styles.subItem} style={underLine}>
+                    {data.cfrmrVO.empName}
+                  </div>
 
-                  <div className={styles.mainItem}>파일</div>
+                  <div
+                    className={styles.mainItem}
+                    style={{ borderRight: "1px solid #ccc" }}
+                  >
+                    파일
+                  </div>
                   <div
                     className={styles.subItem}
                     onClick={() => onFileClickHandler(data.rqmId, data.rqmFile)}
@@ -285,7 +325,15 @@ export default function RequirementView() {
                     {data.rqmFile}
                   </div>
 
-                  <div className={styles.mainItem}>테스터</div>
+                  <div
+                    className={styles.mainItem}
+                    style={{
+                      borderRight: "1px solid #ccc",
+                      borderLeft: "1px solid #ccc",
+                    }}
+                  >
+                    테스터
+                  </div>
                   <div className={styles.flexRow}>
                     <div className={styles.subItem}>{data.tstrVO.empName}</div>
                     {data.rqmSts === "604" && // 단위테스트 진행중이고

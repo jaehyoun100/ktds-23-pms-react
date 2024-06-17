@@ -161,7 +161,7 @@ export default function Requirement() {
   // 검색 필터
   const filterOptions = [
     {
-      label: "제목",
+      label: "요구사항명",
       value: "rqmTtl",
     },
   ];
