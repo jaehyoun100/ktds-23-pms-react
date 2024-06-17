@@ -16,24 +16,18 @@ export default function KnowledgeCreate({
     setIsCreateMode(false);
   };
 
-  //등록
+  // Save button click handler
   const onSaveClickHandler = async () => {
     const subject = subjectRef.current.value;
-    const file = fileRef.current.files[0];
-
-    if (!file) {
-      alert("사진을 선택하세요");
-      return;
-    }
-
+    const file = fileRef.current.files[0]; // Get the selected file if any
     const content = contentRef.current.value;
-    const fileName = file.name;
 
     if (!subject || !content) {
-      alert("내용 또는 제목을 입력하세요");
+      alert("Please enter a title and content.");
       return;
     }
 
+    const fileName = file ? file.name : ""; // Use filename if file is selected, otherwise empty string
     const json = await createNewBoard(subject, fileName, content, token);
     console.log(json);
 
@@ -83,10 +77,16 @@ export default function KnowledgeCreate({
           ></textarea>
         </div>
         <div className={styles.knowledgeformbuttonarea}>
-          <button onClick={onCancelClickHandler} type="button">
+          <button
+            onClick={onCancelClickHandler}
+            className={styles.knowledgeformbutton}
+          >
             취소
           </button>
-          <button onClick={onSaveClickHandler} type="button">
+          <button
+            onClick={onSaveClickHandler}
+            className={styles.knowledgeformbutton}
+          >
             등록
           </button>
         </div>

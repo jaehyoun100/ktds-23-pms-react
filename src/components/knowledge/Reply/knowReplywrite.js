@@ -1,13 +1,16 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { createNewKnowledgeReply } from "../../../http/KnowledgeReplyHttp";
 import styles from "../knowleddgeview.module.css";
 import KnowledgeMainReply from "./KnowledgMainReply";
 
 export default function KnowledgeReplyWrite(
-  { pPostId, token, setSelectedSplId, setNeedReload },
+  { pPostId, token, setSelectedSplId, setNeedReload, needReload },
   setIsLoading
 ) {
   const ReplyRef = useRef();
+  const [isReplying, setIsReplying] = useState(false);
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [replies, setReplies] = useState([]);
 
   const onSaveClickHandler = async (event) => {
     const content = ReplyRef.current.value;
@@ -24,8 +27,11 @@ export default function KnowledgeReplyWrite(
         alert(error);
       });
     } else if (json.body) {
-      setSelectedSplId(undefined);
-      setNeedReload(Math.random()); // Can be used if necessary
+      // Update replies state with new reply data
+      setReplies((prevReplies) => [...prevReplies, json.body]);
+      setIsUpdateMode(true); // Trigger re-render for UI update
+      ReplyRef.current.value = "";
+      setIsReplying(true);
     }
   };
 

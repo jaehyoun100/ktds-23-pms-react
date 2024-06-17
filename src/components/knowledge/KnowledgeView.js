@@ -79,31 +79,35 @@ export default function KnowledgeView({
         <div className={styles.viewpage}>
           {knowledgeBody && (
             <>
-              <div className={styles.buttongroup}>
-                <button type="button" onClick={backToListHandler}>
-                  목록보기
-                </button>
-              </div>
               <div className={styles.knowledgeinfo}>
-                <table class={styles.knowledgetable}>
-                  <thead>
-                    <tr>
-                      <th>제목</th>
-                      <th>작성자</th>
-                      <th>작성일</th>
-                      <th>첨부파일</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{knowledgeBody.knlTtl}</td>
-                      <td>{knowledgeBody.crtrId}</td>
-                      <td>{knowledgeBody.crtDt}</td>
-                      <td>{knowledgeBody.fileName}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <h3>지식내용</h3>
+                <button type="button" onClick={backToListHandler}>
+                  뒤로 가기
+                </button>
+                <div className={styles.knowledgecardheader}>
+                  <h4>{knowledgeBody.knlTtl}</h4>
+                  <div className={styles.knowledgecardinfo}>
+                    <p style={{ display: "inline-block" }}>
+                      작성자: {knowledgeBody.crtrId}
+                    </p>
+                    <p style={{ display: "inline-block", marginLeft: "10px" }}>
+                      작성일: {knowledgeBody.crtDt}
+                    </p>
+                    {knowledgeBody.fileName && (
+                      <p
+                        style={{ display: "inline-block", marginLeft: "10px" }}
+                      >
+                        첨부파일: {knowledgeBody.fileName}
+                      </p>
+                    )}
+                    {!knowledgeBody.fileName && (
+                      <p
+                        style={{ display: "inline-block", marginLeft: "10px" }}
+                      >
+                        첨부파일이 없습니다
+                      </p>
+                    )}
+                  </div>
+                </div>
                 <div className={styles.knowledgecontent}>
                   <p>{knowledgeBody.knlCntnt}</p>
                 </div>
@@ -115,11 +119,18 @@ export default function KnowledgeView({
                   <button type="button" onClick={deleteKnowledgeClickHandler}>
                     삭제
                   </button>
-                  <button type="button" onClick={recommendKnowledge}>
-                    추천
+                  <button
+                    type="button"
+                    onClick={recommendKnowledge}
+                    className={
+                      isRecommended ? styles.recommendedButton : styles.button
+                    } // Apply different styles based on state
+                  >
+                    추천 {knowledgeBody.knlRecCnt}
                   </button>
                 </div>
               </div>
+
               <div className={styles.commentinputareas}>
                 <KnowledgeMainReply
                   pPostId={selectedSplId}
