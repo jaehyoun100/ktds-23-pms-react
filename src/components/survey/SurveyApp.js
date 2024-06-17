@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 import SurveyAnswer from "./components/SurveyAnswer";
 import SurveyWrite from "./components/SurveyWriteApp";
 import { useSelector } from "react-redux";
@@ -152,3 +152,4 @@ export default function SurveyApp() {
     </>
   );
 }
+ */

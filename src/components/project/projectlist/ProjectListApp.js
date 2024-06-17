@@ -4,13 +4,19 @@ import Search from "../../common/search/Search";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Table from "../../../utils/Table";
-import { getEmpPrjList, getReviewYN, viewWriteReviewPage, writeReview } from "../../../http/reviewHttp";
+import {
+  getEmpPrjList,
+  getReviewYN,
+  viewWriteReviewPage,
+  writeReview,
+} from "../../../http/reviewHttp";
 import SurveyAnswer from "../../survey/components/SurveyAnswer";
 import SurveyWrite from "../../survey/components/SurveyWriteApp";
 import { format, set } from "date-fns";
 import SurveyResult from "../../survey/components/SurveyResult";
-import { getPrjList } from "../../../http/projectHttp";
+import { getPrjApi, getPrjList } from "../../../http/projectHttp";
 import { jwtDecode } from "jwt-decode";
+import MainHeader from "../main/MainHeader";
 
 const ProjectListApp = () => {
   const token = localStorage.getItem("token");
@@ -18,7 +24,8 @@ const ProjectListApp = () => {
   const [data, setData] = useState([]);
   const [searchDataCommonCode, setSearchDataCommonCode] = useState();
   const [filterOptions, setFilterOptions] = useState([]);
-  const [selectCommonCode, setSelectCommonCode] = useState("옵션 선택해주세요.");
+  const [selectCommonCode, setSelectCommonCode] =
+    useState("옵션 선택해주세요.");
   const [currencyList, setCurrencyList] = useState([]);
   // 후기
   const [prjIdList, setPrjIdList] = useState([]);
@@ -29,6 +36,7 @@ const ProjectListApp = () => {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [reload, setReload] = useState();
   const [surveyResultMode, setSurveyResultMode] = useState(false);
+  const [selectedProject, setSelectedProject] = useState();
 
   const memoizeGetPrjList = useCallback(getPrjList, []);
   useEffect(() => {
@@ -72,20 +80,27 @@ const ProjectListApp = () => {
     };
     result();
   }, []);
+  const memoizedgetPrjApi = useCallback(getPrjApi, []);
 
-  const surveyWriteAnswerClickHandler = (projectId) => {
+  const surveyWriteAnswerClickHandler = async (projectId) => {
+    const run = await memoizedgetPrjApi(token, projectId);
     setSelectedProjectId(projectId);
     setAnswerMode(true);
+    setSelectedProject(run);
   };
 
-  const surveyWriteQuestionClickHandler = (projectId) => {
+  const surveyWriteQuestionClickHandler = async (projectId) => {
+    const run = await memoizedgetPrjApi(token, projectId);
     setSelectedProjectId(projectId);
     setWriteMode(true);
+    setSelectedProject(run);
   };
 
-  const surveyResultClickHandler = (projectId) => {
+  const surveyResultClickHandler = async (projectId) => {
+    const run = await memoizedgetPrjApi(token, projectId);
     setSelectedProjectId(projectId);
     setSurveyResultMode(true);
+    setSelectedProject(run);
   };
 
   const reviewWritePageClickHandler = (record) => {
@@ -173,27 +188,31 @@ const ProjectListApp = () => {
             if (info[4][index].rvYn === "Y") {
               return (
                 <>
-                  <span>후기 작성완료</span>
+                  <span>작성 완료</span>
                 </>
               );
             } else {
               return (
                 <>
-                  <button onClick={() => reviewWritePageClickHandler(record)}>후기 작성하기</button>
+                  <button onClick={() => reviewWritePageClickHandler(record)}>
+                    후기 작성
+                  </button>
                 </>
               );
             }
           } else {
             return (
               <>
-                <button onClick={() => viewReviewResultHandler(record)}>후기 결과보기</button>
+                <button onClick={() => viewReviewResultHandler(record)}>
+                  후기 결과
+                </button>
               </>
             );
           }
         } else {
           return (
             <>
-              <span>프로젝트 진행 중</span>
+              <span style={{ marginLeft: "30px" }}>-</span>
             </>
           );
         }
@@ -206,7 +225,7 @@ const ProjectListApp = () => {
       width: "10%",
       render: (srvsts, record, index, prjId) => {
         if (record.prjSts !== "409") {
-          return "미종료";
+          return <div style={{ marginLeft: "30px" }}>-</div>;
           /* return (<>
             {record.prjSts}
             </>
@@ -221,13 +240,19 @@ const ProjectListApp = () => {
               {!info[3] ? (
                 "미생성"
               ) : (
-                <button onClick={() => surveyWriteQuestionClickHandler(record.prjId)}>설문 작성</button>
+                <button
+                  onClick={() => surveyWriteQuestionClickHandler(record.prjId)}
+                >
+                  설문 작성
+                </button>
               )}
             </>
           );
         } else {
           return info[2].admnCode === "301" && !info[3] ? (
-            <button onClick={() => surveyResultClickHandler(record.prjId)}>결과 보기</button>
+            <button onClick={() => surveyResultClickHandler(record.prjId)}>
+              설문 결과
+            </button>
           ) : (
             <>
               {!info[3] ? (
@@ -235,7 +260,13 @@ const ProjectListApp = () => {
                   {info[4] && info[4][index] && (
                     <>
                       {info[4][index].srvYn === "N" ? (
-                        <button onClick={() => surveyWriteAnswerClickHandler(record.prjId)}>설문 답변</button>
+                        <button
+                          onClick={() =>
+                            surveyWriteAnswerClickHandler(record.prjId)
+                          }
+                        >
+                          설문 답변
+                        </button>
                       ) : (
                         "설문 완료"
                       )}
@@ -243,7 +274,9 @@ const ProjectListApp = () => {
                   )}
                 </>
               ) : (
-                <button onClick={() => surveyResultClickHandler(record.prjId)}>결과 보기</button>
+                <button onClick={() => surveyResultClickHandler(record.prjId)}>
+                  설문 결과
+                </button>
               )}
             </>
           );
@@ -304,31 +337,40 @@ const ProjectListApp = () => {
         </>
       )}
       {answerMode && (
-        <SurveyAnswer
-          token={token}
-          selectedProjectId={selectedProjectId}
-          setAnswerMode={setAnswerMode}
-          info={info}
-          setReload={setReload}
-        />
+        <>
+          <MainHeader project={selectedProject} />
+          <SurveyAnswer
+            token={token}
+            selectedProjectId={selectedProjectId}
+            setAnswerMode={setAnswerMode}
+            info={info}
+            setReload={setReload}
+          />
+        </>
       )}
       {writeMode && (
-        <SurveyWrite
-          token={token}
-          setWriteMode={setWriteMode}
-          surveys={data} // 설문 데이터를 SurveyWrite 컴포넌트로 전달
-          selectedProjectId={selectedProjectId} // 선택된 프로젝트 ID 전달
-          info={info}
-          setReload={setReload}
-        />
+        <>
+          <MainHeader project={selectedProject} />
+          <SurveyWrite
+            token={token}
+            setWriteMode={setWriteMode}
+            surveys={data} // 설문 데이터를 SurveyWrite 컴포넌트로 전달
+            selectedProjectId={selectedProjectId} // 선택된 프로젝트 ID 전달
+            info={info}
+            setReload={setReload}
+          />
+        </>
       )}
       {surveyResultMode && (
-        <SurveyResult
-          token={token}
-          setSurveyResultMode={setSurveyResultMode}
-          selectedProjectId={selectedProjectId}
-          info={info}
-        />
+        <>
+          <MainHeader project={selectedProject} />
+          <SurveyResult
+            token={token}
+            setSurveyResultMode={setSurveyResultMode}
+            selectedProjectId={selectedProjectId}
+            info={info}
+          />
+        </>
       )}
     </div>
   );

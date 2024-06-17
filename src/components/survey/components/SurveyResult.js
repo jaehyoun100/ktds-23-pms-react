@@ -25,7 +25,7 @@ export default function SurveyResult({
 
   return (
     <>
-      <table style={{ width: "100%" }}>
+      <table style={{ width: "90%", margin: "30px 0 0 50px" }}>
         <thead>
           <tr>
             <h2>프로젝트 설문결과</h2>
