@@ -32,22 +32,6 @@
   box-sizing: border-box; /* 패딩 포함 너비 계산 */
 }
 
-/* 버튼 스타일 */
-.button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-  background-color: linear-gradient(to right, #007bff, #fff);
-  margin-right: 10px; /* 버튼 간 간격 */
-}
-
-.button:hover {
-  background-color: #0056b3;
-}
 /* 댓글 작성 폼 */
 .commentform {
   margin-top: 20px;
@@ -73,15 +57,6 @@
 }
 .commentcontent {
   word-break: break-word; /* 긴 댓글 자동 줄바꿈 */
-}
-
-.commentform button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 /* 댓글 목록 */
@@ -207,4 +182,28 @@
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px; /* Add spacing between form and comments */
+}
+
+.knowledgecontainer {
+  display: flex; /* Enable Flexbox layout */
+  flex-direction: row; /* Arrange elements horizontally */
+  width: 100%; /* Take up the full width of the container */
+}
+
+.commentinputareas {
+  display: flex; /* Use Flexbox layout to arrange elements horizontally */
+  flex-direction: column; /* Arrange elements vertically within the container */
+}
+
+.commentform {
+  flex: 1 0 auto; /* Allow the comment form to grow as needed */
+  margin-bottom: 60px; /* Add spacing between the form and the comment list */
+}
+
+.commentlist {
+  flex: 1 0 auto; /* Allow the comment list to grow as needed */
+}
+
+.inputbox {
+  display: none;
 }

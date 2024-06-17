@@ -1,5 +1,5 @@
 const url =
-  "http//" +
+  "http://" +
   (window.location.host === "43.202.29.221"
     ? "43.202.29.221"
     : "localhost:8080");
@@ -11,7 +11,7 @@ export const loadknowledgeList = async ({ token, pageNo = 0 }) => {
   }
 
   const response = await fetch(
-    `http://localhost:8080/api/v1/knowledge?pageNo=${pageNo}`,
+    `${url}/api/v1/knowledge?pageNo=${pageNo}`,
     {
       method: "GET",
       headers: {
@@ -33,7 +33,7 @@ export const createNewBoard = async (subject, file, content, token) => {
   formData.append("fileName", file);
 
   const response = await fetch(
-    "http://localhost:8080/api/v1/knowledge/insert",
+    `${url}/api/v1/knowledge/insert`,
     {
       method: "POST",
       headers: {
@@ -49,7 +49,7 @@ export const createNewBoard = async (subject, file, content, token) => {
 // view(상세보기)
 export const loadKnowledge = async ({ selectedSplId, token }) => {
   const response = await fetch(
-    `http://localhost:8080/api/v1/knowledge/${selectedSplId}`,
+    `${url}/api/v1/knowledge/${selectedSplId}`,
     {
       method: "GET",
       headers: { Authorization: token },
@@ -70,7 +70,7 @@ export const updateKnowledge = async (subject, file, content, knlId, token) => {
   formData.append("fileName", file);
 
   const response = await fetch(
-    `http://localhost:8080/api/v1/knowledge/modify/${knlId}`,
+    `${url}/api/v1/knowledge/modify/${knlId}`,
     {
       method: "PUT",
       headers: {
@@ -87,7 +87,7 @@ export const updateKnowledge = async (subject, file, content, knlId, token) => {
 //삭제
 export const deleteKnowledge = async (knlId, token) => {
   const response = await fetch(
-    `http://localhost:8080/api/v1/knowledge/delete/${knlId}`,
+    `${url}/api/v1/knowledge/delete/${knlId}`,
     {
       method: "GET",
       headers: { Authorization: token },
@@ -101,7 +101,7 @@ export const deleteKnowledge = async (knlId, token) => {
 // 1사원 1추천
 export const KnowledgeRecommand = async (knlId, token) => {
   const response = await fetch(
-    `http://localhost:8080/api/v1/knowledge/recommend/${knlId}`,
+    `${url}/api/v1/knowledge/recommend/${knlId}`,
     {
       method: "POST",
       headers: { Authorization: token },

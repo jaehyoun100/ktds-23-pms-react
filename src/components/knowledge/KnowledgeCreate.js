@@ -83,16 +83,10 @@ export default function KnowledgeCreate({
           ></textarea>
         </div>
         <div className={styles.knowledgeformbuttonarea}>
-          <button
-            onClick={onCancelClickHandler}
-            className={styles.knowledgeformbutton}
-          >
+          <button onClick={onCancelClickHandler} type="button">
             취소
           </button>
-          <button
-            onClick={onSaveClickHandler}
-            className={styles.knowledgeformbutton}
-          >
+          <button onClick={onSaveClickHandler} type="button">
             등록
           </button>
         </div>

@@ -73,70 +73,6 @@ export default function KnowledgeView({
     setIsUpdateMode(true);
   };
 
-  // return (
-  //   <>
-  //     {token && !isUpdateMode && (
-  //       <div class="board-container">
-  //         {knowledgeBody && (
-  //           <div class="board-content">
-  //             <div class="board-stats">
-  //               <div class="board-views">
-  //                 제목 <input type="text" defaultValue={knowledgeBody.knlTtl} />
-  //               </div>
-  //             </div>
-  //             <div class="board-stats">
-  //               <div class="board-views">
-  //                 작성자
-  //                 <input type="text" defaultValue={knowledgeBody.crtrId} />
-  //               </div>
-  //             </div>
-  //             <div class="board-stats">
-  //               <div class="board-views">
-  //                 작성일
-  //                 <input type="text" defaultValue={knowledgeBody.crtDt} />
-  //               </div>
-  //             </div>
-  //             <div class="board-stats">
-  //               <div class="board-views">
-  //                 첨부파일
-  //                 <input type="text" defaultValue={knowledgeBody.fileName} />
-  //               </div>
-  //             </div>
-  //             <div class="board-stats">
-  //               <div class="board-views">지식내용</div>
-  //             </div>
-  //             <textarea
-  //               className="knowledge-form-textarea"
-  //               defaultValue={knowledgeBody.knlCntnt}
-  //             ></textarea>
-  //             <div>
-  //               <button onClick={recommendKnowledge}>추천하기</button>
-  //               <button onClick={UpdateClickHandler}>수정</button>
-  //               <button onClick={deleteKnowledgeClickHandler}>삭제</button>
-  //               <button onClick={backToListHandler}>목록보기</button>
-  //             </div>
-
-  //             <KnowledgeMainReply
-  //               pPostId={selectedSplId}
-  //               token={token}
-  //               setSelectedSplId={setSelectedSplId}
-  //               setNeedReload={setNeedReload}
-  //               needReload={needReload}
-  //             />
-  //           </div>
-  //         )}
-  //       </div>
-  //     )}
-  //     {isUpdateMode && (
-  //       <KnowledgeUpdate
-  //         knowledgeBody={knowledgeBody}
-  //         setNeedReload={setNeedReload}
-  //         setIsUpdateMode={setIsUpdateMode}
-  //         token={token}
-  //       />
-  //     )}
-  //   </>
-  // );
   return (
     <>
       {token && !isUpdateMode && (
@@ -144,7 +80,7 @@ export default function KnowledgeView({
           {knowledgeBody && (
             <>
               <div className={styles.buttongroup}>
-                <button className={styles.button} onClick={backToListHandler}>
+                <button type="button" onClick={backToListHandler}>
                   목록보기
                 </button>
               </div>
@@ -167,39 +103,32 @@ export default function KnowledgeView({
                     </tr>
                   </tbody>
                 </table>
-
+                <h3>지식내용</h3>
                 <div className={styles.knowledgecontent}>
                   <p>{knowledgeBody.knlCntnt}</p>
                 </div>
 
                 <div className={styles.buttongroup}>
-                  <button
-                    className={styles.button}
-                    onClick={UpdateClickHandler}
-                  >
+                  <button type="button" onClick={UpdateClickHandler}>
                     수정
                   </button>
-                  <button
-                    className={styles.button}
-                    onClick={deleteKnowledgeClickHandler}
-                  >
+                  <button type="button" onClick={deleteKnowledgeClickHandler}>
                     삭제
                   </button>
-                  <button
-                    className={styles.button}
-                    onClick={recommendKnowledge}
-                  >
+                  <button type="button" onClick={recommendKnowledge}>
                     추천
                   </button>
                 </div>
               </div>
-              <KnowledgeMainReply
-                pPostId={selectedSplId}
-                token={token}
-                setSelectedSplId={setSelectedSplId}
-                setNeedReload={setNeedReload}
-                needReload={needReload}
-              />
+              <div className={styles.commentinputareas}>
+                <KnowledgeMainReply
+                  pPostId={selectedSplId}
+                  token={token}
+                  setSelectedSplId={setSelectedSplId}
+                  setNeedReload={setNeedReload}
+                  needReload={needReload}
+                />
+              </div>
             </>
           )}
         </div>

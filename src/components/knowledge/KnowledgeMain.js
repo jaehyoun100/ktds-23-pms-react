@@ -108,7 +108,9 @@ export default function KnowledgeMain() {
               };
             }}
           />
-          <button onClick={onCreateModeClickHandler}>신규등록</button>
+          <button type="button" onClick={onCreateModeClickHandler}>
+            신규등록
+          </button>
         </>
       )}
 

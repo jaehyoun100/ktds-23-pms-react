@@ -8,10 +8,11 @@ export default function KnowledgeReplyWrite(
 ) {
   const ReplyRef = useRef();
 
-  const onSaveClickHandler = async () => {
+  const onSaveClickHandler = async (event) => {
     const content = ReplyRef.current.value;
 
     if (!content) {
+      event.preventDefault();
       alert("내용을 입력해 주세요");
       return;
     }
@@ -28,7 +29,7 @@ export default function KnowledgeReplyWrite(
   };
 
   return (
-    <div class={styles.commentform}>
+    <div className={styles.commentform}>
       <form>
         <label for="comment">댓글:</label>
         <textarea
@@ -37,7 +38,7 @@ export default function KnowledgeReplyWrite(
           ref={ReplyRef}
         ></textarea>
 
-        <button type="submit" onClick={onSaveClickHandler}>
+        <button type="button" onClick={onSaveClickHandler}>
           등록
         </button>
       </form>
