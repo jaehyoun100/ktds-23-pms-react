@@ -43,7 +43,7 @@ export function MemuApproval() {
 
   return (
     <>
-      {apprCnt && apprCnt !== 0 && (
+      {apprCnt !== 0 && (
         <div className={w.cardBodyContent}>
           <div>총 {apprCnt} 개의 승인요청 중</div>
           <div>{nonApprList.length}개의 미승인 건이 있습니다.</div>
