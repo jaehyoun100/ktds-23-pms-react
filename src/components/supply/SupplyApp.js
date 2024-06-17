@@ -6,6 +6,9 @@ import style from "./supply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Button, Checkbox } from "antd";
+import SupplyRegistModal from "./components/modal/supplyRegistModal";
+import SupplyRequestModal from "./components/modal/supplyRequestModal";
 
 export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();
@@ -13,6 +16,8 @@ export default function SupplyApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [hideZeroInventory, setHideZeroInventory] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+  const [isRegistModalVisible, setIsRegistModalVisible] = useState(false);
+  const [isGetModalVisible, setIsGetModalVisible] = useState(false);
 
   const { token } = useSelector((state) => state.tokenInfo);
   const isSelect = selectedSplId !== undefined;
@@ -100,18 +105,6 @@ export default function SupplyApp() {
     setSelectedSplId((prevId) => (prevId === rowId ? undefined : rowId));
   };
 
-  const onRegistrationModeClickHandler = () => {
-    navigate("regist");
-  };
-
-  const onSupplyLogViewModeClickHandler = () => {
-    navigate("log");
-  };
-
-  const onApplyModeClickHandler = () => {
-    navigate("get");
-  };
-
   const handleCheckboxChange = (e) => {
     setHideZeroInventory(e.target.checked);
   };
@@ -120,6 +113,32 @@ export default function SupplyApp() {
     ? data.filter((item) => item.invQty > 0)
     : data;
 
+  const handleOpenRegistModal = () => {
+    setIsRegistModalVisible(true);
+  };
+
+  const handleCloseRegistModal = () => {
+    setIsRegistModalVisible(false);
+  };
+
+  const handleOpenGetModal = () => {
+    setIsGetModalVisible(true);
+  };
+
+  const handleCloseGetModal = () => {
+    setIsGetModalVisible(false);
+  };
+
+  const handleRegisterSuccess = () => {
+    // Refresh data or perform necessary actions after registration
+    handleCloseRegistModal();
+  };
+
+  const handleApplySuccess = () => {
+    // Refresh data or perform necessary actions after applying
+    handleCloseGetModal();
+  };
+
   return (
     <div className={style.supplyAppContainer}>
       <div
@@ -127,14 +146,12 @@ export default function SupplyApp() {
       >
         {token && (
           <>
-            <label>
-              <input
-                type="checkbox"
-                checked={hideZeroInventory}
-                onChange={handleCheckboxChange}
-              />
+            <Checkbox
+              checked={hideZeroInventory}
+              onChange={handleCheckboxChange}
+            >
               재고 없는 비품 감추기
-            </label>
+            </Checkbox>
             <Table
               columns={isSelect ? simplifiedColumns : columns}
               dataSource={filteredData}
@@ -152,11 +169,13 @@ export default function SupplyApp() {
             />
           </>
         )}
-        {deptId === "DEPT_230101_000010" && (
-          <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
-        )}
-        <button onClick={onApplyModeClickHandler}>소모품 신청</button>
-        <button onClick={onSupplyLogViewModeClickHandler}>신청 기록</button>
+        <div className={style.buttonContainer}>
+          {deptId === "DEPT_230101_000010" && (
+            <Button onClick={handleOpenRegistModal}>소모품 등록</Button>
+          )}
+          <Button onClick={handleOpenGetModal}>소모품 신청</Button>
+          <Button onClick={() => navigate("log")}>신청 기록</Button>
+        </div>
       </div>
       {isSelect && (
         <div
@@ -167,6 +186,16 @@ export default function SupplyApp() {
           <SupplyView selectedSplId={selectedSplId} />
         </div>
       )}
+      <SupplyRegistModal
+        visible={isRegistModalVisible}
+        onClose={handleCloseRegistModal}
+        onRegister={handleRegisterSuccess}
+      />
+      <SupplyRequestModal
+        visible={isGetModalVisible}
+        onClose={handleCloseGetModal}
+        onApply={handleApplySuccess}
+      />
     </div>
   );
 }

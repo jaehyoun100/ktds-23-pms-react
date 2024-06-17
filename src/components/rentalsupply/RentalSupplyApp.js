@@ -152,13 +152,17 @@ export default function RentalSupplyApp() {
             />
           </>
         )}
-        {deptId === "DEPT_230101_000010" && (
-          <button onClick={onRegistrationModeClickHandler}>대여품 등록</button>
-        )}
-        <button onClick={onApplyModeClickHandler}>대여품 신청</button>
-        <button onClick={onRentalSupplyLogViewModeClickHandler}>
-          신청 기록
-        </button>
+        <div className={style.buttonContainer}>
+          {deptId === "DEPT_230101_000010" && (
+            <button onClick={onRegistrationModeClickHandler}>
+              대여품 등록
+            </button>
+          )}
+          <button onClick={onApplyModeClickHandler}>대여품 신청</button>
+          <button onClick={onRentalSupplyLogViewModeClickHandler}>
+            신청 기록
+          </button>
+        </div>
       </div>
       {isSelect && (
         <div

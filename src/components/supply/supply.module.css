@@ -30,6 +30,13 @@
   cursor: pointer;
 }
 
+/* SupplyApp 버튼을 위한 스타일 */
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 /* SupplyView 컴포넌트를 위한 css */
 .supplyViewContainer {
   background-color: #f9f9f9;
@@ -109,86 +116,9 @@
   color: #999;
 }
 
-/* SupplyRegist 컴포넌트를 위한 css */
-.supplyRegistContainer {
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.supplyRegistHeader {
+/* SupplyView 버튼을 위한 스타일 */
+.supplyViewButtonContainer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.supplyRegistHeader h3 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #333;
-}
-
-.supplyForm {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.formGroup label {
-  font-weight: bold;
-  color: #333;
-}
-
-.formGroup input,
-.formGroup textarea,
-.formGroup select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #333;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.formGroup select {
-  height: 40px;
-}
-
-.formGroup img {
-  max-width: 100px;
-  max-height: 100px;
-  margin-top: 10px;
-}
-
-.formGroup.inlineGroup {
-  display: flex;
-  gap: 20px;
-}
-
-.formGroup.inlineGroup div {
-  flex: 1;
-}
-
-.formGroup.inlineGroup input {
-  width: 100%;
-}
-
-.detailTextarea {
-  height: 200px;
-}
-
-/* SupplyLogView 컴포넌트를 위한 css */
-.supplyLogTableComponent {
-  flex: 1;
-  transition: all 0.3s ease-in-out;
+  justify-content: flex-end;
+  gap: 10px;
 }

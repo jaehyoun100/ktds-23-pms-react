@@ -117,7 +117,7 @@ export default function SupplyView({ selectedSplId }) {
             <span>{supplyBody.splDtl}</span>
           </div>
           {deptId === "DEPT_230101_000010" && (
-            <div>
+            <div className={style.supplyViewButtonContainer}>
               <button onClick={onSupplyModificationModeClickHandler}>
                 수정
               </button>
