@@ -8,10 +8,12 @@ import style from "../rentalSupply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, message } from "antd";
+import axios from "axios";
 
 export default function RentalSupplyLogView() {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState({});
 
   const { token } = useSelector((state) => state.tokenInfo);
   const navigate = useNavigate();
@@ -22,40 +24,55 @@ export default function RentalSupplyLogView() {
   );
   const memoizedToken = useMemo(() => ({ token }), [token]);
 
+  const loadUserInfo = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setUserInfo(res.data.body);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [token]);
+
   useEffect(() => {
     const fetchingData = async () => {
       const json = await memoizedLoadRentalSupplyApprovalList({
         ...memoizedToken,
       });
-
       const flattenedData = json.body.map((item) => ({
         ...item,
         empName: `${item.employeeVO.empName} (${item.employeeVO.email})`,
         reqDt: item.approvalVO.apprDate,
         rsplRqstQty: item.rsplRqstQty === 0 ? undefined : item.rsplRqstQty,
       }));
-
       setData(flattenedData);
       setIsLoading(false);
     };
 
     fetchingData();
-  }, [memoizedLoadRentalSupplyApprovalList, memoizedToken]);
+    loadUserInfo();
+  }, [memoizedLoadRentalSupplyApprovalList, loadUserInfo, memoizedToken]);
 
-  const handleReturnClick = async (rsplApprId, invQty) => {
-    const response = await returnRentalSupply({ rsplApprId, invQty, token });
-    if (response.status === "OK") {
-      message.success("반납 요청이 성공적으로 처리되었습니다.");
-      // 성공적으로 반납 후 데이터 갱신
-      setData(
-        data.map((item) =>
-          item.rsplApprId === rsplApprId ? { ...item, rtrnYn: "Y" } : item
-        )
-      );
-    } else {
-      message.error("반납 요청 처리에 실패했습니다.");
-    }
+  const handleReturnClick = async (rsplApprId, rsplRqstQty) => {
+    const response = await returnRentalSupply({
+      rsplApprId,
+      rsplRqstQty,
+      token,
+    });
+
+    message.success("반납 요청이 성공적으로 처리되었습니다.");
+    setData(
+      data.map((item) =>
+        item.rsplApprId === rsplApprId ? { ...item, rtrnYn: "Y" } : item
+      )
+    );
   };
+
+  const deptId =
+    userInfo && userInfo.departmentVO ? userInfo.departmentVO.deptId : null;
 
   const columns = [
     {
@@ -113,14 +130,16 @@ export default function RentalSupplyLogView() {
                 반납 완료
               </button>
             ) : (
-              <button
-                className="returnButton"
-                onClick={() =>
-                  handleReturnClick(record.rsplApprId, record.rsplRqstQty)
-                }
-              >
-                반납
-              </button>
+              deptId === "DEPT_230101_000010" && (
+                <button
+                  className="returnButton"
+                  onClick={() =>
+                    handleReturnClick(record.rsplApprId, record.rsplRqstQty)
+                  }
+                >
+                  반납
+                </button>
+              )
             )}
           </span>
         ) : null,
