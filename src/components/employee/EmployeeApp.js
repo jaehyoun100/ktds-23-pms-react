@@ -72,7 +72,10 @@ export default function EmployeeApp() {
   }, [token]);
 
   const url =
-    "http://" + (window.location.host === "43.202.29.221" ? "43.202.29.221" : "localhost:8080");
+    "http://" +
+    (window.location.host === "43.202.29.221"
+      ? "43.202.29.221"
+      : "localhost:8080");
 
   const loadDataLists = useCallback(async () => {
     try {
@@ -212,7 +215,10 @@ export default function EmployeeApp() {
       // ),
       // 위와같이, dataIndex를 지정하지 않는 경우에는 첫번째 인자로 row를 받을 수 있다.
       render: (data, row) => (
-        <span style={{ cursor: "pointer" }} onClick={() => navigate(`/employee/${row.empId}`)}>
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate(`/employee/${row.empId}`)}
+        >
           {data}
         </span>
       ),
@@ -260,6 +266,10 @@ export default function EmployeeApp() {
       label: "사원명",
       value: "empName",
     },
+    {
+      label: "부서명",
+      value: "deptName",
+    },
     // {
     //   label: "부서명",
     //   value: "deptId",
@@ -271,9 +281,9 @@ export default function EmployeeApp() {
     async (data) => {
       await handleRegistEmployee({ data, token });
       // await fetchData(); // 데이터 다시 불러오기
-      loadEmployeeList();
+      loadEmployeeList(); // 데이터 다시 불러오기
     },
-    [token]
+    [token, loadEmployeeList]
   );
 
   useEffect(() => {
@@ -281,7 +291,7 @@ export default function EmployeeApp() {
     // fetchData();
     loadUserInfo();
     loadEmployeeList();
-  }, [loadDataLists, fetchData]);
+  }, [loadDataLists, fetchData, loadEmployeeList, loadUserInfo]);
 
   return (
     <>
@@ -306,6 +316,3 @@ export default function EmployeeApp() {
     </>
   );
 }
-
-// TODO: 로그인 시, Redux store와 sessionStorage 로그인한 유저 정보 저장하도록 요구.
-// 그 후,

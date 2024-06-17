@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { Modal, message } from "antd";
 
 const url =
   "http://" +
@@ -59,6 +59,10 @@ export const handleRegistEmployee = async ({ data, token }) => {
     body: JSON.stringify(data),
   });
   if (response.status === 200) {
+    Modal.info({
+      title: "등록 성공",
+      content: "초기 비밀번호는 'ABCDE12345!' 입니다.",
+    });
     loadData({ token });
   }
 
