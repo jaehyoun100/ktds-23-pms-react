@@ -33,10 +33,7 @@ export default function MainChart({ completed, inProgress, children }) {
       <div
         style={{
           textAlign: "center",
-          color:
-            completed || inProgress
-              ? "var(--main-color)"
-              : "var(--third-color)",
+          color: completed || inProgress ? "var(--main-color)" : "var(--third-color)",
           fontWeight: "bold",
           marginBottom: "5px",
         }}
@@ -59,14 +56,14 @@ export default function MainChart({ completed, inProgress, children }) {
           <div
             style={{
               backgroundColor: "var(--third-color)",
-              width: "140px",
-              height: "140px",
+              width: "165px",
+              height: "165px",
               borderRadius: "50%",
             }}
           ></div>
           <div
             style={{
-              marginTop: "15px",
+              marginTop: "12px",
               fontSize: "12px",
               color: "var(--third-color)",
             }}
