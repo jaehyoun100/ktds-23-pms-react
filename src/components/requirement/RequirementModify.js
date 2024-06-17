@@ -313,29 +313,6 @@ export default function RequirementModify({
             >
               {requirement.rqmCntnt}
             </textarea>
-            {/* <div className="hereCkEditor5">
-              <div className="editor" data-name="rqmCntnt" data-init-content="">
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={requirement.rqmCntnt}
-                  onReady={(editor) => {
-                    // You can store the "editor" and use when it is needed.
-                    console.log("Editor is ready to use!", editor);
-                  }}
-                  onChange={(event, editor) => {
-                    const data = editor.getData();
-                    setEditorModifyData(data);
-                  }}
-                  onBlur={(event, editor) => {}}
-                  onFocus={(event, editor) => {}}
-                />
-              </div>
-              {modifyErrors.rqmCntnt && modifyErrors.rqmCntnt.length > 0 && (
-                <div className={styles.errorMessage}>
-                  {modifyErrors.rqmCntnt}
-                </div>
-              )}
-            </div> */}
 
             {/** 체크박스 일정상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
             <label htmlFor="scd-sts">일정상태</label>
