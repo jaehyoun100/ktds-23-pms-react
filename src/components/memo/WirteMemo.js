@@ -65,6 +65,13 @@ export default function WriteMemo() {
     if (json.body) {
       alert("쪽지가 발송되었습니다.");
       navigate("/memo/send");
+      memoDispatch(memoAddrAction.deleteRcvList({ rcvList: [] }));
+      memoDispatch(memoAddrAction.deleteRcvRefList({ rcvRefList: [] }));
+      memoDispatch(
+        memoAddrAction.deleteRcvSecretRefList({
+          rcvSecretRefList: [],
+        })
+      );
     } else if (json.errors) {
       alert(json.errors);
     }
