@@ -6,7 +6,7 @@ import Button from "../../../common/Button/Button";
 import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { CiCircleMinus } from "react-icons/ci";
-import { IoPersonCircleSharp } from "react-icons/io5";
+import { FcBusinessman } from "react-icons/fc";
 import MainHeader from "../MainHeader";
 import {
   addTmmate,
@@ -353,22 +353,20 @@ export default function TeamMate() {
           pm &&
           (userInfo.admnCode === "301" || userInfo.empId === pm.tmId) && (
             <div className={s.teamMateEmpArea}>
-              <div
-                className={s.teamMateEmpPhoto}
-                style={{
-                  backgroundImage: `url(${
-                    selectedEmpData?.originPrflFileName
-                      ? selectedEmpData.originPrflFileName
-                      : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
-                  })`,
-                }}
-              >
-                {/* {selectedEmpData && selectedEmpData.originPrflFileName !== null ? (
-              selectedEmpData.originPrflFileName
-            ) : (
-              <IoPersonCircleSharp />
-            )} */}
-              </div>
+              {selectedEmpData?.originPrflFileName ? (
+                <div
+                  className={s.teamMateEmpPhoto}
+                  style={{
+                    backgroundImage: `url(${
+                      selectedEmpData?.originPrflFileName
+                        ? selectedEmpData.originPrflFileName
+                        : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
+                    })`,
+                  }}
+                ></div>
+              ) : (
+                <FcBusinessman className={s.teamMateEmpPhoto} />
+              )}
               <TeammateEmpInfo empData={selectedEmpData && selectedEmpData} />
             </div>
           )}

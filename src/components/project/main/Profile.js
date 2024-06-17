@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import s from "../project.module.css";
 import ProfileModal from "./ProfileModal";
+import { FcBusinessman } from "react-icons/fc";
 
 const Profile = ({ profileFile, profileValue }) => {
   const [showModal, setShowModal] = useState(false);
@@ -13,12 +14,13 @@ const Profile = ({ profileFile, profileValue }) => {
     console.log(profileValue);
   };
   const styles = {
-    backgroundImage: `url(${
-      profileFile !== null
-        ? profileFile
-        : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
-    })`,
+    backgroundImage: `url(${profileFile})`,
     backgroundSize: "contain",
+    borderRadius: "50%",
+    width: "40px",
+    height: "40px",
+  };
+  const styles2 = {
     borderRadius: "50%",
     width: "40px",
     height: "40px",
@@ -26,7 +28,11 @@ const Profile = ({ profileFile, profileValue }) => {
 
   return (
     <>
-      <div style={styles} onClick={onProfileClickHandler}></div>
+      {profileFile !== null ? (
+        <div style={styles} onClick={onProfileClickHandler}></div>
+      ) : (
+        <FcBusinessman style={styles2} onClick={onProfileClickHandler} />
+      )}
       <ProfileModal
         show={showModal}
         onClose={handleCloseModal}

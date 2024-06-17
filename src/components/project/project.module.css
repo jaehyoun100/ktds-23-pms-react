@@ -527,3 +527,8 @@ h1 {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.modalPhoto{
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}

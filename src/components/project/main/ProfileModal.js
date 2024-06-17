@@ -1,6 +1,6 @@
 import React from "react";
 import s from "../project.module.css";
-import { IoPersonCircleSharp } from "react-icons/io5";
+import { FcBusinessman } from "react-icons/fc";
 
 const ProfileModal = React.memo(
   ({ content, profileValue, onClose, show, closeContent, selectedEmpData }) => {
@@ -30,9 +30,15 @@ const ProfileModal = React.memo(
             <div className={s.infoEmpPhoto}>
               {selectedEmpData &&
               selectedEmpData.employeeVO.originPrflFileName !== null ? (
-                selectedEmpData.originPrflFileName
+                <div
+                  style={{
+                    backgroundImage: `url(${selectedEmpData.employeeVO.originPrflFileName})`,
+                    backgroundSize: "contain",
+                  }}
+                  className={s.modalPhoto}
+                ></div>
               ) : (
-                <IoPersonCircleSharp />
+                <FcBusinessman className={s.modalPhoto} />
               )}
             </div>
             <div className={s.modalInfoContent}>

@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import w from "./../ContentMain.module.css";
+import { FcBusinessman } from "react-icons/fc";
 
 const MemberLogin = () => {
   const [myDeptmate, setMyDeptmate] = useState([]);
@@ -40,16 +41,24 @@ const MemberLogin = () => {
     <div className={w.deptFlex}>
       {myDeptmate?.map((item, idx) => (
         <div key={idx}>
-          <div
-            style={{
-              border: `2px solid ${item.lgnYn === "Y" ? "#71dd37" : "#777"}`,
-              backgroundImage: item.originFileName
-                ? `url(${item.originFileName}`
-                : `url(https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171)`,
-              opacity: item.lgnYn === "N" ? "0.5" : "1",
-            }}
-            className={w.deptMemberPhoto}
-          ></div>
+          {item?.originFileName ? (
+            <div
+              style={{
+                border: `2px solid ${item.lgnYn === "Y" ? "#71dd37" : "#777"}`,
+                backgroundImage: `url(${item.originFileName}`,
+                opacity: item.lgnYn === "N" ? "0.5" : "1",
+              }}
+              className={w.deptMemberPhoto}
+            ></div>
+          ) : (
+            <FcBusinessman
+              style={{
+                border: `2px solid ${item.lgnYn === "Y" ? "#71dd37" : "#777"}`,
+                opacity: item.lgnYn === "N" ? "0.5" : "1",
+              }}
+              className={w.deptMemberPhoto}
+            />
+          )}
           <div
             className={w.deptMemberName}
             style={{
