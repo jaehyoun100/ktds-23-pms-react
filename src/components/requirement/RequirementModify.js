@@ -303,13 +303,15 @@ export default function RequirementModify({
 
             {/** ckeditor를 이용한 내용넣기 */}
             <label htmlFor="rqm-cntnt">요구사항 내용</label>
-            <textarea
-              className={styles.contentBox}
-              id="rqm-cntnt"
-              ref={rqmCntntRef}
-            >
-              {requirement.rqmCntnt}
-            </textarea>
+            <div className={styles.contentBoxContainer}>
+              <textarea
+                className={styles.contentBox}
+                id="rqm-cntnt"
+                ref={rqmCntntRef}
+              >
+                {requirement.rqmCntnt}
+              </textarea>
+            </div>
 
             {/** 체크박스 일정상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
             <label htmlFor="scd-sts">일정상태</label>
