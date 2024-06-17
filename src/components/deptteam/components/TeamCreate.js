@@ -15,6 +15,7 @@ export default function TeamCreate({
     {
       name: "",
       empId: "",
+      reason: "",
       deptId: selectedDeptId,
     },
   ]);
@@ -33,6 +34,7 @@ export default function TeamCreate({
       {
         name: "",
         empId: "",
+        reason: "",
         deptId: selectedDeptId,
       },
     ]);
@@ -52,8 +54,8 @@ export default function TeamCreate({
 
   const onRegisterClickHandler = async () => {
     for (const field of inputFields) {
-      const { name, empId, deptId } = field;
-      const json = await createTeam(token, name, empId, deptId);
+      const { name, empId, deptId, reason } = field;
+      const json = await createTeam(token, name, empId, deptId, reason);
 
       if (json.errors) {
         json.errors.forEach((error) => {
@@ -127,6 +129,17 @@ export default function TeamCreate({
               name="empName"
               // value={inputField.empName}
               // onChange={(event) => handleInputChange(index, event)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`reason-${index}`}>팀 신청 사유</label>
+            <input
+              type="text"
+              id={`reason-${index}`}
+              name="reason"
+              value={inputField.reason}
+              defaultValue=""
+              onChange={(event) => handleInputChange(index, event)}
             />
           </div>
 
