@@ -62,12 +62,6 @@ export const menus = [
     ],
   },
   {
-    label: "프로젝트",
-    to: "/project",
-    icon: <BsHouseDoor />,
-    clickIcon: <BsHouseDoorFill />,
-  },
-  {
     label: "지식관리",
     to: "/knowledge",
     icon: <BsHouseDoor />,
