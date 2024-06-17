@@ -82,10 +82,11 @@ export const loadTeamMemberList = async ({ token, selectTmId }) => {
   return json;
 };
 
-export const createDepartment = async (token, name, empId) => {
+export const createDepartment = async (token, name, empId, reason) => {
   const data = new FormData();
   data.append("deptName", name);
   data.append("deptLeadId", empId);
+  data.append("deptApprReason", reason);
 
   const response = await fetch(`${url}/api/v1/department`, {
     method: "POST",
