@@ -57,7 +57,9 @@ const SelectDate = ({
         className={styles.datePicker}
         onChange={handleStartDateChange}
         // ref={startDateRef}
-        defaultValue={dayjs(startDate, "YYYY-MM-DD")}
+        defaultValue={
+          startDate !== undefined ? dayjs(startDate, "YYYY-MM-DD") : undefined
+        }
         format="YYYY-MM-DD"
       />
       ~
@@ -65,7 +67,9 @@ const SelectDate = ({
         className={styles.datePicker2}
         onChange={handleEndDateChange}
         // ref={endDateRef}
-        defaultValue={dayjs(endDate, "YYYY-MM-DD")}
+        defaultValue={
+          endDate !== undefined ? dayjs(endDate, "YYYY-MM-DD") : undefined
+        }
         format="YYYY-MM-DD"
       />
     </div>
