@@ -44,6 +44,7 @@ export default function ApprovalApp() {
           {data}
         </span>
       ),
+      width: "10%",
     },
     {
       title: "승인여부",
@@ -54,6 +55,7 @@ export default function ApprovalApp() {
           {data}
         </span>
       ),
+      width: "5%",
     },
     {
       title: "결제요청자",
@@ -66,6 +68,27 @@ export default function ApprovalApp() {
       ),
     },
     {
+      title: "승인담당",
+      dataIndex: "approver",
+      key: "approver",
+      render: (data, row) => (
+        <span style={{ cursor: "pointer" }} onClick={showModal(row.apprId)}>
+          {data}
+        </span>
+      ),
+    },
+    {
+      title: "사유",
+      dataIndex: "apprRsn",
+      key: "apprRsn",
+      render: (data, row) => (
+        <span style={{ cursor: "pointer" }} onClick={showModal(row.apprId)}>
+          {data}
+        </span>
+      ),
+      width: "15%",
+    },
+    {
       title: "결제요청일",
       dataIndex: "apprDate",
       key: "apprDate",
@@ -74,6 +97,7 @@ export default function ApprovalApp() {
           {data}
         </span>
       ),
+      width: "10%",
     },
     {
       title: "결제마감일",
@@ -84,6 +108,7 @@ export default function ApprovalApp() {
           {data}
         </span>
       ),
+      width: "10%",
     },
     // {
     //   title: "승인",
@@ -96,7 +121,7 @@ export default function ApprovalApp() {
   return (
     <>
       <h4>결제 승인 요청</h4>
-      <div>{apprCnt}개가 있어요 </div>
+      {apprCnt && <div>{apprCnt}개가 있어요 </div>}
       {apprList && (
         <>
           <Table
