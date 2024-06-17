@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   loadRequirements,
   loadTeamListByPrjId,
 } from "../../http/requirementHttp";
 import Table from "../../utils/Table";
+import MainHeader from "../project/main/MainHeader";
 
 export default function Requirement() {
   const [requirement, setRequirement] = useState({
@@ -13,22 +14,29 @@ export default function Requirement() {
   });
   const [teamList, setTeamList] = useState();
   const [userData, setUserData] = useState();
+  const [project, setProject] = useState();
 
   const token = localStorage.getItem("token");
 
-  const query = new URLSearchParams(useLocation().search);
-  const prjNameValue = query.get("prjName");
+  // const query = new URLSearchParams(useLocation().search);
+  // const prjNameValue = query.get("prjName");
 
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
+
+  const location = useLocation();
+  useMemo(() => {
+    const projectState = location.state || {};
+    setProject(projectState.project);
+  }, [location.state]);
 
   // const query = new URLSearchParams(useLocation().search);
   // const prjId = query.get("prjId");
   const { prjIdValue } = useParams();
 
   const onRqmCreateHandler = () => {
-    navigate(`/requirement/${prjIdValue}/write?prjName=${prjNameValue}`);
+    navigate(`/requirement/${prjIdValue}/write`, { state: { project } });
   };
 
   const rqmTtlClickHandler = (prjId, rqmId) => {
@@ -102,7 +110,7 @@ export default function Requirement() {
       title: "프로젝트",
       dataIndex: ["projectVO", "prjName"],
       key: "prjName",
-      width: "30%",
+      width: "25%",
     },
     {
       title: "요구사항명",
@@ -125,25 +133,25 @@ export default function Requirement() {
       title: "일정상태",
       dataIndex: ["scdStsVO", "cmcdName"],
       key: "cmcdName",
-      width: "10%",
+      width: "auto",
     },
     {
       title: "진행상태",
       dataIndex: ["rqmStsVO", "cmcdName"],
       key: "cmcdName",
-      width: "10%",
+      width: "auto",
     },
     {
       title: "작성자",
       dataIndex: ["crtrIdVO", "empName"],
       key: "empName",
-      width: "10%",
+      width: "auto",
     },
     {
       title: "작성일",
       dataIndex: "crtDt",
       key: "crtDt",
-      width: "20%",
+      width: "auto",
     },
   ];
 
@@ -161,47 +169,10 @@ export default function Requirement() {
       {data.requirementList && userData && (
         <>
           {userData && data.count > 0 ? (
-            // (
-            //   <>
-            //     <div>총 {data.count}개의 요구사항이 검색되었습니다.</div>
-            //     <table>
-            //       <thead>
-            //         <tr>
-            //           <th>프로젝트</th>
-            //           <th>제목</th>
-            //           <th>일정상태</th>
-            //           <th>진행상태</th>
-            //           <th>작성자</th>
-            //           <th>작성일</th>
-            //         </tr>
-            //       </thead>
-            //       <tbody>
-            //         {data &&
-            //           data.requirementList.map((item) => (
-            //             <tr key={item.rqmId}>
-            //               <td>{item.projectVO.prjName}</td>
-            //               <td
-            //                 onClick={() =>
-            //                   rqmTtlClickHandler(item.projectVO.prjId, item.rqmId)
-            //                 }
-            //               >
-            //                 {item.rqmTtl}
-            //               </td>
-            //               <td>{item.scdStsVO.cmcdName}</td>
-            //               <td>{item.rqmStsVO.cmcdName}</td>
-            //               <td>{item.crtrIdVO.empName}</td>
-            //               <td>{item.crtDt}</td>
-            //             </tr>
-            //           ))}
-            //       </tbody>
-            //     </table>
-            //   </>
-            // ) : (
-            //   <div>해당 프로젝트에 대한 요구사항이 없습니다.</div>
-            // )}
             <>
-              {token && (
+              {token && project && (
                 <>
+                  <MainHeader project={project} />
                   <div style={{ marginBottom: "20px" }}>
                     총 {data.count}개의 요구사항이 검색되었습니다.
                   </div>
@@ -219,6 +190,7 @@ export default function Requirement() {
             <>
               {token && (
                 <>
+                  <MainHeader project={project} />
                   <div style={{ marginBottom: "20px" }}>
                     해당 프로젝트에 대한 요구사항이 없습니다.
                   </div>

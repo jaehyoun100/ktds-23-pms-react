@@ -32,8 +32,11 @@ export default function RequirementWrite() {
     rqmSts: [], // 진행상태
   });
 
-  const query = new URLSearchParams(useLocation().search);
-  const prjNameValue = query.get("prjName");
+  // const query = new URLSearchParams(useLocation().search);
+  // const prjNameValue = query.get("prjName");
+
+  const location = useLocation();
+  const projectValue = location.state || {};
 
   const token = localStorage.getItem("token");
 
@@ -181,7 +184,7 @@ export default function RequirementWrite() {
                 id="prj-id"
                 name="prjId"
                 ref={prjIdRef}
-                defaultValue={prjNameValue}
+                defaultValue={projectValue.project.prjName}
                 readOnly
               />
               {writeErrors.prjId && writeErrors.prjId.length > 0 && (
