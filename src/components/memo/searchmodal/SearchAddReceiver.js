@@ -69,7 +69,7 @@ export default function SearchAddReceiver() {
         </div>
       </div>
       <div className={style.heightFull}>
-        <div className={style.miniTitle}>비밀참조</div>
+        <div className={style.miniTitle}>숨은참조</div>
         <div className={`${style.tree} ${style.treeItemOverflow}`}>
           {rcvSecretRefList &&
             rcvSecretRefList.map((emp) => (

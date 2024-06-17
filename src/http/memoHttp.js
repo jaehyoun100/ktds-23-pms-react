@@ -80,7 +80,7 @@ export const loadSendMemo = async ({ token, selectSendMemoId }) => {
 };
 
 // 쪽지 발송
-export const sendMemo = async (
+export const sendMemoService = async (
   token,
   memoTtl,
   memoCntnt,
@@ -205,7 +205,6 @@ export const loadSaveReceiveMemos = async ({ token, pageNo = 0 }) => {
 
 // 수신 쪽지 상세 조회
 export const loadReceiveMemo = async ({ selectRcvMemoId, token }) => {
-  console.log("????");
   if (!token) {
     return;
   }
@@ -215,7 +214,6 @@ export const loadReceiveMemo = async ({ selectRcvMemoId, token }) => {
   });
   const rcvJson = await response.json();
   const sendMemoId = rcvJson.body.sendMemoId;
-  console.log("ooo ", rcvJson);
 
   if (!sendMemoId) {
     console.log("데이터를 불러오지 못했습니다.");

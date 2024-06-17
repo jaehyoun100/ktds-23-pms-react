@@ -9,7 +9,6 @@ export const memoSliceStore = createSlice({
     // 로그인한 사원정보
     saveMyInfo(state, action) {
       state.myInfo = action.payload.myInfo;
-      console.log(state.myInfo);
     },
   },
 });

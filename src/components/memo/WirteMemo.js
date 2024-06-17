@@ -2,11 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import Button from "../common/Button/Button";
 import style from "./Memo.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { sendMemo } from "../../http/memoHttp";
+import { sendMemoService } from "../../http/memoHttp";
 import { useNavigate } from "react-router-dom";
 import SearchEmpMemo from "./searchmodal/SearchEmpMemo";
 import MemoModal from "./searchmodal/MemoModal";
-import { BsXCircle } from "react-icons/bs";
 import { memoAddrAction } from "../../store/toolkit/slice/memoAddrSlice";
 
 export default function WriteMemo() {
@@ -55,7 +54,13 @@ export default function WriteMemo() {
     const memoCntnt = memoCntntRef.current.value;
     const file = fileRef.current.files[0];
 
-    const json = await sendMemo(token, memoTtl, memoCntnt, file, receiveMemoVO);
+    const json = await sendMemoService(
+      token,
+      memoTtl,
+      memoCntnt,
+      file,
+      receiveMemoVO
+    );
 
     if (json.body) {
       alert("쪽지가 발송되었습니다.");

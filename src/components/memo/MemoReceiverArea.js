@@ -1,17 +1,30 @@
 import style from "./Memo.module.css";
+import { useEffect, useState } from "react";
 
-export default function MemoReceiverArea({ sendMemo }) {
+export default function MemoReceiverArea({ sendMemo, myInfo }) {
+  console.log(myInfo, "<<<<");
+
   const receiveMemoVOList = sendMemo ? sendMemo.receiveMemoVOList : [];
+  const [rcvSecretRefList, setRcvSecretRefList] = useState([]);
 
   const rcvList = receiveMemoVOList.filter((memo) => memo.rcvCode === "1401");
   const rcvRefList = receiveMemoVOList.filter(
     (memo) => memo.rcvCode === "1402"
   );
 
-  // @TODO 수신쪽지일 경우 비밀참조 숨기기!!!
-  const rcvSecretRefList = receiveMemoVOList.filter(
-    (memo) => memo.rcvCode === "1403"
-  );
+  useEffect(() => {
+    if (myInfo === undefined) {
+      const rcvList = receiveMemoVOList.filter(
+        (memo) => memo.rcvCode === "1403"
+      );
+      setRcvSecretRefList(rcvList);
+    } else if (myInfo) {
+      const rcvList = receiveMemoVOList.filter(
+        (memo) => memo.rcvCode === "1403" && memo.rcvId === myInfo.empId
+      );
+      setRcvSecretRefList(rcvList);
+    }
+  }, [myInfo, receiveMemoVOList]);
   const isRcvSecretExist = Object.keys(rcvSecretRefList).length > 0;
 
   return (

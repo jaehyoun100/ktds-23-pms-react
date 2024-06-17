@@ -17,6 +17,8 @@ import {
   BsFileEarmarkTextFill,
 } from "react-icons/bs";
 import MemoReceiverArea from "./MemoReceiverArea";
+import ReplyMemo from "./ReplyMemo";
+import { useNavigate } from "react-router-dom";
 
 export default function ReceiveMemoViewDetail({
   token,
@@ -25,12 +27,16 @@ export default function ReceiveMemoViewDetail({
   setSelectRcvMemoId,
   setNeedLoad,
 }) {
+  const navigate = useNavigate();
   const [isFolded, setIsFolded] = useState(false);
   const [isFileFolded, setIsFileFolded] = useState(false);
   const [needViewReload, setNeedViewReload] = useState();
+  const [isReplyMode, setIsReplyMode] = useState(false);
 
   // 쪽지 상세정보 조회
   const fetchLoadReceiveMemo = useCallback(loadReceiveMemo, []);
+
+  console.log("********", selectRcvMemoId);
 
   const fetchParam = useMemo(() => {
     return { selectRcvMemoId, token, needViewReload };
@@ -45,6 +51,11 @@ export default function ReceiveMemoViewDetail({
   const { rcvJson, sendJson } = data || {};
   const { body: receiveMemo } = rcvJson || {};
   const { body: sendMemo } = sendJson || {};
+
+  // 답변하기
+  const onReplyMemoHandler = () => {
+    navigate("/memo/reply", { state: { selectRcvMemoId } });
+  };
 
   // 목록 조회
   const onBoardListClickHandler = () => {
@@ -113,7 +124,7 @@ export default function ReceiveMemoViewDetail({
         <>
           {/* button */}
           <div className={style.memoToolBar}>
-            <Button>답장</Button>
+            <Button onClickHandler={onReplyMemoHandler}>답장</Button>
             <Button onClickHandler={onBoardListClickHandler}>목록</Button>
             <Button onClickHandler={onDeleteClickHandler}>삭제</Button>
           </div>
