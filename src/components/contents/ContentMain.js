@@ -45,7 +45,7 @@ export default function ContentMain() {
                     icon={<MdOutlineWorkHistory />}
                     header={"출퇴근"}
                     body={<MainCommute />}
-                    path={""}
+                    path={"commute/"}
                   />
                 </div>
                 {/* 쪽지 */}
@@ -61,12 +61,13 @@ export default function ContentMain() {
                   <Card
                     icon={<BsFillPeopleFill />}
                     header={"비품"}
-                    body={<MemuEmployee />}
+                    body={<MemuProduct />}
                   />
                   <Card
                     icon={<AiOutlineFundProjectionScreen />}
                     header={"결재"}
-                    body={<MenuProject />}
+                    body={<MemuApproval />}
+                    path={"approval/"}
                   />
                 </div>
               </div>
@@ -105,6 +106,14 @@ export default function ContentMain() {
                       path={"/project"}
                     />
                   </div>
+
+                  {/* <div className={w.contentGridTwo}>
+                  <Card
+                    icon={<HiMiniArchiveBox />}
+                    header={"비품"}
+                    body={<MemuProduct />}
+                  />
+                   */}
                 </div>
               </div>
             </div>

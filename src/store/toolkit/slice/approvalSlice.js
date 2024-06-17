@@ -6,6 +6,7 @@ export const approvalSliceStore = createSlice({
     apprCnt: 0,
     apprList: [],
     apprInfo: {},
+    approvalVO: {},
   },
   reducers: {
     set(state, action) {
@@ -13,7 +14,8 @@ export const approvalSliceStore = createSlice({
       state.apprList = action.payload.body.apprList;
     },
     getApprInfo(state, action) {
-      state.apprInfo = action.payload.body;
+      state.apprInfo = action.payload.body.approvalInfo;
+      state.approvalVO = action.payload.body.approvalVO;
     },
   },
 });

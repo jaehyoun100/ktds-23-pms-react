@@ -5,7 +5,7 @@ import { approveOneRequest } from "../../http/approvalHttp";
 import { useRef } from "react";
 
 export default function ApprovalModal({ open, setOpen, apprId, footer }) {
-  const { apprInfo } = useSelector((state) => state.approvalInfo);
+  const { apprInfo, approvalVO } = useSelector((state) => state.approvalInfo);
   const { token } = useSelector((state) => state.tokenInfo);
   const dispatch = useDispatch();
   const apprRsnRef = useRef("");
@@ -128,12 +128,12 @@ export default function ApprovalModal({ open, setOpen, apprId, footer }) {
     {
       key: "deptLeadId",
       label: "부서장",
-      children: apprInfo?.employeeVO?.empName,
+      children: apprInfo?.edlEmpName,
     },
     {
       key: "deptApprReqtr",
       label: "신청인",
-      children: apprInfo?.employeeVO?.empName,
+      children: apprInfo?.eaEmpName,
     },
     {
       key: "deptApprType",
@@ -151,24 +151,25 @@ export default function ApprovalModal({ open, setOpen, apprId, footer }) {
     //   children: apprInfo?.splRqstType,
     // },
   ];
-  const footerOption = footer
-    ? [
-        <h6 key="appr">상기된 내용의 결제를 요청드립니다</h6>,
-        <Input
-          ref={apprRsnRef}
-          key="rsnInput"
-          placeholder="사유를 입력해주세요(10자이내)"
-        ></Input>,
-        <Spacer key="forMargin1" margin={5} />,
-        <Button key="apprBtn" onClick={onApprHandler(apprId)}>
-          승인
-        </Button>,
-        <Spacer key="forMargin2" margin={5} />,
-        <Button key="refuseBtn" onClick={onRefuseHandler(apprId)}>
-          거절
-        </Button>,
-      ]
-    : [];
+  const footerOption =
+    footer && (approvalVO.apprYn === null || approvalVO.apprYn === undefined)
+      ? [
+          <h6 key="appr">상기 내용의 결제를 요청드립니다</h6>,
+          <Input
+            ref={apprRsnRef}
+            key="rsnInput"
+            placeholder="사유를 입력해주세요(10자이내)"
+          ></Input>,
+          <Spacer key="forMargin1" margin={5} />,
+          <Button key="apprBtn" onClick={onApprHandler(apprId)}>
+            승인
+          </Button>,
+          <Spacer key="forMargin2" margin={5} />,
+          <Button key="refuseBtn" onClick={onRefuseHandler(apprId)}>
+            거절
+          </Button>,
+        ]
+      : [];
 
   return (
     <>
