@@ -100,7 +100,7 @@ export default function SurveyWrite({
 
   return (
     <>
-      <table style={{ width: "100%", minWidth: "510px" }}>
+      <table style={{ width: "90%", minWidth: "510px", margin: "30px 0 0 50px" }}>
         <thead>
           <tr>
             <th style={{ display: "flex", justifyContent: "space-between" }}>
