@@ -21,6 +21,7 @@ import { FaCalendarCheck } from "react-icons/fa";
 import { AiOutlineFundProjectionScreen, AiFillMessage } from "react-icons/ai";
 import { MdOutlineWorkHistory, MdEditDocument } from "react-icons/md";
 import { HiMiniArchiveBox } from "react-icons/hi2";
+import MemberLogin from "./maincomponents/MemberLogin";
 
 export default function ContentMain() {
   // <div className={w.}></div>
@@ -91,7 +92,7 @@ export default function ContentMain() {
                   <Card
                     icon={<AiOutlineFundProjectionScreen />}
                     header={"프로젝트"}
-                    body={<MenuProject />}
+                    body={<MemberLogin />}
                   />
                 </div>
                 <div className={w.contentGridTwo}>
