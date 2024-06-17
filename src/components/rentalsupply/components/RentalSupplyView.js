@@ -6,12 +6,14 @@ import {
 import style from "../rentalSupply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function RentalSupplyView({ selectedRsplId }) {
   const [data, setData] = useState();
   const [image, setImage] = useState(null);
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState({});
 
   const { token } = useSelector((state) => state.tokenInfo);
   const navigate = useNavigate();
@@ -20,6 +22,19 @@ export default function RentalSupplyView({ selectedRsplId }) {
   const memoizedParam = useMemo(() => {
     return { selectedRsplId, token };
   }, [selectedRsplId, token]);
+
+  const loadUserInfo = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setUserInfo(res.data.body);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +55,11 @@ export default function RentalSupplyView({ selectedRsplId }) {
     };
 
     fetchData();
-  }, [memoizedLoadRentalSupply, memoizedParam, setData, token]);
+    loadUserInfo();
+  }, [memoizedLoadRentalSupply, loadUserInfo, memoizedParam, setData, token]);
+
+  const deptId =
+    userInfo && userInfo.departmentVO ? userInfo.departmentVO.deptId : null;
 
   const { body: rentalSupplyBody } = data || {};
 
@@ -88,11 +107,13 @@ export default function RentalSupplyView({ selectedRsplId }) {
           <div className={style.detailItem}>
             <span>{rentalSupplyBody.rsplDtl}</span>
           </div>
-          <div>
-            <button onClick={onRentalSupplyModificationModeClickHandler}>
-              수정
-            </button>
-          </div>
+          {deptId === "DEPT_230101_000010" && (
+            <div>
+              <button onClick={onRentalSupplyModificationModeClickHandler}>
+                수정
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

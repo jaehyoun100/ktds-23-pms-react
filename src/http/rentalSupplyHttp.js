@@ -150,3 +150,22 @@ export const applyForMultipleRentalSupplies = async (token, supplies) => {
 
   return json;
 };
+
+export const returnRentalSupply = async ({ rsplApprId, invQty, token }) => {
+  if (!token) {
+    return undefined;
+  }
+
+  const response = await fetch(`${url}/api/v1/rentalsupply/return`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ rsplApprId, invQty }),
+  });
+
+  const json = await response.json();
+
+  return json;
+};

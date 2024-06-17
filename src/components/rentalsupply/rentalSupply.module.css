@@ -11,7 +11,7 @@
 }
 
 .tableComponent.collapsed {
-  flex: 0.32;
+  flex: 0.33;
 }
 
 .rentalSupplyViewComponent {
@@ -191,4 +191,26 @@
 .rentalSupplyLogTableComponent {
   flex: 1;
   transition: all 0.3s ease-in-out;
+}
+
+/* 반납 버튼 스타일 */
+.returnButton {
+  padding: 6px 12px;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.returnButton:hover {
+  background-color: #0056b3;
+}
+
+.returnButton.disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  text-decoration: line-through;
 }

@@ -125,7 +125,7 @@ export default function SupplyGet() {
 
     const supplies = inputFields.map((field) => ({
       splId: field.selectedSupply,
-      invQty: field.quantity,
+      splRqstQty: field.quantity,
     }));
 
     const json = await applyForMultipleSupplies(token, supplies);

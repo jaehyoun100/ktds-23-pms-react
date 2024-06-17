@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { loadRentalSupplyApprovalList } from "../../../http/rentalSupplyHttp";
+import {
+  loadRentalSupplyApprovalList,
+  returnRentalSupply,
+} from "../../../http/rentalSupplyHttp";
 import Table from "../../../utils/Table";
 import style from "../rentalSupply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 export default function RentalSupplyLogView() {
   const [data, setData] = useState();
@@ -16,9 +20,7 @@ export default function RentalSupplyLogView() {
     loadRentalSupplyApprovalList,
     []
   );
-  const memoizedToken = useMemo(() => {
-    return { token };
-  }, [token]);
+  const memoizedToken = useMemo(() => ({ token }), [token]);
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -30,6 +32,7 @@ export default function RentalSupplyLogView() {
         ...item,
         empName: `${item.employeeVO.empName} (${item.employeeVO.email})`,
         reqDt: item.approvalVO.apprDate,
+        rsplRqstQty: item.rsplRqstQty === 0 ? undefined : item.rsplRqstQty,
       }));
 
       setData(flattenedData);
@@ -38,6 +41,21 @@ export default function RentalSupplyLogView() {
 
     fetchingData();
   }, [memoizedLoadRentalSupplyApprovalList, memoizedToken]);
+
+  const handleReturnClick = async (rsplApprId, invQty) => {
+    const response = await returnRentalSupply({ rsplApprId, invQty, token });
+    if (response.status === "OK") {
+      message.success("반납 요청이 성공적으로 처리되었습니다.");
+      // 성공적으로 반납 후 데이터 갱신
+      setData(
+        data.map((item) =>
+          item.rsplApprId === rsplApprId ? { ...item, rtrnYn: "Y" } : item
+        )
+      );
+    } else {
+      message.error("반납 요청 처리에 실패했습니다.");
+    }
+  };
 
   const columns = [
     {
@@ -62,8 +80,8 @@ export default function RentalSupplyLogView() {
     },
     {
       title: "신청 갯수",
-      dataIndex: "reqCnt",
-      key: "reqCnt",
+      dataIndex: "rsplRqstQty",
+      key: "rsplRqstQty",
     },
     {
       title: "신청일",
@@ -74,6 +92,30 @@ export default function RentalSupplyLogView() {
       title: "승인 여부",
       dataIndex: "rsplApprYn",
       key: "rsplApprYn",
+    },
+    {
+      title: "반납 여부",
+      dataIndex: "rtrnYn",
+      key: "rtrnYn",
+      render: (text, record) =>
+        text && record.rsplApprYn !== "N" ? (
+          <span>
+            {text === "Y" ? (
+              <button className="returnButton disabled" disabled>
+                반납 완료
+              </button>
+            ) : (
+              <button
+                className="returnButton"
+                onClick={() =>
+                  handleReturnClick(record.rsplApprId, record.rsplRqstQty)
+                }
+              >
+                반납
+              </button>
+            )}
+          </span>
+        ) : null,
     },
   ];
 
