@@ -31,64 +31,53 @@ export function MainProject() {
 
   return (
     <>
-      <div className={w.cardBodyContent}></div>
-      <div style={{ gridColumn: "1/-1" }}>
-        <div className={p.overflowProTable}>
-          <table className={p.proTable}>
-            <thead className={p.proTableThead}>
-              <tr style={{ borderBottom: "1px solid #ccc" }}>
-                <th style={{ width: "20%" }}>프로젝트명</th>
-                <th style={{ width: "15%" }}>고객사</th>
-                <th style={{ width: "20%" }}>진행상황</th>
-                <th style={{ width: "15%" }}>D-day</th>
-                <th style={{ width: "30%" }}> 진행정도</th>
-              </tr>
-            </thead>
-            <tbody>
-              {myProject &&
-                myProject.map((item, idx) => {
-                  const dataDate = new Date(item.endDt);
-                  const sysdate = new Date();
-                  let diff = Math.abs(dataDate.getTime() - sysdate.getTime());
-                  diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
-                  return (
-                    <tr key={idx} style={{ borderBottom: "1px solid #ccc" }}>
-                      <td>{item.prjName}</td>
-                      <td>{item.clientVO.clntName}</td>
-                      <td>{item.prjStsCode.cmcdName}</td>
-                      <td>
-                        {new Date(item.endDt) > new Date() ? (
-                          "D - " + diff
-                        ) : (
-                          <>
-                            {new Date(item.endDt) === new Date()
-                              ? "D - DAY"
-                              : "마감"}
-                          </>
-                        )}
-                      </td>
-                      <td>
-                        {item.chartData && (
-                          <ProjectSubChart
-                            totalTasks={
-                              item.chartData[0] && item.chartData[0] != null
-                                ? item.chartData[0]
-                                : 0
-                            }
-                            completedTasks={
-                              item.chartData[1] && item.chartData[1] != null
-                                ? item.chartData[1]
-                                : 0
-                            }
-                            plusStyles={{ width: "300px" }}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
+      <div className={w.cardBodyContent}>
+        <div style={{ gridColumn: "1/-1", height: "100%" }}>
+          <div className={p.overflowProTable}>
+            <table className={p.proTable}>
+              <thead className={p.proTableThead}>
+                <tr style={{ borderBottom: "1px solid #ccc" }}>
+                  <th style={{ width: "20%" }}>프로젝트명</th>
+                  <th style={{ width: "15%" }}>고객사</th>
+                  <th style={{ width: "20%" }}>진행상황</th>
+                  <th style={{ width: "15%" }}>D-day</th>
+                  <th style={{ width: "30%" }}> 진행정도</th>
+                </tr>
+              </thead>
+              <tbody>
+                {myProject &&
+                  myProject.map((item, idx) => {
+                    const dataDate = new Date(item.endDt);
+                    const sysdate = new Date();
+                    let diff = Math.abs(dataDate.getTime() - sysdate.getTime());
+                    diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                    return (
+                      <tr key={idx} style={{ borderBottom: "1px solid #ccc" }}>
+                        <td>{item.prjName}</td>
+                        <td>{item.clientVO.clntName}</td>
+                        <td>{item.prjStsCode.cmcdName}</td>
+                        <td>
+                          {new Date(item.endDt) > new Date() ? (
+                            "D - " + diff
+                          ) : (
+                            <>{new Date(item.endDt) === new Date() ? "D - DAY" : "마감"}</>
+                          )}
+                        </td>
+                        <td>
+                          {item.chartData && (
+                            <ProjectSubChart
+                              totalTasks={item.chartData[0] && item.chartData[0] != null ? item.chartData[0] : 0}
+                              completedTasks={item.chartData[1] && item.chartData[1] != null ? item.chartData[1] : 0}
+                              plusStyles={{ width: "300px" }}
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </>
@@ -138,21 +127,14 @@ export function MainCalendar() {
   }, [tokenInfo.token]);
   return (
     <>
-      <div className={w.cardBodyContent}></div>
-
-      <div style={{ gridColumn: "1/-1" }}>
-        {/* <div className={w.commonDashboardCont}> */}
-        {/* <FaRegCalendarAlt FaRegCalendarCheck className={w.icons} /> 달력 */}
-        <CalendarComponent main events={sortedList} />
-        {/* </div> */}
+      <div className={w.cardBodyContent}>
+        <div style={{ gridColumn: "1/-1" }}>
+          {/* <div className={w.commonDashboardCont}> */}
+          {/* <FaRegCalendarAlt FaRegCalendarCheck className={w.icons} /> 달력 */}
+          <CalendarComponent main events={sortedList} />
+          {/* </div> */}
+        </div>
       </div>
-    </>
-  );
-}
-export function MainScaduale() {
-  return (
-    <>
-      <div className={w.cardBodyContent}></div>
     </>
   );
 }

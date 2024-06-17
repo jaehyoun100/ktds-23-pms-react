@@ -131,7 +131,7 @@
 }
 
 .bodyContentContainer {
-  padding: 15px;
+  padding: 0 15px;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
@@ -144,8 +144,13 @@
 
 .mainContentHolderRight {
   display: grid;
-  row-gap: 16px;
-  grid-template-rows: 1fr 1fr 1.5fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 15px;
+}
+.mainContentHolderRight2 {
+  display: grid;
+  grid-template-rows: 180px 1fr 1fr;
+  gap: 15px;
 }
 
 .mainContentHolderLeft {
@@ -183,7 +188,7 @@
   height: 100%; /* 상위 div의 높이에 맞춤 */
 }
 
-.gridTwoItem{
+.gridTwoItem {
   align-items: center;
   height: 100%; /* 상위 div 높이에 맞춤 */
   width: 100%; /* 상위 div 너비에 맞춤 */
@@ -268,9 +273,10 @@
 .deptFlex {
   display: flex;
   overflow: auto;
-  width: 400px;
-  gap: 20px;
+  width: 650px;
+  gap: 23px;
   text-align: center;
+  padding: 25px 10px 30px;
 }
 .deptMemberPhoto {
   background-size: contain;
@@ -281,4 +287,7 @@
 .deptMemberName {
   margin-top: 10px;
   font-weight: 550;
+}
+.cardBodyContent {
+  height: 100%;
 }

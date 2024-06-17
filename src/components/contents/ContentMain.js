@@ -1,16 +1,7 @@
 import w from "./ContentMain.module.css";
-import {
-  MainEmployee,
-  MainEmployeeImg,
-  MemuEmployee,
-} from "./maincomponents/Employee";
+import { MainEmployee, MainEmployeeImg, MemuEmployee } from "./maincomponents/Employee";
 import MainCommute from "./maincomponents/Commute";
-import {
-  MainCalendar,
-  MainProject,
-  MainScaduale,
-  MenuProject,
-} from "./maincomponents/Project";
+import { MainCalendar, MainProject, MainScaduale, MenuProject } from "./maincomponents/Project";
 import MainMemo from "./maincomponents/Memo";
 import MainIssue from "./maincomponents/Issue";
 import { MemuProduct } from "./maincomponents/Product";
@@ -19,9 +10,10 @@ import Card from "../common/card/Card";
 import { BsFillPeopleFill, BsFilePersonFill } from "react-icons/bs";
 import { FaCalendarCheck } from "react-icons/fa";
 import { AiOutlineFundProjectionScreen, AiFillMessage } from "react-icons/ai";
-import { MdOutlineWorkHistory, MdEditDocument } from "react-icons/md";
+import { MdOutlineWorkHistory } from "react-icons/md";
 import { HiMiniArchiveBox } from "react-icons/hi2";
 import MemberLogin from "./maincomponents/MemberLogin";
+import { IoDocumentText } from "react-icons/io5";
 import MainRentalSupplyLog from "./maincomponents/RentalSupplyLog";
 
 export default function ContentMain() {
@@ -36,41 +28,21 @@ export default function ContentMain() {
               <div className={w.mainContentHolderRight}>
                 {/* row-1 */}
                 <div className={w.contentGridOne}>
-                  <Card
-                    icon={<BsFilePersonFill />}
-                    header={"내정보"}
-                    body={<MainEmployee />}
-                    path={""}
-                  />
-                  <Card
-                    icon={<MdOutlineWorkHistory />}
-                    header={"출퇴근"}
-                    body={<MainCommute />}
-                    path={"commute/"}
-                  />
+                  <Card icon={<BsFilePersonFill />} header={"내정보"} body={<MainEmployee />} path={""} />
+                  <Card icon={<MdOutlineWorkHistory />} header={"출퇴근"} body={<MainCommute />} path={"commute/"} />
                 </div>
                 {/* 쪽지 */}
                 <div className={w.gridTwoItem}>
-                  <Card
-                    icon={<AiFillMessage />}
-                    header={"쪽지"}
-                    body={<MainMemo />}
-                    path={""}
-                  />
+                  <Card icon={<AiFillMessage />} header={"쪽지"} body={<MainMemo />} path={""} />
                 </div>
                 <div className={w.contentGridTwo}>
                   <Card
-                    icon={<BsFillPeopleFill />}
+                    icon={<HiMiniArchiveBox />}
                     header={"비품"}
                     body={<MainRentalSupplyLog />}
                     path={"/rentalsupply/log"}
                   />
-                  <Card
-                    icon={<AiOutlineFundProjectionScreen />}
-                    header={"결재"}
-                    body={<MemuApproval />}
-                    path={"approval/"}
-                  />
+                  <Card icon={<IoDocumentText />} header={"결재"} body={<MemuApproval />} path={"approval/"} />
                 </div>
               </div>
             </div>
@@ -79,24 +51,13 @@ export default function ContentMain() {
               <div className={w.mainContentHolderRight}>
                 <div className={w.gridItem}>
                   <div className={`${w.gridTwoItem}`}>
-                    <Card
-                      icon={<BsFilePersonFill />}
-                      header={"부서 접속 현황"}
-                      body={""}
-                      path={""}
-                    />
+                    <Card icon={<BsFillPeopleFill />} header={"부서 접속 현황"} body={<MemberLogin />} path={""} />
                   </div>
                 </div>
                 {/* 쪽지 */}
                 <div className={w.gridItem}>
                   <div className={`${w.gridTwoItem}`}>
-                    <Card
-                      icon={<FaCalendarCheck />}
-                      header={"달력"}
-                      body={<MainCalendar />}
-                      path={""}
-                      notNavigate
-                    />
+                    <Card icon={<FaCalendarCheck />} header={"달력"} body={<MainCalendar />} path={""} notNavigate />
                   </div>
                 </div>
                 <div className={w.gridItem}>

@@ -3,7 +3,7 @@
 }
 .overflowProTable {
   overflow-y: auto;
-  height: 280px;
+  height: 210px;
 }
 .proTable > thead {
   position: sticky;
