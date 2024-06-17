@@ -35,18 +35,18 @@ export function MainProject() {
         <div className={p.overflowProTable}>
           <table className={p.proTable}>
             <thead className={p.proTableThead}>
-              <tr>
-                <th style={{ width: "15%" }}>프로젝트명</th>
+              <tr style={{ borderBottom: "1px solid #ccc" }}>
+                <th style={{ width: "20%" }}>프로젝트명</th>
                 <th style={{ width: "15%" }}>고객사</th>
                 <th style={{ width: "20%" }}>진행상황</th>
-                <th style={{ width: "15%" }}>프로젝트 기한</th>
-                <th style={{ width: "35%" }}> 진행정도</th>
+                <th style={{ width: "15%" }}>D-day</th>
+                <th style={{ width: "30%" }}> 진행정도</th>
               </tr>
             </thead>
             <tbody>
               {myProject &&
                 myProject.map((item, idx) => (
-                  <tr key={idx}>
+                  <tr key={idx} style={{ borderBottom: "1px solid #ccc" }}>
                     <td>{item.prjName}</td>
                     <td>{item.clientVO.clntName}</td>
                     <td>{item.prjStsCode.cmcdName}</td>
@@ -58,8 +58,16 @@ export function MainProject() {
                     <td>
                       {item.chartData && (
                         <ProjectSubChart
-                          totalTasks={item.chartData[0] && item.chartData[0] != null ? item.chartData[0] : 0}
-                          completedTasks={item.chartData[1] && item.chartData[1] != null ? item.chartData[1] : 0}
+                          totalTasks={
+                            item.chartData[0] && item.chartData[0] != null
+                              ? item.chartData[0]
+                              : 0
+                          }
+                          completedTasks={
+                            item.chartData[1] && item.chartData[1] != null
+                              ? item.chartData[1]
+                              : 0
+                          }
                           plusStyles={{ width: "300px" }}
                         />
                       )}

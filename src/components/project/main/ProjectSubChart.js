@@ -9,15 +9,16 @@ const ProjectSubChart = ({ totalTasks, completedTasks, plusStyles }) => {
 
   return (
     <div style={plusStyles} className={styles.barContainer}>
+      <div className={styles.barContainerSpan}>
+        {completedTasks} / {totalTasks} ({Math.round(completionRatio)}%)
+      </div>
       <div
         className={styles.bar}
         style={{
           width: `${completionRatio ? completionRatio : 100}%`,
           backgroundColor: `${completionRatio === 0 ? "#e0e0e0" : ""}`,
         }}
-      >
-        {completedTasks} / {totalTasks} ({Math.round(completionRatio)}%)
-      </div>
+      ></div>
     </div>
   );
 };

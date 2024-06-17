@@ -45,8 +45,9 @@
   top: 0;
 
   z-index: 2;
-  background-color: #eaeaea;
+  background-color: var(--light-color);
 }
+
 .teamMateButtonArea {
   margin-top: 50px;
   text-align: right;

@@ -8,7 +8,12 @@ import { useSelector } from "react-redux";
 import { CiCircleMinus } from "react-icons/ci";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import MainHeader from "../MainHeader";
-import { addTmmate, deleteTmmate, getEmp, getEmpData } from "../../../../http/projectHttp";
+import {
+  addTmmate,
+  deleteTmmate,
+  getEmp,
+  getEmpData,
+} from "../../../../http/projectHttp";
 import TeammateEmpInfo from "./TeammateEmpInfo";
 import { jwtDecode } from "jwt-decode";
 
@@ -49,7 +54,9 @@ export default function TeamMate() {
     setproject(item.project);
 
     const pmData = item.project.pm;
-    const teamListWithoutPm = item.project.projectTeammateList.filter((member) => member.empId !== pmData.empId);
+    const teamListWithoutPm = item.project.projectTeammateList.filter(
+      (member) => member.empId !== pmData.empId
+    );
 
     setTeammateList(teamListWithoutPm);
     setPm(pmData);
@@ -76,7 +83,10 @@ export default function TeamMate() {
 
   const onPlusClickHandler = () => {
     if (isEditing) {
-      setTemporaryList((prev) => [...prev, { empName: "", empId: "", role: "", key: Date.now() }]);
+      setTemporaryList((prev) => [
+        ...prev,
+        { empName: "", empId: "", role: "", key: Date.now() },
+      ]);
     }
   };
 
@@ -184,7 +194,9 @@ export default function TeamMate() {
 
   const onDeleteClickHandler = (item) => {
     setIsDelete(true);
-    const deleteItemListData = project.projectTeammateList.filter((item) => item.role !== "PM");
+    const deleteItemListData = project.projectTeammateList.filter(
+      (item) => item.role !== "PM"
+    );
     setDeleteItemList(deleteItemListData);
     buttonHiddenRef.current.style.display = "none";
     cancelButtonGroupHiddenRef.current.style.display = "block";
@@ -220,15 +232,17 @@ export default function TeamMate() {
           <div className={s.teamMateTableContainer}>
             <table className={s.teamMateTable}>
               <thead>
-                <tr>
+                <tr style={{ borderBottom: "1px solid #ccc" }}>
                   <th>이름</th>
                   <th>역할</th>
-                  {(isEditing || isDelete) && <th>삭제</th>}
+                  {(isEditing || isDelete) && (
+                    <th style={{ width: "15%" }}>삭제</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {pm && (
-                  <tr>
+                  <tr style={{ borderBottom: "1px solid #ccc" }}>
                     <td style={{ width: "300px" }}>{pm.employeeVO.empName}</td>
                     <td style={{ width: "300px" }}>{pm.role}</td>
                     {isEditing && <td></td>}
@@ -238,20 +252,25 @@ export default function TeamMate() {
                   project.projectTeammateList
                     .filter((item) => item.role !== "PM")
                     .map((item, idx) => (
-                      <tr key={idx}>
+                      <tr key={idx} style={{ borderBottom: "1px solid #ccc" }}>
                         <td>{item.employeeVO.empName}</td>
                         <td>{item.role}</td>
                         {isEditing && <td></td>}
                         {isDelete && (
                           <td className={s.svgTeammateContainer}>
-                            <CiCircleMinus onClick={() => onTeammateDeleteHandler(item)} />
+                            <CiCircleMinus
+                              onClick={() => onTeammateDeleteHandler(item)}
+                            />
                           </td>
                         )}
                       </tr>
                     ))}
                 {isEditing &&
                   temporaryList.map((item, idx) => (
-                    <tr key={item.key}>
+                    <tr
+                      key={item.key}
+                      style={{ borderBottom: "1px solid #ccc" }}
+                    >
                       <td style={{ width: "300px" }}>
                         <Selectbox
                           optionList={memberList}
@@ -259,7 +278,13 @@ export default function TeamMate() {
                           setSelectedData={setSelectedData}
                           idx={idx}
                           style={{ width: "100%" }}
-                          onChangeFn={(selectedOption) => onChangeSelectHandler(selectedOption, idx, "empName")}
+                          onChangeFn={(selectedOption) =>
+                            onChangeSelectHandler(
+                              selectedOption,
+                              idx,
+                              "empName"
+                            )
+                          }
                           initial="추가할 직원을 선택해주세요"
                         />
                       </td>
@@ -274,7 +299,9 @@ export default function TeamMate() {
                             selectedData={selectedRoleData}
                             setSelectedData={setSelectedRoleData}
                             style={{ width: "100%" }}
-                            onChangeFn={(selectedOption) => onChangeSelectHandler(selectedOption, idx, "role")}
+                            onChangeFn={(selectedOption) =>
+                              onChangeSelectHandler(selectedOption, idx, "role")
+                            }
                             initial="직책을 선택해주세요"
                           />
                         </div>
@@ -287,22 +314,38 @@ export default function TeamMate() {
               </tbody>
             </table>
           </div>
-          {userInfo && (userInfo.admnCode === "301" || userInfo.empId === pm) && (
-            <div className={s.teamMateButtonArea}>
-              <div ref={buttonHiddenRef}>
-                <Button onClickHandler={onModifyClickHandler} children="참여원 추가" />
-                <Button onClickHandler={onDeleteClickHandler} children="참여원 삭제" />
+          {userInfo &&
+            (userInfo.admnCode === "301" || userInfo.empId === pm) && (
+              <div className={s.teamMateButtonArea}>
+                <div ref={buttonHiddenRef}>
+                  <Button
+                    onClickHandler={onModifyClickHandler}
+                    children="참여원 추가"
+                  />
+                  <Button
+                    onClickHandler={onDeleteClickHandler}
+                    children="참여원 삭제"
+                  />
+                </div>
+                <div ref={buttonGroupHiddenRef}>
+                  <Button
+                    onClickHandler={onPlusClickHandler}
+                    children="줄 추가"
+                  />
+                  <Button onClickHandler={onSaveClickHandler} children="저장" />
+                  <Button
+                    onClickHandler={onCancelClickHandler}
+                    children="취소"
+                  />
+                </div>
+                <div ref={cancelButtonGroupHiddenRef}>
+                  <Button
+                    onClickHandler={onCancelClickHandler}
+                    children="취소"
+                  />
+                </div>
               </div>
-              <div ref={buttonGroupHiddenRef}>
-                <Button onClickHandler={onPlusClickHandler} children="줄 추가" />
-                <Button onClickHandler={onSaveClickHandler} children="저장" />
-                <Button onClickHandler={onCancelClickHandler} children="취소" />
-              </div>
-              <div ref={cancelButtonGroupHiddenRef}>
-                <Button onClickHandler={onCancelClickHandler} children="취소" />
-              </div>
-            </div>
-          )}
+            )}
         </div>
         {userInfo && (userInfo.admnCode === "301" || userInfo.empId === pm) && (
           <div className={s.teamMateEmpArea}>
