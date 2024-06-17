@@ -164,13 +164,15 @@ export const modifyDepartment = async (
   empId,
   empName,
   deptName,
-  deptId
+  deptId,
+  deptApprReason
 ) => {
   const data = new FormData();
   data.append("deptLeadId", empId);
   data.append("empName", empName);
   data.append("deptName", deptName);
   data.append("deptId", deptId);
+  data.append("deptApprReason", deptApprReason);
 
   const response = await fetch(`${url}/api/v1/department/modify`, {
     method: "PUT",

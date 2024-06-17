@@ -12,6 +12,7 @@ export default function DepartmentUpdate({
   const deptNameRef = useRef();
   const empIdRef = useRef();
   const empNameRef = useRef();
+  const reasonRef = useRef();
   const alertRef = useRef();
   const alertRef2 = useRef();
 
@@ -24,6 +25,7 @@ export default function DepartmentUpdate({
     const empId = empIdRef.current.value;
     const empName = empNameRef.current.value;
     const deptName = deptNameRef.current.value;
+    const deptApprReason = reasonRef.current.value;
     const deptId = data.deptId;
 
     // 입력값 검증
@@ -35,7 +37,8 @@ export default function DepartmentUpdate({
       empId,
       empName,
       deptName,
-      deptId
+      deptId,
+      deptApprReason
     );
     if (json.errors) {
       json.errors.forEach((error) => {
@@ -107,12 +110,16 @@ export default function DepartmentUpdate({
         <span className={s.alertMessage} ref={alertRef2}></span>
         <div>
           <label htmlFor="empName">부서장 이름</label>
+          <input type="text" id="empName" name="empName" ref={empNameRef} />
+        </div>
+        <div>
+          <label htmlFor="reason">부서 정보 수정 사유</label>
           <input
             type="text"
-            id="empName"
-            name="empName"
-            defaultValue={data.empName}
-            ref={empNameRef}
+            id="reason"
+            name="reason"
+            defaultValue={data.reason}
+            ref={reasonRef}
           />
         </div>
       </div>
