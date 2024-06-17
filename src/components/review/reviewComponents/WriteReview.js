@@ -2,12 +2,12 @@
  * 프로젝트에 참여한 인원이 후기를 작성하는 Component
  *
  */
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import w from "../reviewCss/write.module.css";
 import { viewWriteReviewPage, writeReview } from "../../../http/reviewHttp";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import ProjectListApp from "../../project/projectlist/ProjectListApp";
-import WriteReviewStarRating from "./WriteReviewStarRating"
+import WriteReviewStarRating from "./WriteReviewStarRating";
 
 export default function WriteReview() {
   const token = localStorage.getItem("token");
@@ -27,12 +27,6 @@ export default function WriteReview() {
   const rvCntntRef = useRef();
   const prjIdRef = useRef();
 
-  // 임시 콘솔
-  console.log(projectInfo);
-  console.log(projectInfo.writeReview.prjName);
-  console.log(projectInfo.writeReview.prjId);
-  console.log(selectedRating);
-
   const onSaveClickHandler = async () => {
     const rvCntnt = rvCntntRef.current.value;
     const prjId = projectInfo.writeReview.prjId;
@@ -46,7 +40,6 @@ export default function WriteReview() {
     } else if (json.body) {
     }
 
-    console.log(token);
     reloadProjectView();
   };
 
@@ -61,9 +54,13 @@ export default function WriteReview() {
           <div></div>
           <span className={w.projectReview}>프로젝트 후기 제출지</span>
           <div></div>
-          <span className={w.projectSub}>프로젝트 : {projectInfo.writeReview.prjName}</span>
+          <span className={w.projectSub}>
+            프로젝트 : {projectInfo.writeReview.prjName}
+          </span>
           <div></div>
-          <span className={w.projectSub}>PM : {projectInfo.writeReview.pm.employeeVO.empName}</span>
+          <span className={w.projectSub}>
+            PM : {projectInfo.writeReview.pm.employeeVO.empName}
+          </span>
         </div>
         <br></br>
         <br></br>
@@ -71,10 +68,7 @@ export default function WriteReview() {
           <div></div>
           <span className={w.writeReviewSpan}>후기를 작성해주세요.</span>
           <div></div>
-          <textarea
-            className={w.writeReviewText}
-            ref={rvCntntRef}
-          ></textarea>
+          <textarea className={w.writeReviewText} ref={rvCntntRef}></textarea>
           <div></div>
           <div className={w.svgContainer}>
             <div>
