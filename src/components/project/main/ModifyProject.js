@@ -41,9 +41,33 @@ const ModifyProject = () => {
   const [customerInfo, setCustomerInfo] = useState("");
   const location = useLocation();
   const allData = location.state || {};
+  const [clientData, setClientData] = useState([]);
+  const [clientSelectedData, setClientSelectedData] =
+    useState(originClientName);
+
+  const [deptData, setDeptData] = useState([]);
+  const [deptSelectedData, setDeptSelectedData] = useState(OriginDeptName);
+  const [dateInfo, setDateInfo] = useState("");
+
+  const [pmCandidate, setPmCandidate] = useState([]);
+  const [pmSelectedData, setPmSelectedData] = useState(originPm);
+
+  const tokenInfo = useSelector((state) => {
+    return {
+      token: state.tokenInfo.token,
+      credentialsExpired: state.tokenInfo.credentialsExpired,
+    };
+  });
   useEffect(() => {
     prjNameRef.current.value = projectName || "";
-  }, [projectName]);
+    console.log(originClientName, originPm, originPrjMemoName, OriginDeptName);
+  }, [
+    projectName,
+    originClientName,
+    originPm,
+    originPrjMemoName,
+    OriginDeptName,
+  ]);
 
   useMemo(() => {
     const { prjName } = allData?.allData;
@@ -60,12 +84,15 @@ const ModifyProject = () => {
     }
     if (clientVO) {
       setOriginClientName(clientVO.clntName);
+      setClientSelectedData(clientVO.clntId);
     }
     if (deptVO) {
       setOriginDeptName(deptVO.deptName);
+      setDeptSelectedData(deptVO.deptId);
     }
     if (pm) {
       setOriginPm(pm.employeeVO.empName);
+      setPmSelectedData(pm.employeeVO.empId);
     }
     if (prjId) {
       setProjectId(prjId);
@@ -84,24 +111,9 @@ const ModifyProject = () => {
     }
   }, [allData]);
 
-  const [clientData, setClientData] = useState([]);
-  const [clientSelectedData, setClientSelectedData] =
-    useState("고객사를 선택해주세요.");
-
-  const [deptData, setDeptData] = useState([]);
-  const [deptSelectedData, setDeptSelectedData] =
-    useState("부서를 선택해주세요.");
-  const [dateInfo, setDateInfo] = useState("");
-
-  const [pmCandidate, setPmCandidate] = useState([]);
-  const [pmSelectedData, setPmSelectedData] = useState("PM을 선택해주세요");
-
-  const tokenInfo = useSelector((state) => {
-    return {
-      token: state.tokenInfo.token,
-      credentialsExpired: state.tokenInfo.credentialsExpired,
-    };
-  });
+  useEffect(() => {
+    console.log(clientSelectedData, deptSelectedData, pmSelectedData);
+  }, [clientSelectedData, deptSelectedData, pmSelectedData]);
 
   const memoizeGetPrjInfo = useCallback(getPrjInfo, []);
   useEffect(() => {
@@ -117,20 +129,30 @@ const ModifyProject = () => {
   // 고객사 정보 가져오기
   const memoizeGetClient = useCallback(getClient, []);
   useEffect(() => {
-    memoizeGetClient(tokenInfo.token, setClientData);
-    setIsAddClient(false);
+    const getClient = async () => {
+      await memoizeGetClient(tokenInfo.token, setClientData);
+      await console.log(clientData);
+      setIsAddClient(false);
+    };
+    getClient();
   }, [tokenInfo.token, isAddClient]);
 
   // 부서 정보 가져오기
   const memoizeGetDept = useCallback(getDept, []);
   useEffect(() => {
-    memoizeGetDept(tokenInfo.token, setDeptData);
+    const getDept = async () => {
+      await memoizeGetDept(tokenInfo.token, setDeptData);
+    };
+    getDept();
   }, [tokenInfo.token]);
 
   // 부서에 따른 PM 후보자 가져오기
   const memoizeGetPmCandidates = useCallback(getPmCandidates, []);
   useEffect(() => {
-    memoizeGetPmCandidates(deptSelectedData, tokenInfo.token, setPmCandidate);
+    const getPm = async () => {
+      memoizeGetPmCandidates(deptSelectedData, tokenInfo.token, setPmCandidate);
+    };
+    getPm();
   }, [deptSelectedData, tokenInfo.token]);
 
   // 날짜 선택 변경 시 처리
@@ -186,16 +208,26 @@ const ModifyProject = () => {
     } else {
       setCanSave(true);
     }
-  }, [clientSelectedData, deptSelectedData, pmSelectedData, dateInfo]);
+  }, [
+    clientSelectedData,
+    deptSelectedData,
+    pmSelectedData,
+    dateInfo,
+    originClientName,
+    OriginDeptName,
+    originPm,
+    originPrjMemoName,
+  ]);
 
   // 프로젝트 생성 버튼 클릭 핸들러
   const memoizeModifyPrj = useCallback(modifyPrj, []);
-  const onClickCreateButtonHandler = async () => {
+  const onClickModifyButtonHandler = async () => {
     if (!canSave) {
       alert("형식에 맞춰 재입력 후 저장해주세요.");
       return;
     }
     if (clientSelectedData === "고객사를 선택해주세요.") {
+      console.log("랄라");
       return;
     }
     if (deptSelectedData === "부서를 선택해주세요.") {
@@ -214,12 +246,17 @@ const ModifyProject = () => {
       endDt: endDateRef.current,
       prjMemo: prjMemoRef.current.value,
     };
-
-    const json = await memoizeModifyPrj(tokenInfo.token, projectId, dataArray);
-
-    if (json.status === 200) {
-      alert("프로젝트 수정에 성공했습니다.");
-      navigate("/project");
+    console.log(dataArray);
+    if (dataArray) {
+      const json = await memoizeModifyPrj(
+        tokenInfo.token,
+        projectId,
+        dataArray
+      );
+      if (json.status === 200) {
+        alert("프로젝트 수정에 성공했습니다.");
+        navigate("/project");
+      }
     }
   };
 
@@ -312,13 +349,16 @@ const ModifyProject = () => {
         </div>
         <div>Project Readme</div>
         <div className={styles.contentBoxContainer}>
-          <textarea className={styles.contentBox} id="prjMemo" ref={prjMemoRef}>
-            {originPrjMemoName}
-          </textarea>
+          <textarea
+            className={styles.contentBox}
+            id="prjMemo"
+            ref={prjMemoRef}
+            defaultValue={originPrjMemoName}
+          ></textarea>
         </div>
       </div>
       <div className={styles.buttonArea}>
-        <Button onClickHandler={onClickCreateButtonHandler}>수정</Button>
+        <Button onClickHandler={onClickModifyButtonHandler}>수정</Button>
       </div>
     </div>
   );

@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-const url = "http://" + (window.location.host === "43.202.29.221" ? "43.202.29.221" : "localhost:8080");
+const url =
+  "http://" +
+  (window.location.host === "43.202.29.221"
+    ? "43.202.29.221"
+    : "localhost:8080");
 
 // 프로젝트 id 통해 해당 프로젝트 가져오는 API
 export const getPrjApi = async (token, projectId) => {
@@ -60,13 +64,16 @@ export const putMemo = async (date, memo, projectId, token) => {
 // deptId 통해 해당 부서에 속한 사원 정보 가져오는 API
 export const getEmp = async (deptId, token, setMemberList) => {
   if (deptId) {
-    const response = await fetch(`${url}/api/project/employee/findbydeptid/${deptId}`, {
-      headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-    });
+    const response = await fetch(
+      `${url}/api/project/employee/findbydeptid/${deptId}`,
+      {
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      }
+    );
     const json = await response.json();
     const members = json.body?.map((emp) => ({
       label: emp.empName,
@@ -90,7 +97,13 @@ export const getEmpData = async (empId, token) => {
 };
 
 // client 정보 수정 api
-export const putClientData = async (newTitle, newContact, newContent, token, project) => {
+export const putClientData = async (
+  newTitle,
+  newContact,
+  newContent,
+  token,
+  project
+) => {
   await fetch(`${url}/api/project/client`, {
     method: "PUT",
     headers: {
@@ -160,7 +173,8 @@ export const getClient = async (token, setClientData) => {
     label: client.clntName,
     value: client.clntId,
   }));
-  setClientData(list);
+  await setClientData(list);
+  console.log(list);
 };
 
 // 프로젝트 생성, 수정 시 선택 가능한 부서 가져오는 api
@@ -178,13 +192,20 @@ export const getDept = async (token, setDeptData) => {
 };
 
 // 프로젝트 생성, 수정 시 선택한 부서에 속한 사원 가져오는 api
-export const getPmCandidates = async (deptSelectedData, token, setPmCandidate) => {
+export const getPmCandidates = async (
+  deptSelectedData,
+  token,
+  setPmCandidate
+) => {
   if (deptSelectedData === "부서를 선택해주세요.") return;
 
-  const response = await fetch(`${url}/api/project/employee/findbydeptid/${deptSelectedData}`, {
-    headers: { Authorization: token },
-    method: "GET",
-  });
+  const response = await fetch(
+    `${url}/api/project/employee/findbydeptid/${deptSelectedData}`,
+    {
+      headers: { Authorization: token },
+      method: "GET",
+    }
+  );
   const json = await response.json();
   const list = json.body.map((employee) => ({
     label: employee.empName,
