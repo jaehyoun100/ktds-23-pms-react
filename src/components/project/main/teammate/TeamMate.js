@@ -233,15 +233,17 @@ export default function TeamMate() {
           <div className={s.teamMateTableContainer}>
             <table className={s.teamMateTable}>
               <thead>
-                <tr>
+                <tr style={{ borderBottom: "1px solid #ccc" }}>
                   <th>이름</th>
                   <th>역할</th>
-                  {(isEditing || isDelete) && <th>삭제</th>}
+                  {(isEditing || isDelete) && (
+                    <th style={{ width: "15%" }}>삭제</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {pm && (
-                  <tr>
+                  <tr style={{ borderBottom: "1px solid #ccc" }}>
                     <td style={{ width: "300px" }}>{pm.employeeVO.empName}</td>
                     <td style={{ width: "300px" }}>{pm.role}</td>
                     {isEditing && <td></td>}
@@ -251,7 +253,7 @@ export default function TeamMate() {
                   project.projectTeammateList
                     .filter((item) => item.role !== "PM")
                     .map((item, idx) => (
-                      <tr key={idx}>
+                      <tr key={idx} style={{ borderBottom: "1px solid #ccc" }}>
                         <td>{item.employeeVO.empName}</td>
                         <td>{item.role}</td>
                         {isEditing && <td></td>}
@@ -266,7 +268,10 @@ export default function TeamMate() {
                     ))}
                 {isEditing &&
                   temporaryList.map((item, idx) => (
-                    <tr key={item.key}>
+                    <tr
+                      key={item.key}
+                      style={{ borderBottom: "1px solid #ccc" }}
+                    >
                       <td style={{ width: "300px" }}>
                         <Selectbox
                           optionList={memberList}

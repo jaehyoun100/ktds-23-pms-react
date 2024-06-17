@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styles from "../project.module.css";
 import TextInput from "../../common/input/TextInput";
 import Selectbox from "../../common/selectbox/Selectbox";
@@ -7,7 +13,13 @@ import Button from "../../common/Button/Button";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
-import { getClient, getDept, getPmCandidates, getPrjInfo, modifyPrj } from "../../../http/projectHttp";
+import {
+  getClient,
+  getDept,
+  getPmCandidates,
+  getPrjInfo,
+  modifyPrj,
+} from "../../../http/projectHttp";
 
 const ModifyProject = () => {
   const [isAddClient, setIsAddClient] = useState(false);
@@ -18,6 +30,7 @@ const ModifyProject = () => {
   const [projectName, setProjectName] = useState();
   const prjNameRef = useRef();
   const [originClientName, setOriginClientName] = useState();
+  const [originPrjMemoName, setOriginPrjMemoName] = useState();
   const [OriginDeptName, setOriginDeptName] = useState();
   const [originStrtDt, setOriginStrtDt] = useState();
   const [originEndDt, setOriginEndDt] = useState();
@@ -33,7 +46,6 @@ const ModifyProject = () => {
   }, [projectName]);
 
   useMemo(() => {
-    console.log(allData, "!!@#@!ASDASZX");
     const { prjName } = allData?.allData;
     const { clientVO } = allData?.allData;
     const { deptVO } = allData?.allData;
@@ -41,6 +53,8 @@ const ModifyProject = () => {
     const { prjId } = allData?.allData;
     const { strtDt } = allData?.allData;
     const { endDt } = allData?.allData;
+    const { prjMemo } = allData?.allData;
+
     if (prjName) {
       setProjectName(prjName);
     }
@@ -64,13 +78,19 @@ const ModifyProject = () => {
       setOriginEndDt(endDt);
       // endDateRef.current = setOriginEndDt;
     }
+    if (prjMemo) {
+      setOriginPrjMemoName(prjMemo);
+      // endDateRef.current = setOriginEndDt;
+    }
   }, [allData]);
 
   const [clientData, setClientData] = useState([]);
-  const [clientSelectedData, setClientSelectedData] = useState("고객사를 선택해주세요.");
+  const [clientSelectedData, setClientSelectedData] =
+    useState("고객사를 선택해주세요.");
 
   const [deptData, setDeptData] = useState([]);
-  const [deptSelectedData, setDeptSelectedData] = useState("부서를 선택해주세요.");
+  const [deptSelectedData, setDeptSelectedData] =
+    useState("부서를 선택해주세요.");
   const [dateInfo, setDateInfo] = useState("");
 
   const [pmCandidate, setPmCandidate] = useState([]);
@@ -115,7 +135,11 @@ const ModifyProject = () => {
 
   // 날짜 선택 변경 시 처리
   const onChangeSelect = () => {
-    if (startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current) {
+    if (
+      startDateRef.current &&
+      endDateRef.current &&
+      startDateRef.current > endDateRef.current
+    ) {
       setCanSave(false);
       return;
     }
@@ -125,15 +149,25 @@ const ModifyProject = () => {
 
   // 프로젝트명 유효성 검사
   useEffect(() => {
-    if (prjNameRef.current && (prjNameRef.current.value === "" || prjNameRef.current.value.length > 30)) {
+    if (
+      prjNameRef.current &&
+      (prjNameRef.current.value === "" || prjNameRef.current.value.length > 30)
+    ) {
       setCanSave(false);
       return;
     }
-    if (startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current) {
+    if (
+      startDateRef.current &&
+      endDateRef.current &&
+      startDateRef.current > endDateRef.current
+    ) {
       setCanSave(false);
       return;
     }
-    if (startDateRef.current === undefined || endDateRef.current === undefined) {
+    if (
+      startDateRef.current === undefined ||
+      endDateRef.current === undefined
+    ) {
       setCanSave(false);
       return;
     }
@@ -197,14 +231,26 @@ const ModifyProject = () => {
       <div className={styles.createGrid}>
         <div>프로젝트명</div>
         <div>
-          <TextInput id="prjName" onChangeHandler={(e) => setEditTitle(e.target.value)} ref={prjNameRef} />
-          {prjNameRef.current && prjNameRef.current.value && prjNameRef.current.value.length > 30 ? (
-            <span className={styles.alertMessage}>※ 프로젝트명은 30자를 초과할 수 없습니다.</span>
+          <TextInput
+            id="prjName"
+            onChangeHandler={(e) => setEditTitle(e.target.value)}
+            ref={prjNameRef}
+          />
+          {prjNameRef.current &&
+          prjNameRef.current.value &&
+          prjNameRef.current.value.length > 30 ? (
+            <span className={styles.alertMessage}>
+              ※ 프로젝트명은 30자를 초과할 수 없습니다.
+            </span>
           ) : (
             <></>
           )}
-          {prjNameRef.current && (prjNameRef.current.value === null || prjNameRef.current.value === "") ? (
-            <span className={styles.alertMessage}>※ 프로젝트명은 필수 값입니다.</span>
+          {prjNameRef.current &&
+          (prjNameRef.current.value === null ||
+            prjNameRef.current.value === "") ? (
+            <span className={styles.alertMessage}>
+              ※ 프로젝트명은 필수 값입니다.
+            </span>
           ) : (
             <></>
           )}
@@ -247,20 +293,28 @@ const ModifyProject = () => {
             startDateRef={startDateRef}
             endDateRef={endDateRef}
           />
-          {startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current ? (
-            <span className={styles.alertMessage}>※ 끝 날짜는 시작날짜보다 이전일 수 없습니다.</span>
+          {startDateRef.current &&
+          endDateRef.current &&
+          startDateRef.current > endDateRef.current ? (
+            <span className={styles.alertMessage}>
+              ※ 끝 날짜는 시작날짜보다 이전일 수 없습니다.
+            </span>
           ) : (
             <></>
           )}
           {originStrtDt === undefined || originEndDt === undefined ? (
-            <span className={styles.alertMessage}>※ 시작날짜와 끝날짜는 필수 입력 값입니다.</span>
+            <span className={styles.alertMessage}>
+              ※ 시작날짜와 끝날짜는 필수 입력 값입니다.
+            </span>
           ) : (
             <></>
           )}
         </div>
         <div>Project Readme</div>
         <div className={styles.contentBoxContainer}>
-          <textarea className={styles.contentBox} id="prjMemo" ref={prjMemoRef}></textarea>
+          <textarea className={styles.contentBox} id="prjMemo" ref={prjMemoRef}>
+            {originPrjMemoName}
+          </textarea>
         </div>
       </div>
       <div className={styles.buttonArea}>
