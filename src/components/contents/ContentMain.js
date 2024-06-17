@@ -44,7 +44,7 @@ export default function ContentMain() {
                     icon={<MdOutlineWorkHistory />}
                     header={"출퇴근"}
                     body={<MainCommute />}
-                    path={""}
+                    path={"commute/"}
                   />
                 </div>
                 {/* 쪽지 */}
@@ -104,6 +104,7 @@ export default function ContentMain() {
                     icon={<MdEditDocument />}
                     header={"결제"}
                     body={<MemuApproval />}
+                    path={"approval/"}
                   />
                 </div>
               </div>
