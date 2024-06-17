@@ -42,6 +42,23 @@ export const menus = [
     clickIcon: <BsHouseDoorFill />,
   },
   {
+    label: "결제",
+    to: "/approval",
+    icon: <BsHouseDoor />,
+    clickIcon: <BsHouseDoorFill />,
+    children: [
+      {
+        label: "결제 요청",
+        to: "/approval",
+      },
+      {
+        label: "결제 신청",
+        to: "/approval/requester",
+      },
+    ],
+  },
+
+  {
     label: "쪽지",
     to: "/memo",
     icon: <BsHouseDoor />,
