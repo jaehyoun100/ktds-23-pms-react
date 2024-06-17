@@ -60,14 +60,12 @@ export default function MainHeader({ project }) {
         </span>
         {userInfo.user.admnCode === "301" ? (
           <>
-            <span>설문</span>
             <span onClick={() => viewReviewResultHandler(project)}>
               후기 관리
             </span>
           </>
         ) : project.pm.tmId === userInfo.user.empId ? (
           <>
-            <span>설문</span>
             <span onClick={() => viewReviewResultHandler(project)}>
               후기 보기
             </span>
