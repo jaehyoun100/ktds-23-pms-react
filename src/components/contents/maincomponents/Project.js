@@ -28,6 +28,7 @@ export function MainProject() {
 
     getList();
   }, [tokenInfo.token]);
+
   return (
     <>
       <div className={w.cardBodyContent}></div>
@@ -45,35 +46,47 @@ export function MainProject() {
             </thead>
             <tbody>
               {myProject &&
-                myProject.map((item, idx) => (
-                  <tr key={idx} style={{ borderBottom: "1px solid #ccc" }}>
-                    <td>{item.prjName}</td>
-                    <td>{item.clientVO.clntName}</td>
-                    <td>{item.prjStsCode.cmcdName}</td>
-                    <td>
-                      {new Date(item.endDt) >= new Date()
-                        ? "D-" + format(new Date(item.endDt) - new Date(), "d")
-                        : "마감"}
-                    </td>
-                    <td>
-                      {item.chartData && (
-                        <ProjectSubChart
-                          totalTasks={
-                            item.chartData[0] && item.chartData[0] != null
-                              ? item.chartData[0]
-                              : 0
-                          }
-                          completedTasks={
-                            item.chartData[1] && item.chartData[1] != null
-                              ? item.chartData[1]
-                              : 0
-                          }
-                          plusStyles={{ width: "300px" }}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                myProject.map((item, idx) => {
+                  const dataDate = new Date(item.endDt);
+                  const sysdate = new Date();
+                  let diff = Math.abs(dataDate.getTime() - sysdate.getTime());
+                  diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                  return (
+                    <tr key={idx} style={{ borderBottom: "1px solid #ccc" }}>
+                      <td>{item.prjName}</td>
+                      <td>{item.clientVO.clntName}</td>
+                      <td>{item.prjStsCode.cmcdName}</td>
+                      <td>
+                        {new Date(item.endDt) > new Date() ? (
+                          "D - " + diff
+                        ) : (
+                          <>
+                            {new Date(item.endDt) === new Date()
+                              ? "D - DAY"
+                              : "마감"}
+                          </>
+                        )}
+                      </td>
+                      <td>
+                        {item.chartData && (
+                          <ProjectSubChart
+                            totalTasks={
+                              item.chartData[0] && item.chartData[0] != null
+                                ? item.chartData[0]
+                                : 0
+                            }
+                            completedTasks={
+                              item.chartData[1] && item.chartData[1] != null
+                                ? item.chartData[1]
+                                : 0
+                            }
+                            plusStyles={{ width: "300px" }}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
