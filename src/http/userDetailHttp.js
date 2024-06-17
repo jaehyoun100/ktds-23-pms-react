@@ -16,7 +16,7 @@ const url =
  */
 export const getEmployee = (token) => {
   return async (dispatch) => {
-    const response = await fetch(url, {
+    const response = await fetch(`${url}/api/`, {
       headers: { Authorization: token },
       method: "GET",
     });
