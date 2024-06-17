@@ -1,9 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
   Checkbox,
   DatePicker,
-  Descriptions,
   Form,
   Input,
   InputNumber,
@@ -188,7 +193,7 @@ export default function InputPopup({
           );
       }
     },
-    [editData, handleInputChange, del]
+    [editData, handleInputChange, del, handleDateChange]
   );
 
   const handleScrollToField = useCallback(
@@ -248,28 +253,30 @@ export default function InputPopup({
             colon={false}
             onFinishFailed={handleScrollToField}
           >
-            {options.map(({ type, dataIndex, title, option, required, readOnly }) => (
-              <Form.Item
-                label={title}
-                name={dataIndex}
-                key={dataIndex}
-                rules={[
-                  {
+            {options.map(
+              ({ type, dataIndex, title, option, required, readOnly }) => (
+                <Form.Item
+                  label={title}
+                  name={dataIndex}
+                  key={dataIndex}
+                  rules={[
+                    {
+                      required,
+                      message: `${title}을(를) 입력해주세요.`,
+                    },
+                  ]}
+                >
+                  {renderInput({
+                    type,
+                    dataIndex,
+                    title,
+                    option,
                     required,
-                    message: `${title}을(를) 입력해주세요.`,
-                  },
-                ]}
-              >
-                {renderInput({
-                  type,
-                  dataIndex,
-                  title,
-                  option,
-                  required,
-                  readOnly,
-                })}
-              </Form.Item>
-            ))}
+                    readOnly,
+                  })}
+                </Form.Item>
+              )
+            )}
           </Form>
         </div>
         {/* </Scrollbar> */}
