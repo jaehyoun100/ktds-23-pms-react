@@ -5,6 +5,7 @@ import { LuMenu } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { getEmployee } from "../../http/userDetailHttp";
 import { tokenExpire } from "../../utils/loginUtil";
+import profileImg from "./profile_icon.png";
 
 export default function Sidebar({ menus = [] }) {
   const url =
@@ -81,10 +82,7 @@ export default function Sidebar({ menus = [] }) {
             closeSideBar === false ? null : "active"
           }`}
         >
-          <img
-            src="https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
-            alt="profile"
-          />
+          <img src={profileImg} alt="profile" />
         </div>
         {!closeSideBar && (
           <div className="info-emp">
