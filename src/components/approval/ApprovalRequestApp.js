@@ -65,20 +65,17 @@ export default function ApprovalRequestApp() {
     },
     {
       title: "결제요청자",
-      dataIndex: "apprReqtr",
+      dataIndex: ["reqtrVO", "empName"],
       key: "apprReqtr",
       render: (data, row) => (
-        <span
-          style={{ cursor: "pointer" }}
-          onClick={showModal(row.apprId, row.apprYn)}
-        >
+        <span style={{ cursor: "pointer" }} onClick={showModal(row.apprId)}>
           {data}
         </span>
       ),
     },
     {
       title: "승인담당",
-      dataIndex: "approver",
+      dataIndex: ["approverVO", "empName"],
       key: "approver",
       render: (data, row) => (
         <span style={{ cursor: "pointer" }} onClick={showModal(row.apprId)}>

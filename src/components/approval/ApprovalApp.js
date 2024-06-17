@@ -33,12 +33,6 @@ export default function ApprovalApp() {
       type: "select",
       key: "apprType",
       dataIndex: "apprType",
-      // option: apprList.map((apprType) => {
-      //   if ((apprType = "supply")) {
-      //     return "비품";
-      //   }
-      //   return "";
-      // }),
       render: (data, row) => (
         <span style={{ cursor: "pointer" }} onClick={showModal(row.apprId)}>
           {data}
@@ -59,7 +53,7 @@ export default function ApprovalApp() {
     },
     {
       title: "결제요청자",
-      dataIndex: "apprReqtr",
+      dataIndex: ["reqtrVO", "empName"],
       key: "apprReqtr",
       render: (data, row) => (
         <span style={{ cursor: "pointer" }} onClick={showModal(row.apprId)}>
@@ -69,7 +63,7 @@ export default function ApprovalApp() {
     },
     {
       title: "승인담당",
-      dataIndex: "approver",
+      dataIndex: ["approverVO", "empName"],
       key: "approver",
       render: (data, row) => (
         <span style={{ cursor: "pointer" }} onClick={showModal(row.apprId)}>
