@@ -44,16 +44,19 @@ export default function EmployeeView() {
 
   const loadHisotry = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/v1/employee/${empId}/history`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
+      const res = await axios.get(
+        `http://localhost:8080/api/v1/employee/${empId}/history`,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
       setHistoryList(res.data);
     } catch (error) {
       console.error(error);
     }
-  }, [token, empId, historyList]);
+  }, [token, empId]);
 
   // 비밀번호 변경
   const inputOptions2 = useMemo(
@@ -81,32 +84,15 @@ export default function EmployeeView() {
     []
   );
 
-  const defaultOptions = [
-    {
-      title: "사원명",
-      type: "string",
-      dataIndex: "empName",
-      required: true,
-    },
-    {
-      title: "이메일",
-      type: "string",
-      dataIndex: "email",
-      required: true,
-    },
-    {
-      title: "주소",
-      type: "string",
-      dataIndex: "addr",
-      required: true,
-    },
-    {
-      title: "연락처",
-      type: "string",
-      dataIndex: "cntct",
-      required: true,
-    },
-  ];
+  const defaultOptions = useMemo(
+    () => [
+      { title: "사원명", type: "string", dataIndex: "empName", required: true },
+      { title: "이메일", type: "string", dataIndex: "email", required: true },
+      { title: "주소", type: "string", dataIndex: "addr", required: true },
+      { title: "연락처", type: "string", dataIndex: "cntct", required: true },
+    ],
+    []
+  );
 
   const inputOptions = useMemo(
     () =>
@@ -178,7 +164,10 @@ export default function EmployeeView() {
   }, [token, empId]);
 
   const url =
-    "http://" + (window.location.host === "43.202.29.221" ? "43.202.29.221" : "localhost:8080");
+    "http://" +
+    (window.location.host === "43.202.29.221"
+      ? "43.202.29.221"
+      : "localhost:8080");
 
   const loadDataLists = useCallback(async () => {
     try {
@@ -278,17 +267,18 @@ export default function EmployeeView() {
   const historyColumns = useCallback((key) => [
     { title: "번호", key: "historyId", render: (_, __, idx) => idx + 1 },
     {
-      title: `현재 ${keyText[key]}`,
-      dataIndex: "curValue",
-      key: "curValue",
-      render: (dt) => handleGetNameText(key, dt),
-    },
-    {
       title: `변경전 ${keyText[key]}`,
       dataIndex: "preValue",
       key: "preValue",
       render: (dt) => handleGetNameText(key, dt),
     },
+    {
+      title: `현재 ${keyText[key]}`,
+      dataIndex: "curValue",
+      key: "curValue",
+      render: (dt) => handleGetNameText(key, dt),
+    },
+
     { title: "변경일", dataIndex: "updDate", key: "updDate" },
   ]);
 
@@ -305,7 +295,7 @@ export default function EmployeeView() {
         setData(updatedData.body);
       }
     },
-    [empId, token]
+    [empId, token, loadHisotry]
   );
 
   // 파일 업로드
@@ -385,7 +375,7 @@ export default function EmployeeView() {
       loadHisotry();
     }
     loadUserInfo();
-  }, [loadDataLists, token, empId]);
+  }, [loadDataLists, token, empId, loadEmpData, loadHisotry, loadUserInfo]);
 
   return (
     <EmployeeInfoWrapper>
@@ -407,14 +397,19 @@ export default function EmployeeView() {
           onChange={onChange}
           ref={fileInput}
         />
-        <RegBtn btnText="업로드" type="primary" onClick={handleUpload} />
+        {/* <RegBtn btnText="업로드" type="primary" onClick={handleUpload} /> */}
 
         {/* <RegBtn /> */}
       </ImageWrapper>
 
       {/* Descriptions의 column prop에는 한 row에 표시할 column개수를 브라우저 화면 사이즈 별로 지정.
       기본=3개 */}
-      <Descriptions column={{ xxl: 3, xl: 3, lg: 3, md: 3 }} items={items} size="small" bordered />
+      <Descriptions
+        column={{ xxl: 3, xl: 3, lg: 3, md: 3 }}
+        items={items}
+        size="small"
+        bordered
+      />
       <HistoryTable
         type={keyText["depart"]}
         column={historyColumns("depart")}
@@ -431,10 +426,18 @@ export default function EmployeeView() {
         dataList={historyList.filter((item) => item.type === "job")}
       />
       {userInfo?.empId === empId && (
-        <PasswordBtn data={data} options={inputOptions2} onOk={handleUpdateEmployeeAndReloadData} />
+        <PasswordBtn
+          data={data}
+          options={inputOptions2}
+          onOk={handleUpdateEmployeeAndReloadData}
+        />
       )}
       {(userInfo?.mngrYn === "Y" || userInfo?.empId === empId) && (
-        <ModifyBtn data={data} options={inputOptions} onOk={handleUpdateEmployeeAndReloadData} />
+        <ModifyBtn
+          data={data}
+          options={inputOptions}
+          onOk={handleUpdateEmployeeAndReloadData}
+        />
       )}
       <MenuBtn />
     </EmployeeInfoWrapper>

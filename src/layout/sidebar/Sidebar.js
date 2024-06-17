@@ -60,7 +60,7 @@ export default function Sidebar({ menus = [] }) {
       setUserInfo(json.body);
     };
     userInfo();
-  }, [token]);
+  }, [token, dispatch, url]);
 
   return (
     <div className={`sidebar ${closeSideBar === false ? null : "active"}`}>
@@ -94,7 +94,7 @@ export default function Sidebar({ menus = [] }) {
                 <span className="info-dept dept-tag">
                   {userInfo.departmentVO.deptName}
                 </span>
-                <span className="dept-tag">{userInfo.teamVO.tmName}</span>
+                <span className="dept-tag">{userInfo?.teamVO?.tmName}</span>
               </>
             )}
           </div>
