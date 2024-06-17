@@ -13,6 +13,7 @@ import {
   handleQuestionNumberChange,
   handleLinkedChange,
 } from "../funtion.js/Writefn";
+import {useNavigate} from "react-router";
 
 export default function SurveyWrite({
   token,
@@ -32,6 +33,7 @@ export default function SurveyWrite({
     },
   ]);
 
+  const navigate = useNavigate();
   const registHandler = async () => {
     // 문항 번호 중복 체크
     const questionNumbers = questions.map(
@@ -85,6 +87,7 @@ export default function SurveyWrite({
     }
     setWriteMode(false);
     setReload(Math.random());
+    navigate("/project");
   };
 
   /* const temporarySaveHandler = () => {
