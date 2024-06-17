@@ -234,7 +234,7 @@ export default function DepartmentList({ token }) {
           !isDeptRegistrationMode &&
           !isTeamRegistrationMode && (
             <div className={s.buttonlist}>
-              <button>결제신청기록</button>
+              {/* <button>결제신청기록</button>s */}
               <button onClick={onRegistrationDeptClickHandler}>
                 부서 등록 신청
               </button>
