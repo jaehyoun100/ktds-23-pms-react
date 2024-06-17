@@ -34,6 +34,12 @@ h1 {
   left: 20%;
 }
 .createGrid {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 200px 600px;
+  grid-template-rows: 120px 1fr 120px 1fr 120px 300px;
+}
+.modifyGrid {
   margin-top: 30px;
   align-items: center;
   display: grid;
