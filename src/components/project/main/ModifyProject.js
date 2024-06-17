@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "../project.module.css";
 import TextInput from "../../common/input/TextInput";
 import Selectbox from "../../common/selectbox/Selectbox";
@@ -13,13 +7,7 @@ import Button from "../../common/Button/Button";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
-import {
-  getClient,
-  getDept,
-  getPmCandidates,
-  getPrjInfo,
-  modifyPrj,
-} from "../../../http/projectHttp";
+import { getClient, getDept, getPmCandidates, getPrjInfo, modifyPrj } from "../../../http/projectHttp";
 
 const ModifyProject = () => {
   const [isAddClient, setIsAddClient] = useState(false);
@@ -35,6 +23,7 @@ const ModifyProject = () => {
   const [originStrtDt, setOriginStrtDt] = useState();
   const [originEndDt, setOriginEndDt] = useState();
   const [originPm, setOriginPm] = useState();
+  const [originStatus, setOriginStatus] = useState();
   const [projectId, setProjectId] = useState();
   const [canSave, setCanSave] = useState(true);
   const [editTitle, setEditTitle] = useState("");
@@ -42,8 +31,7 @@ const ModifyProject = () => {
   const location = useLocation();
   const allData = location.state || {};
   const [clientData, setClientData] = useState([]);
-  const [clientSelectedData, setClientSelectedData] =
-    useState(originClientName);
+  const [clientSelectedData, setClientSelectedData] = useState(originClientName);
 
   const [deptData, setDeptData] = useState([]);
   const [deptSelectedData, setDeptSelectedData] = useState(OriginDeptName);
@@ -51,6 +39,19 @@ const ModifyProject = () => {
 
   const [pmCandidate, setPmCandidate] = useState([]);
   const [pmSelectedData, setPmSelectedData] = useState(originPm);
+  const statusList = [
+    { label: "분석중", value: 401 },
+    { label: "설계중", value: 402 },
+    { label: "개발중", value: 403 },
+    { label: "단위테스트진행중", value: 404 },
+    { label: "통합테스트진행중", value: 405 },
+    { label: "오픈대기중", value: 406 },
+    { label: "오픈", value: 407 },
+    { label: "하자보수진행중", value: 408 },
+    { label: "완료", value: 409 },
+  ];
+  const [status, setStatus] = useState();
+  const [statusSelectedData, setStatusSelectedData] = useState(originStatus);
 
   const tokenInfo = useSelector((state) => {
     return {
@@ -60,14 +61,8 @@ const ModifyProject = () => {
   });
   useEffect(() => {
     prjNameRef.current.value = projectName || "";
-    console.log(originClientName, originPm, originPrjMemoName, OriginDeptName);
-  }, [
-    projectName,
-    originClientName,
-    originPm,
-    originPrjMemoName,
-    OriginDeptName,
-  ]);
+    console.log(originClientName, originPm, originPrjMemoName, OriginDeptName, originStatus);
+  }, [projectName, originClientName, originPm, originPrjMemoName, OriginDeptName, originStatus]);
 
   useMemo(() => {
     const { prjName } = allData?.allData;
@@ -78,7 +73,19 @@ const ModifyProject = () => {
     const { strtDt } = allData?.allData;
     const { endDt } = allData?.allData;
     const { prjMemo } = allData?.allData;
-
+    const { prjSts } = allData?.allData;
+    const setPrjStatus = async () => {
+      if (prjSts) {
+        // const item = ;
+        await setStatus(statusList.filter((item) => item.value == prjSts));
+      }
+    };
+    console.log(status, "???");
+    setPrjStatus();
+    if (status) {
+      setOriginStatus(status[0].label);
+      setStatusSelectedData(status[0].value);
+    }
     if (prjName) {
       setProjectName(prjName);
     }
@@ -112,8 +119,8 @@ const ModifyProject = () => {
   }, [allData]);
 
   useEffect(() => {
-    console.log(clientSelectedData, deptSelectedData, pmSelectedData);
-  }, [clientSelectedData, deptSelectedData, pmSelectedData]);
+    console.log(clientSelectedData, deptSelectedData, pmSelectedData, statusSelectedData);
+  }, [clientSelectedData, deptSelectedData, pmSelectedData, statusSelectedData]);
 
   const memoizeGetPrjInfo = useCallback(getPrjInfo, []);
   useEffect(() => {
@@ -157,11 +164,7 @@ const ModifyProject = () => {
 
   // 날짜 선택 변경 시 처리
   const onChangeSelect = () => {
-    if (
-      startDateRef.current &&
-      endDateRef.current &&
-      startDateRef.current > endDateRef.current
-    ) {
+    if (startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current) {
       setCanSave(false);
       return;
     }
@@ -171,25 +174,15 @@ const ModifyProject = () => {
 
   // 프로젝트명 유효성 검사
   useEffect(() => {
-    if (
-      prjNameRef.current &&
-      (prjNameRef.current.value === "" || prjNameRef.current.value.length > 30)
-    ) {
+    if (prjNameRef.current && (prjNameRef.current.value === "" || prjNameRef.current.value.length > 30)) {
       setCanSave(false);
       return;
     }
-    if (
-      startDateRef.current &&
-      endDateRef.current &&
-      startDateRef.current > endDateRef.current
-    ) {
+    if (startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current) {
       setCanSave(false);
       return;
     }
-    if (
-      startDateRef.current === undefined ||
-      endDateRef.current === undefined
-    ) {
+    if (startDateRef.current === undefined || endDateRef.current === undefined) {
       setCanSave(false);
       return;
     }
@@ -222,13 +215,11 @@ const ModifyProject = () => {
   // 프로젝트 수정 버튼 클릭 핸들러
   const memoizeModifyPrj = useCallback(modifyPrj, []);
   const onClickModifyButtonHandler = async () => {
-    console.log(startDateRef.current, endDateRef.current);
     if (!canSave) {
       alert("형식에 맞춰 재입력 후 저장해주세요.");
       return;
     }
     if (clientSelectedData === "고객사를 선택해주세요.") {
-      console.log("랄라");
       return;
     }
     if (deptSelectedData === "부서를 선택해주세요.") {
@@ -243,17 +234,14 @@ const ModifyProject = () => {
       clntInfo: clientSelectedData,
       deptId: deptSelectedData,
       pmId: pmSelectedData,
+      prjSts: statusSelectedData,
       strtDt: startDateRef.current,
       endDt: endDateRef.current,
       prjMemo: prjMemoRef.current.value,
     };
     console.log(dataArray);
     if (dataArray) {
-      const json = await memoizeModifyPrj(
-        tokenInfo.token,
-        projectId,
-        dataArray
-      );
+      const json = await memoizeModifyPrj(tokenInfo.token, projectId, dataArray);
       if (json.status === 200) {
         alert("프로젝트 수정에 성공했습니다.");
         navigate("/project");
@@ -269,26 +257,14 @@ const ModifyProject = () => {
       <div className={styles.createGrid}>
         <div>프로젝트명</div>
         <div>
-          <TextInput
-            id="prjName"
-            onChangeHandler={(e) => setEditTitle(e.target.value)}
-            ref={prjNameRef}
-          />
-          {prjNameRef.current &&
-          prjNameRef.current.value &&
-          prjNameRef.current.value.length > 30 ? (
-            <span className={styles.alertMessage}>
-              ※ 프로젝트명은 30자를 초과할 수 없습니다.
-            </span>
+          <TextInput id="prjName" onChangeHandler={(e) => setEditTitle(e.target.value)} ref={prjNameRef} />
+          {prjNameRef.current && prjNameRef.current.value && prjNameRef.current.value.length > 30 ? (
+            <span className={styles.alertMessage}>※ 프로젝트명은 30자를 초과할 수 없습니다.</span>
           ) : (
             <></>
           )}
-          {prjNameRef.current &&
-          (prjNameRef.current.value === null ||
-            prjNameRef.current.value === "") ? (
-            <span className={styles.alertMessage}>
-              ※ 프로젝트명은 필수 값입니다.
-            </span>
+          {prjNameRef.current && (prjNameRef.current.value === null || prjNameRef.current.value === "") ? (
+            <span className={styles.alertMessage}>※ 프로젝트명은 필수 값입니다.</span>
           ) : (
             <></>
           )}
@@ -323,6 +299,17 @@ const ModifyProject = () => {
             selectedData={pmSelectedData}
           />
         </div>
+        <div>프로젝트 상태</div>
+        <div>
+          {status && (
+            <Selectbox
+              initial={status[0].label}
+              optionList={statusList}
+              setSelectedData={setStatusSelectedData}
+              selectedData={statusSelectedData}
+            />
+          )}
+        </div>
         <div>프로젝트 기간</div>
         <div>
           <SelectDate
@@ -333,19 +320,13 @@ const ModifyProject = () => {
             defaultStart={originStrtDt}
             defaultEnd={originEndDt}
           />
-          {startDateRef.current &&
-          endDateRef.current &&
-          startDateRef.current > endDateRef.current ? (
-            <span className={styles.alertMessage}>
-              ※ 끝 날짜는 시작날짜보다 이전일 수 없습니다.
-            </span>
+          {startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current ? (
+            <span className={styles.alertMessage}>※ 끝 날짜는 시작날짜보다 이전일 수 없습니다.</span>
           ) : (
             <></>
           )}
           {originStrtDt === undefined || originEndDt === undefined ? (
-            <span className={styles.alertMessage}>
-              ※ 시작날짜와 끝날짜는 필수 입력 값입니다.
-            </span>
+            <span className={styles.alertMessage}>※ 시작날짜와 끝날짜는 필수 입력 값입니다.</span>
           ) : (
             <></>
           )}

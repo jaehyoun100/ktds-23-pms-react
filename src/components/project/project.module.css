@@ -29,15 +29,17 @@ h1 {
 .createContainer {
   position: relative;
   width: 800px;
-  height: 900px;
+  /* height: 900px; */
   top: 5%;
   left: 20%;
 }
 .createGrid {
+  margin-top: 30px;
   align-items: center;
   display: grid;
   grid-template-columns: 200px 600px;
-  grid-template-rows: 120px 1fr 120px 1fr 120px 300px;
+  gap: 27px;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 300px;
 }
 
 .readmeContainer {
