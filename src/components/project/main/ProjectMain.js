@@ -9,7 +9,12 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CalendarComponent from "./CalendarComponent";
 import { jwtDecode } from "jwt-decode";
-import { getCalendarApi, getPrjApi, postMemo, putMemo } from "../../../http/projectHttp";
+import {
+  getCalendarApi,
+  getPrjApi,
+  postMemo,
+  putMemo,
+} from "../../../http/projectHttp";
 export default function ProjectMain() {
   const [memo, setMemo] = useState();
   const [project, setProject] = useState();
@@ -65,10 +70,15 @@ export default function ProjectMain() {
   useEffect(() => {
     setEvents([]);
     if (calData) {
-      const sortedData = calData.sort((a, b) => new Date(a.clndDate) - new Date(b.clndDate));
+      const sortedData = calData.sort(
+        (a, b) => new Date(a.clndDate) - new Date(b.clndDate)
+      );
 
       for (let i of sortedData) {
-        setEvents((prev) => [...prev, { date: i.clndDate.split(" ")[0], memo: i.clndContent }]);
+        setEvents((prev) => [
+          ...prev,
+          { date: i.clndDate.split(" ")[0], memo: i.clndContent },
+        ]);
       }
       setNeedRender(false);
     }
@@ -94,7 +104,10 @@ export default function ProjectMain() {
           <div style={{ backgroundColor: "#fff" }}>
             <div className={styles.gridComponent}>
               <MainInfo project={project} />
-              <ChartContainer chartData={project.chartData} totalEmpCnt={project.projectTeammateList.length} />
+              <ChartContainer
+                chartData={project.chartData}
+                totalEmpCnt={project.projectTeammateList.length}
+              />
               <MainReadMe memo={memo} />
 
               <CalendarComponent
@@ -106,11 +119,13 @@ export default function ProjectMain() {
                 pm={project.pm.tmId}
               />
             </div>
-            {userData && (userData.admnCode === "301" || userData.empId === project.pm.tmId) && (
-              <div className={styles.modifyButtonArea}>
-                <button onClick={handleModifyClick}>프로젝트 수정</button>
-              </div>
-            )}
+            {userData &&
+              (userData.admnCode === "301" ||
+                userData.empId === project.pm.tmId) && (
+                <div className={styles.modifyButtonArea}>
+                  <button onClick={handleModifyClick}>프로젝트 수정</button>
+                </div>
+              )}
           </div>
         </>
       )}
