@@ -39,6 +39,9 @@ export const loadIssue = async (token, rqmId) => {
 };
 
 export const loadOneIssue = async ({ token, rqmId, isId }) => {
+  if (!token) {
+    return undefined;
+  }
   const response = await fetch(
     `${url}/api/v1/issue/view?&rqmId${rqmId}&isId${isId}`,
     {
@@ -80,5 +83,31 @@ export const deleteIssue = async (isId, token) => {
   );
 
   const json = await response.json();
+  return json;
+};
+
+export const loadForWriteIssueData = async (token) => {
+  if (!token) {
+    return undefined;
+  }
+  const response = await fetch(`${url}/api/v1/issue/write`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
+  const json = await response.json();
+
+  return json;
+};
+
+export const loadTeamListByPrjId = async (token, prjIdValue) => {
+  if (!token) {
+    return undefined;
+  }
+  const response = await fetch(`${url}/api/v1/issue/teammate/${prjIdValue}`, {
+    method: "GET",
+    headers: { Authorization: token },
+  });
+  const json = await response.json();
+
   return json;
 };
