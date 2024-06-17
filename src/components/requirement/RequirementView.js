@@ -33,6 +33,9 @@ export default function RequirementView() {
   // Spring의 redirect와 유사.
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const projectValue = location.state || {};
+
   const onRqmModifyHandler = () => {
     setIsModifyMode(true);
   };
@@ -42,7 +45,9 @@ export default function RequirementView() {
     if (check) {
       const json = await deleteRequirement(token, rqmId);
       if (json) {
-        navigate(`/requirement/${prjId}`);
+        navigate(`/requirement/${prjId}`, {
+          state: { project: projectValue.project },
+        });
       } else {
         alert("삭제할 권한이 없습니다.");
       }
@@ -50,7 +55,9 @@ export default function RequirementView() {
   };
 
   const onClickHandler = () => {
-    navigate(`/requirement/${prjId}`);
+    navigate(`/requirement/${prjId}`, {
+      state: { project: projectValue.project },
+    });
   };
 
   const onFileClickHandler = async (requirementId, fileName) => {
