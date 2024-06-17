@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { getToken } from "../../http/userDetailHttp";
 import s from "./login.module.css";
 import { Input } from "antd";
+import logo from "../contents/Logo.png";
 
 export default function LoginPage() {
   const empIdRef = useRef();
@@ -40,56 +41,41 @@ export default function LoginPage() {
     <>
       <div className={s.container}>
         <div className={s.header}>
-          <img className={s.logo} src="/images/logo.png" alt="" />
+          <img className={s.logo} src={logo} alt="로고 이미지" />
         </div>
         <div className={s.item}></div>
         <div className={s.item}>
           <div className={s.loginForm}>
-            <img className={s.logo2} src="/images/logo2.png" />
-
-            <div className={s.leftForm}>
-              <div className={s.formBackground}>
-                <div className={s.inputText}>
-                  <div className={s.id}>
-                    <img className={s.loginLogo} src="/images/login.png" />
-                    <Input
-                      className={s.idIput}
-                      type="text"
-                      name="empId"
-                      required
-                      ref={empIdRef}
-                      placeholder="로그인 이미지 구합니다"
-                    />
-                    <label htmlFor="empId">ID</label>
-                    <span></span>
-                  </div>
-                  <div className={s.pwd}>
-                    <img
-                      className={s.passwordLogo}
-                      src="/images/header-login.png"
-                    />
-                    <Input
-                      className={s.pwdIput}
-                      type="password"
-                      name="pwd"
-                      required
-                      ref={passwordRef}
-                      placeholder="혹시 다른곳 css이상하면 정세영한테"
-                    />
-                    <label htmlFor="pwd">PASSWORD</label>
-                    <span></span>
-                  </div>
-                  <div className={s.loginBtn}>
-                    <button
-                      className={s.button}
-                      type="button"
-                      onClick={onLoginBtnClickHandler}
-                    >
-                      LOGIN
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <div className={s.id}>
+              <label htmlFor="empId">ID</label>
+              <Input
+                className={s.idIput}
+                type="text"
+                name="empId"
+                required
+                ref={empIdRef}
+              />
+              <span></span>
+            </div>
+            <div className={s.pwd}>
+              <label htmlFor="pwd">PASSWORD</label>
+              <Input
+                className={s.pwdIput}
+                type="password"
+                name="pwd"
+                required
+                ref={passwordRef}
+              />
+              <span></span>
+            </div>
+            <div className={s.loginBtn}>
+              <button
+                className={s.button}
+                type="button"
+                onClick={onLoginBtnClickHandler}
+              >
+                LOGIN
+              </button>
             </div>
           </div>
         </div>
