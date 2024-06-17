@@ -34,3 +34,16 @@ export const getCommuteLog = (
     dispatch(commuteActions.set(json));
   };
 };
+export const getOneCommute = (token) => {
+  return async (dispatch) => {
+    const response = await fetch(`${url}/api/commute/one`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
+    const json = await response.json();
+    dispatch(commuteActions.setCommute(json));
+  };
+};
