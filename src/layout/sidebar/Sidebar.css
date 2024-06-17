@@ -1,7 +1,7 @@
 /* sidebar */
 .sidebar {
   transition: width 0.5s;
-  background-color: #f4f5ff;
+  background-color: #fff;
   width: 300px;
   height: 100%;
   padding: 36px 20px;

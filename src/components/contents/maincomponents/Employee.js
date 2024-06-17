@@ -53,13 +53,18 @@ export function MainEmployee() {
     <>
       {userInfo && (
         <>
-          <div className={w.cardBodyContent}>
+          <div className={w.cardBodyContent} style={{ display: "flex" }}>
             <div>
-              {userInfo.empName} {userInfo.pstnName} ({userInfo.empId})
+              <MainEmployeeImg />
             </div>
-            <div>{userInfo.email}</div>
             <div>
-              {userInfo.departmentVO.deptName} | {userInfo?.teamVO?.tmName}
+              <div>
+                {userInfo.empName} {userInfo.pstnName} ({userInfo.empId})
+              </div>
+              <div>{userInfo.email}</div>
+              <div>
+                {userInfo.departmentVO.deptName} | {userInfo?.teamVO?.tmName}
+              </div>
             </div>
           </div>
         </>
