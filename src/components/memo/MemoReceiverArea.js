@@ -7,6 +7,8 @@ export default function MemoReceiverArea({ sendMemo }) {
   const rcvRefList = receiveMemoVOList.filter(
     (memo) => memo.rcvCode === "1402"
   );
+
+  // @TODO 수신쪽지일 경우 비밀참조 숨기기!!!
   const rcvSecretRefList = receiveMemoVOList.filter(
     (memo) => memo.rcvCode === "1403"
   );
@@ -58,7 +60,7 @@ export default function MemoReceiverArea({ sendMemo }) {
             </div>
             <div className={style.optionArea}>
               {rcvSecretRefList.map((receiver) => (
-                <div className={style.receiverArea}>
+                <div className={style.receiverArea} key={receiver.empId}>
                   <button className={style.buttonUser}>
                     {receiver.departmentVO.deptName}{" "}
                     {receiver.employeeVO.empName} ({receiver.employeeVO.email})

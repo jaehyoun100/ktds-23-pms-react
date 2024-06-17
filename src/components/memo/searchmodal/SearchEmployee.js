@@ -87,7 +87,7 @@ export default function SearchEmployee({
       })
     );
     setCheckedRcvList([]);
-    setSelectedDeptId(undefined);
+    // setSelectedDeptId(undefined);
     setIsAllCheckedEmp(false);
     memoDispatch(memoAddrAction.resetSearchEmpList());
   };
@@ -103,7 +103,7 @@ export default function SearchEmployee({
       })
     );
     setCheckedRcvList([]);
-    setSelectedDeptId(undefined);
+    // setSelectedDeptId(undefined);
     setIsAllCheckedEmp(false);
     memoDispatch(memoAddrAction.resetSearchEmpList());
   };
@@ -119,7 +119,7 @@ export default function SearchEmployee({
       })
     );
     setCheckedRcvList([]);
-    setSelectedDeptId(undefined);
+    // setSelectedDeptId(undefined);
     setIsAllCheckedEmp(false);
     memoDispatch(memoAddrAction.resetSearchEmpList());
   };

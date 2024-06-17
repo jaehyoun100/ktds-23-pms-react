@@ -110,6 +110,21 @@ export const sendMemo = async (
   return json;
 };
 
+// 파일 다운로드
+export const onSendDownloadFile = async (token, selectSendMemoId) => {
+  if (!token) {
+    return;
+  }
+  const response = await fetch(
+    `${url}/api/memo/send/downloadFile/${selectSendMemoId}`,
+    {
+      method: "GET",
+      headers: { Authorization: token },
+    }
+  );
+  return response;
+};
+
 // 발신 취소
 export const cancelSendMemo = async (token, selectSendMemoId) => {
   if (!token) {
@@ -212,10 +227,10 @@ export const loadReceiveMemo = async ({ selectRcvMemoId, token }) => {
     headers: { Authorization: token },
   });
   const sendJson = await sendResponse.json();
-  console.log("ooo ", sendJson);
+  // console.log("ooo ", sendJson);
 
   const json = { rcvJson, sendJson };
-  console.log("::::: ", json);
+  // console.log("::::: ", json);
 
   return json;
 };
@@ -265,8 +280,7 @@ export const onDownloadFile = async (token, selectRcvMemoId) => {
       headers: { Authorization: token },
     }
   );
-  const json = await response.json();
-  return json;
+  return response;
 };
 
 // 수신 쪽지 삭제

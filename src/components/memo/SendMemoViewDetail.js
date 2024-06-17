@@ -14,9 +14,11 @@ import {
   cancelSendMemo,
   deleteSendMemo,
   loadSendMemo,
+  onSendDownloadFile,
   saveSendMemo,
 } from "../../http/memoHttp";
 import MemoReceiverArea from "./MemoReceiverArea";
+import { useNavigate } from "react-router-dom";
 
 export default function SendMemoViewDetail({
   token,
@@ -24,6 +26,7 @@ export default function SendMemoViewDetail({
   setSelectSendMemoId,
   setNeedLoad,
 }) {
+  const navigate = useNavigate();
   const [isFolded, setIsFolded] = useState(false);
   const [isFileFolded, setIsFileFolded] = useState(false);
   const [needViewReLoad, setNeedViewReLoad] = useState();
@@ -91,11 +94,24 @@ export default function SendMemoViewDetail({
   };
 
   // 첨부파일 다운로드
-  const onDownloadFileHandler = async () => {
-    // const json = await onDownloadFile(token, selectRcvMemoId);
-    // if (json.errors) {
-    //   alert(json.errors);
-    // }
+  const onDownloadFileHandler = async (fileName) => {
+    const response = await onSendDownloadFile(token, selectSendMemoId);
+
+    if (!response.ok) {
+      console.error(
+        `File download failed with status code: ${response.status}`
+      );
+      throw new Error("File download failed");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   };
 
   return (
@@ -107,7 +123,9 @@ export default function SendMemoViewDetail({
           <div className={style.memoToolBar}>
             <Button onClickHandler={onBoardListClickHandler}>목록</Button>
             <Button onClickHandler={onDeleteClickHandler}>삭제</Button>
-            <Button onClickHandler={onCancelClickHandler}>발신취소</Button>
+            {sendMemo.sendStsCode === "1501" && (
+              <Button onClickHandler={onCancelClickHandler}>발신취소</Button>
+            )}
           </div>
           {/* header */}
           <div className={style.mailViewWrap}>
@@ -194,7 +212,9 @@ export default function SendMemoViewDetail({
                           <div className={style.task}>
                             <div
                               className={style.buttonSaveFile}
-                              onClick={() => onDownloadFileHandler()}
+                              onClick={() =>
+                                onDownloadFileHandler(sendMemo.originFileName)
+                              }
                             >
                               <BsDownload />
                             </div>
