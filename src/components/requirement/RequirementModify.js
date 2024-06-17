@@ -49,6 +49,7 @@ export default function RequirementModify({
   const strtDtRef = useRef(); // 시작일
   const endDtRef = useRef(); // 종료 예정일
   const fileRef = useRef(); // 첨부파일
+  const rqmCntntRef = useRef(); // 내용
   const scdStsRef = useRef(); // 일정상태
   const rqmStsRef = useRef(); // 진행상태
 
@@ -83,10 +84,7 @@ export default function RequirementModify({
         fileRef.current.files[0] === undefined
           ? null
           : fileRef.current.files[0]; // 첨부파일
-      const rqmCntnt =
-        editorModifyData === undefined
-          ? requirement.rqmCntnt
-          : editorModifyData; // 요구사항 내용
+      const rqmCntnt = rqmCntntRef.current.value; // 요구사항 내용
       const scdSts = scdStsRef.current.value; // 일정상태
       const rqmSts = rqmStsRef.current.value; // 진행상태
 
@@ -308,13 +306,15 @@ export default function RequirementModify({
 
             {/** ckeditor를 이용한 내용넣기 */}
             <label htmlFor="rqm-cntnt">요구사항 내용</label>
-            <div className="hereCkEditor5">
-              {/* * 여기가 editor 생성부 */}
+            <textarea
+              className={styles.contentBox}
+              id="rqm-cntnt"
+              ref={rqmCntntRef}
+            >
+              {requirement.rqmCntnt}
+            </textarea>
+            {/* <div className="hereCkEditor5">
               <div className="editor" data-name="rqmCntnt" data-init-content="">
-                {/* <textarea
-                style={{ width: "600px", height: "300px" }}
-                defaultValue="CKEditor를 이용해서 내용 넣기"
-              ></textarea> */}
                 <CKEditor
                   editor={ClassicEditor}
                   data={requirement.rqmCntnt}
@@ -335,7 +335,7 @@ export default function RequirementModify({
                   {modifyErrors.rqmCntnt}
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/** 체크박스 일정상태 선택창 todo 서버에서 정보 가져와서 for문 돌리기 */}
             <label htmlFor="scd-sts">일정상태</label>
