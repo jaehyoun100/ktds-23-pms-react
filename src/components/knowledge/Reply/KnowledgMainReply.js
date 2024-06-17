@@ -9,7 +9,7 @@ import { replyRecommand } from "../../../http/KnowledgeReplyHttp";
 import styles from "../knowleddgeview.module.css";
 import { createNewreReply } from "../../../http/KnowledgeReplyHttp";
 import { loadKnowledgereReply } from "../../../http/KnowledgeReplyHttp";
-
+import { createNewKnowledgeReply } from "../../../http/KnowledgeReplyHttp";
 export default function KnowledgeMainReply(
   { pPostId, token, setSelectedSplId, setNeedReload },
   needReload
@@ -23,21 +23,49 @@ export default function KnowledgeMainReply(
   const [isEditingSubReply, setIsEditingSubReply] = useState({});
   const [isShowAnswer, setIsShowAnswer] = useState(true);
   const [isRecommanded, setIsRecommanded] = useState({});
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
   const contentref = useRef();
   const rplIdRef = useRef();
   const subReplyRef = useRef();
   const subReplyEditRef = useRef();
+  const ReplyRef = useRef();
 
-  const cancelsave = () => {
-    setIsEditing({});
+  const handleReplyAdd = () => {
+    setNeedReload(Math.random());
   };
 
   const reReplycancelsave = () => {
     setIsReplying({});
   };
 
+  const cancelsave = () => {
+    setIsEditing({});
+  };
+
   const cancelsaveSubReply = () => {
     setIsEditingSubReply({});
+  };
+
+  const onSaveClickHandler = async (event) => {
+    const content = ReplyRef.current.value;
+
+    if (!content) {
+      event.preventDefault();
+      alert("내용을 입력해 주세요");
+      return;
+    }
+
+    const json = await createNewKnowledgeReply(content, pPostId, token);
+    if (json.errors) {
+      json.errors.forEach((error) => {
+        alert(error);
+      });
+    } else if (json.body) {
+      // Update replies state with new reply data
+      setReplies((prevReplies) => [...prevReplies, json.body]);
+      ReplyRef.current.value = "";
+      handleReplyAdd();
+    }
   };
 
   const deleteKnowledgeReplyClickHandler = async (replyItem) => {
@@ -51,42 +79,8 @@ export default function KnowledgeMainReply(
       });
     } else {
       alert("삭제에 성공하였습니다");
-      setSelectedSplId(undefined);
       setNeedReload(Math.random());
-    }
-  };
-
-  const RecommandReply = async (replyItem) => {
-    const str = replyItem.rplId;
-    try {
-      const json = await replyRecommand(str, token);
-      if (json.body == false) {
-        alert(" 이미 추천되었습니다");
-      }
-      setIsRecommanded({
-        ...isRecommanded,
-        [replyItem.rplId]: true,
-      });
       return;
-    } catch (error) {
-      console.error("Error recommending reply:", error);
-    }
-  };
-
-  const handleEditComment = async (e, replyItem) => {
-    e.preventDefault();
-    const content = contentref.current.value;
-    const str = replyItem.rplId;
-
-    const json = await updateKnowledgeReply(content, str, token);
-
-    if (json.errors) {
-      alert("수정에 실패했습니다");
-      return;
-    } else if (json.body) {
-      alert("수정이 완료되었습니다");
-      setSelectedSplId(undefined);
-      setNeedReload(Math.random());
     }
   };
 
@@ -98,10 +92,6 @@ export default function KnowledgeMainReply(
         [rplId]: json.body || [],
       }));
     }
-  };
-
-  const handleReplyClick = (replyItem) => {
-    setIsReplying({ ...isReplying, [replyItem.rplId]: true });
   };
 
   const handleAddSubReply = async (e, replyItem) => {
@@ -118,9 +108,30 @@ export default function KnowledgeMainReply(
       return;
     } else if (json.body) {
       alert("답변이 추가되었습니다");
-      setSelectedSplId(undefined);
       setNeedReload(Math.random());
+      setIsReplying({});
     }
+  };
+
+  const handleEditComment = async (e, replyItem) => {
+    e.preventDefault();
+    const content = contentref.current.value;
+    const str = replyItem.rplId;
+
+    const json = await updateKnowledgeReply(content, str, token);
+
+    if (json.errors) {
+      alert("수정에 실패했습니다");
+      return;
+    } else if (json.body) {
+      alert("수정이 완료되었습니다");
+      setNeedReload(Math.random());
+      setIsEditing({});
+    }
+  };
+
+  const handleReplyClick = (replyItem) => {
+    setIsReplying({ ...isReplying, [replyItem.rplId]: true });
   };
 
   const deleteReply = async (subReply) => {
@@ -133,15 +144,8 @@ export default function KnowledgeMainReply(
       });
     } else {
       alert("삭제에 성공하였습니다");
-      setSelectedSplId(undefined);
       setNeedReload(Math.random());
-    }
-  };
-
-  const handlCancelClick = () => {
-    if (isShowAnswer === true) {
-      setIsShowAnswer(isShowAnswer);
-      setSubReplies({});
+      return;
     }
   };
 
@@ -158,20 +162,18 @@ export default function KnowledgeMainReply(
       });
     } else if (json.body) {
       alert("수정이 완료되었습니다");
-      setSelectedSplId(undefined);
       setNeedReload(Math.random());
+      setIsEditingSubReply({});
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const data = await loadKnowledgeReply({ pPostId, token });
-      setData(data);
-      setIsLoading(false);
-    };
+    const intervalId = setInterval(async () => {
+      const newData = await loadKnowledgeReply({ pPostId, token });
+      setData(newData);
+    }, 1000); // Set refresh interval in milliseconds (5 seconds in this case)
 
-    fetchData();
+    return () => clearInterval(intervalId); // Clear interval on unmount
   }, [pPostId, token]);
 
   useEffect(() => {
@@ -185,15 +187,23 @@ export default function KnowledgeMainReply(
   }, [data]);
 
   const { body: knowledgeReplyBody } = data || {};
+  console.log(knowledgeReplyBody);
 
   return (
     <div className={styles.commentinputareas}>
-      <KnowledgeReplyWrite
-        pPostId={pPostId}
-        token={token}
-        setSelectedSplId={setSelectedSplId}
-        setNeedReload={setNeedReload}
-      />
+      <div className={styles.commentform}>
+        <form>
+          <textarea
+            id="comment"
+            placeholder="내용을 입력해주세요"
+            ref={ReplyRef}
+          ></textarea>
+
+          <button type="button" onClick={onSaveClickHandler}>
+            등록
+          </button>
+        </form>
+      </div>
       <div className={styles.commentlist}>
         {token && (
           <>
@@ -244,7 +254,6 @@ export default function KnowledgeMainReply(
                           </button>
                         </div>
                       </div>
-
                       {isEditing[replyItem.rplId] && (
                         <td>
                           <form
