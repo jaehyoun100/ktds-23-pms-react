@@ -163,7 +163,7 @@ export default function Output() {
       title: "프로젝트",
       dataIndex: ["project", "prjName"],
       key: "prjName",
-      width: "25%",
+      width: "auto",
     },
     {
       title: "산출물 제목",
@@ -175,14 +175,14 @@ export default function Output() {
       title: "산출물 종류",
       dataIndex: ["outTypeVO", "cmcdName"],
       key: "cmcdName",
-      width: "10%",
+      width: "auto",
     },
     {
       title: "버전",
       // {item.outVerSts.cmcdName} Ver.{item.level}
       dataIndex: ["outVerSts", "cmcdName"],
       key: "cmcdName",
-      width: "10%",
+      width: "auto",
       render: (data, row) => (
         <span>
           {data} Ver.{row.level}
@@ -193,7 +193,7 @@ export default function Output() {
       title: "파일명",
       dataIndex: "outFile",
       key: "outFile",
-      width: "10%",
+      width: "auto",
       render: (data, row) => (
         <span
           style={{ cursor: "pointer" }}
@@ -207,7 +207,7 @@ export default function Output() {
       title: "작성자",
       dataIndex: ["crtrIdVO", "empName"],
       key: "empName",
-      width: "10%",
+      width: "auto",
     },
     {
       title: "등록일",

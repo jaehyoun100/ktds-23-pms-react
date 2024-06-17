@@ -110,19 +110,22 @@ export default function Requirement() {
       title: "프로젝트",
       dataIndex: ["projectVO", "prjName"],
       key: "prjName",
-      width: "25%",
+      width: "auto",
     },
     {
       title: "요구사항명",
       dataIndex: "rqmTtl",
       key: "rqmTtl",
-      width: "20%",
+      width: "auto",
       render: (data, row) => (
         <span
           style={{ cursor: "pointer" }}
           // onClick={() => navigate(`/employee/view/${row.empId}`)}
           onClick={() =>
-            navigate(`/requirement/view?prjId=${row.prjId}&rqmId=${row.rqmId}`)
+            navigate(
+              `/requirement/view?prjId=${row.prjId}&rqmId=${row.rqmId}`,
+              { state: { project } }
+            )
           }
         >
           {data}
