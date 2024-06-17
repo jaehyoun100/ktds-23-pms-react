@@ -99,11 +99,11 @@ const ModifyProject = () => {
     }
     if (strtDt) {
       setOriginStrtDt(strtDt);
-      // startDateRef.current = setOriginStrtDt;
+      startDateRef.current = strtDt;
     }
     if (endDt) {
       setOriginEndDt(endDt);
-      // endDateRef.current = setOriginEndDt;
+      endDateRef.current = endDt;
     }
     if (prjMemo) {
       setOriginPrjMemoName(prjMemo);
@@ -219,9 +219,10 @@ const ModifyProject = () => {
     originPrjMemoName,
   ]);
 
-  // 프로젝트 생성 버튼 클릭 핸들러
+  // 프로젝트 수정 버튼 클릭 핸들러
   const memoizeModifyPrj = useCallback(modifyPrj, []);
   const onClickModifyButtonHandler = async () => {
+    console.log(startDateRef.current, endDateRef.current);
     if (!canSave) {
       alert("형식에 맞춰 재입력 후 저장해주세요.");
       return;
@@ -329,6 +330,8 @@ const ModifyProject = () => {
             onChangeHandler={(e) => setDateInfo(e.target.value)}
             startDateRef={startDateRef}
             endDateRef={endDateRef}
+            defaultStart={originStrtDt}
+            defaultEnd={originEndDt}
           />
           {startDateRef.current &&
           endDateRef.current &&

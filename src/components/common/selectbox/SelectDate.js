@@ -1,15 +1,24 @@
 import styles from "./selectbox.module.css";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { DatePicker } from "antd";
+import moment from "moment";
+import dayjs from "dayjs";
 
 const SelectDate = ({
   startDateRef,
   endDateRef,
   onChangeSelect,
   onChangeHandler,
+  defaultStart,
+  defaultEnd,
 }) => {
   // const startDateRef = useRef(null);
   // const endDateRef = useRef(null);
+  const [startDate, setStartDate] = useState(
+    defaultStart ? defaultStart : undefined
+  );
+  const [a, seta] = useState(moment());
+  const [endDate, setEndDate] = useState(defaultEnd ? defaultEnd : undefined);
 
   const handleStartDateChange = async (date) => {
     if (date && date.$d) {
@@ -47,11 +56,17 @@ const SelectDate = ({
       <DatePicker
         className={styles.datePicker}
         onChange={handleStartDateChange}
+        // ref={startDateRef}
+        defaultValue={dayjs(startDate, "YYYY-MM-DD")}
+        format="YYYY-MM-DD"
       />
       ~
       <DatePicker
         className={styles.datePicker2}
         onChange={handleEndDateChange}
+        // ref={endDateRef}
+        defaultValue={dayjs(endDate, "YYYY-MM-DD")}
+        format="YYYY-MM-DD"
       />
     </div>
   );
