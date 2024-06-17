@@ -116,9 +116,6 @@
 }
 
 /* ***** component ***** */
-.cardBodyContent {
-  /*  */
-}
 
 .imgCenter {
   background-color: #fff;
@@ -136,6 +133,8 @@
 .bodyContentContainer {
   padding: 15px;
   height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mainContentHolder {
@@ -172,9 +171,31 @@
 }
 
 .contentGridTwo {
+  /* display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 200px;
+  gap: 10px; */
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  column-gap: 16px;
+  grid-template-columns: 1fr 1fr; /* 1:1 비율 */
+  grid-auto-rows: 1fr; /* 높이를 비율로 설정 */
+  gap: 10px; /* 그리드 간격 */
+  width: 100%; /* 상위 div의 너비에 맞춤 */
+  height: 100%; /* 상위 div의 높이에 맞춤 */
+}
+
+.gridTwoItem{
+  align-items: center;
+  height: 100%; /* 상위 div 높이에 맞춤 */
+  width: 100%; /* 상위 div 너비에 맞춤 */
+}
+
+.gridItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* 상위 div 높이에 맞춤 */
+  width: 100%; /* 상위 div 너비에 맞춤 */
 }
 
 .subgridTwo {
@@ -184,6 +205,10 @@
 
 .heightFull {
   height: 100%;
+}
+
+.maxHeight {
+  height: 270px;
 }
 
 @media screen and (max-width: 1200px) {
