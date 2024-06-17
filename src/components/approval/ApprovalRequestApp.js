@@ -127,7 +127,7 @@ export default function ApprovalRequestApp() {
   return (
     <>
       <h4>결제 신청</h4>
-      {apprCnt !== undefined && <div>{apprCnt}개의 신청건이 있습니다. </div>}
+      {apprCnt !== 0 && <div>{apprCnt}개의 신청건이 있습니다. </div>}
       {apprList && (
         <>
           <Table
