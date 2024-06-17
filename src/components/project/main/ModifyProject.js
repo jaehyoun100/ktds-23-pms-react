@@ -254,7 +254,7 @@ const ModifyProject = () => {
   return (
     <div className={styles.createContainer}>
       <h3 className={styles.createAndModify}>프로젝트 수정</h3>
-      <div className={styles.createGrid}>
+      <div className={styles.modifyGrid}>
         <div>프로젝트명</div>
         <div>
           <TextInput id="prjName" onChangeHandler={(e) => setEditTitle(e.target.value)} ref={prjNameRef} />
