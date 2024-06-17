@@ -151,7 +151,11 @@ export const applyForMultipleRentalSupplies = async (token, supplies) => {
   return json;
 };
 
-export const returnRentalSupply = async ({ rsplApprId, invQty, token }) => {
+export const returnRentalSupply = async ({
+  rsplApprId,
+  rsplRqstQty,
+  token,
+}) => {
   if (!token) {
     return undefined;
   }
@@ -162,7 +166,7 @@ export const returnRentalSupply = async ({ rsplApprId, invQty, token }) => {
       Authorization: token,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ rsplApprId, invQty }),
+    body: JSON.stringify({ rsplApprId, rsplRqstQty }),
   });
 
   const json = await response.json();
