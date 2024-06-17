@@ -53,7 +53,7 @@ export const menus = [
       },
       {
         label: "결제 신청",
-        to: "/approval/requester",
+        to: "/approval/request",
       },
     ],
   },

@@ -61,7 +61,7 @@ export default function ApprovalRequestApp() {
           {data}
         </span>
       ),
-      width: "5%",
+      width: "10%",
     },
     {
       title: "결제요청자",
@@ -106,7 +106,7 @@ export default function ApprovalRequestApp() {
           {data}
         </span>
       ),
-      width: "10%",
+      width: "15%",
     },
     {
       title: "결제마감일",
@@ -117,7 +117,7 @@ export default function ApprovalRequestApp() {
           {data}
         </span>
       ),
-      width: "10%",
+      width: "15%",
     },
     // {
     //   title: "승인",
@@ -129,8 +129,8 @@ export default function ApprovalRequestApp() {
 
   return (
     <>
-      <h4>결제 요청</h4>
-      {apprCnt && <div>{apprCnt}개가 있어요 </div>}
+      <h4>결제 신청</h4>
+      {apprCnt !== undefined && <div>{apprCnt}개의 신청건이 있습니다. </div>}
       {apprList && (
         <>
           <Table
