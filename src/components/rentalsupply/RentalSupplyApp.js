@@ -5,12 +5,14 @@ import Table from "../../utils/Table";
 import style from "./rentalSupply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function RentalSupplyApp() {
   const [selectedRsplId, setSelectedRsplId] = useState();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hideZeroInventory, setHideZeroInventory] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
 
   const { token } = useSelector((state) => state.tokenInfo);
   const isSelect = selectedRsplId !== undefined;
@@ -21,6 +23,19 @@ export default function RentalSupplyApp() {
     return { token };
   }, [token]);
 
+  const loadUserInfo = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setUserInfo(res.data.body);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [token]);
+
   useEffect(() => {
     const fetchingData = async () => {
       const json = await memoizedLoadRentalSupplyList({ ...memoizedToken });
@@ -29,7 +44,11 @@ export default function RentalSupplyApp() {
     };
 
     fetchingData();
-  }, [memoizedLoadRentalSupplyList, memoizedToken]);
+    loadUserInfo();
+  }, [memoizedLoadRentalSupplyList, loadUserInfo, memoizedToken]);
+
+  const deptId =
+    userInfo && userInfo.departmentVO ? userInfo.departmentVO.deptId : null;
 
   const columns = [
     {
@@ -133,7 +152,9 @@ export default function RentalSupplyApp() {
             />
           </>
         )}
-        <button onClick={onRegistrationModeClickHandler}>대여품 등록</button>
+        {deptId === "DEPT_230101_000010" && (
+          <button onClick={onRegistrationModeClickHandler}>대여품 등록</button>
+        )}
         <button onClick={onApplyModeClickHandler}>대여품 신청</button>
         <button onClick={onRentalSupplyLogViewModeClickHandler}>
           신청 기록

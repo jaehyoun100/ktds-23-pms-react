@@ -36,7 +36,7 @@ export default function RentalSupplyRegist() {
   useEffect(() => {
     const fetchingData = async () => {
       const json = await memoizedLoadRentalSupplyCategory({ ...memoizedToken });
-      const categories = json.supplyList.map((item) => item.rsplCtgr);
+      const categories = json.rentalSupplyList.map((item) => item.rsplCtgr);
       setCategoryList(categories);
     };
 

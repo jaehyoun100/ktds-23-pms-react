@@ -28,6 +28,7 @@ export default function SupplyLogView() {
         ...item,
         empName: `${item.employeeVO.empName} (${item.employeeVO.email})`,
         reqDt: item.approvalVO.apprDate,
+        splRqstQty: item.splRqstQty === 0 ? undefined : item.splRqstQty,
       }));
 
       setData(flattenedData);
@@ -60,8 +61,8 @@ export default function SupplyLogView() {
     },
     {
       title: "신청 갯수",
-      dataIndex: "reqCnt",
-      key: "reqCnt",
+      dataIndex: "splRqstQty",
+      key: "splRqstQty",
     },
     {
       title: "신청일",

@@ -5,12 +5,14 @@ import Table from "../../utils/Table";
 import style from "./supply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hideZeroInventory, setHideZeroInventory] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
 
   const { token } = useSelector((state) => state.tokenInfo);
   const isSelect = selectedSplId !== undefined;
@@ -21,15 +23,32 @@ export default function SupplyApp() {
     return { token };
   }, [token]);
 
+  const loadUserInfo = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setUserInfo(res.data.body);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [token]);
+
   useEffect(() => {
     const fetchingData = async () => {
       const json = await memoizedLoadSupplyList({ ...memoizedToken });
       setData(json.body);
       setIsLoading(false);
     };
-
     fetchingData();
-  }, [memoizedLoadSupplyList, memoizedToken]);
+    loadUserInfo();
+  }, [memoizedLoadSupplyList, loadUserInfo, memoizedToken]);
+
+  // userInfo와 departmentVO가 존재하는지 확인
+  const deptId =
+    userInfo && userInfo.departmentVO ? userInfo.departmentVO.deptId : null;
 
   const columns = [
     {
@@ -133,7 +152,9 @@ export default function SupplyApp() {
             />
           </>
         )}
-        <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
+        {deptId === "DEPT_230101_000010" && (
+          <button onClick={onRegistrationModeClickHandler}>소모품 등록</button>
+        )}
         <button onClick={onApplyModeClickHandler}>소모품 신청</button>
         <button onClick={onSupplyLogViewModeClickHandler}>신청 기록</button>
       </div>
