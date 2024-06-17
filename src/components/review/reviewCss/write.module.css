@@ -19,10 +19,9 @@
   height: 300px;
 }
 
-
 .writeReviewContainer {
   display: grid;
-  grid-template-rows: 0.06fr 0.5fr ;
+  grid-template-rows: 0.06fr 0.5fr;
   grid-template-columns: 0.1fr 1fr;
   background-color: white;
   border-radius: 7px;
@@ -104,7 +103,6 @@
 
 /* ViewReview 에 적용할 CSS */
 .reviewResultContainer {
-
 }
 
 .reviewResultProjectContainer {
@@ -125,7 +123,6 @@
 .starIcon {
   color: #d3d3d3;
   transition: color 0.2s;
-
 }
 
 .starIcon.gold {
@@ -155,4 +152,59 @@
 .halfStar {
   color: gold;
   clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+}
+
+/* ViewReview CSS */
+.userIcon {
+  height: 1.7em;
+  width: 1.7em;
+}
+
+.userIconContainer {
+  display: grid;
+  justify-content: center;
+  margin-top: 7px;
+}
+
+.reviewResultInfo {
+  display: grid;
+  grid-template-columns: repeat(3, 0.5fr);
+  align-items: center;
+  justify-items: center;
+  height: 150px;
+  background-color: #ecf0f5;
+}
+
+.reviewResultInfoItems {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  font-weight: 300;
+}
+
+.reviewResultInfoItemsContent {
+  font-size: 30px;
+}
+
+.reviewResultStarFlex {
+  display: flex;
+  align-items: center;
+}
+
+.reviewResultContainer {
+  display: grid;
+  grid-template-columns: 0.05fr 1fr;
+  border: solid 1px black;
+  gap: 5px;
+}
+
+.reviewResultContent {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr;
+}
+
+.starRatingPosition {
+  position: relative;
+  left: 10px;
+  font-weight: 600;
 }
