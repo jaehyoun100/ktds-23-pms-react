@@ -4,8 +4,6 @@ import {
   loadForModifyRequirementData,
   modifyRequirement,
 } from "../../http/requirementHttp";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 export default function RequirementModify({
   projectId,
@@ -21,7 +19,6 @@ export default function RequirementModify({
     rqmSts: [],
     teammateList: [],
   });
-  const [editorModifyData, setEditorModifyData] = useState();
   const [modifyErrors, setModifyErrors] = useState({
     rqmTtl: [],
     prjId: [],

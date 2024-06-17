@@ -7,8 +7,6 @@ import {
   loadTeamListByPrjId,
   writeRequirement,
 } from "../../http/requirementHttp";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import styles from "./requirement.module.css";
 
 export default function RequirementWrite() {
@@ -18,7 +16,6 @@ export default function RequirementWrite() {
     rqmSts: [], // 진행상태
   });
   const [empData, setEmpData] = useState();
-  const [editorWriteData, setEditorWriteData] = useState();
   const [writeErrors, setWriteErrors] = useState({
     rqmTtl: [], // 제목
     prjId: [], // 프로젝트

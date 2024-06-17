@@ -219,30 +219,7 @@ export default function Output() {
       title: "수정",
       width: "7%",
 
-      // {userData.empName === item.crtrIdVO.empName ||
-      //   userData.admnCode === "301" ? (
-      //     <button
-      //       onClick={() => onOutputModifyHandler(item.outId)}
-      //     >
-      //       수정
-      //     </button>
-      //   ) : (
-      //     <button
-      //       onClick={() => onOutputModifyHandler(item.outId)}
-      //       disabled
-      //     >
-      //       수정
-      //     </button>
-      //   )}
-
       render: (data, row) => {
-        // <span
-        //   style={{ cursor: "pointer" }}
-        //   onClick={() => onOutputModifyHandler(row.outId)}
-        // >
-        //   {data}
-        // </span>
-
         if (
           userData.empName === row.crtrIdVO.empName ||
           userData.admnCode === "301"
@@ -288,7 +265,7 @@ export default function Output() {
   // 검색 필터
   const filterOptions = [
     {
-      label: "제목",
+      label: "산출물명",
       value: "outTtl",
     },
   ];
