@@ -49,6 +49,21 @@ export const handleUpdateEmployee = async ({ data, token, empId }) => {
   }
 };
 
+// 비밀번호 변경
+export const handleUpdateEmployeePwd = async ({ data, token, empId }) => {
+  const response = await fetch(`${url}/api/v1/employee/modifyPwd/${empId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify(data),
+  });
+  if (response.status === 200) {
+    loadOneData({ token, empId });
+  }
+};
+
 export const handleRegistEmployee = async ({ data, token }) => {
   const response = await fetch(`${url}/api/v1/employee`, {
     method: "POST",

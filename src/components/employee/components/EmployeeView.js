@@ -4,7 +4,11 @@ import { Avatar, Button, Descriptions, Typography, message } from "antd";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ModifyBtn from "./Popup/ModifyBtn";
-import { loadOneData, handleUpdateEmployee } from "../../../http/employeeHttp";
+import {
+  loadOneData,
+  handleUpdateEmployee,
+  handleUpdateEmployeePwd,
+} from "../../../http/employeeHttp";
 import MenuBtn from "./Popup/MenuBtn";
 import RegBtn from "./Popup/RegBtn";
 import PasswordBtn from "./Popup/PasswordBtn";
@@ -42,7 +46,7 @@ export default function EmployeeView() {
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
   );
 
-  const loadHisotry = useCallback(async () => {
+  const loadHistory = useCallback(async () => {
     try {
       const res = await axios.get(
         `http://localhost:8080/api/v1/employee/${empId}/history`,
@@ -63,20 +67,20 @@ export default function EmployeeView() {
     () => [
       {
         title: "기존 비밀번호",
-        type: "string",
+        type: "password",
         dataIndex: "pwd",
         required: true,
       },
       {
         title: "새로운 비밀번호",
-        type: "string",
+        type: "password",
         dataIndex: "newPwd",
         required: true,
       },
 
       {
         title: "비밀번호 확인",
-        type: "string",
+        type: "password",
         dataIndex: "confirmPwd",
         required: true,
       },
@@ -213,7 +217,7 @@ export default function EmployeeView() {
       {
         key: "pstnId",
         label: "직급",
-        children: `${data?.pstnName}(${data.pstnId})`,
+        children: `${data?.pstnName}(${data?.pstnId})`,
       },
       {
         key: "workSts",
@@ -287,7 +291,7 @@ export default function EmployeeView() {
     async (data) => {
       try {
         await handleUpdateEmployee({ data, token, empId }); // 데이터 업데이트
-        await loadHisotry();
+        await loadHistory();
       } catch (error) {
         message.warning("수정 실패하였습니다.");
       } finally {
@@ -295,7 +299,23 @@ export default function EmployeeView() {
         setData(updatedData.body);
       }
     },
-    [empId, token, loadHisotry]
+    [empId, token, loadHistory]
+  );
+
+  // 비밀번호 수정
+  const handleUpdateEmployeePwdData = useCallback(
+    async (data) => {
+      try {
+        await handleUpdateEmployeePwd({ data, token, empId }); // 데이터 업데이트
+        await loadHistory();
+      } catch (error) {
+        message.warning("비밀번호 변경이 실패하였습니다.");
+      } finally {
+        const updatedData = await loadOneData({ token, empId }); // 업데이트된 데이터 다시 가져오기
+        setData(updatedData.body);
+      }
+    },
+    [empId, token, loadHistory]
   );
 
   // 파일 업로드
@@ -372,10 +392,10 @@ export default function EmployeeView() {
     if (token && empId) {
       loadDataLists();
       loadEmpData();
-      loadHisotry();
+      loadHistory();
     }
     loadUserInfo();
-  }, [loadDataLists, token, empId, loadEmpData, loadHisotry, loadUserInfo]);
+  }, [loadDataLists, token, empId, loadEmpData, loadHistory, loadUserInfo]);
 
   return (
     <EmployeeInfoWrapper>
@@ -429,7 +449,7 @@ export default function EmployeeView() {
         <PasswordBtn
           data={data}
           options={inputOptions2}
-          onOk={handleUpdateEmployeeAndReloadData}
+          onOk={handleUpdateEmployeePwdData}
         />
       )}
       {(userInfo?.mngrYn === "Y" || userInfo?.empId === empId) && (
