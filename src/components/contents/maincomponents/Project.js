@@ -60,14 +60,26 @@ export function MainProject() {
                           {new Date(item.endDt) > new Date() ? (
                             "D - " + diff
                           ) : (
-                            <>{new Date(item.endDt) === new Date() ? "D - DAY" : "마감"}</>
+                            <>
+                              {new Date(item.endDt) === new Date()
+                                ? "D - DAY"
+                                : "마감"}
+                            </>
                           )}
                         </td>
                         <td>
                           {item.chartData && (
                             <ProjectSubChart
-                              totalTasks={item.chartData[0] && item.chartData[0] != null ? item.chartData[0] : 0}
-                              completedTasks={item.chartData[1] && item.chartData[1] != null ? item.chartData[1] : 0}
+                              totalTasks={
+                                item.chartData[0] && item.chartData[0] != null
+                                  ? item.chartData[0]
+                                  : 0
+                              }
+                              completedTasks={
+                                item.chartData[1] && item.chartData[1] != null
+                                  ? item.chartData[1]
+                                  : 0
+                              }
                               plusStyles={{ width: "300px" }}
                             />
                           )}
@@ -84,7 +96,7 @@ export function MainProject() {
   );
 }
 
-export function MainCalendar() {
+export function MainCalendar(style) {
   const [prjList, setPrjList] = useState([]);
   const [sortedList, setSortedList] = useState([]);
   const tokenInfo = useSelector((state) => {
@@ -127,7 +139,7 @@ export function MainCalendar() {
   }, [tokenInfo.token]);
   return (
     <>
-      <div className={w.cardBodyContent}>
+      <div className={w.cardBodyContent} style={{ marginLeft: "60px" }}>
         <div style={{ gridColumn: "1/-1" }}>
           {/* <div className={w.commonDashboardCont}> */}
           {/* <FaRegCalendarAlt FaRegCalendarCheck className={w.icons} /> 달력 */}
