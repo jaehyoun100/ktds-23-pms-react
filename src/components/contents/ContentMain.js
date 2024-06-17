@@ -22,6 +22,7 @@ import { AiOutlineFundProjectionScreen, AiFillMessage } from "react-icons/ai";
 import { MdOutlineWorkHistory, MdEditDocument } from "react-icons/md";
 import { HiMiniArchiveBox } from "react-icons/hi2";
 import MemberLogin from "./maincomponents/MemberLogin";
+import MainRentalSupplyLog from "./maincomponents/RentalSupplyLog";
 
 export default function ContentMain() {
   // <div className={w.}></div>
@@ -61,7 +62,8 @@ export default function ContentMain() {
                   <Card
                     icon={<BsFillPeopleFill />}
                     header={"비품"}
-                    body={<MemuEmployee />}
+                    body={<MainRentalSupplyLog />}
+                    path={"/rentalsupply/log"}
                   />
                   <Card
                     icon={<AiOutlineFundProjectionScreen />}

@@ -7,7 +7,7 @@ import Table from "../../../utils/Table";
 import style from "../rentalSupply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { message } from "antd";
+import { Button, message } from "antd";
 
 export default function RentalSupplyLogView() {
   const [data, setData] = useState();
@@ -160,7 +160,7 @@ export default function RentalSupplyLogView() {
         </div>
       </div>
       <div className={style.buttonContainer}>
-        <button onClick={backToListButtonHandler}>목록으로</button>
+        <Button onClick={() => navigate(-1)}>목록으로</Button>
       </div>
     </>
   );

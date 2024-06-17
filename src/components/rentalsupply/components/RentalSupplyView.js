@@ -5,7 +5,8 @@ import {
 } from "../../../http/rentalSupplyHttp";
 import style from "../rentalSupply.module.css";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Button } from "antd";
+import RentalSupplyModificationModal from "./modal/RentalSupplyModificationModal";
 import axios from "axios";
 
 export default function RentalSupplyView({ selectedRsplId }) {
@@ -14,9 +15,9 @@ export default function RentalSupplyView({ selectedRsplId }) {
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userInfo, setUserInfo] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { token } = useSelector((state) => state.tokenInfo);
-  const navigate = useNavigate();
 
   const memoizedLoadRentalSupply = useCallback(loadRentalSupply, []);
   const memoizedParam = useMemo(() => {
@@ -64,7 +65,16 @@ export default function RentalSupplyView({ selectedRsplId }) {
   const { body: rentalSupplyBody } = data || {};
 
   const onRentalSupplyModificationModeClickHandler = () => {
-    navigate(`modify/${selectedRsplId}`);
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleModifySuccess = () => {
+    setIsModalVisible(false);
+    memoizedLoadRentalSupply(memoizedParam).then((json) => setData(json));
   };
 
   const toggleImageSize = () => {
@@ -109,13 +119,22 @@ export default function RentalSupplyView({ selectedRsplId }) {
           </div>
           {deptId === "DEPT_230101_000010" && (
             <div className={style.rentalViewButtonContainer}>
-              <button onClick={onRentalSupplyModificationModeClickHandler}>
+              <Button
+                type="primary"
+                onClick={onRentalSupplyModificationModeClickHandler}
+              >
                 수정
-              </button>
+              </Button>
             </div>
           )}
         </>
       )}
+      <RentalSupplyModificationModal
+        visible={isModalVisible}
+        onClose={handleCloseModal}
+        selectedRsplId={selectedRsplId}
+        onModify={handleModifySuccess}
+      />
     </div>
   );
 }

@@ -6,6 +6,9 @@ import style from "./rentalSupply.module.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Button, Checkbox } from "antd";
+import RentalSupplyRegistModal from "./components/modal/RentalSupplyRegistModal";
+import RentalSupplyRequestModal from "./components/modal/RentalSupplyRequestModal";
 
 export default function RentalSupplyApp() {
   const [selectedRsplId, setSelectedRsplId] = useState();
@@ -13,6 +16,8 @@ export default function RentalSupplyApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [hideZeroInventory, setHideZeroInventory] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+  const [isRegistModalVisible, setIsRegistModalVisible] = useState(false);
+  const [isGetModalVisible, setIsGetModalVisible] = useState(false);
 
   const { token } = useSelector((state) => state.tokenInfo);
   const isSelect = selectedRsplId !== undefined;
@@ -100,18 +105,6 @@ export default function RentalSupplyApp() {
     setSelectedRsplId((prevId) => (prevId === rowId ? undefined : rowId));
   };
 
-  const onRegistrationModeClickHandler = () => {
-    navigate("regist");
-  };
-
-  const onRentalSupplyLogViewModeClickHandler = () => {
-    navigate("log");
-  };
-
-  const onApplyModeClickHandler = () => {
-    navigate("get");
-  };
-
   const handleCheckboxChange = (e) => {
     setHideZeroInventory(e.target.checked);
   };
@@ -120,6 +113,32 @@ export default function RentalSupplyApp() {
     ? data.filter((item) => item.invQty > 0)
     : data;
 
+  const handleOpenRegistModal = () => {
+    setIsRegistModalVisible(true);
+  };
+
+  const handleCloseRegistModal = () => {
+    setIsRegistModalVisible(false);
+  };
+
+  const handleOpenGetModal = () => {
+    setIsGetModalVisible(true);
+  };
+
+  const handleCloseGetModal = () => {
+    setIsGetModalVisible(false);
+  };
+
+  const handleRegisterSuccess = () => {
+    // Refresh data or perform necessary actions after registration
+    handleCloseRegistModal();
+  };
+
+  const handleApplySuccess = () => {
+    // Refresh data or perform necessary actions after applying
+    handleCloseGetModal();
+  };
+
   return (
     <div className={style.rentalSupplyAppContainer}>
       <div
@@ -127,14 +146,12 @@ export default function RentalSupplyApp() {
       >
         {token && (
           <>
-            <label>
-              <input
-                type="checkbox"
-                checked={hideZeroInventory}
-                onChange={handleCheckboxChange}
-              />
+            <Checkbox
+              checked={hideZeroInventory}
+              onChange={handleCheckboxChange}
+            >
               재고 없는 대여품 감추기
-            </label>
+            </Checkbox>
             <Table
               columns={isSelect ? simplifiedColumns : columns}
               dataSource={filteredData}
@@ -154,14 +171,10 @@ export default function RentalSupplyApp() {
         )}
         <div className={style.buttonContainer}>
           {deptId === "DEPT_230101_000010" && (
-            <button onClick={onRegistrationModeClickHandler}>
-              대여품 등록
-            </button>
+            <Button onClick={handleOpenRegistModal}>대여품 등록</Button>
           )}
-          <button onClick={onApplyModeClickHandler}>대여품 신청</button>
-          <button onClick={onRentalSupplyLogViewModeClickHandler}>
-            신청 기록
-          </button>
+          <Button onClick={handleOpenGetModal}>대여품 신청</Button>
+          <Button onClick={() => navigate("log")}>신청 기록</Button>
         </div>
       </div>
       {isSelect && (
@@ -173,6 +186,16 @@ export default function RentalSupplyApp() {
           <RentalSupplyView selectedRsplId={selectedRsplId} />
         </div>
       )}
+      <RentalSupplyRegistModal
+        visible={isRegistModalVisible}
+        onClose={handleCloseRegistModal}
+        onRegister={handleRegisterSuccess}
+      />
+      <RentalSupplyRequestModal
+        visible={isGetModalVisible}
+        onClose={handleCloseGetModal}
+        onApply={handleApplySuccess}
+      />
     </div>
   );
 }
