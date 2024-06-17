@@ -47,6 +47,7 @@ export default function TeamMate() {
 
   useEffect(() => {
     console.log(selectedData, selectedRoleData);
+    // console.log(selectedEmpData);
   }, [selectedData, selectedRoleData]);
 
   useMemo(() => {
@@ -343,27 +344,29 @@ export default function TeamMate() {
               </div>
             )}
         </div>
-        {userInfo && (userInfo.admnCode === "301" || userInfo.empId === pm) && (
-          <div className={s.teamMateEmpArea}>
-            <div
-              className={s.teamMateEmpPhoto}
-              style={{
-                backgroundImage: `url(${
-                  selectedEmpData?.originPrflFileName
-                    ? selectedEmpData.originPrflFileName
-                    : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
-                })`,
-              }}
-            >
-              {/* {selectedEmpData && selectedEmpData.originPrflFileName !== null ? (
+        {userInfo &&
+          pm &&
+          (userInfo.admnCode === "301" || userInfo.empId === pm.tmId) && (
+            <div className={s.teamMateEmpArea}>
+              <div
+                className={s.teamMateEmpPhoto}
+                style={{
+                  backgroundImage: `url(${
+                    selectedEmpData?.originPrflFileName
+                      ? selectedEmpData.originPrflFileName
+                      : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
+                  })`,
+                }}
+              >
+                {/* {selectedEmpData && selectedEmpData.originPrflFileName !== null ? (
               selectedEmpData.originPrflFileName
             ) : (
               <IoPersonCircleSharp />
             )} */}
+              </div>
+              <TeammateEmpInfo empData={selectedEmpData && selectedEmpData} />
             </div>
-            <TeammateEmpInfo empData={selectedEmpData && selectedEmpData} />
-          </div>
-        )}
+          )}
       </div>
     </div>
   );
