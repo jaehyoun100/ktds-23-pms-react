@@ -25,6 +25,7 @@ export default function KnowledgeMainReply(
   const [isEditingSubReply, setIsEditingSubReply] = useState({});
   const [isShowAnswer, setIsShowAnswer] = useState(true);
   const [isRecommanded, setIsRecommanded] = useState({});
+  const [isPageReloadNeeded, setIsPageReloadNeeded] = useState(false);
   const contentref = useRef();
   const rplIdRef = useRef();
   const subReplyRef = useRef();
@@ -66,8 +67,15 @@ export default function KnowledgeMainReply(
     const str = replyItem.rplId;
     try {
       const json = await replyRecommand(str, token);
-      if (json.body == false) {
+      if (json.body === false) {
         alert(" 이미 추천되었습니다");
+        return;
+      }
+
+      if (json.body === true) {
+        alert(" 추천에 성공 하였습니다");
+        setSelectedSplId(undefined);
+        setNeedReload(Math.random());
       }
 
       // 추천 여부 업데이트
@@ -157,7 +165,7 @@ export default function KnowledgeMainReply(
 
   // 답변 보기 닫기 버튼
   const handlCancelClick = () => {
-    if (isShowAnswer == true) {
+    if (isShowAnswer === true) {
       setIsShowAnswer(isShowAnswer);
       setSubReplies({});
     }

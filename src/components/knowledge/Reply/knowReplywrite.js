@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { createNewKnowledgeReply } from "../../../http/KnowledgeReplyHttp";
 import styles from "../knowleddgeview.module.css";
+import KnowledgeMainReply from "./KnowledgMainReply";
 
 export default function KnowledgeReplyWrite(
   { pPostId, token, setSelectedSplId, setNeedReload },
@@ -24,7 +25,7 @@ export default function KnowledgeReplyWrite(
       });
     } else if (json.body) {
       setSelectedSplId(undefined);
-      setNeedReload(Math.random());
+      setNeedReload(Math.random()); // Can be used if necessary
     }
   };
 
