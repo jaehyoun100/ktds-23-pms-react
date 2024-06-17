@@ -6,9 +6,9 @@ import { useSelector } from "react-redux";
 import ProjectSubChart from "../../project/main/ProjectSubChart";
 import { format } from "date-fns";
 import { getMyEvent, getPrjList } from "../../../http/projectHttp";
-
 export function MainProject() {
   const [myProject, setMyProject] = useState();
+
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,

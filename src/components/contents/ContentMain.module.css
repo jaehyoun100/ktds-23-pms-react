@@ -240,3 +240,20 @@
     height: 220px;
   }
 }
+.deptFlex {
+  display: flex;
+  overflow: auto;
+  width: 400px;
+  gap: 20px;
+  text-align: center;
+}
+.deptMemberPhoto {
+  background-size: contain;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+.deptMemberName {
+  margin-top: 10px;
+  font-weight: 550;
+}
