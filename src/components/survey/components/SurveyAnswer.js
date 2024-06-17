@@ -149,8 +149,7 @@ export default function SurveyAnswer({
       await registSurveyQuestion(token, srvId, srvRplCntnt, sqpId);
     }
 
-    setAnswerMode(false);
-    setReload(Math.random());
+    window.location.reload();
   };
 
   const getRowStyle = (index, seq) => {
