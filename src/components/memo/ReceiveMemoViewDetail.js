@@ -86,11 +86,24 @@ export default function ReceiveMemoViewDetail({
   };
 
   // 첨부파일 다운로드
-  const onDownloadFileHandler = async () => {
-    const json = await onDownloadFile(token, selectRcvMemoId);
-    if (json.errors) {
-      alert(json.errors);
+  const onDownloadFileHandler = async (fileName) => {
+    const response = await onDownloadFile(token, selectRcvMemoId);
+
+    if (!response.ok) {
+      console.error(
+        `File download failed with status code: ${response.status}`
+      );
+      throw new Error("File download failed");
     }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   };
 
   return (
@@ -149,7 +162,9 @@ export default function ReceiveMemoViewDetail({
                       </button>
                     </div>
                   </div>
-                  {!isFolded && <MemoReceiverArea sendMemo={sendMemo} />}
+                  {!isFolded && (
+                    <MemoReceiverArea sendMemo={sendMemo} myInfo={myInfo} />
+                  )}
                 </div>
                 <div className={style.memoViewInfoArea}>
                   <span className={style.memoDate}>
@@ -193,7 +208,11 @@ export default function ReceiveMemoViewDetail({
                           <div className={style.task}>
                             <div
                               className={style.buttonSaveFile}
-                              onClick={() => onDownloadFileHandler()}
+                              onClick={() =>
+                                onDownloadFileHandler(
+                                  receiveMemo.sendMemoVO.originFileName
+                                )
+                              }
                             >
                               <BsDownload />
                             </div>

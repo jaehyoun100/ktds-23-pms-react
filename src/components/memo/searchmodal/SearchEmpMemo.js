@@ -32,11 +32,6 @@ export default function SearchEmpMemo() {
   );
   const { body: deptList } = data || {};
 
-  const onClickHandler = () => {
-    const searchKeyword = textRef.current.value;
-    // 주소록 찾기
-  };
-
   const onOpenClickHandler = (deptId) => {
     setSelectedDeptId(deptId);
     setOpenedDeptId(deptId === openedDeptId ? null : deptId);
@@ -57,13 +52,6 @@ export default function SearchEmpMemo() {
       <div className={`${style.contentGridTwo} ${style.heightFull}`}>
         <div className={style.searchBar}>
           <SearchBox />
-          {/* <Search
-            optionList={optionList}
-            selectedData={selectedData}
-            setSelectedData={setSelectedData}
-            textRef={textRef}
-            onClickHandler={onClickHandler}
-          /> */}
         </div>
         <div className={style.modalBodyListSearch}>
           <div className={style.contentGridOne}>

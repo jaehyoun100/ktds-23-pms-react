@@ -117,7 +117,11 @@ export default function SendMemoApp() {
             text === "1502" ? style.listIcon : style.listIconActive
           }`}
         >
-          {text === "1502" ? <BsEnvelopeX /> : <BsEnvelopeCheck />}
+          {text === "1502" ? (
+            <BsEnvelopeX style={{ color: "#c43921" }} />
+          ) : (
+            <BsEnvelopeCheck />
+          )}
         </span>
       ),
     },

@@ -242,7 +242,23 @@ export default function ReceiveMemoApp() {
     <>
       <div className={style.bodyContainer}>
         <div className={style.memoContainer}>
-          {isLoading && <div>데이터를 불러오는 중입니다.</div>}
+          {isLoading && (
+            <div>
+              {" "}
+              <Table
+                rowSelection={{
+                  type: "checkbox",
+                  ...rowSelection,
+                }}
+                columns={columns}
+                rowClassName={style.tableRow}
+                dataSource={allMemos}
+                rowKey={(dt) => dt.rcvMemoId || dt.sendMemoId}
+                filter
+                filterOptions={filterOptions}
+              />
+            </div>
+          )}
           {!isLoading && allMemos && (
             <>
               {token && !isSelect && (

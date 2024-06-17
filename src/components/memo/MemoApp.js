@@ -3,10 +3,12 @@ import "./Memo.module.css";
 import ReceiveMemoApp from "./ReceiveMemoApp";
 import { loadMyData } from "../../http/memoHttp";
 import { useFetch } from "../hook/useFetch";
-import SaveMemoApp from "./SaveMemoApp";
+import { useDispatch } from "react-redux";
+import { memoAction } from "../../store/toolkit/slice/memoSlice";
 
 export default function Memo() {
   const token = localStorage.getItem("token");
+  const memoDispatch = useDispatch();
 
   const fetchLoadMyData = useCallback(() => {
     if (token) {
@@ -22,6 +24,7 @@ export default function Memo() {
   }, [token]);
   const { data } = useFetch(undefined, fetchLoadMyData(), fetchToken);
   const { body: myInfo } = data || {};
+  memoDispatch(memoAction.saveMyInfo({ myInfo: myInfo }));
 
   return (
     <>
