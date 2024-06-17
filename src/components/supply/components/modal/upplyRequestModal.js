@@ -18,7 +18,7 @@ import {
 } from "../../../../http/supplyHttp";
 import { useSelector } from "react-redux";
 import style from "../../supply.module.css";
-
+// 수정?
 const SupplyRequestModal = ({ visible, onClose, onApply }) => {
   const [categoryList, setCategoryList] = useState([]);
   const [supplyList, setSupplyList] = useState([]);

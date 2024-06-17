@@ -16,7 +16,7 @@ import {
 import { useSelector } from "react-redux";
 import { UploadOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
-
+// 수정?
 const SupplyRegistModal = ({ visible, onClose, onRegister }) => {
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
