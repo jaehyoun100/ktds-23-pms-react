@@ -12,6 +12,7 @@ export default function TeamUpdate({
   const tmNameRef = useRef();
   const tmLeadIdRef = useRef();
   const empNameRef = useRef();
+  const reasonRef = useRef();
   const alertRef = useRef();
   const alertRef2 = useRef();
 
@@ -23,13 +24,14 @@ export default function TeamUpdate({
   const onUpdateClickHandler = async () => {
     const tmName = tmNameRef.current.value;
     const tmLeadId = tmLeadIdRef.current.value;
+    const tmApprReason = reasonRef.current.value;
     const tmId = data.tmId;
 
     // 입력값 검증
     if (!validateInputs(tmName)) return;
     if (!validateInputs2(tmLeadId)) return;
 
-    const json = await modifyTeam(token, tmLeadId, tmId, tmName);
+    const json = await modifyTeam(token, tmLeadId, tmId, tmApprReason, tmName);
     if (json.errors) {
       json.errors.forEach((error) => {
         alert(error);
@@ -103,6 +105,16 @@ export default function TeamUpdate({
             name="empName"
             defaultValue={data.empName}
             ref={empNameRef}
+          />
+        </div>
+        <div>
+          <label htmlFor="reason">팀 정보 수정 사유</label>
+          <input
+            type="text"
+            id="reason"
+            name="reason"
+            defaultValue={data.reason}
+            ref={reasonRef}
           />
         </div>
       </div>

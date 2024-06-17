@@ -116,10 +116,11 @@ export const createTeam = async (token, name, empId, deptId) => {
   return json;
 };
 
-export const createTeamMember = async (token, tmId, deptId) => {
+export const createTeamMember = async (token, tmId, deptId, tmApprReason) => {
   const data = new FormData();
   data.append("tmId", tmId);
   data.append("deptId", deptId);
+  data.append("tmApprReason", tmApprReason);
 
   const response = await fetch(`${url}/api/v1/team/member`, {
     method: "POST",
@@ -183,11 +184,18 @@ export const modifyDepartment = async (
   return json;
 };
 
-export const modifyTeam = async (token, tmLeadId, tmId, tmName) => {
+export const modifyTeam = async (
+  token,
+  tmLeadId,
+  tmId,
+  tmName,
+  tmApprReason
+) => {
   const data = new FormData();
   data.append("tmLeadId", tmLeadId);
   data.append("tmId", tmId);
   data.append("tmName", tmName);
+  data.append("tmApprReason", tmApprReason);
 
   const response = await fetch(`${url}/api/v1/team/modify`, {
     method: "PUT",
