@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Checkbox } from "antd";
-import RentalSupplyRegistModal from "./components/modal/rentalSupplyRegistModal";
+import RentalSupplyRegistModal from "./components/modal/RentalSupplyRegistModal";
 import RentalSupplyRequestModal from "./components/modal/RentalSupplyRequestModal";
 
 export default function RentalSupplyApp() {
