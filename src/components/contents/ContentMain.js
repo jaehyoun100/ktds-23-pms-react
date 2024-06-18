@@ -113,21 +113,13 @@ export default function ContentMain() {
                     className={`${w.gridTwoItem2}`}
                     style={{ height: "300px" }}
                   >
-                    <div
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Card
-                        style={{ height: "300px" }}
-                        icon={<AiOutlineFundProjectionScreen />}
-                        header={"프로젝트"}
-                        body={<MainProject />}
-                        path={"/project"}
-                      />
-                    </div>
+                    <Card
+                      style={{ height: "300px" }}
+                      icon={<AiOutlineFundProjectionScreen />}
+                      header={"프로젝트"}
+                      body={<MainProject />}
+                      path={"/project"}
+                    />
                   </div>
                 </div>
                 {/* 쪽지 */}
