@@ -23,7 +23,9 @@ export default function MainInfo({ project }) {
 
   return (
     <div>
-      <div className={`${styles.displayFlex} ${styles.infoDisplay} ${styles.infoFirst}`}>
+      <div
+        className={`${styles.displayFlex} ${styles.infoDisplay} ${styles.infoFirst}`}
+      >
         <div className={styles.infoTitle}>프로젝트 기간</div>
         <div>
           {project.strtDt} ~ {project.endDt}
@@ -34,7 +36,10 @@ export default function MainInfo({ project }) {
         <div className={styles.displayInfoFlex}>
           {" "}
           {project.clientVO.clntName}{" "}
-          <IoInformationCircleSharp className={styles.info} onClick={() => setModalVisible(true)} />
+          <IoInformationCircleSharp
+            className={styles.info}
+            onClick={() => setModalVisible(true)}
+          />
         </div>
       </div>
       <div className={`${styles.displayFlex} ${styles.infoDisplay}`}>
@@ -67,7 +72,11 @@ export default function MainInfo({ project }) {
         />
       </div>
       <InfoModal
-        canManage={userInfo.admnCode === "301" || userInfo.empId === project.pm.tmId ? true : false}
+        canManage={
+          userInfo.admnCode === "301" || userInfo.empId === project.pm.tmId
+            ? true
+            : false
+        }
         show={modalVisible}
         onClose={() => setModalVisible(false)}
         clientData={clientData}

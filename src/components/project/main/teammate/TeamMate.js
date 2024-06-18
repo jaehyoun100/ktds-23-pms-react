@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { CiCircleMinus } from "react-icons/ci";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import MainHeader from "../MainHeader";
+import photo from "../../../../layout/sidebar/profile_icon.png";
 import {
   addTmmate,
   deleteTmmate,
@@ -359,7 +360,7 @@ export default function TeamMate() {
                   backgroundImage: `url(${
                     selectedEmpData?.originPrflFileName
                       ? selectedEmpData.originPrflFileName
-                      : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
+                      : photo
                   })`,
                 }}
               >
