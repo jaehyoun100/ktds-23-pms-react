@@ -2,7 +2,7 @@ const url =
   "http://" +
   (window.location.host === "43.202.29.221"
     ? "43.202.29.221"
-    : "localhost:8080");
+    : `${window.location.hostname}:8080`);
 
 export const loadRentalSupplyList = async ({ token, pageNo = 0 }) => {
   if (!token) {
