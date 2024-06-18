@@ -1,8 +1,4 @@
-const url =
-  "http://" +
-  (window.location.host === "43.202.29.221"
-    ? "43.202.29.221"
-    : "localhost:8080");
+const url = "http://43.202.29.221";
 
 export const createSurvey = async (selectedProjectId, token, requestData) => {
   const response = await fetch(

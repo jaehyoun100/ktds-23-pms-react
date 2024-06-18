@@ -17,25 +17,6 @@ export default function SurveyApp() {
     };
   });
 
-  useEffect(() => {
-    if (!tokenInfo.token) {
-      return;
-    }
-    const loadsurvey = async () => {
-      const response = await fetch("http://localhost:8080/api/survey/list", {
-        method: "GET",
-        headers: {
-          Authorization: tokenInfo.token,
-        },
-      });
-
-      const json = await response.json();
-      setSurveys(json.body);
-      console.log("SurveyApp json.body : ", json.body);
-    };
-    loadsurvey();
-  }, [tokenInfo.token]);
-
   //답변하기 버튼을 클릭했을 때
   const surveyWriteAnswerClickHandler = (projectId) => {
     setSelectedProjectId(projectId);
