@@ -62,17 +62,16 @@ const SupplyRegistModal = ({ visible, onClose, onRegister }) => {
       image?.file,
       detail
     );
-
-    if (json.errors) {
-      json.errors.forEach((error) => {
-        message.error(error);
-      });
-    } else if (json.body) {
-      message.success("소모품 등록에 대한 결재 요청 완료!");
-      form.resetFields(); // Reset form fields after successful registration
-      onRegister();
-      onClose();
-    }
+    // if (json.errors) {
+    //   json.errors.forEach((error) => {
+    //     alert(error);
+    //   });
+    // } else if (json.body) {
+    message.success("소모품 등록에 대한 결재 요청 완료!");
+    form.resetFields();
+    onRegister();
+    onClose();
+    // }
   };
 
   const handleCategoryChange = (value) => {

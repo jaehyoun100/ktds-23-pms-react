@@ -138,15 +138,15 @@ const SupplyRequestModal = ({ visible, onClose, onApply }) => {
 
     const json = await applyForMultipleSupplies(token, supplies);
 
-    if (json.errors) {
-      json.errors.forEach((error) => {
-        alert(error);
-      });
-    } else if (json.body) {
-      message.success("소모품 신청에 대한 결재 요청 성공!");
-      onApply();
-      onClose();
-    }
+    // if (json.errors) {
+    //   json.errors.forEach((error) => {
+    //     alert(error);
+    //   });
+    // } else if (json.body) {
+    message.success("소모품 신청에 대한 결재 요청 성공!");
+    onApply();
+    onClose();
+    // }
   };
 
   return (
