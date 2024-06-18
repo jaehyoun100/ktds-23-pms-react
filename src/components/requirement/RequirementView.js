@@ -14,6 +14,8 @@ import {
 import RequirementModify from "./RequirementModify";
 
 export default function RequirementView() {
+  const url = "http://43.202.29.221";
+
   const [content, setContent] = useState({
     requirement: [],
     isPmAndPl: [],
@@ -140,7 +142,7 @@ export default function RequirementView() {
       return;
     }
     const userInfo = async () => {
-      const response = await fetch("http://localhost:8080/api/", {
+      const response = await fetch(`${url}/api/`, {
         method: "GET",
         headers: {
           Authorization: token,
