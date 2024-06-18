@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./output.module.css";
 import { loadForModifyOutputData, modifyOutput } from "../../http/outputHttp";
 import { useParams } from "react-router-dom";
+import ConfirmModal from "../common/modal/ConfirmModal";
 
 export default function OutputModify({
   setIsModifyMode,
@@ -23,6 +24,7 @@ export default function OutputModify({
     outVer: [], // 프로젝트 진행상태
     outFile: [], // 산출물 파일
   });
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -66,6 +68,42 @@ export default function OutputModify({
       if (json.body !== (true || false)) {
         setModifyErrors(json.body);
       }
+    }
+  };
+
+  // 등록 버튼 누를 시 Confirm Modal창 열기
+  const handleOpenConfirmModal = () => {
+    setShowConfirmModal(true);
+  };
+
+  // Confirm Modal 창에서 "아니오" 클릭 시 Modal 창 닫힘
+  const handleCloseConfirmModal = () => {
+    setShowConfirmModal(false);
+  };
+
+  // Confirm Modal 창에서 "예" 클릭 시 목록으로 이동
+  const handleConfirm = async () => {
+    const outTtl = outTtlRef.current.value; // 산출물 제목
+    const prjId = prjIdValue; // 프로젝트 ID
+    const outType = outTypeRef.current.value; // 산출물 종류
+    const outVer = outVerRef.current.value; // 프로젝트 진행상태(산출물 버전)
+    const file =
+      fileRef.current.files[0] === undefined ? null : fileRef.current.files[0]; // 첨부파일
+
+    const formData = new FormData();
+    formData.append("outTtl", outTtl);
+    formData.append("prjId", prjId);
+    formData.append("outType", outType);
+    formData.append("outVer", outVer);
+    formData.append("file", file);
+
+    const json = await modifyOutput(token, selectedOutputId, formData);
+    if (json.body === true) {
+      setIsModifyMode(false);
+      setNeedReload(Math.random());
+    }
+    if (json.body !== (true || false)) {
+      setModifyErrors(json.body);
     }
   };
 
@@ -181,8 +219,20 @@ export default function OutputModify({
       </div>
 
       <div className={styles.buttonArea}>
+        <button onClick={handleOpenConfirmModal}>수정</button>
+        {showConfirmModal && (
+          <ConfirmModal
+            show={showConfirmModal}
+            onClose={handleCloseConfirmModal}
+            content="수정하시겠습니까?"
+            cancelContent="아니오"
+            confirmContent="예"
+            confirmOnClick={handleConfirm}
+            cancelOnclick={handleCloseConfirmModal}
+          />
+        )}
+
         <button onClick={onCancelClickHandler}>취소</button>
-        <button onClick={onModifyClickHandler}>수정</button>
       </div>
     </>
   );

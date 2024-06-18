@@ -9,6 +9,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import OutputModify from "./OutputModify";
 import Table from "../../utils/Table";
 import MainHeader from "../project/main/MainHeader";
+import styles from "./output.module.css";
+import AlertModal from "../common/modal/AlertModal";
 
 export default function Output() {
   const url = "http://43.202.29.221";
@@ -26,6 +28,7 @@ export default function Output() {
   const [teamList, setTeamList] = useState();
   const [userData, setUserData] = useState();
   const [project, setProject] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
@@ -54,7 +57,7 @@ export default function Output() {
       if (json) {
         setNeedReload(Math.random());
       } else {
-        alert("삭제할 권한이 없습니다.");
+        handleOpenModal();
       }
     }
   };
@@ -82,6 +85,16 @@ export default function Output() {
     document.body.appendChild(a);
     a.click();
     a.remove();
+  };
+
+  // Alert Modal 창에서 "아니오" 클릭 시 Modal 창 닫힘
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  // Alert 나올 경우가 발생하면
+  const handleOpenModal = () => {
+    setShowModal(true);
   };
 
   const fetchParams = useMemo(() => {
@@ -327,6 +340,15 @@ export default function Output() {
             />
           )}
 
+          {showModal && (
+            <AlertModal
+              show={showModal}
+              onClose={handleCloseModal}
+              content="삭제할 권한이 없습니다."
+              closeContent="확인"
+            />
+          )}
+
           {/** 수정 모드가 아니고, 로그인 사용자 정보가 로드되고,
            * 로그인한 사원이 관리자이거나 PM or PL 이거나 팀원일때 버튼 보여주기
            */}
@@ -336,7 +358,7 @@ export default function Output() {
             (userData.admnCode === "301" ||
               isPmAndPl === true ||
               isUserInTeam) && (
-              <div className="button-area right-align">
+              <div className={styles.buttonArea}>
                 <button onClick={onOutputCreateHandler}>산출물 생성</button>
               </div>
             )}

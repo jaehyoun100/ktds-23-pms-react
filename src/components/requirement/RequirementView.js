@@ -12,6 +12,7 @@ import {
   requirementTestResult,
 } from "../../http/requirementHttp";
 import RequirementModify from "./RequirementModify";
+import AlertModal from "../common/modal/AlertModal";
 
 export default function RequirementView() {
   const url = "http://43.202.29.221";
@@ -30,6 +31,7 @@ export default function RequirementView() {
 
   const [userData, setUserData] = useState();
   const [teamList, setTeamList] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
@@ -51,7 +53,7 @@ export default function RequirementView() {
           state: { project: projectValue.project },
         });
       } else {
-        alert("삭제할 권한이 없습니다.");
+        handleOpenModal();
       }
     }
   };
@@ -124,6 +126,16 @@ export default function RequirementView() {
         alert(json.body);
       }
     }
+  };
+
+  // Alert Modal 창에서 "아니오" 클릭 시 Modal 창 닫힘
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  // Alert 나올 경우가 발생하면
+  const handleOpenModal = () => {
+    setShowModal(true);
   };
 
   const fetchParams = useMemo(() => {
@@ -381,6 +393,15 @@ export default function RequirementView() {
               setIsModifyMode={setIsModifyMode}
               setNeedReloadDetail={setNeedReloadDetail}
               prjName={data.projectVO.prjName}
+            />
+          )}
+
+          {showModal && (
+            <AlertModal
+              show={showModal}
+              onClose={handleCloseModal}
+              content="삭제할 권한이 없습니다."
+              closeContent="확인"
             />
           )}
 

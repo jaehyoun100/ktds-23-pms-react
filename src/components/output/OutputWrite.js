@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { loadForWriteOutputData, writeOutput } from "../../http/outputHttp";
 import styles from "./output.module.css";
+import ConfirmModal from "../common/modal/ConfirmModal";
+import AlertModal from "../common/modal/AlertModal";
 
 export default function OutoutWrite() {
   const [writeOutputData, setWriteOutputData] = useState({
@@ -16,6 +18,8 @@ export default function OutoutWrite() {
     outVer: [], // 프로젝트 진행상태
     outFile: [], // 산출물 파일
   });
+  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // const query = new URLSearchParams(useLocation().search);
   // const prjNameValue = query.get("prjName");
@@ -63,7 +67,7 @@ export default function OutoutWrite() {
       console.log(fileRef, "aswefawrg");
 
       if (file === undefined) {
-        alert("파일은 필수입니다.");
+        handleOpenModal();
         return;
       }
 
@@ -85,6 +89,70 @@ export default function OutoutWrite() {
         setWriteErrors(json.body);
       }
     }
+  };
+
+  // 등록 버튼 누를 시 Confirm Modal창 열기
+  const handleOpenConfirmModal = () => {
+    setShowConfirmModal(true);
+  };
+
+  // Confirm Modal 창에서 "아니오" 클릭 시 Modal 창 닫힘
+  const handleCloseConfirmModal = () => {
+    setShowConfirmModal(false);
+  };
+
+  // Confirm Modal 창에서 "예" 클릭 시 목록으로 이동
+  const handleConfirm = async () => {
+    setWriteErrors({
+      outTtl: [],
+      prjId: [],
+      outType: [],
+      outVer: [],
+      outFile: [],
+    });
+
+    const outTtl = outTtlRef.current.value; // 산출물 제목
+    const prjId = prjIdValue; // 프로젝트 ID
+    const outType = outTypeRef.current.value; // 산출물 종류
+    const outVer = outVerRef.current.value; // 프로젝트 진행상태(산출물 버전)
+    const file = fileRef.current.files[0]; // 첨부파일
+    console.log(fileRef, "aswefawrg");
+
+    if (file === undefined) {
+      handleOpenModal();
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("outTtl", outTtl);
+    formData.append("prjId", prjId);
+    formData.append("outType", outType);
+    formData.append("outVer", outVer);
+    formData.append("file", file);
+    console.log("formData: ", formData);
+
+    const json = await writeOutput(token, formData);
+    if (json.body === true) {
+      navigate(`/output/${prjIdValue}`, {
+        state: { project: projectValue.project },
+      });
+    }
+    if (json.body !== (true || false)) {
+      setWriteErrors(json.body);
+    }
+
+    setShowConfirmModal(false);
+  };
+
+  // Alert Modal 창에서 "아니오" 클릭 시 Modal 창 닫힘
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  // Alert 나올 경우가 발생하면
+  const handleOpenModal = () => {
+    setShowConfirmModal(false);
+    setShowModal(true);
   };
 
   useEffect(() => {
@@ -177,10 +245,34 @@ export default function OutoutWrite() {
             </div>
           </div>
 
+          {showModal && (
+            <AlertModal
+              show={showModal}
+              onClose={handleCloseModal}
+              content="파일은 필수입니다."
+              closeContent="확인"
+            />
+          )}
+
           <div className={styles.buttonArea}>
-            <button data-id="wirte" type="button" onClick={onWriteClickHandler}>
+            <button
+              data-id="wirte"
+              type="button"
+              onClick={handleOpenConfirmModal}
+            >
               등록
             </button>
+            {showConfirmModal && (
+              <ConfirmModal
+                show={showConfirmModal}
+                onClose={handleCloseConfirmModal}
+                content="등록하시겠습니까?"
+                cancelContent="아니오"
+                confirmContent="예"
+                confirmOnClick={handleConfirm}
+                cancelOnclick={handleCloseConfirmModal}
+              />
+            )}
             <button onClick={onClickHandler}>목록으로 이동</button>
           </div>
         </>

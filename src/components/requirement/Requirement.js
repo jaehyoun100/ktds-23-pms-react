@@ -6,6 +6,7 @@ import {
 } from "../../http/requirementHttp";
 import Table from "../../utils/Table";
 import MainHeader from "../project/main/MainHeader";
+import styles from "./requirement.module.css";
 
 export default function Requirement() {
   const url = "http://43.202.29.221";
@@ -218,8 +219,7 @@ export default function Requirement() {
             (userData.admnCode === "301" ||
               isPmAndPl === true ||
               isUserInTeam) && (
-              <div className="button-area right-align">
-                {/* <button>삭제</button> */}
+              <div className={styles.buttonArea}>
                 <button onClick={onRqmCreateHandler}>요구사항 생성</button>
               </div>
             )}
