@@ -1,8 +1,4 @@
-const url =
-  "http://" +
-  (window.location.host === "43.202.29.221"
-    ? "43.202.29.221"
-    : "localhost:8080");
+const url = "http://43.202.29.221";
 
 // 댓글 리스트
 export const loadKnowledgeReply = async ({ pPostId, token, pageNo = 0 }) => {
