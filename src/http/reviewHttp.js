@@ -26,8 +26,6 @@ export const writeReview = async (token, rvCntnt, prjId, starRating) => {
   formData.append("prjId", prjId);
   formData.append("starRating", starRating);
 
-  console.log(rvCntnt);
-
   const response = await fetch(`${url}/api/review/writes`, {
     method: "POST",
     headers: {
@@ -35,7 +33,6 @@ export const writeReview = async (token, rvCntnt, prjId, starRating) => {
     },
     body: formData,
   });
-
   const json = await response.json();
   console.log(json);
   return json;
@@ -48,7 +45,7 @@ export const deleteReview = async (token, rvId, prjId) => {
     headers: {
       Authorization: token,
     },
-    body: prjId,
+    body: String(prjId),
   });
 
   const json = await response.json();

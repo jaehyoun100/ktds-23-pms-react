@@ -19,7 +19,6 @@ export default function ViewReview() {
   const [reviewResult, setReviewResult] = useState([]);
   const [avgStarRating, setAvgStarRating] = useState([]);
   const userInfo = jwtDecode(token);
-  console.log(getReviewResult);
 
   useEffect(() => {
     const loadData = async () => {
@@ -40,12 +39,11 @@ export default function ViewReview() {
     const rvId = reviewId;
     const prjId = projectId;
     const doDelete = async () => {
-      const response = await deleteReview(token, prjId, rvId);
+      const response = await deleteReview(token, rvId, prjId);
     };
     doDelete();
     window.location.reload();
   };
-  console.log(reviewResult);
   return (
     <>
       <MainHeader project={getReviewResult.viewResult} />
