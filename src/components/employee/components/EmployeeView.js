@@ -10,12 +10,13 @@ import {
   handleUpdateEmployeePwd,
 } from "../../../http/employeeHttp";
 import MenuBtn from "./Popup/MenuBtn";
-import RegBtn from "./Popup/RegBtn";
 import PasswordBtn from "./Popup/PasswordBtn";
 import axios from "axios";
 import HistoryTable from "./HistoryTable";
 
 const { Title } = Typography;
+
+const url = "http://43.202.29.221";
 
 const keyText = {
   depart: "부서",
@@ -48,14 +49,11 @@ export default function EmployeeView() {
 
   const loadHistory = useCallback(async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/v1/employee/${empId}/history`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${url}/api/v1/employee/${empId}/history`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
       setHistoryList(res.data);
     } catch (error) {
       console.error(error);
@@ -166,12 +164,6 @@ export default function EmployeeView() {
       console.error(error);
     }
   }, [token, empId]);
-
-  const url =
-    "http://" +
-    (window.location.host === "43.202.29.221"
-      ? "43.202.29.221"
-      : "localhost:8080");
 
   const loadDataLists = useCallback(async () => {
     try {
@@ -365,7 +357,7 @@ export default function EmployeeView() {
 
   const loadUserInfo = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/", {
+      const res = await axios.get(`${url}/api/`, {
         headers: {
           Authorization: token,
         },

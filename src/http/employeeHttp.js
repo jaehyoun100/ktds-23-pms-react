@@ -1,16 +1,12 @@
 import { Modal, message } from "antd";
 
-const url =
-  "http://" +
-  (window.location.host === "43.202.29.221"
-    ? "43.202.29.221"
-    : "localhost:8080");
+const url = "http://43.202.29.221";
 
 export const loadData = async ({ token }) => {
   if (!token) {
     return undefined;
   }
-  const response = await fetch(`http://localhost:8080/api/v1/employees`, {
+  const response = await fetch(`${url}/api/v1/employees`, {
     method: "GET",
     headers: {
       Authorization: token,
