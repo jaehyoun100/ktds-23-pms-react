@@ -22,11 +22,7 @@ export function MainEmployeeImg() {
   );
 }
 export function MainEmployee() {
-  const url =
-    "http://" +
-    (window.location.host === "43.202.29.221"
-      ? "43.202.29.221"
-      : "localhost:8080");
+  const url = "http://43.202.29.221";
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.tokenInfo);
   const [userInfo, setUserInfo] = useState();
