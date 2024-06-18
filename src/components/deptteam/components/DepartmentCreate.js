@@ -80,7 +80,6 @@ export default function DepartmentCreate({
               id={`name-${index}`}
               name="name"
               value={inputField.name}
-              defaultValue=""
               onChange={(event) => handleInputChange(index, event)}
               ref={nameRef}
             />
@@ -124,7 +123,6 @@ export default function DepartmentCreate({
               id={`reason-${index}`}
               name="reason"
               value={inputField.reason}
-              defaultValue=""
               onChange={(event) => handleInputChange(index, event)}
             />
           </div>

@@ -1,4 +1,8 @@
-const url = "http://43.202.29.221";
+const url =
+  "http://" +
+  (window.location.host === "43.202.29.221"
+    ? "43.202.29.221"
+    : "localhost:8080");
 export const loadDepartmentList = async ({ token, pageNo = 0 }) => {
   if (!token) {
     return undefined;
@@ -78,15 +82,19 @@ export const loadTeamMemberList = async ({ token, selectTmId }) => {
 };
 
 export const createDepartment = async (token, name, empId, reason) => {
-  const data = new FormData();
-  data.append("deptName", name);
-  data.append("deptLeadId", empId);
-  data.append("deptApprReason", reason);
+  const data = {
+    deptName: name,
+    deptLeadId: empId,
+    deptApprReason: reason,
+  };
 
   const response = await fetch(`${url}/api/v1/department`, {
     method: "POST",
-    headers: { Authorization: token },
-    body: data,
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
   });
 
   const json = await response.json();
@@ -95,15 +103,19 @@ export const createDepartment = async (token, name, empId, reason) => {
 };
 
 export const createTeam = async (token, name, empId, deptId) => {
-  const data = new FormData();
-  data.append("tmName", name);
-  data.append("tmLeadId", empId);
-  data.append("deptId", deptId);
+  const data = {
+    tmName: name,
+    tmLeadId: empId,
+    deptId: deptId,
+  };
 
   const response = await fetch(`${url}/api/v1/team`, {
     method: "POST",
-    headers: { Authorization: token },
-    body: data,
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
   });
 
   const json = await response.json();
@@ -112,15 +124,19 @@ export const createTeam = async (token, name, empId, deptId) => {
 };
 
 export const createTeamMember = async (token, tmId, deptId, tmApprReason) => {
-  const data = new FormData();
-  data.append("tmId", tmId);
-  data.append("deptId", deptId);
-  data.append("tmApprReason", tmApprReason);
+  const data = {
+    tmId: tmId,
+    deptId: deptId,
+    tmApprReason: tmApprReason,
+  };
 
   const response = await fetch(`${url}/api/v1/team/member`, {
     method: "POST",
-    headers: { Authorization: token },
-    body: data,
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
   });
 
   const json = await response.json();
@@ -163,17 +179,21 @@ export const modifyDepartment = async (
   deptId,
   deptApprReason
 ) => {
-  const data = new FormData();
-  data.append("deptLeadId", empId);
-  data.append("empName", empName);
-  data.append("deptName", deptName);
-  data.append("deptId", deptId);
-  data.append("deptApprReason", deptApprReason);
+  const data = {
+    deptLeadId: empId,
+    empName: empName,
+    deptName: deptName,
+    deptId: deptId,
+    deptApprReason: deptApprReason,
+  };
 
   const response = await fetch(`${url}/api/v1/department/modify`, {
     method: "PUT",
-    headers: { Authorization: token },
-    body: data,
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
   });
   const json = await response.json();
   return json;
@@ -186,16 +206,20 @@ export const modifyTeam = async (
   tmName,
   tmApprReason
 ) => {
-  const data = new FormData();
-  data.append("tmLeadId", tmLeadId);
-  data.append("tmId", tmId);
-  data.append("tmName", tmName);
-  data.append("tmApprReason", tmApprReason);
+  const data = {
+    tmLeadId: tmLeadId,
+    tmId: tmId,
+    tmName: tmName,
+    tmApprReason: tmApprReason,
+  };
 
   const response = await fetch(`${url}/api/v1/team/modify`, {
     method: "PUT",
-    headers: { Authorization: token },
-    body: data,
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
   });
   const json = await response.json();
   return json;
