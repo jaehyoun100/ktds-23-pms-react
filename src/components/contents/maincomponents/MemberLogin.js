@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import w from "./../ContentMain.module.css";
+import photo from "../../../layout/sidebar/profile_icon.png";
 
 const MemberLogin = () => {
   const [myDeptmate, setMyDeptmate] = useState([]);
@@ -45,7 +46,7 @@ const MemberLogin = () => {
               border: `2px solid ${item.lgnYn === "Y" ? "#71dd37" : "#777"}`,
               backgroundImage: item.originFileName
                 ? `url(${item.originFileName}`
-                : `url(https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171)`,
+                : `url(${photo})`,
               opacity: item.lgnYn === "N" ? "0.5" : "1",
             }}
             className={w.deptMemberPhoto}

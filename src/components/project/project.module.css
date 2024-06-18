@@ -490,7 +490,7 @@ h1 {
   width: 150px;
   height: 150px;
 }
-.infoEmpPhoto > svg {
+.infoEmpPhoto > svg, .infoEmpPhotoImage {
   width: 80%;
   height: 80%;
 }

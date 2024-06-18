@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import s from "../project.module.css";
 import ProfileModal from "./ProfileModal";
+import photo from "../../../layout/sidebar/profile_icon.png";
 
 const Profile = ({ profileFile, profileValue }) => {
   const [showModal, setShowModal] = useState(false);
@@ -13,11 +14,7 @@ const Profile = ({ profileFile, profileValue }) => {
     console.log(profileValue);
   };
   const styles = {
-    backgroundImage: `url(${
-      profileFile !== null
-        ? profileFile
-        : "https://t1.kakaocdn.net/together_action_prod/admin/20230730/b8d3ba0648d64f5c8564b2e7e908a171"
-    })`,
+    backgroundImage: `url(${profileFile !== null ? profileFile : photo})`,
     backgroundSize: "contain",
     borderRadius: "50%",
     width: "40px",

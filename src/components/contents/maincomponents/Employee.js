@@ -4,6 +4,7 @@ import jaeDragon from "../jaeDragon.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { tokenExpire } from "../../../utils/loginUtil";
+import photo from "../../../layout/sidebar/profile_icon.png";
 
 export function MainEmployeeImg() {
   return (
@@ -11,7 +12,7 @@ export function MainEmployeeImg() {
       <div className={`${w.cardBodyContent} ${w.imgCenter}`}>
         <div className={w.heightFit}>
           <img
-            src={jaeDragon}
+            src={photo}
             className={w.myInfoImg}
             alt="로그인한 유저의 프로필 사진"
           />

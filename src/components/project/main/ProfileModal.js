@@ -1,6 +1,7 @@
 import React from "react";
 import s from "../project.module.css";
 import { IoPersonCircleSharp } from "react-icons/io5";
+import photo from "../../../layout/sidebar/profile_icon.png";
 
 const ProfileModal = React.memo(
   ({ content, profileValue, onClose, show, closeContent, selectedEmpData }) => {
@@ -32,7 +33,11 @@ const ProfileModal = React.memo(
               selectedEmpData.employeeVO.originPrflFileName !== null ? (
                 selectedEmpData.originPrflFileName
               ) : (
-                <IoPersonCircleSharp />
+                <img
+                  src={photo}
+                  alt="로그인한 유저의 프로필 사진"
+                  className={s.infoEmpPhotoImage}
+                />
               )}
             </div>
             <div className={s.modalInfoContent}>
