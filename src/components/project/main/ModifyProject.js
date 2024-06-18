@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styles from "../project.module.css";
 import TextInput from "../../common/input/TextInput";
 import Selectbox from "../../common/selectbox/Selectbox";
@@ -7,7 +13,13 @@ import Button from "../../common/Button/Button";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
-import { getClient, getDept, getPmCandidates, getPrjInfo, modifyPrj } from "../../../http/projectHttp";
+import {
+  getClient,
+  getDept,
+  getPmCandidates,
+  getPrjInfo,
+  modifyPrj,
+} from "../../../http/projectHttp";
 
 const ModifyProject = () => {
   const [isAddClient, setIsAddClient] = useState(false);
@@ -31,7 +43,8 @@ const ModifyProject = () => {
   const location = useLocation();
   const allData = location.state || {};
   const [clientData, setClientData] = useState([]);
-  const [clientSelectedData, setClientSelectedData] = useState(originClientName);
+  const [clientSelectedData, setClientSelectedData] =
+    useState(originClientName);
 
   const [deptData, setDeptData] = useState([]);
   const [deptSelectedData, setDeptSelectedData] = useState(OriginDeptName);
@@ -61,8 +74,21 @@ const ModifyProject = () => {
   });
   useEffect(() => {
     prjNameRef.current.value = projectName || "";
-    console.log(originClientName, originPm, originPrjMemoName, OriginDeptName, originStatus);
-  }, [projectName, originClientName, originPm, originPrjMemoName, OriginDeptName, originStatus]);
+    console.log(
+      originClientName,
+      originPm,
+      originPrjMemoName,
+      OriginDeptName,
+      originStatus
+    );
+  }, [
+    projectName,
+    originClientName,
+    originPm,
+    originPrjMemoName,
+    OriginDeptName,
+    originStatus,
+  ]);
 
   useMemo(() => {
     const { prjName } = allData?.allData;
@@ -119,8 +145,18 @@ const ModifyProject = () => {
   }, [allData]);
 
   useEffect(() => {
-    console.log(clientSelectedData, deptSelectedData, pmSelectedData, statusSelectedData);
-  }, [clientSelectedData, deptSelectedData, pmSelectedData, statusSelectedData]);
+    console.log(
+      clientSelectedData,
+      deptSelectedData,
+      pmSelectedData,
+      statusSelectedData
+    );
+  }, [
+    clientSelectedData,
+    deptSelectedData,
+    pmSelectedData,
+    statusSelectedData,
+  ]);
 
   const memoizeGetPrjInfo = useCallback(getPrjInfo, []);
   useEffect(() => {
@@ -164,7 +200,11 @@ const ModifyProject = () => {
 
   // 날짜 선택 변경 시 처리
   const onChangeSelect = () => {
-    if (startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current) {
+    if (
+      startDateRef.current &&
+      endDateRef.current &&
+      startDateRef.current > endDateRef.current
+    ) {
       setCanSave(false);
       return;
     }
@@ -174,15 +214,25 @@ const ModifyProject = () => {
 
   // 프로젝트명 유효성 검사
   useEffect(() => {
-    if (prjNameRef.current && (prjNameRef.current.value === "" || prjNameRef.current.value.length > 30)) {
+    if (
+      prjNameRef.current &&
+      (prjNameRef.current.value === "" || prjNameRef.current.value.length > 30)
+    ) {
       setCanSave(false);
       return;
     }
-    if (startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current) {
+    if (
+      startDateRef.current &&
+      endDateRef.current &&
+      startDateRef.current > endDateRef.current
+    ) {
       setCanSave(false);
       return;
     }
-    if (startDateRef.current === undefined || endDateRef.current === undefined) {
+    if (
+      startDateRef.current === undefined ||
+      endDateRef.current === undefined
+    ) {
       setCanSave(false);
       return;
     }
@@ -228,20 +278,25 @@ const ModifyProject = () => {
     if (pmSelectedData === "PM을 선택해주세요") {
       return;
     }
+
     const dataArray = {
       prjId: projectId,
       prjName: prjNameRef.current.value,
       clntInfo: clientSelectedData,
       deptId: deptSelectedData,
       pmId: pmSelectedData,
-      prjSts: statusSelectedData,
+      prjSts: String(statusSelectedData),
       strtDt: startDateRef.current,
       endDt: endDateRef.current,
       prjMemo: prjMemoRef.current.value,
     };
-    console.log(dataArray);
+
     if (dataArray) {
-      const json = await memoizeModifyPrj(tokenInfo.token, projectId, dataArray);
+      const json = await memoizeModifyPrj(
+        tokenInfo.token,
+        projectId,
+        dataArray
+      );
       if (json.status === 200) {
         alert("프로젝트 수정에 성공했습니다.");
         navigate("/project");
@@ -257,14 +312,26 @@ const ModifyProject = () => {
       <div className={styles.modifyGrid}>
         <div>프로젝트명</div>
         <div>
-          <TextInput id="prjName" onChangeHandler={(e) => setEditTitle(e.target.value)} ref={prjNameRef} />
-          {prjNameRef.current && prjNameRef.current.value && prjNameRef.current.value.length > 30 ? (
-            <span className={styles.alertMessage}>※ 프로젝트명은 30자를 초과할 수 없습니다.</span>
+          <TextInput
+            id="prjName"
+            onChangeHandler={(e) => setEditTitle(e.target.value)}
+            ref={prjNameRef}
+          />
+          {prjNameRef.current &&
+          prjNameRef.current.value &&
+          prjNameRef.current.value.length > 30 ? (
+            <span className={styles.alertMessage}>
+              ※ 프로젝트명은 30자를 초과할 수 없습니다.
+            </span>
           ) : (
             <></>
           )}
-          {prjNameRef.current && (prjNameRef.current.value === null || prjNameRef.current.value === "") ? (
-            <span className={styles.alertMessage}>※ 프로젝트명은 필수 값입니다.</span>
+          {prjNameRef.current &&
+          (prjNameRef.current.value === null ||
+            prjNameRef.current.value === "") ? (
+            <span className={styles.alertMessage}>
+              ※ 프로젝트명은 필수 값입니다.
+            </span>
           ) : (
             <></>
           )}
@@ -320,13 +387,19 @@ const ModifyProject = () => {
             defaultStart={originStrtDt}
             defaultEnd={originEndDt}
           />
-          {startDateRef.current && endDateRef.current && startDateRef.current > endDateRef.current ? (
-            <span className={styles.alertMessage}>※ 끝 날짜는 시작날짜보다 이전일 수 없습니다.</span>
+          {startDateRef.current &&
+          endDateRef.current &&
+          startDateRef.current > endDateRef.current ? (
+            <span className={styles.alertMessage}>
+              ※ 끝 날짜는 시작날짜보다 이전일 수 없습니다.
+            </span>
           ) : (
             <></>
           )}
           {originStrtDt === undefined || originEndDt === undefined ? (
-            <span className={styles.alertMessage}>※ 시작날짜와 끝날짜는 필수 입력 값입니다.</span>
+            <span className={styles.alertMessage}>
+              ※ 시작날짜와 끝날짜는 필수 입력 값입니다.
+            </span>
           ) : (
             <></>
           )}
