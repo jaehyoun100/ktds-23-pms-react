@@ -8,6 +8,8 @@ import Table from "../../utils/Table";
 import MainHeader from "../project/main/MainHeader";
 
 export default function Requirement() {
+  const url = "http://43.202.29.221";
+
   const [requirement, setRequirement] = useState({
     requirementList: [],
     isPmAndPl: [],
@@ -49,7 +51,7 @@ export default function Requirement() {
       return;
     }
     const userInfo = async () => {
-      const response = await fetch("http://localhost:8080/api/", {
+      const response = await fetch(`${url}/api/`, {
         method: "GET",
         headers: {
           Authorization: token,

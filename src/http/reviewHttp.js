@@ -2,11 +2,7 @@
  * Review(후기) 에 대한 메서드 집합
  */
 
-const url =
-  "http://" +
-  (window.location.host === "43.202.29.221"
-    ? "43.202.29.221"
-    : "localhost:8080");
+const url = "http://43.202.29.221";
 // view 메서드
 export const viewWriteReviewPage = async (token, selectedProjectId) => {
   const response = await fetch(

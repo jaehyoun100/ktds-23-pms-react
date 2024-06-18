@@ -11,6 +11,8 @@ import Table from "../../utils/Table";
 import MainHeader from "../project/main/MainHeader";
 
 export default function Output() {
+  const url = "http://43.202.29.221";
+
   const [output, setOutput] = useState({
     outputList: [],
     isPmAndPl: [],
@@ -128,7 +130,7 @@ export default function Output() {
       return;
     }
     const userInfo = async () => {
-      const response = await fetch("http://localhost:8080/api/", {
+      const response = await fetch(`${url}/api/`, {
         method: "GET",
         headers: {
           Authorization: token,
