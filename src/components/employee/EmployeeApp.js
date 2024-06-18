@@ -7,6 +7,8 @@ import { handleRegistEmployee, loadData } from "../../http/employeeHttp";
 import dayjs from "dayjs";
 import axios from "axios";
 
+const url = "http://43.202.29.221";
+
 const defaultValues = {
   empName: "",
   email: "",
@@ -60,7 +62,7 @@ export default function EmployeeApp() {
 
   const loadEmployeeList = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/v1/employeeList", {
+      const res = await axios.get(`${url}/api/v1/employeeList`, {
         headers: {
           Authorization: token,
         },
@@ -70,12 +72,6 @@ export default function EmployeeApp() {
       console.error(error);
     }
   }, [token]);
-
-  const url =
-    "http://" +
-    (window.location.host === "43.202.29.221"
-      ? "43.202.29.221"
-      : "localhost:8080");
 
   const loadDataLists = useCallback(async () => {
     try {
@@ -88,11 +84,11 @@ export default function EmployeeApp() {
     } catch (error) {
       console.error(error);
     }
-  }, [token, url]);
+  }, [token]);
 
   const loadUserInfo = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/", {
+      const res = await axios.get(`${url}/api/`, {
         headers: {
           Authorization: token,
         },
