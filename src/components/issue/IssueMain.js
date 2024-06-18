@@ -8,12 +8,13 @@ export default function IssueMain() {
     issueList: [],
     isPmAndPl: [],
   });
+  const url = "43.202.29.221";
   const [teamList, setTeamList] = useState();
   const [userData, setUserData] = useState();
   const token = localStorage.getItem("token");
 
   const query = new URLSearchParams(useLocation().search);
-  const prjNameValue = query.get("prjName");
+  const rqmNameValue = query.get("rqmName");
 
   // React Router의 Path를 이동시키는 Hook
   // Spring의 redirect와 유사.
@@ -21,14 +22,15 @@ export default function IssueMain() {
 
   // const query = new URLSearchParams(useLocation().search);
   // const prjId = query.get("prjId");
+  const { rqmIdValue } = useParams();
   const { prjIdValue } = useParams();
 
   const onIsCreateHandler = () => {
-    navigate(`/issue/${prjIdValue}/write?prjName=${prjNameValue}`);
+    navigate(`/issue/${rqmIdValue}/write?prjName=${rqmNameValue}`);
   };
 
-  const isTtlClickHandler = (prjId, isId) => {
-    navigate(`/issue/view?prjId=${prjIdValue}&isId=${isId}`);
+  const isTtlClickHandler = (rqmId, isId) => {
+    navigate(`/issue/view?rqmId=${rqmId}&isId=${isId}`);
   };
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function IssueMain() {
       return;
     }
     const userInfo = async () => {
-      const response = await fetch("http://localhost:8080/api/", {
+      const response = await fetch(`${url}/api/`, {
         method: "GET",
         headers: {
           Authorization: token,
@@ -51,7 +53,8 @@ export default function IssueMain() {
   useEffect(() => {
     // 이슈 리스트 불러오기
     const getIssueList = async () => {
-      const json = await loadIssue(token, prjIdValue);
+      const json = await loadIssue(token, rqmIdValue);
+      console.log("Issue List:", json.body.issueList); // 상태 업데이트 확인
       const { issueList, isPmAndPl } = json.body;
       setIssue({
         issueList,
@@ -60,12 +63,12 @@ export default function IssueMain() {
     };
 
     getIssueList();
-  }, [token, prjIdValue]);
+  }, [token, rqmIdValue]);
 
   useEffect(() => {
     const getTeammateList = async () => {
       const json = await loadTeamListByPrjId(token, prjIdValue);
-
+      console.log("Teammate List:", json.body); // 상태 업데이트 확인
       const { body: teammateData } = json;
       const list = teammateData.map((item) => item.employeeVO);
       setTeamList(list);
@@ -89,7 +92,7 @@ export default function IssueMain() {
 
   const columns = [
     {
-      title: "제목",
+      title: "이슈명",
       dataIndex: "isTtl",
       key: "isTtl",
       render: (data, row) => (

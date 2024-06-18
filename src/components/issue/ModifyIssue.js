@@ -21,8 +21,8 @@ function IssueModifyForm({ issueVO }) {
     e.preventDefault();
     // Form submission logic here
   };
-  {
-    /**
+
+  /**
   <form
   id="writeForm"
   action={`/issue/modify/?isId=${issueVO.isId}`}
@@ -44,7 +44,6 @@ function IssueModifyForm({ issueVO }) {
         <label
     </div>
 */
-  }
 
   return (
     <form
