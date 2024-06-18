@@ -1,10 +1,6 @@
 import { useState } from "react";
 
-const url =
-  "http://" +
-  (window.location.host === "43.202.29.221"
-    ? "43.202.29.221"
-    : "localhost:8080");
+const url = "http://43.202.29.221";
 
 // 보관쪽지 전체 검색
 export const loadSaveMemos = async ({ token, pageNo = 0 }) => {
