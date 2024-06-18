@@ -49,11 +49,6 @@ export default function KnowledgeMain() {
       key: "knlCntnt",
     },
     {
-      title: "조회수",
-      dataIndex: "knlCnt",
-      key: "knlCnt",
-    },
-    {
       title: "추천수",
       dataIndex: "knlRecCnt",
       key: "knlRecCnt",
