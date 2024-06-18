@@ -36,10 +36,11 @@ export default function ViewReview() {
     loadData();
   }, [setReviewResult]);
 
-  const reviewDeleteHandler = (projectId) => {
+  const reviewDeleteHandler = (reviewId, projectId) => {
+    const rvId = reviewId;
     const prjId = projectId;
     const doDelete = async () => {
-      const response = await deleteReview(token, prjId);
+      const response = await deleteReview(token, prjId, rvId);
     };
     doDelete();
     window.location.reload();
@@ -101,7 +102,9 @@ export default function ViewReview() {
                 {userInfo.user.admnCode === "301" && (
                   <button
                     className={w.buttonStyle}
-                    onClick={() => reviewDeleteHandler(index.rvId)}
+                    onClick={() =>
+                      reviewDeleteHandler(index.rvId, index.projectVO.prjId)
+                    }
                   >
                     삭제
                   </button>
