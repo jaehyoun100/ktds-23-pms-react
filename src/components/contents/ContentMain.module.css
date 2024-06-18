@@ -199,7 +199,7 @@
 }
 .gridItem2 {
   display: grid;
-  grid-template-rows: 0.6fr 1.3fr 1.2fr;
+  grid-template-rows: 0.4fr 0.4fr 1.2fr;
   gap: 10px; /* 항목 간의 간격 설정 */
   height: 100%; /* 상위 div의 높이에 맞춤 */
   width: 100%; /* 상위 div의 너비에 맞춤 */
