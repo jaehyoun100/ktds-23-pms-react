@@ -3,7 +3,6 @@ import {
   loadKnowledgeReply,
   updateKnowledgeReply,
 } from "../../../http/KnowledgeReplyHttp";
-import KnowledgeReplyWrite from "./knowReplywrite";
 import { deleteKnowledgeReply } from "../../../http/KnowledgeReplyHttp";
 import { replyRecommand } from "../../../http/KnowledgeReplyHttp";
 import styles from "../knowleddgeview.module.css";
