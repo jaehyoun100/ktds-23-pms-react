@@ -21,7 +21,7 @@ export default function RouterAppProvider() {
   const routers = createBrowserRouter([
     /* 라우트 영역 */
     {
-      path: "/static",
+      path: "/",
       element: <Main />,
       errorElement: <NotFoundError />,
       children: [
