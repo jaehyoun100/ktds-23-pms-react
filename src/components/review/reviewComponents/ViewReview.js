@@ -3,7 +3,7 @@
  */
 import { deleteReview, getReviewResultByprjId } from "../../../http/reviewHttp";
 import w from "../reviewCss/write.module.css";
-import { useLocation } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 import Table from "../../../utils/Table";
 import ViewStarRating from "./ViewStarRating";
@@ -19,6 +19,7 @@ export default function ViewReview() {
   const [reviewResult, setReviewResult] = useState([]);
   const [avgStarRating, setAvgStarRating] = useState([]);
   const userInfo = jwtDecode(token);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadData = async () => {
@@ -42,7 +43,7 @@ export default function ViewReview() {
       const response = await deleteReview(token, rvId, prjId);
     };
     doDelete();
-    window.location.reload();
+    navigate("/project");
   };
   return (
     <>
