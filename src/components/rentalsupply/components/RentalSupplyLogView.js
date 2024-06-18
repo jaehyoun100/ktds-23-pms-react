@@ -5,17 +5,20 @@ import {
 } from "../../../http/rentalSupplyHttp";
 import Table from "../../../utils/Table";
 import style from "../rentalSupply.module.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, message } from "antd";
-import axios from "axios";
+// import axios from "axios";
+import { getEmployee } from "../../http/userDetailHttp";
 
 export default function RentalSupplyLogView() {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState({});
+  // const [userInfo, setUserInfo] = useState({});
 
   const { token } = useSelector((state) => state.tokenInfo);
+  const dispatch = useDispatch();
+  const { employee } = useSelector((state) => state.employee);
   const navigate = useNavigate();
 
   const memoizedLoadRentalSupplyApprovalList = useCallback(
@@ -24,18 +27,18 @@ export default function RentalSupplyLogView() {
   );
   const memoizedToken = useMemo(() => ({ token }), [token]);
 
-  const loadUserInfo = useCallback(async () => {
-    try {
-      const res = await axios.get("http://43.202.29.221", {
-        headers: {
-          Authorization: token,
-        },
-      });
-      setUserInfo(res.data.body);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [token]);
+  // const loadUserInfo = useCallback(async () => {
+  //   try {
+  //     const res = await axios.get("http://43.202.29.221", {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     });
+  //     setUserInfo(res.data.body);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [token]);
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -51,10 +54,10 @@ export default function RentalSupplyLogView() {
       setData(flattenedData);
       setIsLoading(false);
     };
-
+    dispatch(getEmployee(token));
     fetchingData();
-    loadUserInfo();
-  }, [memoizedLoadRentalSupplyApprovalList, loadUserInfo, memoizedToken]);
+    // loadUserInfo();
+  }, [memoizedLoadRentalSupplyApprovalList, memoizedToken, dispatch]);
 
   const handleReturnClick = async (rsplApprId, rsplRqstQty) => {
     const response = await returnRentalSupply({
@@ -72,7 +75,7 @@ export default function RentalSupplyLogView() {
   };
 
   const deptId =
-    userInfo && userInfo.departmentVO ? userInfo.departmentVO.deptId : null;
+    employee && employee.departmentVO ? employee.departmentVO.deptId : null;
 
   const columns = [
     {

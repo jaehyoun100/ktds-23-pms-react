@@ -1,38 +1,41 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadSupply, loadSupplyImage } from "../../../http/supplyHttp";
 import style from "../supply.module.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "antd";
 import SupplyModificationModal from "./modal/SupplyModificationModal";
-import axios from "axios";
+// import axios from "axios";
+import { getEmployee } from "../../http/userDetailHttp";
 
 export default function SupplyView({ selectedSplId }) {
   const [data, setData] = useState();
   const [image, setImage] = useState(null);
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState({});
+  // const [userInfo, setUserInfo] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { token } = useSelector((state) => state.tokenInfo);
+  const dispatch = useDispatch();
+  const { employee } = useSelector((state) => state.employee);
 
   const memoizedLoadSupply = useCallback(loadSupply, []);
   const memoizedParam = useMemo(() => {
     return { selectedSplId, token };
   }, [selectedSplId, token]);
 
-  const loadUserInfo = useCallback(async () => {
-    try {
-      const res = await axios.get("http://43.202.29.221", {
-        headers: {
-          Authorization: token,
-        },
-      });
-      setUserInfo(res.data.body);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [token]);
+  // const loadUserInfo = useCallback(async () => {
+  //   try {
+  //     const res = await axios.get("http://43.202.29.221", {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     });
+  //     setUserInfo(res.data.body);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,11 +56,11 @@ export default function SupplyView({ selectedSplId }) {
     };
 
     fetchData();
-    loadUserInfo();
-  }, [memoizedLoadSupply, loadUserInfo, memoizedParam, setData, token]);
+    dispatch(getEmployee(token));
+  }, [memoizedLoadSupply, dispatch, memoizedParam, setData, token]);
 
   const deptId =
-    userInfo && userInfo.departmentVO ? userInfo.departmentVO.deptId : null;
+    employee && employee.departmentVO ? employee.departmentVO.deptId : null;
 
   const { body: supplyBody } = data || {};
 

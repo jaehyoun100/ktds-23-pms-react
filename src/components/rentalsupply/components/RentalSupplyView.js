@@ -4,38 +4,41 @@ import {
   loadRentalSupplyImage,
 } from "../../../http/rentalSupplyHttp";
 import style from "../rentalSupply.module.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "antd";
 import RentalSupplyModificationModal from "./modal/RentalSupplyModificationModal";
-import axios from "axios";
+// import axios from "axios";
+import { getEmployee } from "../../http/userDetailHttp";
 
 export default function RentalSupplyView({ selectedRsplId }) {
   const [data, setData] = useState();
   const [image, setImage] = useState(null);
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState({});
+  // const [userInfo, setUserInfo] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { token } = useSelector((state) => state.tokenInfo);
+  const dispatch = useDispatch();
+  const { employee } = useSelector((state) => state.employee);
 
   const memoizedLoadRentalSupply = useCallback(loadRentalSupply, []);
   const memoizedParam = useMemo(() => {
     return { selectedRsplId, token };
   }, [selectedRsplId, token]);
 
-  const loadUserInfo = useCallback(async () => {
-    try {
-      const res = await axios.get("http://43.202.29.221", {
-        headers: {
-          Authorization: token,
-        },
-      });
-      setUserInfo(res.data.body);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [token]);
+  // const loadUserInfo = useCallback(async () => {
+  //   try {
+  //     const res = await axios.get("http://43.202.29.221", {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     });
+  //     setUserInfo(res.data.body);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,13 +57,13 @@ export default function RentalSupplyView({ selectedRsplId }) {
 
       setIsLoading(false);
     };
-
+    dispatch(getEmployee(token));
     fetchData();
-    loadUserInfo();
-  }, [memoizedLoadRentalSupply, loadUserInfo, memoizedParam, setData, token]);
+    // loadUserInfo();
+  }, [memoizedLoadRentalSupply, dispatch, memoizedParam, setData, token]);
 
   const deptId =
-    userInfo && userInfo.departmentVO ? userInfo.departmentVO.deptId : null;
+    employee && employee.departmentVO ? employee.departmentVO.deptId : null;
 
   const { body: rentalSupplyBody } = data || {};
 
