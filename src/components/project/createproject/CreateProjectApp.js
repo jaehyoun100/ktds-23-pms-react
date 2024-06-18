@@ -7,8 +7,8 @@ import Button from "../../common/Button/Button";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import CreateClientModal from "./CreateClientModal";
-
 const CreateProjectApp = () => {
+  const url = "http://43.202.29.221";
   const [isAddClient, setIsAddClient] = useState(false);
   const prjNameRef = useRef();
   const prjMemoRef = useRef();
@@ -43,7 +43,7 @@ const CreateProjectApp = () => {
   // 고객사 정보 가져오기
   useEffect(() => {
     const getClient = async () => {
-      const response = await fetch("http://localhost:8080/api/project/client", {
+      const response = await fetch(`${url}/api/project/client`, {
         headers: { Authorization: tokenInfo.token },
         method: "GET",
       });
@@ -61,7 +61,7 @@ const CreateProjectApp = () => {
   // 부서 정보 가져오기
   useEffect(() => {
     const getDept = async () => {
-      const response = await fetch("http://localhost:8080/api/v1/department", {
+      const response = await fetch(`${url}/api/v1/department`, {
         headers: { Authorization: tokenInfo.token },
         method: "GET",
       });
@@ -81,7 +81,7 @@ const CreateProjectApp = () => {
       if (deptSelectedData === "부서를 선택해주세요.") return;
 
       const response = await fetch(
-        `http://localhost:8080/api/project/employee/findbydeptid/${deptSelectedData}`,
+        `${url}/api/project/employee/findbydeptid/${deptSelectedData}`,
         { headers: { Authorization: tokenInfo.token }, method: "GET" }
       );
       const json = await response.json();
@@ -160,7 +160,7 @@ const CreateProjectApp = () => {
       return;
     }
 
-    const response = await fetch("http://localhost:8080/api/project/write", {
+    const response = await fetch(`${url}/api/project/write`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -209,7 +209,7 @@ const CreateProjectApp = () => {
       alert("형식에 맞춰 재입력 후 저장해주세요.");
       return;
     }
-    const response = await fetch("http://localhost:8080/api/project/client", {
+    const response = await fetch(`${url}/api/project/client`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
