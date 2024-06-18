@@ -45,7 +45,7 @@ export default function ViewReview() {
     doDelete();
     window.location.reload();
   };
-
+  console.log(reviewResult);
   return (
     <>
       <MainHeader project={getReviewResult.viewResult} />
@@ -102,9 +102,7 @@ export default function ViewReview() {
                 {userInfo.user.admnCode === "301" && (
                   <button
                     className={w.buttonStyle}
-                    onClick={() =>
-                      reviewDeleteHandler(index.rvId, index.projectVO.prjId)
-                    }
+                    onClick={() => reviewDeleteHandler(index.rvId, index.prjId)}
                   >
                     삭제
                   </button>
