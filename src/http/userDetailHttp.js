@@ -1,12 +1,7 @@
-import Content from "../layout/content/Content";
 import { tokenActions } from "../store/toolkit/slice/tokenSlice";
 import { employeeActions } from "../store/toolkit/slice/userDetailSlice";
 
-const url =
-  "http://" +
-  (window.location.host === "43.202.29.221"
-    ? "43.202.29.221"
-    : "localhost:8080");
+const url = "http://43.202.29.221";
 
 /**
  * Token 값을 받아서 서버에서 empVO 를 가져온 다음
