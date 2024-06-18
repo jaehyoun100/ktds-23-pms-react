@@ -6,7 +6,7 @@ import photo from "../../../layout/sidebar/profile_icon.png";
 
 const MemberLogin = () => {
   const [myDeptmate, setMyDeptmate] = useState([]);
-  console.log(myDeptmate);
+
   const tokenInfo = useSelector((state) => {
     return {
       token: state.tokenInfo.token,
@@ -18,20 +18,22 @@ const MemberLogin = () => {
   useEffect(() => {
     const getEmpData = async () => {
       const response = await fetch(
-        `${url}/api/project/employee/findbydeptid/${userData?.deptId}`,
+        `${url}/api/project/employee/login/findbydeptid/${userData?.deptId}`,
         {
           headers: {
             Authorization: tokenInfo.token,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
           },
           method: "GET",
         }
       );
       const json = await response.json();
+      console.log(json, "DRFGGFDDFG");
       setMyDeptmate(json.body);
     };
     getEmpData();
-  }, [tokenInfo.token]);
+  }, [tokenInfo.token, userData?.deptId]);
 
   return (
     <div className={w.deptFlex}>
