@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Button } from "antd";
 import SupplyModificationModal from "./modal/SupplyModificationModal";
 // import axios from "axios";
-import { getEmployee } from "../../http/userDetailHttp";
+import { getEmployee } from "../../../http/userDetailHttp";
 
 export default function SupplyView({ selectedSplId }) {
   const [data, setData] = useState();

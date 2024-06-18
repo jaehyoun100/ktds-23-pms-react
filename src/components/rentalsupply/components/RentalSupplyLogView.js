@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, message } from "antd";
 // import axios from "axios";
-import { getEmployee } from "../../http/userDetailHttp";
+import { getEmployee } from "../../../http/userDetailHttp";
 
 export default function RentalSupplyLogView() {
   const [data, setData] = useState();

@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Button } from "antd";
 import RentalSupplyModificationModal from "./modal/RentalSupplyModificationModal";
 // import axios from "axios";
-import { getEmployee } from "../../http/userDetailHttp";
+import { getEmployee } from "../../../http/userDetailHttp";
 
 export default function RentalSupplyView({ selectedRsplId }) {
   const [data, setData] = useState();
