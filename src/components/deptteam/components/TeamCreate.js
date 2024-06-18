@@ -143,7 +143,7 @@ export default function TeamCreate({
             />
           </div>
 
-          <div>
+          {/* <div>
             <button type="button" onClick={handleAddFields}>
               +
             </button>
@@ -152,7 +152,7 @@ export default function TeamCreate({
                 -
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       ))}
       <div>

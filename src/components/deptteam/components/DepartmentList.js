@@ -50,19 +50,19 @@ export default function DepartmentList({ token }) {
       title: "부서명",
       dataIndex: "deptName",
       key: "deptName",
-      // width: "50%",
+      width: "33%",
     },
     {
       title: "부서장명",
       dataIndex: "empName",
       key: "empName",
-      // width: "50%",
+      width: "33%",
     },
     {
       title: "EMAIL",
       dataIndex: "email",
       key: "email",
-      // width: "50%",
+      width: "33%",
     },
   ];
 

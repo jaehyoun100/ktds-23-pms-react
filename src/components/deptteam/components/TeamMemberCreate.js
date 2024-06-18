@@ -109,7 +109,7 @@ export default function TeamMemberCreate({
             <input type="text" id={`empName-${index}`} name="empName" />
           </div>
 
-          <div>
+          {/* <div>
             <button type="button" onClick={handleAddFields}>
               +
             </button>
@@ -118,7 +118,7 @@ export default function TeamMemberCreate({
                 -
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       ))}
       <div>
