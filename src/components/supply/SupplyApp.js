@@ -3,23 +3,26 @@ import { loadSupplyList } from "../../http/supplyHttp";
 import SupplyView from "./components/SupplyView";
 import Table from "../../utils/Table";
 import style from "./supply.module.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import { Button, Checkbox } from "antd";
-import SupplyRegistModal from "./components/modal/SupplyRegistModal";
+import SupplyRegistModal from "./components/modal/supplyRegistModal";
 import SupplyRequestModal from "./components/modal/SupplyRequestModal";
+import { getEmployee } from "../../http/userDetailHttp";
 
 export default function SupplyApp() {
   const [selectedSplId, setSelectedSplId] = useState();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hideZeroInventory, setHideZeroInventory] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
+  // const [userInfo, setUserInfo] = useState({});
   const [isRegistModalVisible, setIsRegistModalVisible] = useState(false);
   const [isGetModalVisible, setIsGetModalVisible] = useState(false);
 
   const { token } = useSelector((state) => state.tokenInfo);
+  const dispatch = useDispatch();
+  const { employee } = useSelector((state) => state.employee);
   const isSelect = selectedSplId !== undefined;
   const navigate = useNavigate();
 
@@ -28,18 +31,18 @@ export default function SupplyApp() {
     return { token };
   }, [token]);
 
-  const loadUserInfo = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:8080/api/", {
-        headers: {
-          Authorization: token,
-        },
-      });
-      setUserInfo(res.data.body);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [token]);
+  // const loadUserInfo = useCallback(async () => {
+  //   try {
+  //     const res = await axios.get("http://localhost:8080/api/", {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     });
+  //     setUserInfo(res.data.body);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [token]);
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -47,13 +50,14 @@ export default function SupplyApp() {
       setData(json.body);
       setIsLoading(false);
     };
+    dispatch(getEmployee(token));
     fetchingData();
-    loadUserInfo();
-  }, [memoizedLoadSupplyList, loadUserInfo, memoizedToken]);
+    // loadUserInfo();
+  }, [memoizedLoadSupplyList, memoizedToken, dispatch]);
 
   // userInfo와 departmentVO가 존재하는지 확인
   const deptId =
-    userInfo && userInfo.departmentVO ? userInfo.departmentVO.deptId : null;
+    employee && employee.departmentVO ? employee.departmentVO.deptId : null;
 
   const columns = [
     {
