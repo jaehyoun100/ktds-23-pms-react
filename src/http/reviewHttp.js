@@ -3,6 +3,7 @@
  */
 
 const url = "http://43.202.29.221";
+
 // view 메서드
 export const viewWriteReviewPage = async (token, selectedProjectId) => {
   const response = await fetch(
@@ -41,12 +42,13 @@ export const writeReview = async (token, rvCntnt, prjId, starRating) => {
 };
 
 // 후기 삭제 메서드
-export const deleteReview = async (token, rvId) => {
+export const deleteReview = async (token, rvId, prjId) => {
   const response = await fetch(`${url}/api/review/writes/${rvId}`, {
     method: "PUT",
     headers: {
       Authorization: token,
     },
+    body: prjId,
   });
 
   const json = await response.json();
