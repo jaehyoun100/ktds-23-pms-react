@@ -103,7 +103,7 @@ export default function ContentMain() {
                       }}
                       icon={<FaCalendarCheck />}
                       header={"달력"}
-                      body={<MainCalendar style={{ marginLeft: "40px" }} />}
+                      body={<MainCalendar />}
                       path={""}
                       notNavigate
                     />

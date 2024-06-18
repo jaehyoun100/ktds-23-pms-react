@@ -139,7 +139,7 @@ export function MainCalendar(style) {
   }, [tokenInfo.token]);
   return (
     <>
-      <div className={w.cardBodyContent} style={{ marginLeft: "60px" }}>
+      <div className={w.cardBodyContent} style={{ marginLeft: "20px" }}>
         <div style={{ gridColumn: "1/-1" }}>
           {/* <div className={w.commonDashboardCont}> */}
           {/* <FaRegCalendarAlt FaRegCalendarCheck className={w.icons} /> 달력 */}

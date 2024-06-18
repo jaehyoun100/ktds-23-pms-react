@@ -199,7 +199,7 @@
 }
 .gridItem2 {
   display: grid;
-  grid-template-rows: 0.7fr 1.3fr 1.2fr;
+  grid-template-rows: 0.6fr 1.3fr 1.2fr;
   gap: 10px; /* 항목 간의 간격 설정 */
   height: 100%; /* 상위 div의 높이에 맞춤 */
   width: 100%; /* 상위 div의 너비에 맞춤 */
@@ -280,7 +280,7 @@
 .deptFlex {
   display: flex;
   overflow: auto;
-  width: 100%;
+  width: 800px;
   gap: 20px;
   text-align: center;
 }
@@ -291,6 +291,6 @@
   border-radius: 50%;
 }
 .deptMemberName {
-  margin-top: 10px;
+  margin: 10px 0;
   font-weight: 550;
 }
