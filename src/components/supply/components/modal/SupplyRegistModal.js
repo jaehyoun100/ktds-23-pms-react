@@ -15,8 +15,9 @@ import {
 } from "../../../../http/supplyHttp";
 import { useSelector } from "react-redux";
 import { UploadOutlined } from "@ant-design/icons";
+
 const { TextArea } = Input;
-// 수정?
+
 const SupplyRegistModal = ({ visible, onClose, onRegister }) => {
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -68,6 +69,7 @@ const SupplyRegistModal = ({ visible, onClose, onRegister }) => {
       });
     } else if (json.body) {
       message.success("소모품 등록에 대한 결재 요청 완료!");
+      form.resetFields(); // Reset form fields after successful registration
       onRegister();
       onClose();
     }
