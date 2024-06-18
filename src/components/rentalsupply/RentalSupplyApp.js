@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Checkbox } from "antd";
-import RentalSupplyRegistModal from "./components/modal/RentalSupplyRegistModal";
+import RentalSupplyRegistModal from "./components/modal/rentalSupplyRegistModal";
 import RentalSupplyRequestModal from "./components/modal/RentalSupplyRequestModal";
 
 export default function RentalSupplyApp() {
@@ -30,7 +30,7 @@ export default function RentalSupplyApp() {
 
   const loadUserInfo = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/", {
+      const res = await axios.get("http://43.202.29.221", {
         headers: {
           Authorization: token,
         },

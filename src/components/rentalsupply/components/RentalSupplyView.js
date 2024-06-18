@@ -26,7 +26,7 @@ export default function RentalSupplyView({ selectedRsplId }) {
 
   const loadUserInfo = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/", {
+      const res = await axios.get("http://43.202.29.221", {
         headers: {
           Authorization: token,
         },
