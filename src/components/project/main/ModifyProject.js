@@ -285,7 +285,9 @@ const ModifyProject = () => {
       clntInfo: clientSelectedData,
       deptId: deptSelectedData,
       pmId: pmSelectedData,
-      prjSts: String(statusSelectedData),
+      prjSts: String(
+        statusSelectedData == undefined ? status[0].value : statusSelectedData
+      ),
       strtDt: startDateRef.current,
       endDt: endDateRef.current,
       prjMemo: prjMemoRef.current.value,
